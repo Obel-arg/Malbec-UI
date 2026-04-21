@@ -1,4 +1,45 @@
-# React + TypeScript + Vite
+# @obel-arg/malbec-ui
+
+Malbec UI — React component library, published to GitHub Packages.
+
+## Install (consumers)
+
+Because this package is hosted on GitHub Packages, you need to tell npm where to find the `@obel-arg` scope. Add a `.npmrc` at the root of your consuming project:
+
+```
+@obel-arg:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Where `GITHUB_TOKEN` is a [Personal Access Token (classic)](https://github.com/settings/tokens) with the `read:packages` scope (export it in your shell / CI environment).
+
+Then install:
+
+```bash
+npm install @obel-arg/malbec-ui
+```
+
+## Publish (maintainers)
+
+Publishing happens automatically via `.github/workflows/publish.yml` when a GitHub Release is published. To publish manually:
+
+```bash
+npm version patch        # or minor / major
+npm run build
+npm publish              # uses publishConfig -> npm.pkg.github.com
+```
+
+You'll need to be authenticated against GitHub Packages locally:
+
+```bash
+npm login --scope=@obel-arg --registry=https://npm.pkg.github.com
+```
+
+Use your GitHub username and a PAT (classic) with `write:packages` scope as the password.
+
+---
+
+## Development
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
