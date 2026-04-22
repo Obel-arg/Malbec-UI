@@ -203,3 +203,43 @@ export type {
   ComboboxChipsInputProps,
   ComboboxValueProps,
 } from "./Combobox/Combobox";
+
+export {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+  CommandShortcut,
+  CommandLoading,
+  CommandDialog,
+} from "./Command/Command";
+export {
+  commandRootVariants,
+  commandInputShellVariants,
+  commandInputInnerRowVariants,
+  commandInputVariants,
+  commandListVariants,
+  commandEmptyVariants,
+  commandGroupVariants,
+  commandItemVariants,
+  commandSeparatorVariants,
+  commandShortcutVariants,
+  commandLoadingVariants,
+  commandDialogOverlayVariants,
+  commandDialogContentVariants,
+} from "./Command/command-variants";
+export type {
+  CommandProps,
+  CommandInputProps,
+  CommandListProps,
+  CommandEmptyProps,
+  CommandGroupProps,
+  CommandItemProps,
+  CommandSeparatorProps,
+  CommandShortcutProps,
+  CommandLoadingProps,
+  CommandDialogProps,
+} from "./Command/Command";

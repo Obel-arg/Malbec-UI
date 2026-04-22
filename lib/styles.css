@@ -59,6 +59,9 @@
   --color-text-default: var(--color-text-default);
   --color-text-default-muted: var(--color-text-default-muted);
 
+ 
+  --leading-tight: calc(20 / 16 * 1rem);
+
   --text-h1: 48px;
   --text-h1--line-height: 48px;
   --text-h1--font-weight: 700;

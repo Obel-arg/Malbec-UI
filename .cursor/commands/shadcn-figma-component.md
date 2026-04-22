@@ -2,6 +2,8 @@
 
 You are implementing a **malbec-ui** component that must follow **shadcn/ui semantics and API expectations** while matching the **Figma frame pixel- and structure-faithfully**. Use **composition** (compound subcomponents + shared context + variant modules) consistent with existing library code.
 
+**Variants (strict):** Implement **only** variant dimensions and values that appear in the Figma frame (component properties, variant sets, named states, and visible modes). **Do not** add sizes, colors, visual styles, or state branches from shadcn docs, registry defaults, or guesswork when they are **not** present in the design. If shadcn documents more variants than Figma, keep the API compatible where required but map styling to what Figma shows—**omit** visuals for combinations that do not appear in the design rather than inventing them.
+
 **Primitives:** implement behavior and accessibility with **Radix UI** (`@radix-ui/react-*`) only. **Do not** use Base UI (`@base-ui/react`) or other headless stacks for this workflow—even if upstream shadcn docs or CLI output reference Base UI or link to base-ui.com, map the interaction model to **Radix**-based composition (and native elements where Radix has no primitive).
 
 **Compound API (required for stories and primary usage):** attach pieces on the root the same way as **`lib/Button/`** and **`lib/Alert/`** — e.g. `<Button.Icon>`, `<Button.Text>`; for breadcrumbs, `<Breadcrumb.List>`, `<Breadcrumb.Item>`, `<Breadcrumb.Link>`, `<Breadcrumb.Page>`, `<Breadcrumb.Separator>`, `<Breadcrumb.Ellipsis>`. Story source must demonstrate this pattern, not only flat `BreadcrumbList`-style imports. You may still export **shadcn-registry-style flat names** as aliases (documented as equivalent to the compound members) when it helps consumers following upstream docs.
@@ -20,11 +22,12 @@ You are implementing a **malbec-ui** component that must follow **shadcn/ui sema
 
 ## Phase 1 — Gather sources
 
-1. **Shadcn**: Read the linked documentation (and examples). Internalize props, accessibility requirements, composition rules (slots, Title/Description patterns, **Radix** expectations), and variant naming. Do **not** copy generic Tailwind from docs blindly—map styles to this repo’s tokens and patterns. Ignore or translate any Base UI–specific APIs; the deliverable is **Radix-backed** only.
+1. **Shadcn**: Read the linked documentation (and examples). Internalize props, accessibility requirements, composition rules (slots, Title/Description patterns, **Radix** expectations), and naming that aids API parity. **Do not** treat doc-listed visual variants as a checklist to implement—those apply only when Figma includes them (see **Variants (strict)** above). Do **not** copy generic Tailwind from docs blindly—map styles to this repo’s tokens and patterns. Ignore or translate any Base UI–specific APIs; the deliverable is **Radix-backed** only.
 2. **Figma (MCP)**: Before writing code, call the **Figma MCP** tools (read tool schemas first if needed):
    - **`get_design_context`** with `fileKey`, `nodeId`, `clientLanguages=typescript`, `clientFrameworks=react`. Keep screenshot **on** unless context is huge; use it to understand layout, typography, spacing, and states.
    - Optionally **`get_variable_defs`** if the design relies on variables/tokens you should mirror in CSS/Tailwind.
    - Optionally **`get_metadata`** if you need hierarchy or child node names.
+   - **Inventory variant axes and values from the frame** (component sets, properties, interactive states). That list is what you implement—nothing beyond it unless required for a11y/behavior with **neutral** styling aligned to the closest Figma state.
 
 Treat Figma-generated code as **reference only**—rebuild using this library’s conventions.
 
@@ -35,7 +38,7 @@ Treat Figma-generated code as **reference only**—rebuild using this library’
 Study **`lib/Alert/`** and **`lib/Button/`** as templates:
 
 - **`cn`** from `lib/utils/cn` for `className` merging.
-- **Variants**: `class-variance-authority` (or project equivalent) in a separate `*-variants.ts` file; export variant types.
+- **Variants**: `class-variance-authority` (or project equivalent) in a separate `*-variants.ts` file; export variant types. **Define variant keys and options from Figma only** (what the design actually ships); do not extend `cva` with extra `variant`/`size`/state options just because shadcn lists them.
 - **Composition**: Root + subcomponents (`forwardRef`) assigned on the root export (`Component.Part = …`), optional **React context** when children need parent variant/size (see `Alert`, `Button`). **Stories** should use the compound JSX form (`<Breadcrumb.List>…`) like **`Button.stories.tsx`**, not flat sibling components only.
 - **DOM**: Semantic elements; `data-slot="..."`, `data-variant`, `data-size` where it helps Storybook/CSS.
 - **Accessibility**: Roles, labels, `aria-*`, keyboard behavior per shadcn and **Radix** expectations (never Base UI patterns in code).
@@ -51,8 +54,8 @@ Prefer **small composable pieces** over one bloated component file.
 ## Phase 3 — Implement
 
 1. Implement the component to satisfy **shadcn docs** (behavior, API shape, a11y) using **Radix** primitives only—no `@base-ui/react`.
-2. Style to match **Figma** (spacing, radii, borders, typography scale, icon sizes, states). Resolve conflicts by: **behavior/API/docs first**, **visuals from Figma**—use design tokens / CSS variables already in the library when possible.
-3. Add or reuse stories that cover the main **variants and states** (independent, neutral titles—see Phase 2 Storybook rules: no Figma in `*.stories.tsx`).
+2. Style to match **Figma** (spacing, radii, borders, typography scale, icon sizes, states **that exist in the frame**). Resolve conflicts by: **behavior/API/docs first**, **visuals from Figma**—use design tokens / CSS variables already in the library when possible. **Do not** add decorative classes, shadows, borders, or state styles that are absent from the design.
+3. Add or reuse stories that cover **only** the **variants and states shown in Figma** (independent, neutral titles—see Phase 2 Storybook rules: no Figma in `*.stories.tsx`). Do not add story permutations for combinations the design does not include.
 
 ---
 
@@ -71,12 +74,13 @@ If Code Connect is configured for this file, you may also use **`get_context_for
 - [ ] API and behavior align with **shadcn documentation** for the component family, implemented with **Radix UI** only (no Base UI).
 - [ ] Visual structure and styling match the **Figma frame** (checked with **`get_screenshot`** against the built component, without relying on a Storybook “design frame” story).
 - [ ] Code follows **malbec-ui composition patterns** (variants file, `cn`, compound components, exports).
-- [ ] Stories cover the main variants/states, without the Figma frame in Storybook and without Figma references in `*.stories.tsx`.
+- [ ] Stories cover the variants/states **present in Figma** (no extra permutations), without the Figma frame in Storybook and without Figma references in `*.stories.tsx`.
 
 ---
 
 ## Notes
 
+- **Figma is the source of truth for visual variants:** do not add variant options, states, or styling dimensions that the frame does not show (including “helpful” shadcn parity extras).
 - Do not introduce unrelated refactors or new docs outside this workflow.
 - If the shadcn CLI or registry is unavailable, rely on the user-provided doc URLs and still complete the Figma MCP review loop.
 - Do not add or rely on **Base UI**; prefer **`@radix-ui/react-*`** (and small controlled React state) to match documented UX.

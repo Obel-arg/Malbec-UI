@@ -30,7 +30,7 @@ export const alertDialogContentVariants = cva(
   {
     variants: {
       size: {
-        default: "ui:max-w-[32rem]",
+        default: "ui:max-w-lg",
         // Compact dialog: Figma / mobile — more rounded panel, full-width footer stack, primary on top
         sm: "ui:max-w-sm ui:gap-4 ui:rounded-xl ui:p-6",
       },
@@ -134,7 +134,7 @@ export const alertDialogActionVariants = cva(
         destructive: "ui:bg-destructive ui:text-destructive-foreground",
       },
       size: {
-        default: "ui:min-w-[4.5rem]",
+        default: "ui:min-w-18",
         sm: "ui:w-full ui:min-w-0 ui:justify-center ui:py-2.5 ui:whitespace-normal",
       },
     },
