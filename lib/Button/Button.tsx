@@ -10,7 +10,6 @@ import {
 import type { ButtonSize, ButtonVariant } from "./button-variants";
 
 export type { ButtonSize, ButtonVariant };
-export { buttonVariants } from "./button-variants";
 
 export interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
@@ -108,8 +107,7 @@ const ButtonIcon = React.forwardRef<HTMLSpanElement, ButtonIconProps>(
   },
 );
 
-export interface ButtonTextProps
-  extends React.HTMLAttributes<HTMLSpanElement> {}
+export type ButtonTextProps = React.HTMLAttributes<HTMLSpanElement>;
 
 const ButtonText = React.forwardRef<HTMLSpanElement, ButtonTextProps>(
   function ButtonText({ className, children, ...rest }, ref) {
