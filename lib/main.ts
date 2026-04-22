@@ -31,6 +31,47 @@ export type {
   ButtonSize,
 } from "./Button/Button";
 
+export {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogOverlay,
+  AlertDialogPortal,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./AlertDialog/AlertDialog";
+export {
+  alertDialogActionVariants,
+  alertDialogCancelVariants,
+  alertDialogContentVariants,
+  alertDialogDescriptionVariants,
+  alertDialogFooterVariants,
+  alertDialogHeaderVariants,
+  alertDialogMediaVariants,
+  alertDialogOverlayVariants,
+  alertDialogTitleVariants,
+} from "./AlertDialog/alert-dialog-variants";
+export type {
+  AlertDialogSize,
+  AlertDialogActionVariant,
+} from "./AlertDialog/alert-dialog-variants";
+export type {
+  AlertDialogContentProps,
+  AlertDialogHeaderProps,
+  AlertDialogFooterProps,
+  AlertDialogTitleProps,
+  AlertDialogDescriptionProps,
+  AlertDialogActionProps,
+  AlertDialogCancelProps,
+  AlertDialogMediaProps,
+  AlertDialogOverlayProps,
+} from "./AlertDialog/AlertDialog";
+
 export { MalbecThemeProvider, useTheme } from "./theme";
 export type {
   MalbecThemeContextValue,
