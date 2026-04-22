@@ -154,3 +154,52 @@ export type {
   CheckboxProps,
   CheckboxIndicatorProps,
 } from "./Checkbox/Checkbox";
+
+export {
+  Combobox,
+  ComboboxInput,
+  ComboboxTrigger,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxItem,
+  ComboboxEmpty,
+  ComboboxSeparator,
+  ComboboxGroup,
+  ComboboxLabel,
+  ComboboxCollection,
+  ComboboxChips,
+  ComboboxChip,
+  ComboboxChipsInput,
+  ComboboxValue,
+} from "./Combobox/Combobox";
+export { useComboboxAnchor } from "./Combobox/useComboboxAnchor";
+export {
+  comboboxTriggerRowVariants,
+  comboboxFilterRowVariants,
+  comboboxFilterInputVariants,
+  comboboxContentVariants,
+  comboboxListVariants,
+  comboboxItemVariants,
+  comboboxEmptyVariants,
+  comboboxSeparatorVariants,
+  comboboxGroupLabelVariants,
+  comboboxChipVariants,
+} from "./Combobox/combobox-variants";
+export type { ComboboxTriggerRowVariant } from "./Combobox/combobox-variants";
+export type {
+  ComboboxProps,
+  ComboboxInputProps,
+  ComboboxTriggerProps,
+  ComboboxContentProps,
+  ComboboxListProps,
+  ComboboxItemProps,
+  ComboboxEmptyProps,
+  ComboboxSeparatorProps,
+  ComboboxGroupProps,
+  ComboboxLabelProps,
+  ComboboxCollectionProps,
+  ComboboxChipsProps,
+  ComboboxChipProps,
+  ComboboxChipsInputProps,
+  ComboboxValueProps,
+} from "./Combobox/Combobox";
