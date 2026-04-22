@@ -9,7 +9,9 @@ export default defineConfig({
     react(),
     dts({
       include: ['lib'],
-      rollupTypes: true,
+      // rollupTypes bundles .d.ts via API Extractor; it was emitting `export {}` only
+      // and broke consumer imports like `import { Button } from '…'`.
+      rollupTypes: false,
       tsconfigPath: './tsconfig.app.json',
     }),
   ],

@@ -9,10 +9,10 @@
   ],
   "main": "dist/malbec-ui.umd.cjs",
   "module": "dist/malbec-ui.js",
-  "types": "dist/malbec-ui.d.ts",
+  "types": "dist/lib/main.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/malbec-ui.d.ts",
+      "types": "./dist/lib/main.d.ts",
       "import": "./dist/malbec-ui.js",
       "require": "./dist/malbec-ui.umd.cjs"
     }
