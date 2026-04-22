@@ -1,5 +1,4 @@
 @import "tailwindcss" prefix(ui);
-@import "@fontsource-variable/inter";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -30,8 +29,17 @@
 }
 
 @layer base {
+  /**
+   * Preflight sets `button { font: inherit }`, so controls inherit the parent chain.
+   * Storybook (and some apps) set a serif stack on #storybook-root — use an explicit
+   * stack here and `.malbec-font-sans` on wrappers or components when needed.
+   */
   html {
-    font-family: var(--font-sans);
+    font-family: "Inter Variable", Inter, sans-serif;
+  }
+
+  .malbec-font-sans {
+    font-family: "Inter Variable", Inter, sans-serif;
   }
 }
 
