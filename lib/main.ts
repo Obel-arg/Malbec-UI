@@ -1,7 +1,18 @@
 import "@fontsource-variable/inter";
 import "./styles.css";
 
-export { Button } from "./Button/Button";
+export { Button, buttonVariants } from "./Button/Button";
+export { cn } from "./utils/cn";
+export { Spinner } from "./Spinner/Spinner";
+export type { SpinnerProps } from "./Spinner/Spinner";
+export type {
+  ButtonProps,
+  ButtonIconProps,
+  ButtonTextProps,
+  ButtonSpinnerProps,
+  ButtonVariant,
+  ButtonSize,
+} from "./Button/Button";
 
 export { MalbecThemeProvider, useTheme } from "./theme";
 export type {

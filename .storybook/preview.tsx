@@ -77,7 +77,7 @@ const preview: Preview = {
           theme={theme}
           defaultMode={mode}
         >
-          <div className="malbec-font-sans ui:min-h-[200px] ui:bg-background-100 ui:p-8">
+          <div className="malbec-font-sans ui:min-h-[calc(100svh-40px)] ui:bg-background-100 ui:p-8 ui:min-w-[calc(100svw-40px)] ui:flex ui:items-center ui:justify-center">
             <Story />
           </div>
         </MalbecThemeProvider>
