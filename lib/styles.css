@@ -1,10 +1,125 @@
 @import "tailwindcss" prefix(ui);
+@import "@fontsource-variable/inter";
 
-@theme {
-  --font-display: "Satoshi", "sans-serif";
-  --breakpoint-3xl: 120rem;
-  --color-avocado-100: oklch(0.99 0 0);
-  --color-avocado-200: oklch(0.98 0.04 113.22);
-  --color-avocado-300: oklch(0.94 0.11 115.03);
-  /* ... */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-background-100: #f8f8f8;
+  --color-background-200: #f1f0ee;
+  --color-background-300: #e4e2df;
+  --color-foreground: #09090b;
+  --color-primary: #621543;
+  --color-primary-foreground: #fafafa;
+  --color-accent: #ccb9c4;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #fafafa;
+  --color-text-default: #3f3f46;
+  --color-text-default-muted: color-mix(in srgb, #3f3f46 60%, transparent);
+}
+
+.dark {
+  --color-background-100: #0c0a0b;
+  --color-background-200: #1a1118;
+  --color-background-300: #261a21;
+  --color-foreground: #e4e2df;
+  --color-primary: #c4366f;
+  --color-accent: #dfc8d5;
+  --color-destructive: #ef4444;
+  --color-text-default: #ede8e2;
+  --color-text-default-muted: color-mix(in srgb, #ede8e2 60%, transparent);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+}
+
+@theme inline {
+  --font-display: "Inter Variable", Inter, sans-serif;
+  --font-sans: "Inter Variable", Inter, sans-serif;
+
+  --color-background-100: var(--color-background-100);
+  --color-background-200: var(--color-background-200);
+  --color-background-300: var(--color-background-300);
+  --color-foreground: var(--color-foreground);
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-accent: var(--color-accent);
+  --color-destructive: var(--color-destructive);
+  --color-destructive-foreground: var(--color-destructive-foreground);
+  --color-text-default: var(--color-text-default);
+  --color-text-default-muted: var(--color-text-default-muted);
+
+  --text-h1: 48px;
+  --text-h1--line-height: 48px;
+  --text-h1--font-weight: 700;
+
+  --text-h2: 30px;
+  --text-h2--line-height: 36px;
+  --text-h2--font-weight: 700;
+
+  --text-h3-medium: 24px;
+  --text-h3-medium--line-height: 32px;
+  --text-h3-medium--font-weight: 500;
+
+  --text-h3-semibold: 24px;
+  --text-h3-semibold--line-height: 32px;
+  --text-h3-semibold--font-weight: 600;
+
+  --text-h4: 20px;
+  --text-h4--line-height: 28px;
+  --text-h4--font-weight: 700;
+
+  --text-lead: 20px;
+  --text-lead--line-height: 28px;
+  --text-lead--font-weight: 400;
+
+  --text-large: 18px;
+  --text-large--line-height: 28px;
+  --text-large--font-weight: 700;
+
+  --text-p: 16px;
+  --text-p--line-height: 28px;
+  --text-p--font-weight: 400;
+
+  --text-blockquote: 16px;
+  --text-blockquote--line-height: 24px;
+  --text-blockquote--font-weight: 400;
+
+  --text-table-head: 16px;
+  --text-table-head--line-height: 24px;
+  --text-table-head--font-weight: 700;
+
+  --text-table-item: 16px;
+  --text-table-item--line-height: 24px;
+  --text-table-item--font-weight: 400;
+
+  --text-list: 16px;
+  --text-list--line-height: 24px;
+  --text-list--font-weight: 400;
+
+  --text-code: 14px;
+  --text-code--line-height: 20px;
+  --text-code--font-weight: 700;
+
+  --text-small: 14px;
+  --text-small--line-height: 14px;
+  --text-small--font-weight: 600;
+
+  --text-muted: 14px;
+  --text-muted--line-height: 20px;
+  --text-muted--font-weight: 400;
+
+  --text-muted-medium: 14px;
+  --text-muted-medium--line-height: 20px;
+  --text-muted-medium--font-weight: 500;
+
+  --text-label: 14px;
+  --text-label--line-height: 14px;
+  --text-label--font-weight: 400;
+
+  --text-label-semibold: 14px;
+  --text-label-semibold--line-height: 14px;
+  --text-label-semibold--font-weight: 600;
 }
