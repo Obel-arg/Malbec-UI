@@ -82,3 +82,29 @@ export type {
   TokenName,
 } from "./theme";
 export * as themes from "./theme/presets";
+
+export {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  AvatarBadge,
+  AvatarGroup,
+  AvatarGroupCount,
+} from "./Avatar/Avatar";
+export {
+  avatarRootVariants,
+  avatarImageVariants,
+  avatarFallbackVariants,
+  avatarBadgeVariants,
+  avatarGroupVariants,
+  avatarGroupCountVariants,
+} from "./Avatar/avatar-variants";
+export type {
+  AvatarProps,
+  AvatarImageProps,
+  AvatarFallbackProps,
+  AvatarBadgeProps,
+  AvatarGroupProps,
+  AvatarGroupCountProps,
+} from "./Avatar/Avatar";
+export type { AvatarSize } from "./Avatar/avatar-variants";
