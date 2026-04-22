@@ -110,6 +110,37 @@ export type {
 export type { AvatarSize } from "./Avatar/avatar-variants";
 
 export { Badge } from "./Badge/Badge";
-export { badgeVariants } from "./Badge/badge-variants";
-export type { BadgeProps } from "./Badge/Badge";
+export {
+  badgeVariants,
+  badgeIconVariants,
+  badgeTextVariants,
+} from "./Badge/badge-variants";
+export type { BadgeProps, BadgeIconProps, BadgeTextProps } from "./Badge/Badge";
 export type { BadgeVariant } from "./Badge/badge-variants";
+
+export {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./Breadcrumb/Breadcrumb";
+export {
+  breadcrumbEllipsisVariants,
+  breadcrumbItemVariants,
+  breadcrumbLinkVariants,
+  breadcrumbListVariants,
+  breadcrumbPageVariants,
+  breadcrumbSeparatorVariants,
+} from "./Breadcrumb/breadcrumb-variants";
+export type {
+  BreadcrumbProps,
+  BreadcrumbEllipsisProps,
+  BreadcrumbItemProps,
+  BreadcrumbLinkProps,
+  BreadcrumbListProps,
+  BreadcrumbPageProps,
+  BreadcrumbSeparatorProps,
+} from "./Breadcrumb/Breadcrumb";

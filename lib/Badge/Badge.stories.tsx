@@ -47,7 +47,10 @@ const ArrowUpRightIcon = () => (
 );
 
 /**
- * Follows [shadcn/ui Badge](https://ui.shadcn.com/docs/components/radix/badge) API (`variant`, `asChild`, optional icons via `data-icon` on children).
+ * Composed API (like `Button`): wrap labels in `<Badge.Text>` and icons in `<Badge.Icon>`.
+ * Root props: `variant`, `asChild`, plus standard div attributes.
+ *
+ * See [shadcn/ui Badge](https://ui.shadcn.com/docs/components/radix/badge) for the upstream pattern.
  */
 const meta = {
   title: "Components/Badge",
@@ -96,7 +99,7 @@ export const AllVariants: Story = {
         ] as const
       ).map((v) => (
         <Badge key={v} variant={v}>
-          {labels[v]}
+          <Badge.Text>{labels[v]}</Badge.Text>
         </Badge>
       ))}
     </div>
@@ -108,16 +111,16 @@ export const WithIconInlineStart: Story = {
   render: () => (
     <div className="ui:flex ui:flex-wrap ui:gap-3">
       <Badge>
-        <span data-icon="inline-start">
+        <Badge.Icon>
           <CheckIcon />
-        </span>
-        Verified
+        </Badge.Icon>
+        <Badge.Text>Verified</Badge.Text>
       </Badge>
       <Badge variant="secondary">
-        <span data-icon="inline-start">
+        <Badge.Icon>
           <BookmarkIcon />
-        </span>
-        Bookmark
+        </Badge.Icon>
+        <Badge.Text>Bookmark</Badge.Text>
       </Badge>
     </div>
   ),
@@ -127,10 +130,10 @@ export const WithIconInlineEnd: Story = {
   name: "With icon (inline end)",
   render: () => (
     <Badge variant="outline">
-      Status
-      <span data-icon="inline-end">
+      <Badge.Text>Status</Badge.Text>
+      <Badge.Icon>
         <CheckIcon />
-      </span>
+      </Badge.Icon>
     </Badge>
   ),
 };
@@ -140,16 +143,16 @@ export const WithSpinner: Story = {
   render: () => (
     <div className="ui:flex ui:flex-wrap ui:gap-3">
       <Badge>
-        <span className="ui:contents" data-icon="inline-start">
-          <Spinner className="ui:size-3" />
-        </span>
-        Deleting
+        <Badge.Icon>
+          <Spinner className="ui:size-full" />
+        </Badge.Icon>
+        <Badge.Text>Deleting</Badge.Text>
       </Badge>
       <Badge variant="secondary">
-        Generating
-        <span className="ui:contents" data-icon="inline-end">
-          <Spinner className="ui:size-3" />
-        </span>
+        <Badge.Text>Generating</Badge.Text>
+        <Badge.Icon>
+          <Spinner className="ui:size-full" />
+        </Badge.Icon>
       </Badge>
     </div>
   ),
@@ -165,10 +168,10 @@ export const AsChildLink: Story = {
         target="_blank"
         rel="noreferrer"
       >
-        Open shadcn Badge
-        <span className="ui:contents" data-icon="inline-end">
+        <Badge.Text>Open shadcn Badge</Badge.Text>
+        <Badge.Icon>
           <ArrowUpRightIcon />
-        </span>
+        </Badge.Icon>
       </a>
     </Badge>
   ),

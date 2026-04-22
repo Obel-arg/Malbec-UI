@@ -2,6 +2,8 @@
 
 You are implementing a **malbec-ui** component that must follow **shadcn/ui semantics and API expectations** while matching the **Figma frame pixel- and structure-faithfully**. Use **composition** (compound subcomponents + shared context + variant modules) consistent with existing library code.
 
+**Compound API (required for stories and primary usage):** attach pieces on the root the same way as **`lib/Button/`** and **`lib/Alert/`** — e.g. `<Button.Icon>`, `<Button.Text>`; for breadcrumbs, `<Breadcrumb.List>`, `<Breadcrumb.Item>`, `<Breadcrumb.Link>`, `<Breadcrumb.Page>`, `<Breadcrumb.Separator>`, `<Breadcrumb.Ellipsis>`. Story source must demonstrate this pattern, not only flat `BreadcrumbList`-style imports. You may still export **shadcn-registry-style flat names** as aliases (documented as equivalent to the compound members) when it helps consumers following upstream docs.
+
 ---
 
 ## Inputs (fill in the chat when you run this command)
@@ -32,7 +34,7 @@ Study **`lib/Alert/`** and **`lib/Button/`** as templates:
 
 - **`cn`** from `lib/utils/cn` for `className` merging.
 - **Variants**: `class-variance-authority` (or project equivalent) in a separate `*-variants.ts` file; export variant types.
-- **Composition**: Root + subcomponents (`forwardRef`), optional **React context** when children need parent variant/size (see `Alert`, `Button`).
+- **Composition**: Root + subcomponents (`forwardRef`) assigned on the root export (`Component.Part = …`), optional **React context** when children need parent variant/size (see `Alert`, `Button`). **Stories** should use the compound JSX form (`<Breadcrumb.List>…`) like **`Button.stories.tsx`**, not flat sibling components only.
 - **DOM**: Semantic elements; `data-slot="..."`, `data-variant`, `data-size` where it helps Storybook/CSS.
 - **Accessibility**: Roles, labels, `aria-*`, keyboard behavior per shadcn/Radix expectations.
 - **Exports**: Wire **`lib/main.ts`** (types + components + variant helpers as appropriate).

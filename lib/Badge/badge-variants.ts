@@ -30,8 +30,6 @@ export const badgeVariants = cva(
     "ui:focus-visible:ring-primary",
     "ui:focus-visible:ring-offset-2",
     "ui:focus-visible:ring-offset-background-100",
-    "ui:[&_svg]:size-3",
-    "ui:[&_svg]:shrink-0",
   ],
   {
     variants: {
@@ -51,6 +49,12 @@ export const badgeVariants = cva(
     defaultVariants: { variant: "default" },
   },
 );
+
+export const badgeIconVariants = cva(
+  "ui:inline-flex ui:shrink-0 ui:items-center ui:justify-center ui:size-3 ui:[&>svg]:size-full",
+);
+
+export const badgeTextVariants = cva("ui:inline-block ui:min-w-0 ui:truncate");
 
 export type BadgeVariant = NonNullable<
   VariantProps<typeof badgeVariants>["variant"]
