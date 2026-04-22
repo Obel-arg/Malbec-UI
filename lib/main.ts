@@ -144,3 +144,13 @@ export type {
   BreadcrumbPageProps,
   BreadcrumbSeparatorProps,
 } from "./Breadcrumb/Breadcrumb";
+
+export { Checkbox, CheckboxIndicator } from "./Checkbox/Checkbox";
+export {
+  checkboxRootVariants,
+  checkboxIndicatorVariants,
+} from "./Checkbox/checkbox-variants";
+export type {
+  CheckboxProps,
+  CheckboxIndicatorProps,
+} from "./Checkbox/Checkbox";
