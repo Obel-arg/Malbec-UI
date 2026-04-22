@@ -36,7 +36,9 @@ Study **`lib/Alert/`** and **`lib/Button/`** as templates:
 - **DOM**: Semantic elements; `data-slot="..."`, `data-variant`, `data-size` where it helps Storybook/CSS.
 - **Accessibility**: Roles, labels, `aria-*`, keyboard behavior per shadcn/Radix expectations.
 - **Exports**: Wire **`lib/main.ts`** (types + components + variant helpers as appropriate).
-- **Stories**: Add **`<Component>.stories.tsx`** beside the component (match existing Storybook style).
+- **Stories**: Add **`<Component>.stories.tsx`** beside the component (match existing Storybook style). **In Storybook, do not**:
+  - replicate the **Figma artboard / frame** layout (no “full frame” or design-board mock, no copy of the doc blurb that exists only in Figma);
+  - include **any reference to Figma** in stories—no Figma URLs, no `Figma`, `figma.com`, or “frame” in story `name`/`title`, JSDoc shown by autodocs, or story source meant for design reviews. Visual parity with the design is validated in the agent workflow (Phase 4), not in the stories file.
 
 Prefer **small composable pieces** over one bloated component file.
 
@@ -46,15 +48,15 @@ Prefer **small composable pieces** over one bloated component file.
 
 1. Implement the component to satisfy **shadcn docs** (behavior, API shape, a11y).
 2. Style to match **Figma** (spacing, radii, borders, typography scale, icon sizes, states). Resolve conflicts by: **behavior/API/docs first**, **visuals from Figma**—use design tokens / CSS variables already in the library when possible.
-3. Add or reuse stories that show variants/states visible in Figma.
+3. Add or reuse stories that cover the main **variants and states** (independent, neutral titles—see Phase 2 Storybook rules: no Figma in `*.stories.tsx`).
 
 ---
 
 ## Phase 4 — MCP visual review (required)
 
 1. Call **`get_screenshot`** with the same **`fileKey`** and **`nodeId`** as the design frame.
-2. Compare the screenshot to the implemented UI (Storybook story or described markup): list **concrete deltas** (padding, font size/weight, colors, alignment, gaps, border, shadows, icon alignment).
-3. Iterate styles/markup until the Storybook representation **matches the Figma frame** within normal browser/font rendering tolerance.
+2. Compare the screenshot to the implemented UI in the **chat** (a plain Storybook canvas view or described markup is fine; **do not** add a special “Figma / frame” story for this).
+3. List **concrete deltas** (padding, font size/weight, colors, alignment, gaps, border, shadows, icon alignment) and iterate styles until the build **matches the Figma frame** within normal browser/font rendering tolerance.
 
 If Code Connect is configured for this file, you may also use **`get_context_for_code_connect`** / related tools—still validate visually with **`get_screenshot`**.
 
@@ -63,9 +65,9 @@ If Code Connect is configured for this file, you may also use **`get_context_for
 ## Definition of done
 
 - [ ] API and behavior align with **shadcn documentation** for the component family.
-- [ ] Visual structure and styling match the **Figma frame** (verified via **`get_screenshot`** vs Storybook).
+- [ ] Visual structure and styling match the **Figma frame** (checked with **`get_screenshot`** against the built component, without relying on a Storybook “design frame” story).
 - [ ] Code follows **malbec-ui composition patterns** (variants file, `cn`, compound components, exports).
-- [ ] Stories cover the main variants/states shown in design.
+- [ ] Stories cover the main variants/states, without the Figma frame in Storybook and without Figma references in `*.stories.tsx`.
 
 ---
 

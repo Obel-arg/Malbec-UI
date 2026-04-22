@@ -108,3 +108,8 @@ export type {
   AvatarGroupCountProps,
 } from "./Avatar/Avatar";
 export type { AvatarSize } from "./Avatar/avatar-variants";
+
+export { Badge } from "./Badge/Badge";
+export { badgeVariants } from "./Badge/badge-variants";
+export type { BadgeProps } from "./Badge/Badge";
+export type { BadgeVariant } from "./Badge/badge-variants";
