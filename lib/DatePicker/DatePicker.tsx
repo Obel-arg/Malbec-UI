@@ -1,5 +1,5 @@
 import * as React from "react";
-import { format } from "date-fns";
+import { format, type Locale } from "date-fns";
 import {
   type DateRange,
   type DayPickerProps,
@@ -56,13 +56,13 @@ function resolveDefaultMode(state: DatePickerState): DatePickerMode {
   return state === "date-range" ? "range" : "single";
 }
 
-function formatDateValue(date: Date): string {
-  return format(date, "MMM dd, yyyy");
+function formatDateValue(date: Date, locale?: Locale): string {
+  return format(date, "MMM dd, yyyy", { locale });
 }
 
-function formatRangeValue(range: DateRange): string | null {
+function formatRangeValue(range: DateRange, locale?: Locale): string | null {
   if (!range.from || !range.to) return null;
-  return `${formatDateValue(range.from)} - ${formatDateValue(range.to)}`;
+  return `${formatDateValue(range.from, locale)} - ${formatDateValue(range.to, locale)}`;
 }
 
 function getEffectiveState(
@@ -116,6 +116,7 @@ type DatePickerContextValue = {
   preset: string | undefined;
   setPreset: (next: string | undefined) => void;
   showPreset: boolean;
+  locale: Locale | undefined;
 };
 
 const DatePickerContext = React.createContext<DatePickerContextValue | null>(
@@ -152,6 +153,8 @@ export interface DatePickerProps {
   preset?: string;
   defaultPreset?: string;
   onPresetChange?: (preset: string | undefined) => void;
+  /** date-fns locale applied to both the trigger label and the calendar. */
+  locale?: Locale;
   className?: string;
   children?: React.ReactNode;
 }
@@ -180,6 +183,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
       preset: presetProp,
       defaultPreset,
       onPresetChange,
+      locale,
       className,
       children,
     },
@@ -272,6 +276,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
         preset,
         setPreset,
         showPreset,
+        locale,
       }),
       [
         state,
@@ -291,6 +296,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
         preset,
         setPreset,
         showPreset,
+        locale,
       ],
     );
 
@@ -331,13 +337,25 @@ const DatePickerTrigger = React.forwardRef<
   const label = React.useMemo(() => {
     if (children) return children;
     if (ctx.mode === "range" && ctx.range) {
-      return formatRangeValue(ctx.range) ?? placeholder ?? ctx.placeholder;
+      return (
+        formatRangeValue(ctx.range, ctx.locale) ??
+        placeholder ??
+        ctx.placeholder
+      );
     }
     if (ctx.mode === "single" && ctx.date) {
-      return formatDateValue(ctx.date);
+      return formatDateValue(ctx.date, ctx.locale);
     }
     return placeholder ?? ctx.placeholder;
-  }, [children, ctx.date, ctx.mode, ctx.placeholder, ctx.range, placeholder]);
+  }, [
+    children,
+    ctx.date,
+    ctx.locale,
+    ctx.mode,
+    ctx.placeholder,
+    ctx.range,
+    placeholder,
+  ]);
 
   const trailingIcon = ctx.state === "birth";
 
@@ -494,6 +512,7 @@ const DatePickerCalendar = React.forwardRef<
           pagedNavigation
           showOutsideDays
           showTodayStyle={false}
+          locale={ctx.locale}
           month={ctx.month}
           onMonthChange={ctx.setMonth}
           selected={ctx.range}
@@ -515,6 +534,7 @@ const DatePickerCalendar = React.forwardRef<
           mode="single"
           showOutsideDays
           showTodayStyle
+          locale={ctx.locale}
           month={ctx.month}
           onMonthChange={ctx.setMonth}
           selected={ctx.date}

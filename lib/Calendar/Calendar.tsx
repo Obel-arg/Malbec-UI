@@ -57,6 +57,23 @@ function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.33"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      {...props}
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
 export type CalendarDayButtonProps = React.ComponentProps<
   typeof DayButtonPrimitive
 >;
@@ -121,11 +138,12 @@ const defaultClassNames: Record<string, string> = {
   /** Keep heading clear of the shared nav row. */
   month_caption:
     "ui:relative ui:flex ui:h-7 ui:max-w-full ui:min-w-0 ui:items-center ui:justify-center ui:px-9 ui:box-border",
+  dropdowns: "ui:flex ui:items-center ui:justify-center ui:gap-2",
   caption_label:
     "ui:text-sm ui:font-medium ui:leading-tight ui:text-text-default ui:text-center",
-  nav: "ui:absolute ui:inset-x-0 ui:top-0 ui:z-10 ui:flex ui:items-center ui:justify-between",
-  button_previous: cn(calendarNavButtonVariants()),
-  button_next: cn(calendarNavButtonVariants()),
+  nav: "ui:pointer-events-none ui:absolute ui:inset-x-0 ui:top-0 ui:z-10 ui:flex ui:items-center ui:justify-between",
+  button_previous: cn(calendarNavButtonVariants(), "ui:pointer-events-auto"),
+  button_next: cn(calendarNavButtonVariants(), "ui:pointer-events-auto"),
   chevron: "ui:text-current",
   weekdays: "ui:mt-4 ui:flex ui:w-full",
   weekday:
@@ -145,6 +163,45 @@ const defaultClassNames: Record<string, string> = {
 };
 
 const defaultComponents = {
+  Dropdown: ({
+    value,
+    onChange,
+    options,
+    className,
+    ...props
+  }: React.SelectHTMLAttributes<HTMLSelectElement> & {
+    options?: { value: string | number; label: string; disabled?: boolean }[];
+  }) => {
+    return (
+      <div
+        className={cn(
+          "ui:relative ui:inline-flex ui:items-center ui:rounded-md ui:px-2 ui:py-0.5 ui:text-sm ui:font-medium ui:text-text-default ui:transition-colors hover:ui:bg-background-200",
+          className,
+        )}
+      >
+        <select
+          className="ui:absolute ui:inset-0 ui:h-full ui:w-full ui:cursor-pointer ui:appearance-none ui:bg-transparent ui:opacity-0 ui:outline-none"
+          value={value}
+          onChange={onChange}
+          {...props}
+        >
+          {options?.map((option) => (
+            <option
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled}
+            >
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <span className="ui:pointer-events-none">
+          {options?.find((o) => o.value === value)?.label}
+        </span>
+        <ChevronDownIcon className="ui:pointer-events-none ui:ml-1 ui:size-3.5 ui:text-text-default/60" />
+      </div>
+    );
+  },
   Chevron: ({
     orientation,
     ...iconProps
@@ -194,6 +251,8 @@ function CalendarImpl({
     <CalendarUiContext.Provider value={ui}>
       <DayPicker
         showOutsideDays
+        captionLayout="dropdown"
+        navLayout="after"
         className={cn("malbec-font-sans ui:w-full", className)}
         classNames={{ ...defaultClassNames, ...classNames }}
         components={{ ...defaultComponents, ...components }}

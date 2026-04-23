@@ -63,10 +63,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Closed: Story = {
   render: () => (
-    <DatePicker state="closed">
+    <DatePicker locale={es} state="closed">
       <DatePicker.Trigger />
       <DatePicker.Content>
-        <DatePicker.Calendar locale={es} />
+        <DatePicker.Calendar />
       </DatePicker.Content>
     </DatePicker>
   ),
@@ -74,11 +74,11 @@ export const Closed: Story = {
 
 export const Open: Story = {
   render: () => (
-    <DatePicker state="open" defaultOpen>
+    <DatePicker state="open" locale={es} defaultOpen>
       <DatePicker.Trigger />
       <DatePicker.Content>
         {" "}
-        <DatePicker.Calendar locale={es} />
+        <DatePicker.Calendar />
       </DatePicker.Content>
     </DatePicker>
   ),
@@ -86,11 +86,10 @@ export const Open: Story = {
 
 export const DateRange: Story = {
   render: () => (
-    <DatePicker state="date-range" defaultOpen>
+    <DatePicker state="date-range" locale={es} defaultOpen>
       <DatePicker.Trigger />
       <DatePicker.Content>
-        {" "}
-        <DatePicker.Calendar locale={es} />
+        <DatePicker.Calendar />
       </DatePicker.Content>
     </DatePicker>
   ),
