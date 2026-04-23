@@ -21,6 +21,8 @@ const DialogRoot = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
 const DialogPortal = DialogPrimitive.Portal;
 
+export type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root>;
+
 export type DialogOverlayProps = React.ComponentProps<typeof DialogPrimitive.Overlay>;
 
 const DialogOverlay = React.forwardRef<
@@ -40,22 +42,36 @@ const DialogOverlay = React.forwardRef<
 export interface DialogContentProps
   extends React.ComponentProps<typeof DialogPrimitive.Content> {
   showCloseButton?: boolean;
+  /** Merged after default overlay styles. */
+  overlayClassName?: string;
+  /** When true, default dialog padding and shape classes are omitted; use `className` for the full surface. */
+  unstyled?: boolean;
+  /** Passed to `Dialog.Portal` (`container` in Radix Portal). */
+  container?: React.ComponentProps<typeof DialogPrimitive.Portal>["container"];
 }
 
 const DialogContent = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
   DialogContentProps
 >(function DialogContent(
-  { className, children, showCloseButton = true, ...rest },
+  {
+    className,
+    children,
+    showCloseButton = true,
+    overlayClassName,
+    unstyled,
+    container,
+    ...rest
+  },
   ref,
 ) {
   return (
-    <DialogPortal>
-      <DialogOverlay />
+    <DialogPortal container={container}>
+      <DialogOverlay className={overlayClassName} />
       <DialogPrimitive.Content
         ref={ref}
         data-slot="dialog-content"
-        className={cn(dialogContentVariants(), className)}
+        className={cn(!unstyled && dialogContentVariants(), className)}
         {...rest}
       >
         {children}

@@ -7,6 +7,12 @@
   --malbec-popover-enter-duration: 150ms;
   --malbec-popover-exit-duration: 120ms;
 
+  /** Dialog overlay + panel (aligned with common shadcn / Radix timing). */
+  --malbec-dialog-overlay-enter-duration: 150ms;
+  --malbec-dialog-overlay-exit-duration: 120ms;
+  --malbec-dialog-content-enter-duration: 200ms;
+  --malbec-dialog-content-exit-duration: 150ms;
+
   --color-background-100: #f8f8f8;
   --color-background-200: #f1f0ee;
   --color-background-300: #e4e2df;
@@ -56,6 +62,76 @@
       opacity: 0;
       transform: scale(0.95);
       transform-origin: var(--radix-popper-transform-origin);
+    }
+  }
+
+  @keyframes malbec-dialog-overlay-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes malbec-dialog-overlay-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes malbec-dialog-content-in {
+    from {
+      opacity: 0;
+      scale: 0.96;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  @keyframes malbec-dialog-content-out {
+    from {
+      opacity: 1;
+      scale: 1;
+    }
+    to {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
+
+  [data-slot="dialog-overlay"][data-state="open"] {
+    animation: malbec-dialog-overlay-in var(--malbec-dialog-overlay-enter-duration, 150ms)
+      cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-slot="dialog-overlay"][data-state="closed"] {
+    animation: malbec-dialog-overlay-out var(--malbec-dialog-overlay-exit-duration, 120ms)
+      cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  }
+
+  [data-slot="dialog-content"][data-state="open"] {
+    animation: malbec-dialog-content-in var(--malbec-dialog-content-enter-duration, 200ms)
+      cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-slot="dialog-content"][data-state="closed"] {
+    animation: malbec-dialog-content-out var(--malbec-dialog-content-exit-duration, 150ms)
+      cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="dialog-overlay"][data-state="open"],
+    [data-slot="dialog-overlay"][data-state="closed"],
+    [data-slot="dialog-content"][data-state="open"],
+    [data-slot="dialog-content"][data-state="closed"] {
+      animation-duration: 1ms;
+      animation-timing-function: linear;
     }
   }
 

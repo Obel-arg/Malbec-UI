@@ -4,7 +4,6 @@ export const dialogOverlayVariants = cva([
   "ui:fixed ui:inset-0 ui:z-50",
   "ui:bg-black/45",
   "ui:backdrop-blur-md",
-  "ui:transition-[opacity,backdrop-filter]",
 ]);
 
 export const dialogContentVariants = cva([
@@ -17,7 +16,6 @@ export const dialogContentVariants = cva([
   "ui:p-6",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
-  "ui:transition-[opacity,transform] ui:duration-200",
 ]);
 
 export const dialogCloseVariants = cva([

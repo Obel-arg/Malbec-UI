@@ -1,8 +1,6 @@
 import * as React from "react";
-import type { DialogProps } from "@radix-ui/react-dialog";
 import {
   Command as CmdkCommand,
-  CommandDialog as CmdkCommandDialog,
   CommandEmpty as CmdkCommandEmpty,
   CommandGroup as CmdkCommandGroup,
   CommandInput as CmdkCommandInput,
@@ -11,6 +9,8 @@ import {
   CommandLoading as CmdkCommandLoading,
   CommandSeparator as CmdkCommandSeparator,
 } from "cmdk";
+import type { DialogProps } from "../Dialog/Dialog";
+import { Dialog } from "../Dialog/Dialog";
 import { cn } from "../utils/cn";
 import {
   commandDialogContentVariants,
@@ -213,8 +213,8 @@ const CommandLoading = React.forwardRef<
   );
 });
 
-/** Mirrors cmdk `CommandDialog` while keeping public types rooted in `@radix-ui/react-dialog`. */
-export interface CommandDialogProps extends DialogProps {
+/** Command palette in a dialog; dialog shell uses `Dialog`, behavior matches cmdk `CommandDialog`. */
+export type CommandDialogProps = DialogProps & {
   label?: string;
   shouldFilter?: boolean;
   filter?: (value: string, search: string, keywords?: string[]) => number;
@@ -229,24 +229,64 @@ export interface CommandDialogProps extends DialogProps {
   contentClassName?: string;
   overlayClassName?: string;
   container?: HTMLElement;
-}
+};
 
 const CommandDialog = React.forwardRef<HTMLDivElement, CommandDialogProps>(
   function CommandDialog(
-    { className, contentClassName, overlayClassName, ...rest },
+    {
+      children,
+      className,
+      contentClassName,
+      overlayClassName,
+      container,
+      label,
+      shouldFilter,
+      filter,
+      defaultValue,
+      value,
+      onValueChange,
+      loop,
+      disablePointerSelection,
+      vimBindings,
+      open,
+      defaultOpen,
+      onOpenChange,
+      modal,
+    },
     ref,
   ) {
     return (
-      <CmdkCommandDialog
-        ref={ref}
-        className={cn(commandRootVariants(), className)}
-        contentClassName={cn(commandDialogContentVariants(), contentClassName)}
-        overlayClassName={cn(commandDialogOverlayVariants(), overlayClassName)}
-        {...(rest as Omit<
-          React.ComponentPropsWithoutRef<typeof CmdkCommandDialog>,
-          "className" | "contentClassName" | "overlayClassName"
-        >)}
-      />
+      <Dialog
+        open={open}
+        defaultOpen={defaultOpen}
+        onOpenChange={onOpenChange}
+        modal={modal}
+      >
+        <Dialog.Content
+          showCloseButton={false}
+          unstyled
+          container={container}
+          overlayClassName={cn(commandDialogOverlayVariants(), overlayClassName)}
+          className={cn(commandDialogContentVariants(), contentClassName)}
+          aria-label={label}
+        >
+          <CmdkCommand
+            ref={ref}
+            label={label}
+            shouldFilter={shouldFilter}
+            filter={filter}
+            defaultValue={defaultValue}
+            value={value}
+            onValueChange={onValueChange}
+            loop={loop}
+            disablePointerSelection={disablePointerSelection}
+            vimBindings={vimBindings}
+            className={cn(commandRootVariants(), className)}
+          >
+            {children}
+          </CmdkCommand>
+        </Dialog.Content>
+      </Dialog>
     );
   },
 );
