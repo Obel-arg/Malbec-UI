@@ -17,6 +17,7 @@ export { Command } from "./Command/Command";
 export { Calendar } from "./Calendar/Calendar";
 export { DatePicker } from "./DatePicker/DatePicker";
 export { Input } from "./Input/Input";
+export { InputOtp } from "./InputOtp/InputOtp";
 export { Label } from "./Label/Label";
 export { Popover } from "./Popover/Popover";
 export { Select } from "./Select/Select";
