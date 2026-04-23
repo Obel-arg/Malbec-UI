@@ -19,3 +19,4 @@ export { DatePicker } from "./DatePicker/DatePicker";
 export { Popover } from "./Popover/Popover";
 export { Select } from "./Select/Select";
 export { Dialog } from "./Dialog/Dialog";
+export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
