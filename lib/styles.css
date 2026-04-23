@@ -3,6 +3,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  /** Popover / Combobox / Select surface motion — override in host app `:root` if needed. */
+  --malbec-popover-enter-duration: 150ms;
+  --malbec-popover-exit-duration: 120ms;
+
   --color-background-100: #f8f8f8;
   --color-background-200: #f1f0ee;
   --color-background-300: #e4e2df;
@@ -26,6 +30,66 @@
   --color-destructive: #ef4444;
   --color-text-default: #ede8e2;
   --color-text-default-muted: color-mix(in srgb, #ede8e2 60%, transparent);
+}
+
+@layer base {
+  @keyframes malbec-popover-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+      transform-origin: var(--radix-popper-transform-origin);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+      transform-origin: var(--radix-popper-transform-origin);
+    }
+  }
+
+  @keyframes malbec-popover-out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+      transform-origin: var(--radix-popper-transform-origin);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95);
+      transform-origin: var(--radix-popper-transform-origin);
+    }
+  }
+
+  /**
+   * Transition-based motion for surfaces whose host primitive does NOT support Radix
+   * Presence (e.g. Radix Select). Transitions interpolate from the current displayed
+   * value, so interrupting enter with exit doesn't snap to a fully-open state.
+   *
+   * Drive with `data-malbec-motion="enter" | "exit"`.
+   */
+  [data-malbec-motion] {
+    transition-property: opacity, transform;
+    transition-duration: var(--malbec-popover-enter-duration, 150ms);
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-malbec-motion="enter"] {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  [data-malbec-motion="exit"] {
+    opacity: 0;
+    transform: scale(0.95);
+    transition-duration: var(--malbec-popover-exit-duration, 120ms);
+    transition-timing-function: cubic-bezier(0.3, 0, 0.8, 0.15);
+  }
+
+  @starting-style {
+    [data-malbec-motion="enter"] {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
 }
 
 @layer base {

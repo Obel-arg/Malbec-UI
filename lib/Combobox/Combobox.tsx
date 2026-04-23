@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { Popover, type PopoverContentProps } from "../Popover/Popover";
 import { cn } from "../utils/cn";
 import {
   comboboxChipVariants,
@@ -322,7 +322,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
     );
 
     return (
-      <PopoverPrimitive.Root
+      <Popover
         modal={false}
         open={open}
         onOpenChange={(next) => {
@@ -352,7 +352,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
             {children}
           </div>
         </ComboboxContext.Provider>
-      </PopoverPrimitive.Root>
+      </Popover>
     );
   },
 );
@@ -664,9 +664,9 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
     }
 
     return (
-      <PopoverPrimitive.Anchor asChild>
+      <Popover.Anchor asChild>
         <div className="ui:w-full">{row}</div>
-      </PopoverPrimitive.Anchor>
+      </Popover.Anchor>
     );
   },
 );
@@ -698,7 +698,7 @@ const ComboboxTrigger = React.forwardRef<
   }, [children, ctx, placeholder]);
 
   return (
-    <PopoverPrimitive.Trigger asChild>
+    <Popover.Trigger asChild>
       <button
         ref={ref}
         type="button"
@@ -722,21 +722,15 @@ const ComboboxTrigger = React.forwardRef<
           <ChevronsUpDownIcon className="ui:size-full" />
         </span>
       </button>
-    </PopoverPrimitive.Trigger>
+    </Popover.Trigger>
   );
 });
 ComboboxTrigger.displayName = "Combobox.Trigger";
 
-export type ComboboxContentProps = React.ComponentPropsWithoutRef<
-  typeof PopoverPrimitive.Content
-> & {
-  side?: React.ComponentProps<typeof PopoverPrimitive.Content>["side"];
-  sideOffset?: number;
-  align?: React.ComponentProps<typeof PopoverPrimitive.Content>["align"];
-};
+export type ComboboxContentProps = Omit<PopoverContentProps, "surface">;
 
 const ComboboxContent = React.forwardRef<
-  React.ElementRef<typeof PopoverPrimitive.Content>,
+  React.ComponentRef<typeof Popover.Content>,
   ComboboxContentProps
 >(function ComboboxContent(
   {
@@ -761,46 +755,42 @@ const ComboboxContent = React.forwardRef<
       : undefined;
 
   return (
-    <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Content
-        ref={ref}
-        data-slot="combobox-content"
-        style={{
-          ...measuredWidthStyle,
-          ...styleProp,
-        }}
-        side={side}
-        sideOffset={sideOffset}
-        align={align}
-        collisionPadding={8}
-        onOpenAutoFocus={(e) => {
-          if (ctx.preventContentAutofocus) e.preventDefault();
-          onOpenAutoFocus?.(e);
-        }}
-        onCloseAutoFocus={(e) => {
-          onCloseAutoFocus?.(e);
-        }}
-        onPointerDownOutside={(e) => {
-          if (isNodeInsideRoot(ctx.comboboxRootRef.current, e.target)) {
-            e.preventDefault();
-          }
-          onPointerDownOutside?.(e);
-        }}
-        onFocusOutside={(e) => {
-          if (
-            isNodeInsideRoot(
-              ctx.comboboxRootRef.current,
-              document.activeElement,
-            )
-          ) {
-            e.preventDefault();
-          }
-          onFocusOutside?.(e);
-        }}
-        className={cn(comboboxContentVariants(), className)}
-        {...rest}
-      />
-    </PopoverPrimitive.Portal>
+    <Popover.Content
+      ref={ref}
+      surface="plain"
+      data-slot="combobox-content"
+      style={{
+        ...measuredWidthStyle,
+        ...styleProp,
+      }}
+      side={side}
+      sideOffset={sideOffset}
+      align={align}
+      collisionPadding={8}
+      onOpenAutoFocus={(e) => {
+        if (ctx.preventContentAutofocus) e.preventDefault();
+        onOpenAutoFocus?.(e);
+      }}
+      onCloseAutoFocus={(e) => {
+        onCloseAutoFocus?.(e);
+      }}
+      onPointerDownOutside={(e) => {
+        if (isNodeInsideRoot(ctx.comboboxRootRef.current, e.target)) {
+          e.preventDefault();
+        }
+        onPointerDownOutside?.(e);
+      }}
+      onFocusOutside={(e) => {
+        if (
+          isNodeInsideRoot(ctx.comboboxRootRef.current, document.activeElement)
+        ) {
+          e.preventDefault();
+        }
+        onFocusOutside?.(e);
+      }}
+      className={cn(comboboxContentVariants(), className)}
+      {...rest}
+    />
   );
 });
 ComboboxContent.displayName = "Combobox.Content";
@@ -1002,7 +992,7 @@ const ComboboxChips = React.forwardRef<HTMLDivElement, ComboboxChipsProps>(
 
     return (
       <ComboboxInsideChipsContext.Provider value={true}>
-        <PopoverPrimitive.Anchor asChild>
+        <Popover.Anchor asChild>
           <div
             ref={ref}
             data-slot="combobox-chips"
@@ -1013,7 +1003,7 @@ const ComboboxChips = React.forwardRef<HTMLDivElement, ComboboxChipsProps>(
             )}
             {...rest}
           />
-        </PopoverPrimitive.Anchor>
+        </Popover.Anchor>
       </ComboboxInsideChipsContext.Provider>
     );
   },

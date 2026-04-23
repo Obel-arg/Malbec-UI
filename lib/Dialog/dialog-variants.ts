@@ -1,0 +1,78 @@
+import { cva } from "class-variance-authority";
+
+export const dialogOverlayVariants = cva([
+  "ui:fixed ui:inset-0 ui:z-50",
+  "ui:bg-black/45",
+  "ui:backdrop-blur-md",
+  "ui:transition-[opacity,backdrop-filter]",
+]);
+
+export const dialogContentVariants = cva([
+  "ui:malbec-font-sans",
+  "ui:fixed ui:top-1/2 ui:left-1/2 ui:z-50",
+  "ui:flex ui:w-full ui:max-w-[425px] ui:translate-x-[-50%] ui:translate-y-[-50%] ui:flex-col",
+  "ui:gap-4",
+  "ui:rounded-[8px]",
+  "ui:bg-background-100",
+  "ui:p-6",
+  "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
+  "ui:outline-none",
+  "ui:transition-[opacity,transform] ui:duration-200",
+]);
+
+export const dialogCloseVariants = cva([
+  "ui:absolute ui:top-4 ui:right-4",
+  "ui:inline-flex ui:size-8 ui:items-center ui:justify-center",
+  "ui:rounded-[8px]",
+  "ui:opacity-70",
+  "ui:transition-opacity",
+  "ui:outline-none",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+]);
+
+export const dialogCloseIconVariants = cva("ui:size-4");
+
+export const dialogHeaderVariants = cva("ui:flex ui:flex-col ui:text-left");
+
+export const dialogTitleVariants = cva(
+  "ui:text-[18px] ui:leading-7 ui:font-semibold ui:text-text-default",
+);
+
+export const dialogDescriptionVariants = cva(
+  "ui:pt-2 ui:text-sm ui:leading-5 ui:font-normal ui:text-text-default",
+);
+
+export const dialogBodyVariants = cva(
+  "ui:flex ui:flex-col ui:gap-4 ui:py-4",
+);
+
+export const dialogFooterVariants = cva("ui:flex ui:items-center ui:justify-end ui:gap-2");
+
+export const dialogActionVariants = cva([
+  "ui:malbec-font-sans",
+  "ui:inline-flex ui:h-9 ui:min-w-[123px] ui:items-center ui:justify-center",
+  "ui:rounded-[8px]",
+  "ui:bg-primary ui:px-4 ui:py-2",
+  "ui:text-sm ui:leading-5 ui:font-medium ui:text-primary-foreground",
+  "ui:whitespace-nowrap",
+  "ui:outline-none ui:transition-[opacity,background-color]",
+  "ui:hover:opacity-90 ui:active:opacity-80",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+]);
+
+export const dialogInlineFieldVariants = cva("ui:flex ui:w-full ui:items-center ui:gap-4");
+
+export const dialogInlineLabelVariants = cva(
+  "ui:flex-1 ui:min-w-0 ui:text-sm ui:leading-[14px] ui:font-medium ui:text-text-default",
+);
+
+export const dialogInlineInputVariants = cva([
+  "ui:flex-1 ui:min-w-0",
+  "ui:rounded-[6px]",
+  "ui:bg-background-100",
+  "ui:px-4 ui:py-2",
+  "ui:text-sm ui:leading-5 ui:font-normal ui:text-text-default",
+  "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
+  "ui:outline-none",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+]);

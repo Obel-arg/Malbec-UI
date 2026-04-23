@@ -49,7 +49,7 @@ function SearchGlyph(props: React.SVGProps<SVGSVGElement>) {
 export type CommandProps = React.ComponentPropsWithoutRef<typeof CmdkCommand>;
 
 const CommandRoot = React.forwardRef<
-  React.ElementRef<typeof CmdkCommand>,
+  React.ComponentRef<typeof CmdkCommand>,
   CommandProps
 >(function CommandRoot({ className, ...rest }, ref) {
   return (
@@ -67,11 +67,14 @@ export type CommandInputProps = React.ComponentPropsWithoutRef<
 >;
 
 const CommandInput = React.forwardRef<
-  React.ElementRef<typeof CmdkCommandInput>,
+  React.ComponentRef<typeof CmdkCommandInput>,
   CommandInputProps
 >(function CommandInput({ className, ...rest }, ref) {
   return (
-    <div data-slot="command-input-shell" className={commandInputShellVariants()}>
+    <div
+      data-slot="command-input-shell"
+      className={commandInputShellVariants()}
+    >
       <span className="ui:pointer-events-none ui:absolute ui:left-2 ui:top-1/2 ui:size-4 ui:-translate-y-1/2 ui:text-text-default ui:opacity-50">
         <SearchGlyph className="ui:size-full" />
       </span>
@@ -92,7 +95,7 @@ export type CommandListProps = React.ComponentPropsWithoutRef<
 >;
 
 const CommandList = React.forwardRef<
-  React.ElementRef<typeof CmdkCommandList>,
+  React.ComponentRef<typeof CmdkCommandList>,
   CommandListProps
 >(function CommandList({ className, ...rest }, ref) {
   return (
@@ -110,7 +113,7 @@ export type CommandEmptyProps = React.ComponentPropsWithoutRef<
 >;
 
 const CommandEmpty = React.forwardRef<
-  React.ElementRef<typeof CmdkCommandEmpty>,
+  React.ComponentRef<typeof CmdkCommandEmpty>,
   CommandEmptyProps
 >(function CommandEmpty({ className, ...rest }, ref) {
   return (
@@ -128,7 +131,7 @@ export type CommandGroupProps = React.ComponentPropsWithoutRef<
 >;
 
 const CommandGroup = React.forwardRef<
-  React.ElementRef<typeof CmdkCommandGroup>,
+  React.ComponentRef<typeof CmdkCommandGroup>,
   CommandGroupProps
 >(function CommandGroup({ className, ...rest }, ref) {
   return (
@@ -146,7 +149,7 @@ export type CommandItemProps = React.ComponentPropsWithoutRef<
 >;
 
 const CommandItem = React.forwardRef<
-  React.ElementRef<typeof CmdkCommandItem>,
+  React.ComponentRef<typeof CmdkCommandItem>,
   CommandItemProps
 >(function CommandItem({ className, ...rest }, ref) {
   return (
@@ -164,7 +167,7 @@ export type CommandSeparatorProps = React.ComponentPropsWithoutRef<
 >;
 
 const CommandSeparator = React.forwardRef<
-  React.ElementRef<typeof CmdkCommandSeparator>,
+  React.ComponentRef<typeof CmdkCommandSeparator>,
   CommandSeparatorProps
 >(function CommandSeparator({ className, ...rest }, ref) {
   return (
@@ -197,7 +200,7 @@ export type CommandLoadingProps = React.ComponentPropsWithoutRef<
 >;
 
 const CommandLoading = React.forwardRef<
-  React.ElementRef<typeof CmdkCommandLoading>,
+  React.ComponentRef<typeof CmdkCommandLoading>,
   CommandLoadingProps
 >(function CommandLoading({ className, ...rest }, ref) {
   return (
@@ -241,9 +244,7 @@ const CommandDialog = React.forwardRef<HTMLDivElement, CommandDialogProps>(
         overlayClassName={cn(commandDialogOverlayVariants(), overlayClassName)}
         {...(rest as Omit<
           React.ComponentPropsWithoutRef<typeof CmdkCommandDialog>,
-          | "className"
-          | "contentClassName"
-          | "overlayClassName"
+          "className" | "contentClassName" | "overlayClassName"
         >)}
       />
     );

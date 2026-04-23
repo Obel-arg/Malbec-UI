@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import { popoverSurfaceMotionClasses } from "../Popover/popover-variants";
 
 /** Closed trigger / anchor row — matches design system combobox field. */
 export const comboboxTriggerRowVariants = cva(
@@ -102,6 +103,7 @@ export const comboboxContentVariants = cva(
     "ui:text-text-default",
     "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
     "ui:origin-(--radix-popover-content-transform-origin)",
+    ...popoverSurfaceMotionClasses,
   ],
   { variants: {}, defaultVariants: {} },
 );

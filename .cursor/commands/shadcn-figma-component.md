@@ -6,7 +6,7 @@ You are implementing a **malbec-ui** component that must follow **shadcn/ui sema
 
 **Primitives:** implement behavior and accessibility with **Radix UI** (`@radix-ui/react-*`) only. **Do not** use Base UI (`@base-ui/react`) or other headless stacks for this workflow—even if upstream shadcn docs or CLI output reference Base UI or link to base-ui.com, map the interaction model to **Radix**-based composition (and native elements where Radix has no primitive).
 
-**Compound API (required for stories and primary usage):** attach pieces on the root the same way as **`lib/Button/`** and **`lib/Alert/`** — e.g. `<Button.Icon>`, `<Button.Text>`; for breadcrumbs, `<Breadcrumb.List>`, `<Breadcrumb.Item>`, `<Breadcrumb.Link>`, `<Breadcrumb.Page>`, `<Breadcrumb.Separator>`, `<Breadcrumb.Ellipsis>`. Story source must demonstrate this pattern, not only flat `BreadcrumbList`-style imports. You may still export **shadcn-registry-style flat names** as aliases (documented as equivalent to the compound members) when it helps consumers following upstream docs.
+**Compound API (required for stories and primary usage):** attach pieces on the root the same way as **`lib/Button/`** and **`lib/Alert/`** — e.g. `<Button.Icon>`, `<Button.Text>`; for breadcrumbs, `<Breadcrumb.List>`, `<Breadcrumb.Item>`, `<Breadcrumb.Link>`, `<Breadcrumb.Page>`, `<Breadcrumb.Separator>`, `<Breadcrumb.Ellipsis>`. Story source must demonstrate this pattern, not only flat `BreadcrumbList`-style imports. **Public library exports** are only the root component (see **Exports** below); do not add separate top-level exports for flat registry names, internal modules, or types.
 
 ---
 
@@ -17,6 +17,23 @@ You are implementing a **malbec-ui** component that must follow **shadcn/ui sema
   - Extract **`fileKey`** from the path.
   - Extract **`nodeId`** from `node-id=` and convert `-` → `:` (e.g. `1-234` → `1:234`).
   - Branch URLs: if the URL contains `/branch/<branchKey>/`, use **`branchKey` as `fileKey`** (per Figma MCP rules).
+
+---
+
+## Phase 0 — Primitive dependency check (required, first)
+
+Before gathering sources for the requested component, determine whether it **composes other shadcn/Radix primitives** (e.g. `DatePicker` composes `Popover` + `Calendar`; `Combobox` composes `Popover` + `Command`; `Form` composes `Label`, etc.).
+
+1. From the shadcn docs for the requested component, list every primitive it depends on.
+2. For each dependency, check whether it **already exists as a malbec-ui primitive** under `lib/<Primitive>/` with its own variants file, component, stories, and an export in `lib/main.ts`.
+   - Only count it as "existing" if it is a **public** malbec-ui component. Internal usage of a Radix package inside another component (e.g. `@radix-ui/react-popover` imported from `Combobox.tsx`) does **not** count.
+3. If any dependency is **missing**:
+   - **Stop.** Do not start building the requested component.
+   - List every missing primitive to the user.
+   - **Ask the user to provide a Figma frame URL for each missing primitive.** The user must supply one Figma URL per primitive. Do not guess, do not reuse frames.
+   - For each missing primitive, **look up the shadcn docs page** for its Radix implementation (e.g. `https://ui.shadcn.com/docs/components/popover`) so you have docs + Figma before implementing.
+4. **Build each missing primitive first**, one at a time, by running the full workflow (Phases 1–4 below) on that primitive: variants file, component(s), stories, `lib/main.ts` export. A primitive is done when it satisfies the same Definition of Done as any other component.
+5. Only after **all** dependent primitives are in place may you proceed to build the originally-requested component by composing them.
 
 ---
 
@@ -38,11 +55,11 @@ Treat Figma-generated code as **reference only**—rebuild using this library’
 Study **`lib/Alert/`** and **`lib/Button/`** as templates:
 
 - **`cn`** from `lib/utils/cn` for `className` merging.
-- **Variants**: `class-variance-authority` (or project equivalent) in a separate `*-variants.ts` file; export variant types. **Define variant keys and options from Figma only** (what the design actually ships); do not extend `cva` with extra `variant`/`size`/state options just because shadcn lists them.
+- **Variants**: `class-variance-authority` (or project equivalent) in a separate `*-variants.ts` file. **Define variant keys and options from Figma only** (what the design actually ships); do not extend `cva` with extra `variant`/`size`/state options just because shadcn lists them. Keep variant helpers and any variant-related types **internal** to the component folder; do not export them from **`lib/main.ts`**.
 - **Composition**: Root + subcomponents (`forwardRef`) assigned on the root export (`Component.Part = …`), optional **React context** when children need parent variant/size (see `Alert`, `Button`). **Stories** should use the compound JSX form (`<Breadcrumb.List>…`) like **`Button.stories.tsx`**, not flat sibling components only.
 - **DOM**: Semantic elements; `data-slot="..."`, `data-variant`, `data-size` where it helps Storybook/CSS.
 - **Accessibility**: Roles, labels, `aria-*`, keyboard behavior per shadcn and **Radix** expectations (never Base UI patterns in code).
-- **Exports**: Wire **`lib/main.ts`** (types + components + variant helpers as appropriate).
+- **Exports**: From **`lib/main.ts`**, export **only the base (root) component** for the feature—one named export per component family (e.g. `Button`, `DatePicker`). **Do not** export: compound subcomponents as separate entry points, “flat” shadcn-style siblings, **prop types**, **variant types**, **`Props` interfaces**, or anything from `*-variants.ts`. Consumers use the compound API via the root only (e.g. `DatePicker.Trigger`), not separate package exports for internal pieces.
 - **Stories**: Add **`<Component>.stories.tsx`** beside the component (match existing Storybook style). **In Storybook, do not**:
   - replicate the **Figma artboard / frame** layout (no “full frame” or design-board mock, no copy of the doc blurb that exists only in Figma);
   - include **any reference to Figma** in stories—no Figma URLs, no `Figma`, `figma.com`, or “frame” in story `name`/`title`, JSDoc shown by autodocs, or story source meant for design reviews. Visual parity with the design is validated in the agent workflow (Phase 4), not in the stories file.
@@ -71,15 +88,17 @@ If Code Connect is configured for this file, you may also use **`get_context_for
 
 ## Definition of done
 
+- [ ] Phase 0 completed: every dependent primitive either already existed in `lib/` as a public malbec-ui component, or was built first (with its own Figma frame, variants, stories, and `lib/main.ts` export) before the requested component.
 - [ ] API and behavior align with **shadcn documentation** for the component family, implemented with **Radix UI** only (no Base UI).
 - [ ] Visual structure and styling match the **Figma frame** (checked with **`get_screenshot`** against the built component, without relying on a Storybook “design frame” story).
-- [ ] Code follows **malbec-ui composition patterns** (variants file, `cn`, compound components, exports).
+- [ ] Code follows **malbec-ui composition patterns** (variants file, `cn`, compound components on the root). **`lib/main.ts`** exports only the base component—no internal subcomponents, prop types, or variant exports.
 - [ ] Stories cover the variants/states **present in Figma** (no extra permutations), without the Figma frame in Storybook and without Figma references in `*.stories.tsx`.
 
 ---
 
 ## Notes
 
+- **`lib/main.ts` public API:** one root export per component (compound members hang off that object only). No exported prop types, variant types, or internal subcomponents as separate package exports.
 - **Figma is the source of truth for visual variants:** do not add variant options, states, or styling dimensions that the frame does not show (including “helpful” shadcn parity extras).
 - Do not introduce unrelated refactors or new docs outside this workflow.
 - If the shadcn CLI or registry is unavailable, rely on the user-provided doc URLs and still complete the Figma MCP review loop.

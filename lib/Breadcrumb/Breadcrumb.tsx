@@ -29,12 +29,7 @@ function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function EllipsisIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden
-      {...props}
-    >
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
       <circle cx="5" cy="12" r="1.5" />
       <circle cx="12" cy="12" r="1.5" />
       <circle cx="19" cy="12" r="1.5" />
@@ -45,7 +40,7 @@ function EllipsisIcon(props: React.SVGProps<SVGSVGElement>) {
 export type BreadcrumbProps = React.ComponentPropsWithoutRef<"nav">;
 
 const BreadcrumbRoot = React.forwardRef<
-  React.ElementRef<"nav">,
+  React.ComponentRef<"nav">,
   BreadcrumbProps
 >(function BreadcrumbRoot({ className, ...props }, ref) {
   return (

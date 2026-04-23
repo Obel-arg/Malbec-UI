@@ -44,7 +44,7 @@ export type CheckboxProps = React.ComponentPropsWithoutRef<
 >;
 
 const CheckboxRoot = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
+  React.ComponentRef<typeof CheckboxPrimitive.Root>,
   CheckboxProps
 >(function CheckboxRoot({ className, children, ...props }, ref) {
   return (
@@ -68,7 +68,7 @@ export type CheckboxIndicatorProps = React.ComponentPropsWithoutRef<
 };
 
 const CheckboxIndicator = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Indicator>,
+  React.ComponentRef<typeof CheckboxPrimitive.Indicator>,
   CheckboxIndicatorProps
 >(function CheckboxIndicator({ className, children, ...props }, ref) {
   return (
