@@ -33,6 +33,7 @@ const SheetOverlay = React.forwardRef<
     <DialogPrimitive.Overlay
       ref={ref}
       data-slot="sheet-overlay"
+      data-malbec-motion="dialog-overlay"
       className={cn(sheetOverlayVariants(), className)}
       {...rest}
     />
@@ -74,6 +75,7 @@ const SheetContent = React.forwardRef<
         ref={ref}
         data-slot="sheet-content"
         data-side={side}
+        data-malbec-motion="sheet-content"
         className={cn(!unstyled && sheetContentVariants({ side }), className)}
         {...rest}
       >

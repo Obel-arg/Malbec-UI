@@ -31,6 +31,7 @@ function MinusGlyph(props: React.SVGProps<SVGSVGElement>) {
       stroke="currentColor"
       strokeWidth="2.5"
       strokeLinecap="round"
+      strokeLinejoin="round"
       aria-hidden
       {...props}
     >
@@ -42,23 +43,6 @@ function MinusGlyph(props: React.SVGProps<SVGSVGElement>) {
 export type CheckboxProps = React.ComponentPropsWithoutRef<
   typeof CheckboxPrimitive.Root
 >;
-
-const CheckboxRoot = React.forwardRef<
-  React.ComponentRef<typeof CheckboxPrimitive.Root>,
-  CheckboxProps
->(function CheckboxRoot({ className, children, ...props }, ref) {
-  return (
-    <CheckboxPrimitive.Root
-      ref={ref}
-      data-slot="checkbox"
-      className={cn(checkboxRootVariants(), className)}
-      {...props}
-    >
-      {children}
-    </CheckboxPrimitive.Root>
-  );
-});
-CheckboxRoot.displayName = "Checkbox";
 
 export type CheckboxIndicatorProps = React.ComponentPropsWithoutRef<
   typeof CheckboxPrimitive.Indicator
@@ -88,6 +72,23 @@ const CheckboxIndicator = React.forwardRef<
   );
 });
 CheckboxIndicator.displayName = "Checkbox.Indicator";
+
+const CheckboxRoot = React.forwardRef<
+  React.ComponentRef<typeof CheckboxPrimitive.Root>,
+  CheckboxProps
+>(function CheckboxRoot({ className, children, ...props }, ref) {
+  return (
+    <CheckboxPrimitive.Root
+      ref={ref}
+      data-slot="checkbox"
+      className={cn(checkboxRootVariants(), className)}
+      {...props}
+    >
+      {children ?? <CheckboxIndicator />}
+    </CheckboxPrimitive.Root>
+  );
+});
+CheckboxRoot.displayName = "Checkbox";
 
 type CheckboxComponent = typeof CheckboxRoot & {
   Indicator: typeof CheckboxIndicator;
