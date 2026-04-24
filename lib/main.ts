@@ -24,3 +24,4 @@ export { Select } from "./Select/Select";
 export { Dialog } from "./Dialog/Dialog";
 export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Pagination } from "./Pagination/Pagination";
+export { RadioGroup } from "./RadioGroup/RadioGroup";
