@@ -29,3 +29,6 @@ export { Pagination } from "./Pagination/Pagination";
 export { RadioGroup } from "./RadioGroup/RadioGroup";
 export { Sonner } from "./Sonner/Sonner";
 export { Switch } from "./Switch/Switch";
+export { Toggle } from "./Toggle/Toggle";
+export { ToggleGroup } from "./ToggleGroup/ToggleGroup";
+export { Tabs } from "./Tabs/Tabs";
