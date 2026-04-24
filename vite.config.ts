@@ -12,6 +12,9 @@ export default defineConfig({
     tailwindcss(),
     dts({
       include: ['lib'],
+      // Storybook `meta` uses `satisfies Meta<typeof Component>` / props that reference
+      // unexported or dependency-internal types, which causes TS4023 in emitted .d.ts.
+      exclude: ['**/*.stories.tsx', 'node_modules/**'],
       // rollupTypes bundles .d.ts via API Extractor; it was emitting `export {}` only
       // and broke consumer imports like `import { Button } from '…'`.
       rollupTypes: false,
@@ -30,6 +33,10 @@ export default defineConfig({
     },
     emptyOutDir: true,
     rolldownOptions: {
+      // vite-plugin-dts runs for several seconds; Rolldown flags high plugin time vs.
+      // the native link stage. Not actionable without replacing dts (see
+      // https://rolldown.rs/options/checks#plugintimings).
+      checks: { pluginTimings: false },
       external: ['react', 'react-dom', 'react/jsx-runtime'],
       output: {
         globals: {
@@ -38,6 +45,6 @@ export default defineConfig({
           'react/jsx-runtime': 'react/jsx-runtime',
         },
       },
-    }
+    },
   }
 })
