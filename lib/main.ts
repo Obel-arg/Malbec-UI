@@ -34,4 +34,5 @@ export { ToggleGroup } from "./ToggleGroup/ToggleGroup";
 export { Tabs } from "./Tabs/Tabs";
 export { Tooltip } from "./Tooltip/Tooltip";
 export { Card } from "./Card/Card";
+export { Chart } from "./Chart/Chart";
 export { Steps } from "./Steps/Steps";

@@ -93,5 +93,8 @@
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.9",
     "vite-plugin-dts": "^4.5.4"
+  },
+  "dependencies": {
+    "recharts": "^3.8.1"
   }
 }
