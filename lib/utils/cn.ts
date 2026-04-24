@@ -1,7 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { extendTailwindMerge } from "tailwind-merge";
 
-const twMerge = extendTailwindMerge({ prefix: "ui:" });
+/** Prefix is the string before the first `:` (tailwind-merge adds `:` itself). */
+const twMerge = extendTailwindMerge({ prefix: "ui" });
 
 /**
  * Merges class names with `clsx`, then resolves Tailwind conflicts with
