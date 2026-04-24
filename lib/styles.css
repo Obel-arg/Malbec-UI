@@ -105,6 +105,78 @@
     }
   }
 
+  @keyframes malbec-sheet-content-in-right {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes malbec-sheet-content-out-right {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes malbec-sheet-content-in-left {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes malbec-sheet-content-out-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes malbec-sheet-content-in-top {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes malbec-sheet-content-out-top {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-100%);
+    }
+  }
+
+  @keyframes malbec-sheet-content-in-bottom {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes malbec-sheet-content-out-bottom {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
   [data-slot="dialog-overlay"][data-state="open"] {
     animation: malbec-dialog-overlay-in var(--malbec-dialog-overlay-enter-duration, 150ms)
       cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -125,11 +197,65 @@
       cubic-bezier(0.3, 0, 0.8, 0.15) both;
   }
 
+  [data-slot="sheet-overlay"][data-state="open"] {
+    animation: malbec-dialog-overlay-in var(--malbec-dialog-overlay-enter-duration, 150ms)
+      cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-slot="sheet-overlay"][data-state="closed"] {
+    animation: malbec-dialog-overlay-out var(--malbec-dialog-overlay-exit-duration, 120ms)
+      cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  }
+
+  [data-slot="sheet-content"][data-side="right"][data-state="open"] {
+    animation: malbec-sheet-content-in-right var(--malbec-dialog-content-enter-duration, 200ms)
+      cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-slot="sheet-content"][data-side="right"][data-state="closed"] {
+    animation: malbec-sheet-content-out-right var(--malbec-dialog-content-exit-duration, 150ms)
+      cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  }
+
+  [data-slot="sheet-content"][data-side="left"][data-state="open"] {
+    animation: malbec-sheet-content-in-left var(--malbec-dialog-content-enter-duration, 200ms)
+      cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-slot="sheet-content"][data-side="left"][data-state="closed"] {
+    animation: malbec-sheet-content-out-left var(--malbec-dialog-content-exit-duration, 150ms)
+      cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  }
+
+  [data-slot="sheet-content"][data-side="top"][data-state="open"] {
+    animation: malbec-sheet-content-in-top var(--malbec-dialog-content-enter-duration, 200ms)
+      cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-slot="sheet-content"][data-side="top"][data-state="closed"] {
+    animation: malbec-sheet-content-out-top var(--malbec-dialog-content-exit-duration, 150ms)
+      cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  }
+
+  [data-slot="sheet-content"][data-side="bottom"][data-state="open"] {
+    animation: malbec-sheet-content-in-bottom var(--malbec-dialog-content-enter-duration, 200ms)
+      cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-slot="sheet-content"][data-side="bottom"][data-state="closed"] {
+    animation: malbec-sheet-content-out-bottom var(--malbec-dialog-content-exit-duration, 150ms)
+      cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     [data-slot="dialog-overlay"][data-state="open"],
     [data-slot="dialog-overlay"][data-state="closed"],
     [data-slot="dialog-content"][data-state="open"],
-    [data-slot="dialog-content"][data-state="closed"] {
+    [data-slot="dialog-content"][data-state="closed"],
+    [data-slot="sheet-overlay"][data-state="open"],
+    [data-slot="sheet-overlay"][data-state="closed"],
+    [data-slot="sheet-content"][data-state="open"],
+    [data-slot="sheet-content"][data-state="closed"] {
       animation-duration: 1ms;
       animation-timing-function: linear;
     }

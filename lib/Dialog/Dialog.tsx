@@ -313,6 +313,7 @@ Dialog.InlineInput = DialogInlineInput;
 
 /** shadcn-style names — same as `Dialog.Trigger` / `Dialog.Content` / … */
 export {
+  DialogPrimitive,
   DialogPortal,
   DialogTrigger,
   DialogOverlay,
