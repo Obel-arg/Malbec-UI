@@ -32,3 +32,4 @@ export { Switch } from "./Switch/Switch";
 export { Toggle } from "./Toggle/Toggle";
 export { ToggleGroup } from "./ToggleGroup/ToggleGroup";
 export { Tabs } from "./Tabs/Tabs";
+export { Tooltip } from "./Tooltip/Tooltip";
