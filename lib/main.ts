@@ -28,3 +28,4 @@ export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Pagination } from "./Pagination/Pagination";
 export { RadioGroup } from "./RadioGroup/RadioGroup";
 export { Sonner } from "./Sonner/Sonner";
+export { Switch } from "./Switch/Switch";
