@@ -4,14 +4,14 @@ Malbec UI — React component library, published to GitHub Packages.
 
 ## Install (consumers)
 
-Because this package is hosted on GitHub Packages, you need to tell npm where to find the `@obel-arg` scope. Add a `.npmrc` at the root of your consuming project:
+Every project that installs `@obel-arg/malbec-ui` must have an `.npmrc` at the repository root so npm can resolve the `@obel-arg` scope from GitHub Packages. Add (or merge) these lines:
 
 ```
 @obel-arg:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+//npm.pkg.github.com/:_authToken=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
 ```
 
-Where `GITHUB_TOKEN` is a [Personal Access Token (classic)](https://github.com/settings/tokens) with the `read:packages` scope (export it in your shell / CI environment).
+The token above is a read-only PAT scoped for pulling packages from GitHub Packages.
 
 Then install:
 
