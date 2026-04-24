@@ -29,7 +29,7 @@ const preview: Preview = {
         icon: "paintbrush",
         dynamicTitle: true,
         items: [
-          { value: "malbecRecords", title: "Malbec Records" },
+          { value: "malbecRecords", title: "Records" },
           { value: "publishing", title: "Publishing" },
           { value: "management", title: "Management" },
           { value: "booking", title: "Booking" },

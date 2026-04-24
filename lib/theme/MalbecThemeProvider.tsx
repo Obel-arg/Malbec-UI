@@ -7,14 +7,16 @@ import {
 } from "react";
 import { MalbecThemeContext } from "./MalbecThemeContext";
 import { malbecRecords } from "./presets";
-import { TOKEN_NAMES, TOKEN_TO_CSS_VAR, type ThemeConfig, type ThemeMode } from "./tokens";
+import {
+  TOKEN_NAMES,
+  TOKEN_TO_CSS_VAR,
+  type ThemeConfig,
+  type ThemeMode,
+} from "./tokens";
 
 const STYLE_ID = "malbec-theme";
 
-function schemeToBlock(
-  selector: string,
-  scheme: ThemeConfig["light"],
-): string {
+function schemeToBlock(selector: string, scheme: ThemeConfig["light"]): string {
   const lines: string[] = [];
   for (const name of TOKEN_NAMES) {
     const value = scheme[name];
@@ -34,7 +36,7 @@ function buildOverrideStylesheet(theme: ThemeConfig): string {
 
 export interface MalbecThemeProviderProps {
   children: ReactNode;
-  /** Full or partial theme; defaults to Malbec Records preset. */
+  /** Full or partial theme; defaults to Records preset. */
   theme?: ThemeConfig;
   /**
    * Initial color scheme. Use `setMode` from `useTheme()` to change at runtime.
@@ -72,10 +74,7 @@ export function MalbecThemeProvider({
 
   useEffect(() => {
     if (typeof document === "undefined") return;
-    document.documentElement.classList.toggle(
-      "dark",
-      resolvedMode === "dark",
-    );
+    document.documentElement.classList.toggle("dark", resolvedMode === "dark");
   }, [resolvedMode]);
 
   useEffect(() => {

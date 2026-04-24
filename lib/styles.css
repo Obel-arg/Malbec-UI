@@ -403,3 +403,111 @@
   --text-label-semibold--line-height: 14px;
   --text-label-semibold--font-weight: 600;
 }
+
+/**
+ * Sonner “default” toasts (unlayered) — must live outside `@layer` so these rules
+ * win over the unlayered stylesheet `sonner` injects (otherwise its
+ * `[data-button]{ background: var(--normal-text) }` overrides Malbec `Button` / primary
+ * theming, which is driven by `--color-primary` from `MalbecThemeProvider`).
+ */
+[data-sonner-toast][data-styled]:not([data-type]) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  width: 384px !important;
+  max-width: 100%;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 1rem !important;
+  /* Sonner’s default is 13px + system stack — Figma: Inter 12px (node 66:7579). */
+  font-family: "Inter Variable", Inter, sans-serif !important;
+  font-size: 12px !important;
+  line-height: 1.25rem !important;
+  -webkit-font-smoothing: antialiased;
+  background: var(--color-background-100) !important;
+  color: var(--color-text-default) !important;
+  border: 0 !important;
+  border-left: 1px solid var(--color-background-300) !important;
+  box-shadow: 0 0 2px 0 rgb(0 0 0 / 0.2) !important;
+}
+
+[data-sonner-toast][data-styled]:not([data-type]) [data-content] {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+[data-sonner-toast][data-styled]:not([data-type]) [data-title] {
+  font-family: "Inter Variable", Inter, sans-serif;
+  font-size: 12px;
+  /* Figma: headline reads slightly stronger than the line below. */
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: var(--color-text-default);
+  letter-spacing: normal;
+  font-synthesis: none;
+}
+
+[data-sonner-toast][data-styled]:not([data-type]) [data-description] {
+  font-family: "Inter Variable", Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.25rem;
+  /* Softer than the title, matching the Figma frame hierarchy. */
+  color: var(--color-text-default-muted);
+  letter-spacing: normal;
+  font-synthesis: none;
+}
+
+/* Figma `Button Primary` in the Sonner frame: 32×~52, 6+6 vertical padding, 20px line (node 66:7586). */
+[data-sonner-toast][data-styled]:not([data-type]) [data-button][data-action] {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  flex-shrink: 0;
+  width: max-content;
+  min-width: 0;
+  height: 32px;
+  min-height: 32px;
+  max-height: 32px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 0;
+  font-family: "Inter Variable", Inter, sans-serif;
+  /* px, not rem — keeps the line box exactly 20px inside 32px − 6px − 6px. */
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--color-primary-foreground);
+  background-color: var(--color-primary);
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+[data-sonner-toast][data-styled]:not([data-type]) [data-button][data-action]:hover {
+  opacity: 0.9;
+}
+
+[data-sonner-toast][data-styled]:not([data-type]) [data-button][data-action]:active {
+  opacity: 0.8;
+}
+
+[data-sonner-toast][data-styled]:not([data-type]) [data-button][data-action]:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-background-100),
+    0 0 0 4px var(--color-primary);
+}

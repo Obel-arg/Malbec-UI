@@ -1,7 +1,7 @@
 import type { ThemeConfig } from "./tokens";
 
 export const malbecRecords: ThemeConfig = {
-  name: "Malbec Records",
+  name: "Records",
   light: {
     accent: "#CCB9C4",
     primary: "#621543",

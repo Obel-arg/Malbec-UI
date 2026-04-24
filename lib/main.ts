@@ -27,3 +27,4 @@ export { Sidebar, useSidebar } from "./Sidebar/Sidebar";
 export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Pagination } from "./Pagination/Pagination";
 export { RadioGroup } from "./RadioGroup/RadioGroup";
+export { Sonner } from "./Sonner/Sonner";
