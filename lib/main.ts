@@ -23,6 +23,7 @@ export { Popover } from "./Popover/Popover";
 export { Select } from "./Select/Select";
 export { Dialog } from "./Dialog/Dialog";
 export { Sheet } from "./Sheet/Sheet";
+export { Sidebar, useSidebar } from "./Sidebar/Sidebar";
 export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Pagination } from "./Pagination/Pagination";
 export { RadioGroup } from "./RadioGroup/RadioGroup";
