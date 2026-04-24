@@ -95,6 +95,7 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.21.3",
     "recharts": "^3.8.1"
   }
 }

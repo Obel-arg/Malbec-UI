@@ -120,7 +120,7 @@ export const WithGroups: Story = {
   render: () => (
     <div className="ui:malbec-font-sans ui:w-[min(100vw-2rem,450px)]">
       <Command defaultValue="calendar" label="Command menu">
-        <Command.Input placeholder="Type a command or search..." />
+        <Command.Input placeholder="Do stuff or ask questions" />
         <Command.List>
           <Command.Empty>No results found.</Command.Empty>
           <Command.Group heading="Suggestions">
@@ -128,7 +128,7 @@ export const WithGroups: Story = {
               <span className="ui:mr-2 ui:inline-flex ui:items-center">
                 <CalendarIcon />
               </span>
-              Calendar
+              Create new show
             </Command.Item>
             <Command.Item value="emoji">
               <span className="ui:mr-2 ui:inline-flex ui:items-center">
@@ -143,7 +143,6 @@ export const WithGroups: Story = {
               Calculator
             </Command.Item>
           </Command.Group>
-          <Command.Separator alwaysRender />
           <Command.Group heading="Settings">
             <Command.Item value="profile">
               <span className="ui:mr-2 ui:inline-flex ui:items-center">
@@ -161,7 +160,7 @@ export const WithGroups: Story = {
               <span className="ui:mr-2 ui:inline-flex ui:items-center">
                 <SettingsIcon />
               </span>
-              Settings
+              Go to settings
             </Command.Item>
           </Command.Group>
         </Command.List>
@@ -176,7 +175,11 @@ export const InDialog: Story = {
 
     return (
       <div className="ui:malbec-font-sans">
-        <Button htmlType="button" variant="secondary" onClick={() => setOpen(true)}>
+        <Button
+          htmlType="button"
+          variant="secondary"
+          onClick={() => setOpen(true)}
+        >
           Open palette
         </Button>
         <Command.Dialog
@@ -185,18 +188,15 @@ export const InDialog: Story = {
           label="Command palette"
           defaultValue="calendar"
         >
-          <Command.Input placeholder="Search for a command to run..." />
+          <Command.Input placeholder="Do stuff or ask questions" />
           <Command.List>
             <Command.Empty>No results found.</Command.Empty>
             <Command.Group heading="Suggestions">
-              <Command.Item
-                value="calendar"
-                onSelect={() => setOpen(false)}
-              >
+              <Command.Item value="calendar" onSelect={() => setOpen(false)}>
                 <span className="ui:mr-2 ui:inline-flex ui:items-center">
                   <CalendarIcon />
                 </span>
-                Calendar
+                Create new show
               </Command.Item>
               <Command.Item value="emoji" onSelect={() => setOpen(false)}>
                 <span className="ui:mr-2 ui:inline-flex ui:items-center">

@@ -2,8 +2,9 @@ import { cva } from "class-variance-authority";
 
 export const sheetOverlayVariants = cva([
   "ui:fixed ui:inset-0 ui:z-50",
-  "ui:bg-black/45",
-  "ui:backdrop-blur-md",
+  "ui:bg-background-200/60",
+  "ui:backdrop-blur-[3.5px]",
+  "ui:transition-opacity",
 ]);
 
 export const sheetContentVariants = cva(

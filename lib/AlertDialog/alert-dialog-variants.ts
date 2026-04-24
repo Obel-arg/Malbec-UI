@@ -4,9 +4,9 @@ import { cva, type VariantProps } from "class-variance-authority";
 export const alertDialogOverlayVariants = cva(
   [
     "ui:fixed ui:inset-0 ui:z-50",
-    "ui:bg-black/45 dark:ui:bg-black/55",
-    "ui:backdrop-blur-md",
-    "ui:transition-[opacity,backdrop-filter]",
+    "ui:bg-background-200/60",
+    "ui:backdrop-blur-[3.5px]",
+    "ui:transition-opacity",
   ],
 );
 

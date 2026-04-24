@@ -10,7 +10,7 @@ import {
   CommandSeparator as CmdkCommandSeparator,
 } from "cmdk";
 import type { DialogProps } from "../Dialog/Dialog";
-import { Dialog } from "../Dialog/Dialog";
+import { DialogPrimitive } from "../Dialog/Dialog";
 import { cn } from "../utils/cn";
 import {
   commandDialogContentVariants,
@@ -256,37 +256,42 @@ const CommandDialog = React.forwardRef<HTMLDivElement, CommandDialogProps>(
     ref,
   ) {
     return (
-      <Dialog
+      <DialogPrimitive.Root
         open={open}
         defaultOpen={defaultOpen}
         onOpenChange={onOpenChange}
         modal={modal}
       >
-        <Dialog.Content
-          showCloseButton={false}
-          unstyled
-          container={container}
-          overlayClassName={cn(commandDialogOverlayVariants(), overlayClassName)}
-          className={cn(commandDialogContentVariants(), contentClassName)}
-          aria-label={label}
-        >
-          <CmdkCommand
-            ref={ref}
-            label={label}
-            shouldFilter={shouldFilter}
-            filter={filter}
-            defaultValue={defaultValue}
-            value={value}
-            onValueChange={onValueChange}
-            loop={loop}
-            disablePointerSelection={disablePointerSelection}
-            vimBindings={vimBindings}
-            className={cn(commandRootVariants(), className)}
+        <DialogPrimitive.Portal container={container}>
+          <DialogPrimitive.Overlay
+            data-slot="command-dialog-overlay"
+            data-malbec-motion="dialog-overlay"
+            className={cn(commandDialogOverlayVariants(), overlayClassName)}
+          />
+          <DialogPrimitive.Content
+            data-slot="command-dialog-content"
+            data-malbec-motion="dialog-content"
+            className={cn(commandDialogContentVariants(), contentClassName)}
+            aria-label={label}
           >
-            {children}
-          </CmdkCommand>
-        </Dialog.Content>
-      </Dialog>
+            <CmdkCommand
+              ref={ref}
+              label={label}
+              shouldFilter={shouldFilter}
+              filter={filter}
+              defaultValue={defaultValue}
+              value={value}
+              onValueChange={onValueChange}
+              loop={loop}
+              disablePointerSelection={disablePointerSelection}
+              vimBindings={vimBindings}
+              className={cn(commandRootVariants(), className)}
+            >
+              {children}
+            </CmdkCommand>
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
     );
   },
 );

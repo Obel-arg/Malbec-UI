@@ -35,4 +35,6 @@ export { Tabs } from "./Tabs/Tabs";
 export { Tooltip } from "./Tooltip/Tooltip";
 export { Card } from "./Card/Card";
 export { Chart } from "./Chart/Chart";
+export { DataTable } from "./DataTable/DataTable";
 export { Steps } from "./Steps/Steps";
+export { Table } from "./Table/Table";
