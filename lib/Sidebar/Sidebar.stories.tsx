@@ -416,9 +416,12 @@ function SidebarDemo({ side }: { side: "left" | "right" }) {
         </Sidebar>
         <Sidebar.Inset>
           <header className="ui:flex ui:h-14 ui:items-center ui:border-b ui:border-background-300 ui:px-4">
-            <Sidebar.Trigger className="ui:md:hidden" />
-            <span className="ui:ml-2 ui:text-sm ui:font-medium ui:text-text-default ui:md:ml-0">
+            <Sidebar.Trigger className="ui:mr-2" />
+            <span className="ui:text-sm ui:font-medium ui:text-text-default">
               Main
+            </span>
+            <span className="ui:ml-auto ui:hidden ui:text-xs ui:text-text-default-muted ui:md:block">
+              Use the button or Cmd/Ctrl+B to collapse
             </span>
           </header>
           <div className="ui:flex ui:flex-1 ui:items-center ui:justify-center ui:p-8 ui:text-text-default-muted">

@@ -32,12 +32,21 @@ export const sidebarGapVariants = cva("ui:flex ui:flex-1 ui:min-h-0 ui:min-w-0 u
   },
 });
 
+/**
+ * Desktop panel shell. Exposes `group/sidebar` so descendants can react to
+ * the collapsed state via `group-data-[state=collapsed]/sidebar:*`. Mobile
+ * always renders expanded (see `SidebarRoot`).
+ */
 export const sidebarRootVariants = cva(
   [
+    "ui:group/sidebar",
     "ui:bg-background-200",
     "ui:text-text-default",
-    "ui:flex ui:h-full ui:max-h-svh ui:w-(--sidebar-width) ui:flex-col",
+    "ui:flex ui:h-full ui:max-h-svh ui:flex-col",
     "ui:overflow-hidden",
+    "ui:w-(--sidebar-width)",
+    "ui:data-[state=collapsed]:w-(--sidebar-width-collapsed)",
+    "ui:transition-[width] ui:duration-200 ui:ease-out",
   ],
   {
     variants: {
@@ -68,13 +77,22 @@ export const sidebarDesktopVariants = cva(
   },
 );
 
-export const sidebarHeaderVariants = cva(
+const collapsedSection = [
+  "ui:group-data-[state=collapsed]/sidebar:items-center",
+  "ui:group-data-[state=collapsed]/sidebar:px-3",
+];
+
+export const sidebarHeaderVariants = cva([
   "ui:bg-background-200 ui:flex ui:flex-col ui:gap-0 ui:items-start ui:justify-center ui:overflow-hidden ui:p-2 ui:shrink-0 ui:w-full",
-);
+  ...collapsedSection,
+]);
 
 /** Outer footer shell — padding only; inner card uses `sidebarFooterInnerVariants`. */
 export const sidebarFooterVariants = cva(
-  "ui:shrink-0 ui:w-full ui:flex ui:min-h-0 ui:flex-col ui:overflow-hidden ui:p-2",
+  [
+    "ui:shrink-0 ui:w-full ui:flex ui:min-h-0 ui:flex-col ui:overflow-hidden ui:p-2",
+    ...collapsedSection,
+  ],
   {
     variants: {
       side: {
@@ -89,33 +107,62 @@ export const sidebarFooterVariants = cva(
 );
 
 /** Inner footer card: `--color-background-300` + radius + shadow (both sidebar sides). */
-export const sidebarFooterInnerVariants = cva(
+export const sidebarFooterInnerVariants = cva([
   "ui:w-full ui:overflow-hidden ui:rounded-[5px] ui:bg-background-300 ui:shadow-[0px_0px_2px_0px_rgba(0,0,0,0.04)]",
-);
+  "ui:group-data-[state=collapsed]/sidebar:w-auto",
+  "ui:group-data-[state=collapsed]/sidebar:bg-transparent",
+  "ui:group-data-[state=collapsed]/sidebar:shadow-none",
+]);
 
-export const sidebarContentVariants = cva(
+export const sidebarContentVariants = cva([
   "ui:bg-background-200 ui:flex ui:min-h-0 ui:flex-1 ui:flex-col ui:gap-0 ui:items-start ui:justify-start ui:overflow-y-auto ui:overflow-x-hidden ui:p-2 ui:w-full",
-);
+  ...collapsedSection,
+]);
 
-export const sidebarGroupVariants = cva(
+export const sidebarGroupVariants = cva([
   "ui:relative ui:flex ui:w-full ui:flex-col ui:items-start ui:justify-start ui:overflow-visible ui:bg-background-200",
-);
+  "ui:group-data-[state=collapsed]/sidebar:items-center",
+]);
 
-export const sidebarGroupLabelVariants = cva(
+/** Hidden entirely when collapsed (no room for text labels). */
+export const sidebarGroupLabelVariants = cva([
   "ui:flex ui:h-8 ui:w-full ui:flex-col ui:items-center ui:justify-center ui:rounded-md ui:px-2",
-);
+  "ui:group-data-[state=collapsed]/sidebar:hidden",
+]);
 
 export const sidebarGroupLabelTextVariants = cva(
   "ui:w-full ui:text-left ui:text-xs ui:font-medium ui:leading-tight ui:text-text-default",
 );
 
-export const sidebarGroupContentVariants = cva("ui:flex ui:w-full ui:flex-col");
+export const sidebarGroupContentVariants = cva([
+  "ui:flex ui:w-full ui:flex-col",
+  "ui:group-data-[state=collapsed]/sidebar:items-center",
+]);
 
-export const sidebarMenuVariants = cva("ui:flex ui:w-full ui:flex-col ui:gap-0 ui:p-0 ui:m-0");
+export const sidebarMenuVariants = cva([
+  "ui:flex ui:w-full ui:flex-col ui:gap-0 ui:p-0 ui:m-0",
+  "ui:group-data-[state=collapsed]/sidebar:items-center",
+]);
 
-export const sidebarMenuItemVariants = cva(
+export const sidebarMenuItemVariants = cva([
   "ui:relative ui:list-none ui:w-full",
-);
+  "ui:group-data-[state=collapsed]/sidebar:flex",
+  "ui:group-data-[state=collapsed]/sidebar:justify-center",
+]);
+
+/**
+ * Shared collapsed recipe for the interactive rows (menu + workspace buttons).
+ * Squashes the row to a 40×40 icon tile and hides every child after the first
+ * so dropdown/collapsible triggers and standalone buttons all render identically.
+ */
+const collapsedRowButton = [
+  "ui:group-data-[state=collapsed]/sidebar:w-10",
+  "ui:group-data-[state=collapsed]/sidebar:h-10",
+  "ui:group-data-[state=collapsed]/sidebar:justify-center",
+  "ui:group-data-[state=collapsed]/sidebar:gap-0",
+  "ui:group-data-[state=collapsed]/sidebar:p-0",
+  "ui:group-data-[state=collapsed]/sidebar:[&>*:not(:first-child)]:hidden",
+];
 
 export const sidebarMenuButtonVariants = cva(
   [
@@ -127,6 +174,7 @@ export const sidebarMenuButtonVariants = cva(
     "ui:disabled:pointer-events-none ui:disabled:opacity-50",
     "ui:hover:bg-background-300/40",
     "ui:data-[active=true]:bg-background-300/60",
+    ...collapsedRowButton,
   ],
   {
     variants: {
@@ -141,9 +189,10 @@ export const sidebarMenuButtonVariants = cva(
   },
 );
 
-export const sidebarMenuSubVariants = cva(
+export const sidebarMenuSubVariants = cva([
   "ui:flex ui:w-full ui:flex-col ui:gap-0 ui:py-0.5 ui:pl-3.5 ui:pr-3.5",
-);
+  "ui:group-data-[state=collapsed]/sidebar:hidden",
+]);
 
 export const sidebarMenuSubRailVariants = cva(
   "ui:flex ui:w-full ui:flex-col ui:items-start ui:border-l ui:border-sidebar-border ui:px-2.5",
@@ -174,9 +223,10 @@ export const sidebarMenuSubButtonVariants = cva(
 );
 
 /** Workspace / user row in header & footer (Figma: h-12, gap-2, p-2). */
-export const sidebarRowButtonVariants = cva(
+export const sidebarRowButtonVariants = cva([
   "ui:flex ui:h-12 ui:w-full ui:min-w-0 ui:items-center ui:gap-2 ui:overflow-hidden ui:rounded-md ui:p-2 ui:bg-transparent ui:text-left ui:outline-none ui:transition-colors ui:hover:bg-background-300/40 ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
-);
+  ...collapsedRowButton,
+]);
 
 export const sidebarWorkspaceIconVariants = cva(
   "ui:flex ui:size-8 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-lg",
@@ -207,6 +257,11 @@ export const sidebarRowSubtitleVariants = cva(
 
 export const sidebarIconBoxVariants = cva(
   "ui:inline-flex ui:size-4 ui:shrink-0 ui:items-center ui:justify-center ui:[&>svg]:size-full",
+);
+
+/** Wrapper around a `Sidebar.Collapsible` menu trigger — shrinks to icon width when collapsed so the row centers cleanly. */
+export const sidebarCollapsibleWrapperVariants = cva(
+  "ui:w-full ui:group-data-[state=collapsed]/sidebar:w-auto",
 );
 
 /** Main column when sidebar is a flex sibling (`Sidebar.Gap`). */

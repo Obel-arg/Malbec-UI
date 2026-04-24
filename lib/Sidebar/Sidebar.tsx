@@ -7,10 +7,12 @@ import { cn } from "../utils/cn";
 import {
   SIDEBAR_KEYBOARD_SHORTCUT,
   SIDEBAR_WIDTH,
+  SIDEBAR_WIDTH_COLLAPSED,
   SIDEBAR_WIDTH_MOBILE,
 } from "./sidebar-constants";
 import {
   sidebarCollapsibleChevronVariants,
+  sidebarCollapsibleWrapperVariants,
   sidebarContentVariants,
   sidebarDesktopVariants,
   sidebarFooterInnerVariants,
@@ -190,6 +192,7 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH,
+              "--sidebar-width-collapsed": SIDEBAR_WIDTH_COLLAPSED,
               "--sidebar-width-mobile": SIDEBAR_WIDTH_MOBILE,
               ...style,
             } as React.CSSProperties
@@ -209,9 +212,10 @@ export interface SidebarProps extends React.ComponentProps<"div"> {
 
 const SidebarRoot = React.forwardRef<HTMLDivElement, SidebarProps>(
   function SidebarRoot({ side: sideProp, className, children, ...rest }, ref) {
-    const { defaultSide, isMobile, openMobile, setOpenMobile, sidebarId } =
+    const { defaultSide, isMobile, openMobile, setOpenMobile, sidebarId, state } =
       useSidebar();
     const side = sideProp ?? defaultSide;
+    const panelState = isMobile ? "expanded" : state;
 
     const panel = (
       <div
@@ -219,6 +223,7 @@ const SidebarRoot = React.forwardRef<HTMLDivElement, SidebarProps>(
         id={sidebarId}
         data-slot="sidebar"
         data-side={side}
+        data-state={panelState}
         className={cn(sidebarRootVariants({ side }), className)}
         {...rest}
       >
@@ -305,7 +310,10 @@ const SidebarTrigger = React.forwardRef<HTMLButtonElement, SidebarTriggerProps>(
   },
 );
 
-function SidebarPanelIcon(props: React.ComponentProps<"svg">) {
+function SidebarPanelIcon({
+  className,
+  ...props
+}: React.ComponentProps<"svg">) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -314,6 +322,7 @@ function SidebarPanelIcon(props: React.ComponentProps<"svg">) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={cn("ui:size-5", className)}
       aria-hidden
       {...props}
     >
@@ -534,29 +543,70 @@ const SidebarInset = React.forwardRef<
   );
 });
 
+/** Lets `Sidebar.CollapsibleTrigger` force its parent collapsible open when the sidebar expands from a collapsed click. */
+const SidebarCollapsibleStateContext = React.createContext<{
+  setOpen: (open: boolean) => void;
+} | null>(null);
+
 const SidebarCollapsible = React.forwardRef<
   React.ComponentRef<typeof CollapsiblePrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Root>
->(function SidebarCollapsible({ className, ...rest }, ref) {
+>(function SidebarCollapsible(
+  { className, open: openProp, defaultOpen, onOpenChange, ...rest },
+  ref,
+) {
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(
+    defaultOpen ?? false,
+  );
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? openProp : uncontrolledOpen;
+
+  const setOpen = React.useCallback(
+    (next: boolean) => {
+      onOpenChange?.(next);
+      if (!isControlled) setUncontrolledOpen(next);
+    },
+    [isControlled, onOpenChange],
+  );
+
+  const ctx = React.useMemo(() => ({ setOpen }), [setOpen]);
+
   return (
-    <CollapsiblePrimitive.Root
-      ref={ref}
-      data-slot="sidebar-collapsible"
-      className={className}
-      {...rest}
-    />
+    <SidebarCollapsibleStateContext.Provider value={ctx}>
+      <CollapsiblePrimitive.Root
+        ref={ref}
+        data-slot="sidebar-collapsible"
+        className={cn(sidebarCollapsibleWrapperVariants(), className)}
+        open={open}
+        onOpenChange={setOpen}
+        {...rest}
+      />
+    </SidebarCollapsibleStateContext.Provider>
   );
 });
 
 const SidebarCollapsibleTrigger = React.forwardRef<
   React.ComponentRef<typeof CollapsiblePrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger>
->(function SidebarCollapsibleTrigger({ className, ...rest }, ref) {
+>(function SidebarCollapsibleTrigger({ className, onClick, ...rest }, ref) {
+  const { state, isMobile, setOpen: setSidebarOpen } = useSidebar();
+  const collapsible = React.useContext(SidebarCollapsibleStateContext);
+
   return (
     <CollapsiblePrimitive.Trigger
       ref={ref}
       data-slot="sidebar-collapsible-trigger"
       className={cn("ui:group", className)}
+      onClick={(e) => {
+        onClick?.(e);
+        if (e.defaultPrevented) return;
+        if (!isMobile && state === "collapsed") {
+          // Skip Radix's default toggle; instead expand the sidebar and open this group.
+          e.preventDefault();
+          setSidebarOpen(true);
+          collapsible?.setOpen(true);
+        }
+      }}
       {...rest}
     />
   );
