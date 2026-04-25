@@ -29,7 +29,6 @@ export default defineConfig({
       entry: {
         'malbec-ui': resolve(import.meta.dirname, 'lib/main.ts'),
         icons: resolve(import.meta.dirname, 'lib/icons/index.ts'),
-        'icons-custom': resolve(import.meta.dirname, 'lib/icons/custom-barrel.ts'),
       },
       name: 'malbec-ui',
       formats: ['es', 'cjs'],
