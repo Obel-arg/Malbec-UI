@@ -19,6 +19,12 @@ Then install:
 npm install @obel-arg/malbec-ui
 ```
 
+Import icons from the dedicated subpath:
+
+```tsx
+import { CheckIcon, BrandGithubIcon } from "@obel-arg/malbec-ui/icons";
+```
+
 ## Publish (maintainers)
 
 Publishing happens automatically via `.github/workflows/publish.yml` when a GitHub Release is published. To publish manually:

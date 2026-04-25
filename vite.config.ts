@@ -26,10 +26,14 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(import.meta.dirname, 'lib/main.ts'),
+      entry: {
+        'malbec-ui': resolve(import.meta.dirname, 'lib/main.ts'),
+        icons: resolve(import.meta.dirname, 'lib/icons/index.ts'),
+        'icons-custom': resolve(import.meta.dirname, 'lib/icons/custom-barrel.ts'),
+      },
       name: 'malbec-ui',
-      // the proper extensions will be added
-      fileName: 'malbec-ui',
+      formats: ['es', 'cjs'],
+      fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'js' : 'cjs'}`,
     },
     emptyOutDir: true,
     rolldownOptions: {
@@ -37,12 +41,13 @@ export default defineConfig({
       // the native link stage. Not actionable without replacing dts (see
       // https://rolldown.rs/options/checks#plugintimings).
       checks: { pluginTimings: false },
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: ['react', 'react-dom', 'react/jsx-runtime', 'lucide-react'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
           'react/jsx-runtime': 'react/jsx-runtime',
+          'lucide-react': 'LucideReact',
         },
       },
     },

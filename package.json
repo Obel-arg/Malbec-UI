@@ -7,14 +7,19 @@
   "files": [
     "dist"
   ],
-  "main": "dist/malbec-ui.umd.cjs",
+  "main": "dist/malbec-ui.cjs",
   "module": "dist/malbec-ui.js",
   "types": "dist/lib/main.d.ts",
   "exports": {
     ".": {
       "types": "./dist/lib/main.d.ts",
       "import": "./dist/malbec-ui.js",
-      "require": "./dist/malbec-ui.umd.cjs"
+      "require": "./dist/malbec-ui.cjs"
+    },
+    "./icons": {
+      "types": "./dist/lib/icons/index.d.ts",
+      "import": "./dist/icons.js",
+      "require": "./dist/icons.cjs"
     },
     "./style.css": "./dist/malbec-ui.css"
   },
@@ -96,6 +101,7 @@
   },
   "dependencies": {
     "@tanstack/react-table": "^8.21.3",
+    "lucide-react": "^1.11.0",
     "recharts": "^3.8.1"
   }
 }

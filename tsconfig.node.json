@@ -7,7 +7,12 @@
     "types": ["node"],
     "skipLibCheck": true,
     "paths": {
-      "malbec-ui": ["./lib/main.ts"]
+      "@obel-arg/malbec-ui": ["./lib/main.ts"],
+      "@obel-arg/malbec-ui/icons": ["./lib/icons/index.ts"],
+      "@obel-arg/malbec-ui/icons/custom": ["./lib/icons/custom-barrel.ts"],
+      "malbec-ui": ["./lib/main.ts"],
+      "malbec-ui/icons": ["./lib/icons/index.ts"],
+      "malbec-ui/icons/custom": ["./lib/icons/custom-barrel.ts"]
     },
 
     /* Bundler mode */
