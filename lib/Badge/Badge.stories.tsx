@@ -67,6 +67,11 @@ const meta = {
         "destructive",
         "ghost",
         "link",
+        "green",
+        "purple",
+        "pink",
+        "indigo",
+        "amber",
       ] satisfies BadgeVariant[],
     },
   },
@@ -76,6 +81,14 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const categoricalDot: Partial<Record<BadgeVariant, string>> = {
+  green: "#218c33",
+  purple: "#7d3bed",
+  pink: "#db2678",
+  indigo: "#4f4acc",
+  amber: "#d9780a",
+};
+
 const labels: Record<BadgeVariant, string> = {
   default: "Badge",
   secondary: "Secondary",
@@ -83,6 +96,11 @@ const labels: Record<BadgeVariant, string> = {
   destructive: "Destructive",
   ghost: "Ghost",
   link: "Link",
+  green: "Green",
+  purple: "Purple",
+  pink: "Pink",
+  indigo: "Indigo",
+  amber: "Amber",
 };
 
 export const AllVariants: Story = {
@@ -154,6 +172,33 @@ export const WithSpinner: Story = {
           <Spinner className="ui:size-full" />
         </Badge.Icon>
       </Badge>
+    </div>
+  ),
+};
+
+export const CategoricalPills: Story = {
+  name: "Categorical (event pill)",
+  render: () => (
+    <div className="ui:flex ui:w-full ui:max-w-md ui:flex-col ui:gap-2">
+      {(
+        [
+          "green",
+          "purple",
+          "pink",
+          "indigo",
+          "amber",
+        ] as const satisfies readonly BadgeVariant[]
+      ).map((v) => (
+        <Badge key={v} variant={v} className="ui:justify-start">
+          <span
+            aria-hidden
+            className="ui:inline-block ui:h-[6px] ui:min-h-[6px] ui:min-w-[6px] ui:w-[6px] ui:shrink-0 ui:rounded-full"
+            style={{ backgroundColor: categoricalDot[v] }}
+          />
+          <Badge.Text tone="accent">20:00</Badge.Text>
+          <Badge.Text>{labels[v]}</Badge.Text>
+        </Badge>
+      ))}
     </div>
   ),
 };

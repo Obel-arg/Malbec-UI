@@ -15,6 +15,7 @@ export { Checkbox } from "./Checkbox/Checkbox";
 export { Combobox } from "./Combobox/Combobox";
 export { Command } from "./Command/Command";
 export { Calendar } from "./Calendar/Calendar";
+export { CalendarMonth } from "./CalendarMonth/CalendarMonth";
 export { DatePicker } from "./DatePicker/DatePicker";
 export { Input } from "./Input/Input";
 export { InputOtp } from "./InputOtp/InputOtp";

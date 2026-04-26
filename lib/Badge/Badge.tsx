@@ -6,6 +6,7 @@ import {
   badgeTextVariants,
   badgeVariants,
 } from "./badge-variants";
+import type { VariantProps } from "class-variance-authority";
 import type { BadgeVariant } from "./badge-variants";
 
 export type { BadgeVariant };
@@ -89,16 +90,19 @@ const BadgeIcon = React.forwardRef<HTMLSpanElement, BadgeIconProps>(
   },
 );
 
-export type BadgeTextProps = React.HTMLAttributes<HTMLSpanElement>;
+export type BadgeTextProps = React.HTMLAttributes<HTMLSpanElement> & {
+  /** When `accent`, uses `var(--malbec-badge-accent)` (set on categorical `Badge` roots). */
+  tone?: NonNullable<VariantProps<typeof badgeTextVariants>["tone"]>;
+};
 
 const BadgeText = React.forwardRef<HTMLSpanElement, BadgeTextProps>(
-  function BadgeText({ className, children, ...rest }, ref) {
+  function BadgeText({ className, children, tone = "default", ...rest }, ref) {
     useBadgeContext("Badge.Text");
 
     return (
       <span
         ref={ref}
-        className={cn(badgeTextVariants(), className)}
+        className={cn(badgeTextVariants({ tone }), className)}
         {...rest}
       >
         {children}
