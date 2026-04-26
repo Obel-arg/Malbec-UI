@@ -4,7 +4,9 @@ export const sheetOverlayVariants = cva([
   "ui:fixed ui:inset-0 ui:z-50",
   "ui:bg-background-200/60",
   "ui:backdrop-blur-[3.5px]",
-  "ui:transition-opacity",
+  "ui:data-[state=open]:animate-malbec-overlay-in",
+  "ui:data-[state=closed]:animate-malbec-overlay-out",
+  "ui:motion-reduce:animate-none",
 ]);
 
 export const sheetContentVariants = cva(
@@ -17,15 +19,31 @@ export const sheetContentVariants = cva(
     "ui:p-6",
     "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
     "ui:outline-none",
+    "ui:motion-reduce:animate-none",
   ],
   {
     variants: {
       side: {
-        top: "ui:inset-x-0 ui:top-0 ui:border-b ui:border-background-300 ui:w-full",
-        bottom: "ui:inset-x-0 ui:bottom-0 ui:border-t ui:border-background-300 ui:w-full",
-        left: "ui:top-0 ui:bottom-0 ui:left-0 ui:right-auto ui:h-full ui:w-[384px] ui:border-r ui:border-background-300",
-        right:
+        top: [
+          "ui:inset-x-0 ui:top-0 ui:border-b ui:border-background-300 ui:w-full",
+          "ui:data-[state=open]:animate-malbec-sheet-in-top",
+          "ui:data-[state=closed]:animate-malbec-sheet-out-top",
+        ],
+        bottom: [
+          "ui:inset-x-0 ui:bottom-0 ui:border-t ui:border-background-300 ui:w-full",
+          "ui:data-[state=open]:animate-malbec-sheet-in-bottom",
+          "ui:data-[state=closed]:animate-malbec-sheet-out-bottom",
+        ],
+        left: [
+          "ui:top-0 ui:bottom-0 ui:left-0 ui:right-auto ui:h-full ui:w-[384px] ui:border-r ui:border-background-300",
+          "ui:data-[state=open]:animate-malbec-sheet-in-left",
+          "ui:data-[state=closed]:animate-malbec-sheet-out-left",
+        ],
+        right: [
           "ui:top-0 ui:bottom-0 ui:right-0 ui:left-auto ui:h-full ui:w-[384px] ui:border-l ui:border-background-300",
+          "ui:data-[state=open]:animate-malbec-sheet-in-right",
+          "ui:data-[state=closed]:animate-malbec-sheet-out-right",
+        ],
       },
     },
     defaultVariants: {

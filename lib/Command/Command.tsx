@@ -267,12 +267,10 @@ const CommandDialog = React.forwardRef<HTMLDivElement, CommandDialogProps>(
         <DialogPrimitive.Portal container={container}>
           <DialogPrimitive.Overlay
             data-slot="command-dialog-overlay"
-            data-malbec-motion="dialog-overlay"
             className={cn(commandDialogOverlayVariants(), overlayClassName)}
           />
           <DialogPrimitive.Content
             data-slot="command-dialog-content"
-            data-malbec-motion="dialog-content"
             className={cn(commandDialogContentVariants(), contentClassName)}
             aria-label={label}
           >

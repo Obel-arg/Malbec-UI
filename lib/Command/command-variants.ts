@@ -66,7 +66,9 @@ export const commandDialogOverlayVariants = cva([
   "ui:fixed ui:inset-0 ui:z-50",
   "ui:bg-background-200/60",
   "ui:backdrop-blur-[3.5px]",
-  "ui:transition-opacity",
+  "ui:data-[state=open]:animate-malbec-overlay-in",
+  "ui:data-[state=closed]:animate-malbec-overlay-out",
+  "ui:motion-reduce:animate-none",
 ]);
 
 export const commandDialogContentVariants = cva([
@@ -74,6 +76,9 @@ export const commandDialogContentVariants = cva([
   "ui:translate-x-[-50%] ui:translate-y-[-50%]",
   "ui:overflow-hidden ui:rounded-[10px] ui:border-0 ui:bg-transparent ui:p-0",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
+  "ui:data-[state=open]:animate-malbec-dialog-in",
+  "ui:data-[state=closed]:animate-malbec-dialog-out",
+  "ui:motion-reduce:animate-none",
 ]);
 
 export const commandLoadingVariants = cva([

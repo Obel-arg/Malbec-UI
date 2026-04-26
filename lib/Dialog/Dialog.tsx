@@ -35,7 +35,6 @@ const DialogOverlay = React.forwardRef<
     <DialogPrimitive.Overlay
       ref={ref}
       data-slot="dialog-overlay"
-      data-malbec-motion="dialog-overlay"
       className={cn(dialogOverlayVariants(), className)}
       {...rest}
     />
@@ -74,7 +73,6 @@ const DialogContent = React.forwardRef<
       <DialogPrimitive.Content
         ref={ref}
         data-slot="dialog-content"
-        data-malbec-motion="dialog-content"
         className={cn(!unstyled && dialogContentVariants(), className)}
         {...rest}
       >

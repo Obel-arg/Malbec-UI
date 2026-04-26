@@ -4,12 +4,15 @@ export const dialogOverlayVariants = cva([
   "ui:fixed ui:inset-0 ui:z-50",
   "ui:bg-background-200/60",
   "ui:backdrop-blur-[3.5px]",
-  "ui:transition-opacity",
+  "ui:data-[state=open]:animate-malbec-overlay-in",
+  "ui:data-[state=closed]:animate-malbec-overlay-out",
+  "ui:motion-reduce:animate-none",
 ]);
 
 export const dialogContentVariants = cva([
   "ui:malbec-font-sans",
   "ui:fixed ui:top-1/2 ui:left-1/2 ui:right-auto ui:bottom-auto ui:z-50",
+  "ui:-translate-x-1/2 ui:-translate-y-1/2",
   "ui:flex ui:w-full ui:max-w-[425px] ui:flex-col",
   "ui:h-auto",
   "ui:gap-4",
@@ -18,6 +21,9 @@ export const dialogContentVariants = cva([
   "ui:p-6",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
+  "ui:data-[state=open]:animate-malbec-dialog-in",
+  "ui:data-[state=closed]:animate-malbec-dialog-out",
+  "ui:motion-reduce:animate-none",
 ]);
 
 export const dialogCloseVariants = cva([

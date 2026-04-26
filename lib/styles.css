@@ -7,12 +7,6 @@
   --malbec-popover-enter-duration: 150ms;
   --malbec-popover-exit-duration: 120ms;
 
-  /** Dialog overlay + panel (aligned with common shadcn / Radix timing). */
-  --malbec-dialog-overlay-enter-duration: 150ms;
-  --malbec-dialog-overlay-exit-duration: 120ms;
-  --malbec-dialog-content-enter-duration: 200ms;
-  --malbec-dialog-content-exit-duration: 150ms;
-
   --color-background-100: #f8f8f8;
   --color-background-200: #f1f0ee;
   --color-background-300: #e4e2df;
@@ -100,210 +94,60 @@
     }
   }
 
-  @keyframes malbec-dialog-overlay-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  /**
+   * Overlay + dialog/sheet motion. Keyframes animate the modern individual
+   * `scale` / `translate` properties so they don't clobber Tailwind's composed
+   * `transform` (e.g. `-translate-x-1/2 -translate-y-1/2` for centering).
+   * Animations are exposed as Tailwind utilities via `@theme` below — components
+   * apply them with `data-[state=…]:animate-malbec-…` classes, no selector hacks.
+   */
+  @keyframes malbec-overlay-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
-
-  @keyframes malbec-dialog-overlay-out {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
+  @keyframes malbec-overlay-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
   }
-
-  @keyframes malbec-dialog-content-in {
-    from {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.96);
-    }
-    to {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
+  @keyframes malbec-dialog-in {
+    from { opacity: 0; scale: 0.96; }
+    to { opacity: 1; scale: 1; }
   }
-
-  @keyframes malbec-dialog-content-out {
-    from {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    to {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.96);
-    }
+  @keyframes malbec-dialog-out {
+    from { opacity: 1; scale: 1; }
+    to { opacity: 0; scale: 0.96; }
   }
-
-  @keyframes malbec-sheet-content-in-right {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+  @keyframes malbec-sheet-in-right {
+    from { translate: 100% 0; }
+    to { translate: 0 0; }
   }
-
-  @keyframes malbec-sheet-content-out-right {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(100%);
-    }
+  @keyframes malbec-sheet-out-right {
+    from { translate: 0 0; }
+    to { translate: 100% 0; }
   }
-
-  @keyframes malbec-sheet-content-in-left {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+  @keyframes malbec-sheet-in-left {
+    from { translate: -100% 0; }
+    to { translate: 0 0; }
   }
-
-  @keyframes malbec-sheet-content-out-left {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-100%);
-    }
+  @keyframes malbec-sheet-out-left {
+    from { translate: 0 0; }
+    to { translate: -100% 0; }
   }
-
-  @keyframes malbec-sheet-content-in-top {
-    from {
-      transform: translateY(-100%);
-    }
-    to {
-      transform: translateY(0);
-    }
+  @keyframes malbec-sheet-in-top {
+    from { translate: 0 -100%; }
+    to { translate: 0 0; }
   }
-
-  @keyframes malbec-sheet-content-out-top {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(-100%);
-    }
+  @keyframes malbec-sheet-out-top {
+    from { translate: 0 0; }
+    to { translate: 0 -100%; }
   }
-
-  @keyframes malbec-sheet-content-in-bottom {
-    from {
-      transform: translateY(100%);
-    }
-    to {
-      transform: translateY(0);
-    }
+  @keyframes malbec-sheet-in-bottom {
+    from { translate: 0 100%; }
+    to { translate: 0 0; }
   }
-
-  @keyframes malbec-sheet-content-out-bottom {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(100%);
-    }
-  }
-
-  [data-malbec-motion="dialog-overlay"][data-state="open"] {
-    animation: malbec-dialog-overlay-in var(--malbec-dialog-overlay-enter-duration, 150ms)
-      cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  [data-malbec-motion="dialog-overlay"][data-state="closed"] {
-    animation: malbec-dialog-overlay-out var(--malbec-dialog-overlay-exit-duration, 120ms)
-      cubic-bezier(0.3, 0, 0.8, 0.15) both;
-  }
-
-  [data-malbec-motion="dialog-content"] {
-    transform: translate(-50%, -50%);
-  }
-
-  [data-malbec-motion="dialog-content"][data-state="open"] {
-    animation: malbec-dialog-content-in var(--malbec-dialog-content-enter-duration, 200ms)
-      cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  [data-malbec-motion="dialog-content"][data-state="closed"] {
-    animation: malbec-dialog-content-out var(--malbec-dialog-content-exit-duration, 150ms)
-      cubic-bezier(0.3, 0, 0.8, 0.15) both;
-  }
-
-  [data-slot="sheet-overlay"][data-state="open"] {
-    animation: malbec-dialog-overlay-in var(--malbec-dialog-overlay-enter-duration, 150ms)
-      cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  [data-slot="sheet-overlay"][data-state="closed"] {
-    animation: malbec-dialog-overlay-out var(--malbec-dialog-overlay-exit-duration, 120ms)
-      cubic-bezier(0.3, 0, 0.8, 0.15) both;
-  }
-
-  [data-malbec-motion="sheet-content"][data-side="right"][data-state="open"] {
-    animation: malbec-sheet-content-in-right var(--malbec-dialog-content-enter-duration, 200ms)
-      cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  [data-malbec-motion="sheet-content"][data-side="right"][data-state="closed"] {
-    animation: malbec-sheet-content-out-right var(--malbec-dialog-content-exit-duration, 150ms)
-      cubic-bezier(0.3, 0, 0.8, 0.15) both;
-  }
-
-  [data-malbec-motion="sheet-content"][data-side="left"][data-state="open"] {
-    animation: malbec-sheet-content-in-left var(--malbec-dialog-content-enter-duration, 200ms)
-      cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  [data-malbec-motion="sheet-content"][data-side="left"][data-state="closed"] {
-    animation: malbec-sheet-content-out-left var(--malbec-dialog-content-exit-duration, 150ms)
-      cubic-bezier(0.3, 0, 0.8, 0.15) both;
-  }
-
-  [data-malbec-motion="sheet-content"][data-side="top"][data-state="open"] {
-    animation: malbec-sheet-content-in-top var(--malbec-dialog-content-enter-duration, 200ms)
-      cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  [data-malbec-motion="sheet-content"][data-side="top"][data-state="closed"] {
-    animation: malbec-sheet-content-out-top var(--malbec-dialog-content-exit-duration, 150ms)
-      cubic-bezier(0.3, 0, 0.8, 0.15) both;
-  }
-
-  [data-malbec-motion="sheet-content"][data-side="bottom"][data-state="open"] {
-    animation: malbec-sheet-content-in-bottom var(--malbec-dialog-content-enter-duration, 200ms)
-      cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  [data-malbec-motion="sheet-content"][data-side="bottom"][data-state="closed"] {
-    animation: malbec-sheet-content-out-bottom var(--malbec-dialog-content-exit-duration, 150ms)
-      cubic-bezier(0.3, 0, 0.8, 0.15) both;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    [data-malbec-motion="dialog-overlay"][data-state="open"],
-    [data-malbec-motion="dialog-overlay"][data-state="closed"],
-    [data-malbec-motion="dialog-content"][data-state="open"],
-    [data-malbec-motion="dialog-content"][data-state="closed"],
-    [data-malbec-motion="sheet-content"][data-state="open"],
-    [data-malbec-motion="sheet-content"][data-state="closed"],
-    [data-slot="dialog-overlay"][data-state="open"],
-    [data-slot="dialog-overlay"][data-state="closed"],
-    [data-slot="dialog-content"][data-state="open"],
-    [data-slot="dialog-content"][data-state="closed"],
-    [data-slot="sheet-overlay"][data-state="open"],
-    [data-slot="sheet-overlay"][data-state="closed"],
-    [data-slot="sheet-content"][data-state="open"],
-    [data-slot="sheet-content"][data-state="closed"] {
-      animation-duration: 1ms;
-      animation-timing-function: linear;
-    }
+  @keyframes malbec-sheet-out-bottom {
+    from { translate: 0 0; }
+    to { translate: 0 100%; }
   }
 
   /**
@@ -311,9 +155,12 @@
    * Presence (e.g. Radix Select). Transitions interpolate from the current displayed
    * value, so interrupting enter with exit doesn't snap to a fully-open state.
    *
-   * Drive with `data-malbec-motion="enter" | "exit"`.
+   * Drive with `data-malbec-motion="enter" | "exit"`. Scoped to those two values
+   * so it stays independent from dialog/sheet motion (which is keyframe-based via
+   * the `animate-malbec-*` Tailwind utilities).
    */
-  [data-malbec-motion] {
+  [data-malbec-motion="enter"],
+  [data-malbec-motion="exit"] {
     transition-property: opacity, transform;
     transition-duration: var(--malbec-popover-enter-duration, 150ms);
     transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
@@ -352,6 +199,26 @@
   .malbec-font-sans {
     font-family: "Inter Variable", Inter, sans-serif;
   }
+}
+
+@theme {
+  /**
+   * Generates `animate-malbec-*` Tailwind utilities used by Dialog, Sheet, and
+   * the Command dialog. Dialog and Sheet pull from independent keyframes — no
+   * shared selectors, no cross-coupling.
+   */
+  --animate-malbec-overlay-in: malbec-overlay-in 150ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-malbec-overlay-out: malbec-overlay-out 120ms cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  --animate-malbec-dialog-in: malbec-dialog-in 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-malbec-dialog-out: malbec-dialog-out 150ms cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  --animate-malbec-sheet-in-right: malbec-sheet-in-right 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-malbec-sheet-out-right: malbec-sheet-out-right 150ms cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  --animate-malbec-sheet-in-left: malbec-sheet-in-left 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-malbec-sheet-out-left: malbec-sheet-out-left 150ms cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  --animate-malbec-sheet-in-top: malbec-sheet-in-top 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-malbec-sheet-out-top: malbec-sheet-out-top 150ms cubic-bezier(0.3, 0, 0.8, 0.15) both;
+  --animate-malbec-sheet-in-bottom: malbec-sheet-in-bottom 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-malbec-sheet-out-bottom: malbec-sheet-out-bottom 150ms cubic-bezier(0.3, 0, 0.8, 0.15) both;
 }
 
 @theme inline {

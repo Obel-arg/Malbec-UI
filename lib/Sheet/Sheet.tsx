@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { DialogPrimitive } from "../Dialog/Dialog";
+import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { cn } from "../utils/cn";
 import {
   sheetActionVariants,
@@ -19,23 +19,22 @@ import {
   sheetTitleVariants,
 } from "./sheet-variants";
 
-const SheetRoot = DialogPrimitive.Root;
-const SheetTrigger = DialogPrimitive.Trigger;
-const SheetPortal = DialogPrimitive.Portal;
+const SheetRoot = SheetPrimitive.Root;
+const SheetTrigger = SheetPrimitive.Trigger;
+const SheetPortal = SheetPrimitive.Portal;
 
-export type SheetProps = React.ComponentProps<typeof DialogPrimitive.Root>;
+export type SheetProps = React.ComponentProps<typeof SheetPrimitive.Root>;
 
-export type SheetOverlayProps = React.ComponentProps<typeof DialogPrimitive.Overlay>;
+export type SheetOverlayProps = React.ComponentProps<typeof SheetPrimitive.Overlay>;
 
 const SheetOverlay = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentRef<typeof SheetPrimitive.Overlay>,
   SheetOverlayProps
 >(function SheetOverlay({ className, ...rest }, ref) {
   return (
-    <DialogPrimitive.Overlay
+    <SheetPrimitive.Overlay
       ref={ref}
       data-slot="sheet-overlay"
-      data-malbec-motion="dialog-overlay"
       className={cn(sheetOverlayVariants(), className)}
       {...rest}
     />
@@ -43,7 +42,7 @@ const SheetOverlay = React.forwardRef<
 });
 
 export interface SheetContentProps
-  extends React.ComponentProps<typeof DialogPrimitive.Content> {
+  extends React.ComponentProps<typeof SheetPrimitive.Content> {
   side?: "top" | "right" | "bottom" | "left";
   showCloseButton?: boolean;
   /** Merged after default overlay styles. */
@@ -51,11 +50,11 @@ export interface SheetContentProps
   /** When true, default sheet padding and shape classes are omitted; use `className` for the full surface. */
   unstyled?: boolean;
   /** Passed to `Sheet.Portal` (`container` in Radix Portal). */
-  container?: React.ComponentProps<typeof DialogPrimitive.Portal>["container"];
+  container?: React.ComponentProps<typeof SheetPrimitive.Portal>["container"];
 }
 
 const SheetContent = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Content>,
+  React.ComponentRef<typeof SheetPrimitive.Content>,
   SheetContentProps
 >(function SheetContent(
   {
@@ -73,25 +72,24 @@ const SheetContent = React.forwardRef<
   return (
     <SheetPortal container={container}>
       <SheetOverlay className={overlayClassName} />
-      <DialogPrimitive.Content
+      <SheetPrimitive.Content
         ref={ref}
         data-slot="sheet-content"
         data-side={side}
-        data-malbec-motion="sheet-content"
         className={cn(!unstyled && sheetContentVariants({ side }), className)}
         {...rest}
       >
         {children}
         {showCloseButton ? (
-          <DialogPrimitive.Close
+          <SheetPrimitive.Close
             data-slot="sheet-close"
             className={sheetCloseVariants()}
             aria-label="Close sheet"
           >
             <SheetCloseIcon />
-          </DialogPrimitive.Close>
+          </SheetPrimitive.Close>
         ) : null}
-      </DialogPrimitive.Content>
+      </SheetPrimitive.Content>
     </SheetPortal>
   );
 });
@@ -142,14 +140,14 @@ const SheetAction = React.forwardRef<HTMLButtonElement, SheetActionProps>(
   },
 );
 
-export type SheetTitleProps = React.ComponentProps<typeof DialogPrimitive.Title>;
+export type SheetTitleProps = React.ComponentProps<typeof SheetPrimitive.Title>;
 
 const SheetTitle = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Title>,
+  React.ComponentRef<typeof SheetPrimitive.Title>,
   SheetTitleProps
 >(function SheetTitle({ className, ...rest }, ref) {
   return (
-    <DialogPrimitive.Title
+    <SheetPrimitive.Title
       ref={ref}
       data-slot="sheet-title"
       className={cn(sheetTitleVariants(), className)}
@@ -159,15 +157,15 @@ const SheetTitle = React.forwardRef<
 });
 
 export type SheetDescriptionProps = React.ComponentProps<
-  typeof DialogPrimitive.Description
+  typeof SheetPrimitive.Description
 >;
 
 const SheetDescription = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Description>,
+  React.ComponentRef<typeof SheetPrimitive.Description>,
   SheetDescriptionProps
 >(function SheetDescription({ className, ...rest }, ref) {
   return (
-    <DialogPrimitive.Description
+    <SheetPrimitive.Description
       ref={ref}
       data-slot="sheet-description"
       className={cn(sheetDescriptionVariants(), className)}
@@ -176,14 +174,14 @@ const SheetDescription = React.forwardRef<
   );
 });
 
-export type SheetCloseProps = React.ComponentProps<typeof DialogPrimitive.Close>;
+export type SheetCloseProps = React.ComponentProps<typeof SheetPrimitive.Close>;
 
 const SheetClose = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Close>,
+  React.ComponentRef<typeof SheetPrimitive.Close>,
   SheetCloseProps
 >(function SheetClose({ className, ...rest }, ref) {
   return (
-    <DialogPrimitive.Close
+    <SheetPrimitive.Close
       ref={ref}
       data-slot="sheet-close"
       className={cn(sheetCloseVariants(), className)}
