@@ -19,11 +19,32 @@ import {
   dialogTitleVariants,
 } from "./dialog-variants";
 
-const DialogRoot = DialogPrimitive.Root;
-const DialogTrigger = DialogPrimitive.Trigger;
-const DialogPortal = DialogPrimitive.Portal;
-
 export type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root>;
+
+/**
+ * Wrap Radix's `Root` (and friends) so the `Dialog` namespace owns a unique
+ * function identity. Reusing `DialogPrimitive.Root` directly would alias the
+ * same object as `Sheet` (which is also Radix Dialog under the hood), causing
+ * `Sheet.Content = …` to overwrite `Dialog.Content` at module load.
+ */
+function DialogRoot(props: DialogProps) {
+  return <DialogPrimitive.Root {...props} />;
+}
+DialogRoot.displayName = "Dialog";
+
+function DialogTrigger(
+  props: React.ComponentProps<typeof DialogPrimitive.Trigger>,
+) {
+  return <DialogPrimitive.Trigger {...props} />;
+}
+DialogTrigger.displayName = "Dialog.Trigger";
+
+function DialogPortal(
+  props: React.ComponentProps<typeof DialogPrimitive.Portal>,
+) {
+  return <DialogPrimitive.Portal {...props} />;
+}
+DialogPortal.displayName = "Dialog.Portal";
 
 export type DialogOverlayProps = React.ComponentProps<typeof DialogPrimitive.Overlay>;
 

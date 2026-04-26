@@ -19,11 +19,32 @@ import {
   sheetTitleVariants,
 } from "./sheet-variants";
 
-const SheetRoot = SheetPrimitive.Root;
-const SheetTrigger = SheetPrimitive.Trigger;
-const SheetPortal = SheetPrimitive.Portal;
-
 export type SheetProps = React.ComponentProps<typeof SheetPrimitive.Root>;
+
+/**
+ * Wrap Radix's `Root` (and friends) so the `Sheet` namespace owns a unique
+ * function identity. Reusing `SheetPrimitive.Root` directly would alias the
+ * same object as `Dialog` (also backed by Radix Dialog), causing
+ * `Sheet.Content = …` to overwrite `Dialog.Content` at module load.
+ */
+function SheetRoot(props: SheetProps) {
+  return <SheetPrimitive.Root {...props} />;
+}
+SheetRoot.displayName = "Sheet";
+
+function SheetTrigger(
+  props: React.ComponentProps<typeof SheetPrimitive.Trigger>,
+) {
+  return <SheetPrimitive.Trigger {...props} />;
+}
+SheetTrigger.displayName = "Sheet.Trigger";
+
+function SheetPortal(
+  props: React.ComponentProps<typeof SheetPrimitive.Portal>,
+) {
+  return <SheetPrimitive.Portal {...props} />;
+}
+SheetPortal.displayName = "Sheet.Portal";
 
 export type SheetOverlayProps = React.ComponentProps<typeof SheetPrimitive.Overlay>;
 
