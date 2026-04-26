@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { DialogPrimitive } from "../Dialog/Dialog";
 import { cn } from "../utils/cn";

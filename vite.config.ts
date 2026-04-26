@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import path, { resolve } from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
+import preserveDirectives from 'rollup-plugin-preserve-directives'
 
 const root = import.meta.dirname
 
@@ -44,7 +45,7 @@ export default defineConfig({
         icons: resolve(root, 'lib/icons/index.ts'),
       },
       name: 'malbec-ui',
-      formats: ['es', 'cjs'],
+      formats: ['cjs'],
       fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'js' : 'cjs'}`,
     },
     emptyOutDir: true,
@@ -54,6 +55,9 @@ export default defineConfig({
       // https://rolldown.rs/options/checks#plugintimings).
       checks: { pluginTimings: false },
       external: isExternalDependency,
+      // Keep `"use client"` / `"use server"` directives on the modules that declare
+      // them so Next/Turbopack treats those files as client boundaries.
+      plugins: [preserveDirectives()],
       output: {
         preserveModules: true,
         preserveModulesRoot: resolve(root, 'lib'),

@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 
 const Icon20 = ({ children }: { children: ReactNode }) => (

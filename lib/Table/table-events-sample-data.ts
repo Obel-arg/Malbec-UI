@@ -1,3 +1,5 @@
+"use client";
+
 export type EventStatus = "open" | "closed" | "private";
 
 export type EventRow = {

@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable react-refresh/only-export-components -- compound menu: many forwardRef subcomponents, single public export */
 import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";

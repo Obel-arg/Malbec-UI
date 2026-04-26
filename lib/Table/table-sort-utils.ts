@@ -1,3 +1,5 @@
+"use client";
+
 export type TableSortState =
   | { key: string; direction: "asc" | "desc" }
   | null;

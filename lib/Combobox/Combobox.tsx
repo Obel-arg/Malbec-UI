@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Popover, type PopoverContentProps } from "../Popover/Popover";
 import { cn } from "../utils/cn";

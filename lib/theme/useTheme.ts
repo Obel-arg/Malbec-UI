@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext } from "react";
 import { MalbecThemeContext } from "./MalbecThemeContext";
 import type { MalbecThemeContextValue } from "./MalbecThemeContext";

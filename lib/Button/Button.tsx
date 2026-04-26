@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Spinner } from "../Spinner/Spinner";
 import { cn } from "../utils/cn";

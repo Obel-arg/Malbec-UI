@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 
 /** Optional external anchor ref for advanced layouts (see shadcn multi-select example). */

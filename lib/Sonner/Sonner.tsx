@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Toaster, toast, type ToasterProps } from "sonner";
 import { useTheme } from "../theme";

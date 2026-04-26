@@ -1,3 +1,5 @@
+"use client";
+
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";

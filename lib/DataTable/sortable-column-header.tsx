@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import type { Column } from "@tanstack/react-table";
 import { cn } from "../utils/cn";

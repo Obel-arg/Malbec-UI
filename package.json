@@ -97,6 +97,7 @@
     "globals": "^17.5.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "rollup-plugin-preserve-directives": "^0.4.0",
     "storybook": "^10.3.5",
     "tailwindcss": "^4.2.4",
     "typescript": "~6.0.2",
