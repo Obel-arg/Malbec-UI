@@ -1,8 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
-import { resolve } from 'node:path'
+import path, { resolve } from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
+
+const root = import.meta.dirname
+
+/** Externalize npm packages so preserveModules does not emit pnpm's node_modules tree into dist. */
+function isExternalDependency(id: string): boolean {
+  if (id.startsWith('\0')) return false
+  if (path.isAbsolute(id)) {
+    const n = id.replace(/\\/g, '/')
+    return n.includes('/node_modules/')
+  }
+  if (id.startsWith('.')) return false
+  return true
+}
 
 
 // https://vite.dev/config/
@@ -27,8 +40,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
-        'malbec-ui': resolve(import.meta.dirname, 'lib/main.ts'),
-        icons: resolve(import.meta.dirname, 'lib/icons/index.ts'),
+        'malbec-ui': resolve(root, 'lib/main.ts'),
+        icons: resolve(root, 'lib/icons/index.ts'),
       },
       name: 'malbec-ui',
       formats: ['es', 'cjs'],
@@ -40,10 +53,10 @@ export default defineConfig({
       // the native link stage. Not actionable without replacing dts (see
       // https://rolldown.rs/options/checks#plugintimings).
       checks: { pluginTimings: false },
-      external: ['react', 'react-dom', 'react/jsx-runtime', 'lucide-react'],
+      external: isExternalDependency,
       output: {
         preserveModules: true,
-        preserveModulesRoot: resolve(import.meta.dirname, "lib"),
+        preserveModulesRoot: resolve(root, 'lib'),
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
