@@ -45,7 +45,7 @@ export default defineConfig({
         icons: resolve(root, 'lib/icons/index.ts'),
       },
       name: 'malbec-ui',
-      formats: ['cjs'],
+      formats: ['es', 'cjs'],
       fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'js' : 'cjs'}`,
     },
     emptyOutDir: true,
