@@ -42,6 +42,8 @@ export default defineConfig({
       checks: { pluginTimings: false },
       external: ['react', 'react-dom', 'react/jsx-runtime', 'lucide-react'],
       output: {
+        preserveModules: true,
+        preserveModulesRoot: resolve(import.meta.dirname, "lib"),
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
