@@ -42,7 +42,8 @@ export const commandGroupVariants = cva([
 ]);
 
 export const commandItemVariants = cva([
-  "ui:relative ui:flex ui:w-full ui:cursor-default ui:select-none ui:items-center ui:justify-start",
+  "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:justify-start",
+  "ui:data-[disabled=true]:cursor-not-allowed",
   "ui:rounded-sm ui:px-2 ui:py-1.5",
   "ui:text-sm ui:font-normal ui:leading-[25.284px] ui:text-text-default",
   "ui:outline-none",

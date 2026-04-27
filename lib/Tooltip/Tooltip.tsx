@@ -33,7 +33,7 @@ const TooltipTrigger = React.forwardRef<
     <TooltipPrimitive.Trigger
       ref={ref}
       data-slot="tooltip-trigger"
-      className={cn(className)}
+      className={cn("ui:cursor-pointer", className)}
       {...rest}
     />
   );

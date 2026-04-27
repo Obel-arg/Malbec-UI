@@ -170,10 +170,17 @@ const defaultComponents = {
     onChange,
     options,
     className,
+    // RDP passes slot styling props; never forward to <select>.
+    classNames,
+    styles,
     ...props
   }: React.SelectHTMLAttributes<HTMLSelectElement> & {
     options?: { value: string | number; label: string; disabled?: boolean }[];
+    classNames?: unknown;
+    styles?: unknown;
   }) => {
+    void classNames;
+    void styles;
     return (
       <div
         className={cn(

@@ -14,6 +14,7 @@ export const switchRootVariants = cva(
     "ui:shrink-0",
     "ui:items-center",
     "ui:rounded-full",
+    "ui:cursor-pointer",
     "ui:border",
     "ui:border-solid",
     "ui:outline-none",

@@ -8,6 +8,8 @@ export const datePickerTriggerVariants = cva(
     "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
     "ui:outline-none ui:transition-[opacity,box-shadow]",
     "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+    "ui:cursor-pointer",
+    "ui:disabled:cursor-not-allowed",
     "ui:disabled:pointer-events-none ui:disabled:opacity-50",
   ],
   {

@@ -45,7 +45,7 @@ const DropdownMenuTrigger = React.forwardRef<
     <DropdownMenuPrimitive.Trigger
       ref={ref}
       data-slot="dropdown-menu-trigger"
-      className={cn(className)}
+      className={cn("ui:cursor-pointer", className)}
       {...rest}
     />
   );

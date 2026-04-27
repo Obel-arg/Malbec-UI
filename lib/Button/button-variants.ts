@@ -10,6 +10,7 @@ export const buttonVariants = cva(
     "ui:tracking-[-0.36px]",
     "ui:whitespace-nowrap",
     "ui:select-none",
+    "ui:cursor-pointer",
     "ui:transition-[opacity,background-color,border-color,color]",
     "ui:outline-none",
     "ui:focus-visible:ring-2",

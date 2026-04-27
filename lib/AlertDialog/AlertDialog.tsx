@@ -39,7 +39,19 @@ function useAlertDialogSize(
 
 const AlertDialogRoot = AlertDialogPrimitive.Root;
 
-const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
+const AlertDialogTrigger = React.forwardRef<
+  React.ComponentRef<typeof AlertDialogPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Trigger>
+>(function AlertDialogTrigger({ className, ...rest }, ref) {
+  return (
+    <AlertDialogPrimitive.Trigger
+      ref={ref}
+      className={cn("ui:cursor-pointer", className)}
+      {...rest}
+    />
+  );
+});
+AlertDialogTrigger.displayName = "AlertDialog.Trigger";
 
 const AlertDialogPortal = AlertDialogPrimitive.Portal;
 
