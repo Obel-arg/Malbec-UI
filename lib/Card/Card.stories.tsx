@@ -3,6 +3,22 @@ import { Button } from "../Button/Button";
 import { Steps } from "../Steps/Steps";
 import { Card, type CardProps } from "./Card";
 
+/**
+ * `Card` is a compound component: `Card.Header`, `Card.Content`, `Card.Footer`, optional
+ * `Card.Action` in the header, and [Steps](?path=/docs/components-steps) when you need a stepper.
+ *
+ * ```tsx
+ * <Card className="ui:w-[500px]">
+ *   <Steps total={3} value={1} />
+ *   <Card.Header>
+ *     <Card.Title>Create project</Card.Title>
+ *     <Card.Description>Enter the details below to get started.</Card.Description>
+ *   </Card.Header>
+ *   <Card.Content>…</Card.Content>
+ *   <Card.Footer>…</Card.Footer>
+ * </Card>
+ * ```
+ */
 const meta = {
   title: "Components/Card",
   component: Card,

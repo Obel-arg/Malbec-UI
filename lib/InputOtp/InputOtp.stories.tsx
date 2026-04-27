@@ -8,6 +8,16 @@ type InputOtpArgs = Partial<
   Omit<Extract<OTPInputProps, { children: React.ReactNode }>, "children">
 >;
 
+/**
+ * Built on [input-otp](https://input-otp.rodz.dev/); use `InputOtp.Slot` to render per-digit boxes.
+ *
+ * ```tsx
+ * <InputOtp maxLength={6} pattern={REGEXP_ONLY_DIGITS} value={value} onChange={onChange}>
+ *   <InputOtp.Slot index={0} />
+ *   …
+ * </InputOtp>
+ * ```
+ */
 const meta: Meta<InputOtpArgs> = {
   title: "Components/InputOtp",
   parameters: { layout: "centered" },

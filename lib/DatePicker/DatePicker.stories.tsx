@@ -48,6 +48,18 @@ function storyPresets(): DatePickerPresetItem[] {
   ];
 }
 
+/**
+ * Composed with `DatePicker.Trigger`, `DatePicker.Content`, and `state` for single / range / preset / birth flows.
+ *
+ * ```tsx
+ * <DatePicker state="closed" locale={es}>
+ *   <DatePicker.Trigger />
+ *   <DatePicker.Content>
+ *     <DatePicker.Calendar />
+ *   </DatePicker.Content>
+ * </DatePicker>
+ * ```
+ */
 const meta = {
   title: "Components/Date Picker",
   component: DatePicker,

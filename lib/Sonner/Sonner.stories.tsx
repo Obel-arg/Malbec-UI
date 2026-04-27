@@ -2,6 +2,16 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../Button/Button";
 import { Sonner, type SonnerProps } from "./Sonner";
 
+/**
+ * Mount `<Sonner />` once and call `Sonner.toast()` from your app. See [Sonner](https://sonner.emilkowal.ski/).
+ *
+ * ```tsx
+ * <>
+ *   <Sonner />
+ *   <Button onClick={() => Sonner.toast("Done")}>Show toast</Button>
+ * </>
+ * ```
+ */
 const meta = {
   title: "Components/Sonner",
   component: Sonner,

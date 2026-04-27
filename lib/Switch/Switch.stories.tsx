@@ -6,6 +6,10 @@ import { Switch, type SwitchProps } from "./Switch";
 /**
  * Binary toggle (`role="switch"`). Pair with [Label](?path=/docs/components-label) via `id` + `htmlFor` when
  * a visible label is required. See [shadcn Switch](https://ui.shadcn.com/docs/components/switch) for forms and a11y.
+ *
+ * ```tsx
+ * <Switch checked={on} onCheckedChange={setOn} />
+ * ```
  */
 const meta = {
   title: "Components/Switch",

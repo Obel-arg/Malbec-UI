@@ -8,6 +8,12 @@ import { Checkbox, type CheckboxProps } from "./Checkbox";
  *
  * See [shadcn/ui Checkbox](https://ui.shadcn.com/docs/components/radix/checkbox)
  * for controlled state, forms, and accessibility expectations.
+ *
+ * ```tsx
+ * <Checkbox checked={checked} onCheckedChange={setChecked}>
+ *   <Checkbox.Indicator />
+ * </Checkbox>
+ * ```
  */
 const meta = {
   title: "Components/Checkbox",

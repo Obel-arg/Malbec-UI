@@ -60,6 +60,12 @@ function UnderlineIcon(props: React.SVGProps<SVGSVGElement>) {
 /**
  * `Toggle` is a two-state button. Compose icon content with `<Toggle.Icon>`.
  * Pair with a visible label or `aria-label` when the control is icon-only.
+ *
+ * ```tsx
+ * <Toggle aria-label="Bold" size="md" variant="default">
+ *   <Toggle.Icon>…</Toggle.Icon>
+ * </Toggle>
+ * ```
  */
 const meta = {
   title: "Components/Toggle",

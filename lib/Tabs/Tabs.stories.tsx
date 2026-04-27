@@ -6,6 +6,15 @@ import { Tabs, type TabsProps } from "./Tabs";
  * Layered tab panels with a segmented control. Compose with `Tabs.List`, `Tabs.Trigger`,
  * and `Tabs.Content`. See [shadcn Tabs](https://ui.shadcn.com/docs/components/radix/tabs)
  * for behavior and accessibility.
+ *
+ * ```tsx
+ * <Tabs value={value} onValueChange={setValue}>
+ *   <Tabs.List>
+ *     <Tabs.Trigger value="a">A</Tabs.Trigger>
+ *   </Tabs.List>
+ *   <Tabs.Content value="a">…</Tabs.Content>
+ * </Tabs>
+ * ```
  */
 const meta = {
   title: "Components/Tabs",

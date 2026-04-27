@@ -1,6 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Select, type SelectProps } from "./Select";
 
+/**
+ * [Radix Select](https://www.radix-ui.com/primitives/docs/components/select) with Malbec styling.
+ *
+ * ```tsx
+ * <Select defaultValue="a">
+ *   <Select.Trigger aria-label="Example">
+ *     <Select.Value placeholder="Choose an option" />
+ *   </Select.Trigger>
+ *   <Select.Content>
+ *     <Select.Item value="a">Option A</Select.Item>
+ *   </Select.Content>
+ * </Select>
+ * ```
+ */
 const meta: Meta<SelectProps> = {
   title: "Components/Select",
   component: Select,

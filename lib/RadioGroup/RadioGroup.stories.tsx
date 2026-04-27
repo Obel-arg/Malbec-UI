@@ -8,6 +8,15 @@ import { RadioGroup, type RadioGroupProps } from "./RadioGroup";
  * and `<RadioGroup.Card />` for card-style options. Pair items with [`Label`](./?path=/docs/components-label--docs) via `htmlFor` / `id`.
  *
  * See [shadcn/ui Radio Group](https://ui.shadcn.com/docs/components/radix/radio-group) for controlled state, forms, and accessibility.
+ *
+ * ```tsx
+ * <RadioGroup value={value} onValueChange={setValue}>
+ *   <div className="ui:flex ui:items-center ui:gap-2">
+ *     <RadioGroup.Item value="a" id="a" />
+ *     <Label htmlFor="a">Option A</Label>
+ *   </div>
+ * </RadioGroup>
+ * ```
  */
 const meta = {
   title: "Components/RadioGroup",

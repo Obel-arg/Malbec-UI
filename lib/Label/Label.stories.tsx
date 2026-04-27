@@ -7,6 +7,11 @@ import { Label, type LabelProps } from "./Label";
  *
  * See [shadcn/ui Label](https://ui.shadcn.com/docs/components/label) for
  * pairing with form controls and accessibility.
+ *
+ * ```tsx
+ * <Label htmlFor="email" weight="regular">Email</Label>
+ * <Input id="email" type="email" />
+ * ```
  */
 const meta = {
   title: "Components/Label",

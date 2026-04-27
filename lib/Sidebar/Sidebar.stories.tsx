@@ -7,7 +7,27 @@ import { Sidebar, type SidebarProps } from "./Sidebar";
 
 /**
  * Compound layout: `Sidebar.Provider` → `Sidebar.Gap` → `Sidebar` + `Sidebar.Inset`.
- * Mobile navigation opens in a sheet; desktop uses a sticky column.
+ * Mobile navigation opens in a sheet; desktop uses a sticky column. The stories use `SidebarDemo`
+ * in this file for a full example (team switcher, groups, account menu). Copy the shape below:
+ *
+ * ```tsx
+ * <Sidebar.Provider defaultSide="left" className="ui:min-h-svh">
+ *   <Sidebar.Gap side="left">
+ *     <Sidebar side="left">
+ *       <Sidebar.Header>…</Sidebar.Header>
+ *       <Sidebar.Content>…</Sidebar.Content>
+ *       <Sidebar.Footer>…</Sidebar.Footer>
+ *     </Sidebar>
+ *     <Sidebar.Inset>
+ *       <header>
+ *         <Sidebar.Trigger />
+ *         <span>Main</span>
+ *       </header>
+ *       <div>Content area</div>
+ *     </Sidebar.Inset>
+ *   </Sidebar.Gap>
+ * </Sidebar.Provider>
+ * ```
  */
 const meta = {
   title: "Components/Sidebar",

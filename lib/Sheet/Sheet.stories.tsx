@@ -2,6 +2,16 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../Button/Button";
 import { Sheet } from "./Sheet";
 
+/**
+ * Viewport edge panel (`side` on `Sheet.Content`), same composition idea as a dialog: `Sheet.Header`, `Sheet.Body`, `Sheet.Footer`.
+ *
+ * ```tsx
+ * <Sheet>
+ *   <Sheet.Trigger asChild>…</Sheet.Trigger>
+ *   <Sheet.Content side="right">…</Sheet.Content>
+ * </Sheet>
+ * ```
+ */
 const meta = {
   title: "Components/Sheet",
   component: Sheet,

@@ -31,6 +31,13 @@ const PlusIcon = (props: SVGProps<SVGSVGElement>) => (
  * Radix-based avatar with Malbec tokens aligned to Figma
  * [Avatar / Malbec OS](https://www.figma.com/design/xpeITaQp7zbkU4htYHvHXo/Malbec-OS-Design-System?node-id=58-164&m=dev)
  * and [shadcn Avatar](https://ui.shadcn.com/docs/components/radix/avatar) composition.
+ *
+ * ```tsx
+ * <Avatar>
+ *   <Avatar.Image src="…" alt="…" />
+ *   <Avatar.Fallback>AB</Avatar.Fallback>
+ * </Avatar>
+ * ```
  */
 const meta = {
   title: "Components/Avatar",

@@ -20,6 +20,20 @@ import {
 import { DataTable, type DataTableProps } from "./DataTable";
 import { SortableColumnHeader } from "./sortable-column-header";
 
+/**
+ * [TanStack Table](https://tanstack.com/table) wrapper. Build a `ColumnDef[]` (see `useEventColumns` in this
+ * file), then pass `data`, `getRowId`, and optional `tableChildrenStart` (e.g. `<colgroup>`) and `rowSelection`.
+ *
+ * ```tsx
+ * <DataTable
+ *   tableAppearance="default"
+ *   getRowId={(r) => r.id}
+ *   columns={columns}
+ *   data={rows}
+ *   tableChildrenStart={colgroup}
+ * />
+ * ```
+ */
 const meta = {
   title: "Components/DataTable",
   parameters: { layout: "padded" },

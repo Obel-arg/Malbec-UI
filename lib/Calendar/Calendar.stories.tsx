@@ -4,6 +4,19 @@ import { Popover } from "../Popover/Popover";
 import { Calendar } from "./Calendar";
 import { es } from "date-fns/locale";
 
+/**
+ * [react-day-picker](https://daypicker.dev/) with Malbec styles. Often wrapped in a `Popover` in apps.
+ *
+ * ```tsx
+ * <Calendar
+ *   locale={es}
+ *   mode="single"
+ *   defaultMonth={month}
+ *   selected={date}
+ *   onSelect={onSelect}
+ * />
+ * ```
+ */
 const meta = {
   title: "Components/Calendar",
   component: Calendar,

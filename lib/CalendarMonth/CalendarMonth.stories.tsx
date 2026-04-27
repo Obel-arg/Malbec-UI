@@ -101,6 +101,17 @@ function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+/**
+ * Full-month grid with optional event cards per day. The stories in this file build the event list with `buildShowcaseEvents` / `MonthWithSwitcher`.
+ *
+ * ```tsx
+ * <CalendarMonth
+ *   month={visibleMonth}
+ *   events={events}
+ *   onSelectDay={(day) => { … }}
+ * />
+ * ```
+ */
 const meta = {
   title: "Custom/CalendarMonth",
   component: CalendarMonth,

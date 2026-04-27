@@ -63,6 +63,12 @@ const iconBox =
 /**
  * `ToggleGroup` uses a compound API: `ToggleGroup.Item` for each option.
  * Pass `type="single"` or `type="multiple"` per your selection model.
+ *
+ * ```tsx
+ * <ToggleGroup type="single" value={value} onValueChange={setValue} aria-label="Text formatting">
+ *   <ToggleGroup.Item value="bold" aria-label="Bold">…</ToggleGroup.Item>
+ * </ToggleGroup>
+ * ```
  */
 const meta = {
   title: "Components/ToggleGroup",

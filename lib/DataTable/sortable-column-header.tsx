@@ -45,8 +45,9 @@ const ChevronsUpDown = () => (
 type MetaWithClass = { thClassName?: string };
 
 /**
- * Renders a semantic button that inherits the table header typography.
- * (Internal helper; not re-exported from the package root.)
+ * Sortable table header cell for TanStack Table column defs (used with {@link DataTable}
+ * or any `flexRender` header). Inherits header typography; reads optional
+ * `column.columnDef.meta.thClassName` for header cell classes.
  */
 export function SortableColumnHeader<TData, TValue>({
   column,

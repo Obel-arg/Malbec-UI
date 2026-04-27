@@ -3,6 +3,15 @@ import { Button } from "../Button/Button";
 import { Label } from "../Label/Label";
 import { Input, type InputProps } from "./Input";
 
+/**
+ * Text input with Malbec surface tokens. Pair with [`Label`](?path=/docs/components-label) for field layouts.
+ *
+ * ```tsx
+ * <div className="ui:w-[280px]">
+ *   <Input type="email" placeholder="Email" />
+ * </div>
+ * ```
+ */
 const meta = {
   title: "Components/Input",
   component: Input,

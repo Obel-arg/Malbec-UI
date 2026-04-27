@@ -7,6 +7,17 @@ import { Command, type CommandProps } from "./Command";
  * `Command` is composed with namespaced parts (`Command.Input`, `Command.List`,
  * …). Registry-style flat imports (`CommandInput`, …) are also available from
  * the package entry.
+ *
+ * ```tsx
+ * <Command>
+ *   <Command.Input placeholder="Search…" />
+ *   <Command.List>
+ *     <Command.Group heading="Group">
+ *       <Command.Item>Item</Command.Item>
+ *     </Command.Group>
+ *   </Command.List>
+ * </Command>
+ * ```
  */
 const meta = {
   title: "Components/Command",

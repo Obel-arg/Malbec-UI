@@ -125,6 +125,15 @@ function lineActiveDots(seriesVar: "--color-series1" | "--color-series2") {
   } as const;
 }
 
+/**
+ * `Chart` is a `ChartContainer` wrapper: pass a `config` map and compose Recharts primitives (`LineChart`, `BarChart`, …) as children.
+ *
+ * ```tsx
+ * <Chart config={chartConfig} className="ui:h-[200px] ui:w-full">
+ *   <LineChart data={data}>…</LineChart>
+ * </Chart>
+ * ```
+ */
 const meta = {
   title: "Components/Chart",
   parameters: { layout: "centered" },

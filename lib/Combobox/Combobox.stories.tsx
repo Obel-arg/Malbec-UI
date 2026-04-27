@@ -15,6 +15,21 @@ const frameworks = [
  *
  * See [shadcn/ui Combobox](https://ui.shadcn.com/docs/components/radix/combobox) for the upstream interaction model.
  * This library implements the popover surface with **Radix** (`@radix-ui/react-popover`).
+ *
+ * ```tsx
+ * <Combobox items={items} className="ui:w-[200px]">
+ *   <Combobox.Input placeholder="Select…" />
+ *   <Combobox.Content>
+ *     <Combobox.List>
+ *       {(item) => (
+ *         <Combobox.Item key={String(item)} value={item}>
+ *           {String(item)}
+ *         </Combobox.Item>
+ *       )}
+ *     </Combobox.List>
+ *   </Combobox.Content>
+ * </Combobox>
+ * ```
  */
 const meta = {
   title: "Components/Combobox",

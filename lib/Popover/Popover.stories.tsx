@@ -2,6 +2,16 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../Button/Button";
 import { Popover } from "./Popover";
 
+/**
+ * ```tsx
+ * <Popover>
+ *   <Popover.Trigger asChild>
+ *     <Button variant="outline">…</Button>
+ *   </Popover.Trigger>
+ *   <Popover.Content>…</Popover.Content>
+ * </Popover>
+ * ```
+ */
 const meta = {
   title: "Components/Popover",
   component: Popover,

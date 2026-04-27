@@ -29,6 +29,13 @@ const CUSTOM_ICONS: { name: string; Icon: CustomIcon }[] = [
   { name: "Settings2", Icon: Settings2 },
 ];
 
+/**
+ * Custom SVGs exported from the package. Import by name from `@obel-arg/malbec-ui/icons`.
+ *
+ * ```tsx
+ * <Artist className="ui:size-5" />
+ * ```
+ */
 const meta = {
   title: "Icons/Custom",
   parameters: {

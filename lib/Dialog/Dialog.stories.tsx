@@ -2,6 +2,22 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../Button/Button";
 import { Dialog } from "./Dialog";
 
+/**
+ * `Dialog.Trigger` opens `Dialog.Content` with `Dialog.Header`, `Dialog.Body` / `Dialog.InlineField`, `Dialog.Footer`.
+ *
+ * ```tsx
+ * <Dialog>
+ *   <Dialog.Trigger asChild>
+ *     <Button variant="outline">…</Button>
+ *   </Dialog.Trigger>
+ *   <Dialog.Content>
+ *     <Dialog.Header>…</Dialog.Header>
+ *     <Dialog.Body>…</Dialog.Body>
+ *     <Dialog.Footer>…</Dialog.Footer>
+ *   </Dialog.Content>
+ * </Dialog>
+ * ```
+ */
 const meta = {
   title: "Components/Dialog",
   component: Dialog,

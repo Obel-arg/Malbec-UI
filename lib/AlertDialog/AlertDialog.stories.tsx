@@ -26,6 +26,16 @@ const BluetoothIcon = (props: SVGProps<SVGSVGElement>) => (
  *
  * Radix: [Alert Dialog](https://ui.shadcn.com/docs/components/radix/alert-dialog).  
  * Figma: [Alert Dialog / Malbec OS](https://www.figma.com/design/xpeITaQp7zbkU4htYHvHXo/Malbec-OS-Design-System?node-id=56-602).
+ *
+ * ```tsx
+ * <AlertDialog>
+ *   <AlertDialog.Trigger asChild>…</AlertDialog.Trigger>
+ *   <AlertDialog.Content>
+ *     <AlertDialog.Header>…</AlertDialog.Header>
+ *     <AlertDialog.Footer>…</AlertDialog.Footer>
+ *   </AlertDialog.Content>
+ * </AlertDialog>
+ * ```
  */
 const meta = {
   title: "Components/AlertDialog",

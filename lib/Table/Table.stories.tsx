@@ -17,6 +17,17 @@ import {
   TableStoryHeaderIconVenue,
 } from "./table-story-header-icons";
 
+/**
+ * Composed with `Table`, `Table.Header`, `Table.Body`, `Table.Row`, `Table.Cell`, and optional `colgroup` for column widths.
+ *
+ * ```tsx
+ * <Table>
+ *   <colgroup>…</colgroup>
+ *   <Table.Header>…</Table.Header>
+ *   <Table.Body>…</Table.Body>
+ * </Table>
+ * ```
+ */
 const meta = {
   title: "Components/Table",
   component: Table,
@@ -28,10 +39,6 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-/**
- * The table is composed with `Table` + `Table.Header` / `Table.Body` + row/cell
- * subcomponents, matching the Malbec “Events” table layout.
- */
 export const EventsShell: Story = {
   name: "Composition · events",
   render: () => (

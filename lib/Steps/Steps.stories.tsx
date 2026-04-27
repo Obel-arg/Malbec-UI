@@ -1,6 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Steps, type StepsProps } from "./Steps";
 
+/**
+ * Step indicator for wizards. Pass `total` and current `value` (1-based in stories).
+ *
+ * ```tsx
+ * <div className="ui:w-[475px]">
+ *   <Steps total={3} value={1} />
+ * </div>
+ * ```
+ */
 const meta = {
   title: "Components/Steps",
   component: Steps,

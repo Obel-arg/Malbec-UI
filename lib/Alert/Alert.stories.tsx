@@ -41,6 +41,14 @@ const AlertCircleIcon = (props: SVGProps<SVGSVGElement>) => (
  * `Alert` is a compound component (like `Button`): use `AlertIcon`, `AlertTitle`,
  * `AlertDescription`, and `AlertAction`, or the `Alert.*` subcomponents. Malbec
  * visual tokens follow the Figma [Alert / Malbec OS](https://www.figma.com/design/xpeITaQp7zbkU4htYHvHXo/Malbec-OS-Design-System?node-id=56-395&m=dev) specs.
+ *
+ * ```tsx
+ * <Alert>
+ *   <Alert.Icon>…</Alert.Icon>
+ *   <Alert.Title>…</Alert.Title>
+ *   <Alert.Description>…</Alert.Description>
+ * </Alert>
+ * ```
  */
 const meta = {
   title: "Components/Alert",

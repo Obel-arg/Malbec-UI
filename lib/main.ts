@@ -37,5 +37,6 @@ export { Tooltip } from "./Tooltip/Tooltip";
 export { Card } from "./Card/Card";
 export { Chart } from "./Chart/Chart";
 export { DataTable } from "./DataTable/DataTable";
+export { SortableColumnHeader } from "./DataTable/sortable-column-header";
 export { Steps } from "./Steps/Steps";
 export { Table } from "./Table/Table";

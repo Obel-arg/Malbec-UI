@@ -4,6 +4,20 @@ import { useState } from "react";
 import { Button } from "../Button/Button";
 import { DropdownMenu } from "./DropdownMenu";
 
+/**
+ * [Radix DropdownMenu](https://www.radix-ui.com/primitives/docs/components/dropdown-menu) with Malbec item chrome. Use `DropdownMenu.Portal` and `DropdownMenu.Content` for positioning.
+ *
+ * ```tsx
+ * <DropdownMenu>
+ *   <DropdownMenu.Trigger asChild>…</DropdownMenu.Trigger>
+ *   <DropdownMenu.Portal>
+ *     <DropdownMenu.Content>
+ *       <DropdownMenu.Item>…</DropdownMenu.Item>
+ *     </DropdownMenu.Content>
+ *   </DropdownMenu.Portal>
+ * </DropdownMenu>
+ * ```
+ */
 const meta = {
   title: "Components/DropdownMenu",
   component: DropdownMenu,

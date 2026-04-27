@@ -51,6 +51,12 @@ const ArrowUpRightIcon = () => (
  * Root props: `variant`, `asChild`, plus standard div attributes.
  *
  * See [shadcn/ui Badge](https://ui.shadcn.com/docs/components/radix/badge) for the upstream pattern.
+ *
+ * ```tsx
+ * <Badge variant="default">
+ *   <Badge.Text>Label</Badge.Text>
+ * </Badge>
+ * ```
  */
 const meta = {
   title: "Components/Badge",

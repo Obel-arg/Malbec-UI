@@ -59,6 +59,10 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    // Autodocs shows the meta JSDoc (incl. fenced ```tsx```) as the first “Description” block.
+    docs: {
+      canvas: { sourceState: "shown" },
+    },
   },
   decorators: [
     (Story, context) => {
