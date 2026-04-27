@@ -195,7 +195,10 @@ export const sidebarMenuSubVariants = cva([
 ]);
 
 export const sidebarMenuSubRailVariants = cva(
-  "ui:flex ui:w-full ui:flex-col ui:items-start ui:border-l ui:border-sidebar-border ui:px-2.5",
+  [
+    "ui:flex ui:w-full ui:flex-col ui:items-start ui:border-l ui:border-sidebar-border ui:px-2.5",
+    "ui:list-none ui:m-0 ui:min-w-0",
+  ],
 );
 
 export const sidebarMenuSubItemVariants = cva("ui:relative ui:list-none ui:w-full");

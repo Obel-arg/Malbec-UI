@@ -487,7 +487,9 @@ const SidebarMenuSub = React.forwardRef<
       className={cn(sidebarMenuSubVariants(), className)}
       {...rest}
     >
-      <div className={sidebarMenuSubRailVariants()}>{children}</div>
+      <ul className={sidebarMenuSubRailVariants()} role="list">
+        {children}
+      </ul>
     </div>
   );
 });
