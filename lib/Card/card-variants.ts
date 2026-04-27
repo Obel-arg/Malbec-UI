@@ -4,7 +4,7 @@ export const cardRootVariants = cva([
   "ui:malbec-font-sans",
   "ui:flex ui:w-full ui:flex-col ui:gap-[25px]",
   "ui:rounded-[10px] ui:border ui:border-background-300 ui:bg-background-100",
-  "ui:p-10",
+  "ui:p-6",
   "ui:shadow-[0px_4px_14px_0px_rgba(0,0,0,0.07)]",
 ]);
 
