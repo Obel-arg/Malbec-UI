@@ -32,11 +32,18 @@ function DialogRoot(props: DialogProps) {
 }
 DialogRoot.displayName = "Dialog";
 
-function DialogTrigger(
-  props: React.ComponentProps<typeof DialogPrimitive.Trigger>,
-) {
-  return <DialogPrimitive.Trigger {...props} />;
-}
+const DialogTrigger = React.forwardRef<
+  React.ComponentRef<typeof DialogPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger>
+>(function DialogTrigger({ className, ...rest }, ref) {
+  return (
+    <DialogPrimitive.Trigger
+      ref={ref}
+      className={cn("ui:cursor-pointer", className)}
+      {...rest}
+    />
+  );
+});
 DialogTrigger.displayName = "Dialog.Trigger";
 
 function DialogPortal(

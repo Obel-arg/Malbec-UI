@@ -1066,7 +1066,7 @@ const ComboboxChip = React.forwardRef<HTMLSpanElement, ComboboxChipProps>(
           <button
             type="button"
             data-slot="combobox-chip-remove"
-            className="ui:inline-flex ui:size-5 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none hover:ui:bg-background-100"
+            className="ui:inline-flex ui:size-5 ui:cursor-pointer ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none hover:ui:bg-background-100"
             onMouseDown={(e) => e.preventDefault()}
             onClick={handleRemove}
             aria-label="Remove"

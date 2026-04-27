@@ -600,7 +600,7 @@ const SidebarCollapsibleTrigger = React.forwardRef<
     <CollapsiblePrimitive.Trigger
       ref={ref}
       data-slot="sidebar-collapsible-trigger"
-      className={cn("ui:group", className)}
+      className={cn("ui:group ui:cursor-pointer", className)}
       onClick={(e) => {
         onClick?.(e);
         if (e.defaultPrevented) return;

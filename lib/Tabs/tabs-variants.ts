@@ -37,6 +37,8 @@ export const tabsTriggerVariants = cva([
   "ui:focus-visible:ring-primary",
   "ui:focus-visible:ring-offset-2",
   "ui:focus-visible:ring-offset-background-100",
+  "ui:cursor-pointer",
+  "ui:disabled:cursor-not-allowed",
   "ui:disabled:pointer-events-none",
   "ui:disabled:opacity-50",
   "ui:data-[state=active]:bg-background-100",

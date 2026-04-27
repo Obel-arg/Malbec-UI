@@ -32,11 +32,18 @@ function SheetRoot(props: SheetProps) {
 }
 SheetRoot.displayName = "Sheet";
 
-function SheetTrigger(
-  props: React.ComponentProps<typeof SheetPrimitive.Trigger>,
-) {
-  return <SheetPrimitive.Trigger {...props} />;
-}
+const SheetTrigger = React.forwardRef<
+  React.ComponentRef<typeof SheetPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Trigger>
+>(function SheetTrigger({ className, ...rest }, ref) {
+  return (
+    <SheetPrimitive.Trigger
+      ref={ref}
+      className={cn("ui:cursor-pointer", className)}
+      {...rest}
+    />
+  );
+});
 SheetTrigger.displayName = "Sheet.Trigger";
 
 function SheetPortal(

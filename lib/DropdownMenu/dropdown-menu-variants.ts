@@ -26,7 +26,8 @@ export const dropdownMenuSubContentVariants = cva([
 
 /** Row: px-2 py-1.5, rounded-sm, text-sm — Default / Active / Disabled from Figma. */
 export const dropdownMenuItemVariants = cva([
-  "ui:relative ui:flex ui:w-full ui:cursor-default ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
+  "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
+  "ui:data-disabled:cursor-not-allowed",
   "ui:px-2 ui:py-1.5",
   "ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default ui:outline-none",
   "ui:data-highlighted:bg-background-200",
@@ -35,7 +36,8 @@ export const dropdownMenuItemVariants = cva([
 
 /** Same as item; use with leading indicator + `justify-between` for shortcut. */
 export const dropdownMenuSubTriggerVariants = cva([
-  "ui:relative ui:flex ui:w-full ui:cursor-default ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
+  "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
+  "ui:data-disabled:cursor-not-allowed",
   "ui:px-2 ui:py-1.5",
   "ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default ui:outline-none",
   "ui:data-highlighted:bg-background-200",

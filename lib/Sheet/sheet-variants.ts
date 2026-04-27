@@ -55,6 +55,7 @@ export const sheetContentVariants = cva(
 export const sheetCloseVariants = cva([
   "ui:absolute ui:top-2 ui:right-2",
   "ui:inline-flex ui:size-8 ui:items-center ui:justify-center",
+  "ui:cursor-pointer",
   "ui:rounded-[8px]",
   "ui:opacity-70",
   "ui:transition-opacity",
@@ -81,6 +82,7 @@ export const sheetFooterVariants = cva("ui:flex ui:items-center ui:justify-end u
 export const sheetActionVariants = cva([
   "ui:malbec-font-sans",
   "ui:inline-flex ui:h-9 ui:min-w-[123px] ui:items-center ui:justify-center",
+  "ui:cursor-pointer",
   "ui:rounded-[8px]",
   "ui:bg-primary ui:px-4 ui:py-2",
   "ui:text-sm ui:leading-5 ui:font-medium ui:text-primary-foreground",
