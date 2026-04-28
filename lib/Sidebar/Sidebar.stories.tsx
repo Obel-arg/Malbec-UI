@@ -8,7 +8,9 @@ import { Sidebar, type SidebarProps } from "./Sidebar";
 /**
  * Compound layout: `Sidebar.Provider` → `Sidebar.Gap` → `Sidebar` + `Sidebar.Inset`.
  * Mobile navigation opens in a sheet; desktop uses a sticky column. The stories use `SidebarDemo`
- * in this file for a full example (team switcher, groups, account menu). Copy the shape below:
+ * in this file for a full example (team switcher, groups, account menu). On a collapsed desktop
+ * rail, pass `tooltip` on `Sidebar.MenuButton` and `Sidebar.WorkspaceButton` so each row
+ * shows its name on hover. Copy the shape below:
  *
  * ```tsx
  * <Sidebar.Provider defaultSide="left" className="ui:min-h-svh">
@@ -224,7 +226,10 @@ function SidebarDemo({ side }: { side: "left" | "right" }) {
           <Sidebar.Header>
             <DropdownMenu>
               <DropdownMenu.Trigger asChild>
-                <Sidebar.WorkspaceButton type="button">
+                <Sidebar.WorkspaceButton
+                  type="button"
+                  tooltip="Acme Inc · Enterprise"
+                >
                   <Sidebar.WorkspaceIcon>
                     <IconGalleryVertical />
                   </Sidebar.WorkspaceIcon>
@@ -287,7 +292,7 @@ function SidebarDemo({ side }: { side: "left" | "right" }) {
               <Sidebar.GroupContent>
                 <Sidebar.Menu>
                   <Sidebar.MenuItem>
-                    <Sidebar.MenuButton type="button">
+                    <Sidebar.MenuButton type="button" tooltip="Project Hub">
                       <Sidebar.Icon>
                         <IconBookOpen />
                       </Sidebar.Icon>
@@ -300,7 +305,7 @@ function SidebarDemo({ side }: { side: "left" | "right" }) {
                   <Sidebar.MenuItem>
                     <Sidebar.Collapsible defaultOpen>
                       <Sidebar.CollapsibleTrigger asChild>
-                        <Sidebar.MenuButton type="button">
+                        <Sidebar.MenuButton type="button" tooltip="Business">
                           <Sidebar.Icon>
                             <IconTerminal />
                           </Sidebar.Icon>
@@ -324,7 +329,7 @@ function SidebarDemo({ side }: { side: "left" | "right" }) {
                     </Sidebar.Collapsible>
                   </Sidebar.MenuItem>
                   <Sidebar.MenuItem>
-                    <Sidebar.MenuButton type="button">
+                    <Sidebar.MenuButton type="button" tooltip="Operations">
                       <Sidebar.Icon>
                         <IconBot />
                       </Sidebar.Icon>
@@ -335,7 +340,7 @@ function SidebarDemo({ side }: { side: "left" | "right" }) {
                     </Sidebar.MenuButton>
                   </Sidebar.MenuItem>
                   <Sidebar.MenuItem>
-                    <Sidebar.MenuButton type="button">
+                    <Sidebar.MenuButton type="button" tooltip="Ticketing">
                       <Sidebar.Icon>
                         <IconTicket />
                       </Sidebar.Icon>
@@ -346,7 +351,7 @@ function SidebarDemo({ side }: { side: "left" | "right" }) {
                     </Sidebar.MenuButton>
                   </Sidebar.MenuItem>
                   <Sidebar.MenuItem>
-                    <Sidebar.MenuButton type="button">
+                    <Sidebar.MenuButton type="button" tooltip="System">
                       <Sidebar.Icon>
                         <IconSettings2 />
                       </Sidebar.Icon>
@@ -363,7 +368,17 @@ function SidebarDemo({ side }: { side: "left" | "right" }) {
           <Sidebar.Footer>
             <DropdownMenu>
               <DropdownMenu.Trigger asChild>
-                <Sidebar.WorkspaceButton type="button">
+                <Sidebar.WorkspaceButton
+                  type="button"
+                  tooltip={
+                    <>
+                      <span className="ui:block ui:font-medium">shadcn</span>
+                      <span className="ui:block ui:text-text-default-muted ui:text-xs">
+                        m@example.com
+                      </span>
+                    </>
+                  }
+                >
                   <Avatar className="ui:size-8 ui:rounded-lg ui:shrink-0" size="sm">
                     <Avatar.Image
                       alt=""

@@ -5,6 +5,7 @@ import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { Button } from "../Button/Button";
 import { Sheet } from "../Sheet/Sheet";
+import { Tooltip } from "../Tooltip/Tooltip";
 import { cn } from "../utils/cn";
 import {
   SIDEBAR_KEYBOARD_SHORTCUT,
@@ -103,6 +104,41 @@ function useSidebarPanelSide(): SidebarSide {
   return inst?.side ?? parent.defaultSide;
 }
 
+/**
+ * Hover label when the rail is collapsed (desktop only). Opens toward the main
+ * column: right for a left sidebar, left for a right sidebar.
+ */
+function SidebarCollapsedTooltip({
+  label,
+  children,
+}: {
+  label: React.ReactNode;
+  children: React.ReactElement;
+}) {
+  const { isMobile, state } = useSidebar();
+  const panelSide = useSidebarPanelSide();
+
+  if (
+    isMobile ||
+    state === "expanded" ||
+    label === undefined ||
+    label === null ||
+    label === false ||
+    label === ""
+  ) {
+    return children;
+  }
+
+  const side = panelSide === "right" ? "left" : "right";
+
+  return (
+    <Tooltip>
+      <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
+      <Tooltip.Content side={side}>{label}</Tooltip.Content>
+    </Tooltip>
+  );
+}
+
 export interface SidebarProviderProps extends React.ComponentProps<"div"> {
   defaultSide?: SidebarSide;
   defaultOpen?: boolean;
@@ -185,24 +221,26 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
 
     return (
       <SidebarContext.Provider value={value}>
-        <div
-          ref={ref}
-          className={cn(
-            sidebarProviderVariants({ side: defaultSide }),
-            className,
-          )}
-          style={
-            {
-              "--sidebar-width": SIDEBAR_WIDTH,
-              "--sidebar-width-collapsed": SIDEBAR_WIDTH_COLLAPSED,
-              "--sidebar-width-mobile": SIDEBAR_WIDTH_MOBILE,
-              ...style,
-            } as React.CSSProperties
-          }
-          {...rest}
-        >
-          {children}
-        </div>
+        <Tooltip.Provider>
+          <div
+            ref={ref}
+            className={cn(
+              sidebarProviderVariants({ side: defaultSide }),
+              className,
+            )}
+            style={
+              {
+                "--sidebar-width": SIDEBAR_WIDTH,
+                "--sidebar-width-collapsed": SIDEBAR_WIDTH_COLLAPSED,
+                "--sidebar-width-mobile": SIDEBAR_WIDTH_MOBILE,
+                ...style,
+              } as React.CSSProperties
+            }
+            {...rest}
+          >
+            {children}
+          </div>
+        </Tooltip.Provider>
       </SidebarContext.Provider>
     );
   },
@@ -454,17 +492,19 @@ const SidebarMenuItem = React.forwardRef<
 export interface SidebarMenuButtonProps extends React.ComponentProps<"button"> {
   asChild?: boolean;
   isActive?: boolean;
+  /** Shown on hover when the sidebar rail is collapsed (desktop). Omit to disable. */
+  tooltip?: React.ReactNode;
 }
 
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement,
   SidebarMenuButtonProps
 >(function SidebarMenuButton(
-  { asChild, isActive, className, type, ...rest },
+  { asChild, isActive, className, type, tooltip, ...rest },
   ref,
 ) {
   const Comp = asChild ? Slot : "button";
-  return (
+  const inner = (
     <Comp
       ref={ref}
       type={asChild ? undefined : (type ?? "button")}
@@ -473,6 +513,14 @@ const SidebarMenuButton = React.forwardRef<
       className={cn(sidebarMenuButtonVariants({ isActive }), className)}
       {...rest}
     />
+  );
+
+  if (tooltip === undefined) {
+    return inner;
+  }
+
+  return (
+    <SidebarCollapsedTooltip label={tooltip}>{inner}</SidebarCollapsedTooltip>
   );
 });
 
@@ -633,14 +681,20 @@ const SidebarCollapsibleContent = React.forwardRef<
   );
 });
 
+export interface SidebarWorkspaceButtonProps
+  extends React.ComponentProps<"button"> {
+  /** Shown on hover when the sidebar rail is collapsed (desktop). Omit to disable. */
+  tooltip?: React.ReactNode;
+}
+
 const SidebarWorkspaceButton = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<"button">
+  SidebarWorkspaceButtonProps
 >(function SidebarWorkspaceButton(
-  { className, type = "button", ...rest },
+  { className, type = "button", tooltip, ...rest },
   ref,
 ) {
-  return (
+  const inner = (
     <button
       ref={ref}
       type={type}
@@ -648,6 +702,14 @@ const SidebarWorkspaceButton = React.forwardRef<
       className={cn(sidebarRowButtonVariants(), className)}
       {...rest}
     />
+  );
+
+  if (tooltip === undefined) {
+    return inner;
+  }
+
+  return (
+    <SidebarCollapsedTooltip label={tooltip}>{inner}</SidebarCollapsedTooltip>
   );
 });
 
