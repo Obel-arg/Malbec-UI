@@ -5,7 +5,6 @@ export const selectTriggerVariants = cva([
   "malbec-font-sans",
   "ui:flex ui:h-9 ui:w-full ui:items-center ui:justify-between ui:rounded-md ui:border ui:border-background-300",
   "ui:bg-background-100 ui:px-4 ui:py-2 ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
-  "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
   "ui:outline-none ui:transition-[opacity,box-shadow]",
   "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   "ui:cursor-pointer",
@@ -18,7 +17,6 @@ export const selectContentVariants = cva([
   "malbec-font-sans",
   "ui:z-50 ui:max-h-64 ui:overflow-y-auto ui:overflow-x-hidden",
   "ui:rounded-md ui:border ui:border-background-300 ui:bg-white ui:p-1 dark:ui:bg-background-200",
-  "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
   /** Popper mode maps this to `--radix-popper-transform-origin`; item-aligned falls back if unset. */
   "ui:origin-(--radix-select-content-transform-origin)",
   ...popoverSurfaceTransitionMotionClasses,
