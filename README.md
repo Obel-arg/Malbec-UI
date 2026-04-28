@@ -11,112 +11,63 @@ Every project that installs `@obel-arg/malbec-ui` must have an `.npmrc` at the r
 //npm.pkg.github.com/:_authToken=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
 ```
 
-The token above is a read-only PAT scoped for pulling packages from GitHub Packages.
+Add this alias dependency in your project's `package.json`:
 
-Then install:
+```json
+{
+  "dependencies": {
+    "malbec-ui": "npm:@obel-arg/malbec-ui@^1.1.9"
+  }
+}
+```
+
+Alternative (recommended): run this and npm will write the same alias for you:
 
 ```bash
-npm install @obel-arg/malbec-ui
+npm install malbec-ui@npm:@obel-arg/malbec-ui@^1.1.9
 ```
 
-Import icons from the dedicated subpath:
+Then add this to your project's `globals.css`:
 
-```tsx
-import { CheckIcon, BrandGithubIcon } from "@obel-arg/malbec-ui/icons";
+```css
+@import "tailwindcss";
+@import "malbec-ui/style.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Re-export malbec-ui runtime vars as Tailwind theme tokens. */
+:root {
+  --app-color-primary: var(--color-primary);
+  --app-color-primary-foreground: var(--color-primary-foreground);
+  --app-color-foreground: var(--color-foreground);
+  --app-color-accent: var(--color-accent);
+  --app-color-destructive: var(--color-destructive);
+  --app-color-destructive-foreground: var(--color-destructive-foreground);
+  --app-color-background-100: var(--color-background-100);
+  --app-color-background-200: var(--color-background-200);
+  --app-color-background-300: var(--color-background-300);
+  --app-color-text-default: var(--color-text-default);
+  --app-color-text-default-muted: var(--color-text-default-muted);
+  --app-color-sidebar-border: var(--color-sidebar-border);
+}
+
+@theme inline {
+  --color-primary: var(--app-color-primary);
+  --color-primary-foreground: var(--app-color-primary-foreground);
+  --color-foreground: var(--app-color-foreground);
+  --color-accent: var(--app-color-accent);
+  --color-destructive: var(--app-color-destructive);
+  --color-destructive-foreground: var(--app-color-destructive-foreground);
+  --color-background-100: var(--app-color-background-100);
+  --color-background-200: var(--app-color-background-200);
+  --color-background-300: var(--app-color-background-300);
+  --color-text-default: var(--app-color-text-default);
+  --color-text-default-muted: var(--app-color-text-default-muted);
+  --color-sidebar-border: var(--app-color-sidebar-border);
+  --font-sans: "Inter Variable", Inter, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --text-xxs: 0.656rem;
+}
 ```
 
-## Publish (maintainers)
-
-Publishing happens automatically via `.github/workflows/publish.yml` when a GitHub Release is published. To publish manually:
-
-```bash
-npm version patch        # or minor / major
-npm run build
-npm publish              # uses publishConfig -> npm.pkg.github.com
-```
-
-You'll need to be authenticated against GitHub Packages locally:
-
-```bash
-npm login --scope=@obel-arg --registry=https://npm.pkg.github.com
-```
-
-Use your GitHub username and a PAT (classic) with `write:packages` scope as the password.
-
----
-
-## Development
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```

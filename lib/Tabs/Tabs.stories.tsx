@@ -79,3 +79,37 @@ export const Disabled: Story = {
     </Tabs>
   ),
 };
+
+export const UnderlineNavigation: Story = {
+  name: "Variant · Underline navigation",
+  render: () => (
+    <Tabs defaultValue="overview" variant="underline" className="ui:w-[520px]">
+      <Tabs.List>
+        <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+        <Tabs.Trigger value="activity">Activity</Tabs.Trigger>
+        <Tabs.Trigger value="integrations">Integrations</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="overview">Overview content.</Tabs.Content>
+      <Tabs.Content value="activity">Activity content.</Tabs.Content>
+      <Tabs.Content value="integrations">Integrations content.</Tabs.Content>
+    </Tabs>
+  ),
+};
+
+export const UnderlineDisabled: Story = {
+  name: "Variant · Underline disabled",
+  render: () => (
+    <Tabs defaultValue="projects" variant="underline" className="ui:w-[520px]">
+      <Tabs.List>
+        <Tabs.Trigger value="projects">Projects</Tabs.Trigger>
+        <Tabs.Trigger value="members" disabled>
+          Members
+        </Tabs.Trigger>
+        <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="projects">Projects content.</Tabs.Content>
+      <Tabs.Content value="members">Members content.</Tabs.Content>
+      <Tabs.Content value="settings">Settings content.</Tabs.Content>
+    </Tabs>
+  ),
+};
