@@ -16,7 +16,7 @@ Add this alias dependency in your project's `package.json`:
 ```json
 {
   "dependencies": {
-    "malbec-ui": "npm:@obel-arg/malbec-ui@^1.1.9"
+    "malbec-ui": "npm:@obel-arg/malbec-ui@latest"
   }
 }
 ```
@@ -24,7 +24,7 @@ Add this alias dependency in your project's `package.json`:
 Alternative (recommended): run this and npm will write the same alias for you:
 
 ```bash
-npm install malbec-ui@npm:@obel-arg/malbec-ui@^1.1.9
+npm install malbec-ui@npm:@obel-arg/malbec-ui@latest
 ```
 
 Then add this to your project's `globals.css`:
