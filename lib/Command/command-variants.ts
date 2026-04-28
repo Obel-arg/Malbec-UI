@@ -6,7 +6,6 @@ export const commandRootVariants = cva([
   "ui:flex ui:h-full ui:w-full ui:max-w-[450px] ui:flex-col ui:items-start ui:overflow-hidden",
   "ui:rounded-[10px] ui:border-2 ui:border-solid ui:border-white",
   "ui:bg-background-200 ui:text-text-default",
-  "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
 ]);
 
 /** Search field shell — top row with bottom rule. */
@@ -14,7 +13,6 @@ export const commandInputShellVariants = cva([
   "ui:relative ui:flex ui:w-full ui:flex-col ui:justify-center",
   "ui:rounded-t-[6px] ui:border-b-[0.5px] ui:border-solid ui:border-background-300",
   "ui:bg-background-200",
-  "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
 ]);
 
 /** Inner row padding — Figma Input/Search inset. */

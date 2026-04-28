@@ -22,7 +22,6 @@ export const comboboxTriggerRowVariants = cva(
     "ui:font-normal",
     "ui:leading-tight",
     "ui:text-text-default",
-    "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
     "ui:outline-none",
     "ui:transition-[color,box-shadow,opacity]",
     "ui:focus-visible:ring-2",
