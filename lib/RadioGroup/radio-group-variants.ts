@@ -9,8 +9,9 @@ export const radioGroupRootVariants = cva([
 ]);
 
 /**
- * 16×16px circular control: foreground fill, 1px primary border, 12px inner
- * primary dot when checked (leaves a 1px gap to the border).
+ * 16×16px circular control: background-100 fill (Figma surface), 1px primary
+ * border. Checked: radial-gradient (5px radius = 10px dot, then background-100
+ * to the inner edge) so the disk is geometrically centered, not a nested span.
  */
 export const radioGroupItemVariants = cva([
   "malbec-font-sans",
@@ -26,12 +27,13 @@ export const radioGroupItemVariants = cva([
   "ui:border",
   "ui:border-solid",
   "ui:border-primary",
-  "ui:bg-foreground",
+  "ui:bg-background-100",
   "ui:p-0",
   "ui:m-0",
   "ui:appearance-none",
   "ui:text-primary",
   "ui:outline-none",
+  "ui:data-[state=checked]:bg-[radial-gradient(circle_at_center,var(--color-primary)_0,var(--color-primary)_5px,var(--color-background-100)_5px)]",
   "ui:transition-[color,background-color,border-color,opacity,box-shadow]",
   "ui:focus-visible:ring-2",
   "ui:focus-visible:ring-primary",
@@ -47,23 +49,8 @@ export const radioGroupItemVariants = cva([
   "ui:aria-invalid:ring-offset-background-100",
 ]);
 
-export const radioGroupIndicatorVariants = cva([
-  "ui:pointer-events-none",
-  "ui:absolute",
-  "ui:left-1/2",
-  "ui:top-1/2",
-  "ui:-translate-x-1/2",
-  "ui:-translate-y-1/2",
-]);
-
-/** Inner filled circle shown when checked. */
-export const radioGroupDotVariants = cva([
-  "ui:block",
-  "ui:size-3",
-  "ui:shrink-0",
-  "ui:rounded-full",
-  "ui:bg-primary",
-]);
+/** Kept for Radix Presence; fill is drawn on the item via radial-gradient. */
+export const radioGroupIndicatorVariants = cva(["ui:hidden"]);
 
 /**
  * Card-style option: 6px radius, 2px border, padding 16px, gap 12px between icon and label.

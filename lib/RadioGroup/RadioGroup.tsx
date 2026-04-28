@@ -5,7 +5,6 @@ import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cn } from "../utils/cn";
 import {
   radioGroupCardVariants,
-  radioGroupDotVariants,
   radioGroupIndicatorVariants,
   radioGroupItemVariants,
   radioGroupRootVariants,
@@ -49,9 +48,7 @@ const RadioGroupItem = React.forwardRef<
       <RadioGroupPrimitive.Indicator
         data-slot="radio-group-indicator"
         className={cn(radioGroupIndicatorVariants())}
-      >
-        <span className={cn(radioGroupDotVariants())} aria-hidden />
-      </RadioGroupPrimitive.Indicator>
+      />
     </RadioGroupPrimitive.Item>
   );
 });
