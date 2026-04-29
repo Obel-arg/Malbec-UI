@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   addDays,
+  addMonths,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
@@ -34,6 +35,7 @@ import {
   calendarMonthWeekRowVariants,
 } from "./calendar-month-variants";
 import { Button } from "../Button/Button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type CalendarMonthEventColor =
   | "green"
@@ -163,13 +165,8 @@ const CalendarMonthToolbarImpl = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
 >(function CalendarMonthToolbarImpl({ className, ...rest }, ref) {
-  const {
-    month,
-    locale,
-    onMonthChange,
-    yearSelectFrom,
-    yearSelectTo,
-  } = useCalendarMonthContext("CalendarMonth.Toolbar");
+  const { month, locale, onMonthChange, yearSelectFrom, yearSelectTo } =
+    useCalendarMonthContext("CalendarMonth.Toolbar");
 
   const y = getYear(month);
   const m = getMonth(month);
@@ -191,58 +188,84 @@ const CalendarMonthToolbarImpl = React.forwardRef<
 
   if (!onMonthChange) return null;
 
+  const monthAnchor = startOfMonth(month);
+
   return (
     <div
       ref={ref}
       data-slot="calendar-month-toolbar"
       className={cn(
-        "ui:flex ui:w-full ui:items-center ui:justify-center ui:gap-2 ui:border-b ui:border-[#e5e5eb] ui:bg-background-200 ui:px-3 ui:py-2",
+        "ui:grid ui:w-full ui:grid-cols-[auto_1fr_auto] ui:items-center ui:gap-2 ui:border-b ui:border-[#e5e5eb] ui:bg-background-200 ui:px-3 ui:py-2",
         className,
       )}
       {...rest}
     >
-      <Select
-        value={String(m)}
-        onValueChange={(v) => {
-          const nextM = Number(v);
-          onMonthChange(startOfMonth(new Date(y, nextM, 1)));
-        }}
+      <Button
+        variant="outline"
+        size="sm"
+        aria-label="Previous month"
+        className="ui:shrink-0 ui:justify-self-start"
+        onClick={() => onMonthChange(startOfMonth(addMonths(monthAnchor, -1)))}
       >
-        <Select.Trigger
-          aria-label="Month"
-          className="ui:min-w-[min(148px,42vw)] ui:justify-between"
+        <Button.Icon>
+          <ChevronLeft className="ui:size-4" />
+        </Button.Icon>
+      </Button>
+      <div className="ui:flex ui:min-w-0 ui:items-center ui:justify-center ui:gap-2 ui:justify-self-center">
+        <Select
+          value={String(m)}
+          onValueChange={(v) => {
+            const nextM = Number(v);
+            onMonthChange(startOfMonth(new Date(y, nextM, 1)));
+          }}
         >
-          <Select.Value />
-        </Select.Trigger>
-        <Select.Content>
-          {monthItems.map((item) => (
-            <Select.Item key={item.value} value={item.value}>
-              {item.label}
-            </Select.Item>
-          ))}
-        </Select.Content>
-      </Select>
-      <Select
-        value={String(y)}
-        onValueChange={(v) => {
-          const nextY = Number(v);
-          onMonthChange(startOfMonth(new Date(nextY, m, 1)));
-        }}
+          <Select.Trigger
+            aria-label="Month"
+            className="ui:w-36 ui:max-w-[40vw] ui:shrink-0 ui:justify-between"
+          >
+            <Select.Value />
+          </Select.Trigger>
+          <Select.Content>
+            {monthItems.map((item) => (
+              <Select.Item key={item.value} value={item.value}>
+                {item.label}
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select>
+        <Select
+          value={String(y)}
+          onValueChange={(v) => {
+            const nextY = Number(v);
+            onMonthChange(startOfMonth(new Date(nextY, m, 1)));
+          }}
+        >
+          <Select.Trigger
+            aria-label="Year"
+            className="ui:w-24 ui:max-w-[28vw] ui:shrink-0 ui:justify-between"
+          >
+            <Select.Value />
+          </Select.Trigger>
+          <Select.Content>
+            {years.map((yr) => (
+              <Select.Item key={yr} value={String(yr)}>
+                {String(yr)}
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select>
+      </div>
+      <Button
+        variant="outline"
+        size="sm"
+        aria-label="Next month"
+        className="ui:shrink-0 ui:justify-self-end"
+        onClick={() => onMonthChange(startOfMonth(addMonths(monthAnchor, 1)))}
       >
-        <Select.Trigger
-          aria-label="Year"
-          className="ui:min-w-[min(100px,28vw)] ui:justify-between"
-        >
-          <Select.Value />
-        </Select.Trigger>
-        <Select.Content>
-          {years.map((yr) => (
-            <Select.Item key={yr} value={String(yr)}>
-              {String(yr)}
-            </Select.Item>
-          ))}
-        </Select.Content>
-      </Select>
+        <Button.Icon>
+          <ChevronRight className="ui:size-4" />
+        </Button.Icon>
+      </Button>
     </div>
   );
 });

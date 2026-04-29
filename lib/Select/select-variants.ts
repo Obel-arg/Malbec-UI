@@ -16,7 +16,7 @@ export const selectTriggerVariants = cva([
 export const selectContentVariants = cva([
   "malbec-font-sans",
   "ui:z-50 ui:max-h-64 ui:overflow-y-auto ui:overflow-x-hidden",
-  "ui:rounded-md ui:border ui:border-background-300 ui:bg-white ui:p-1 dark:ui:bg-background-200",
+  "ui:rounded-md ui:border ui:border-background-300 ui:bg-background-100 ui:p-1 dark:ui:bg-background-200",
   /** Popper mode maps this to `--radix-popper-transform-origin`; item-aligned falls back if unset. */
   "ui:origin-(--radix-select-content-transform-origin)",
   ...popoverSurfaceTransitionMotionClasses,
