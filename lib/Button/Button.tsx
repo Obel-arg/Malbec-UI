@@ -13,8 +13,10 @@ import type { ButtonSize, ButtonVariant } from "./button-variants";
 
 export type { ButtonSize, ButtonVariant };
 
-export interface ButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+export interface ButtonProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "type"
+> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
@@ -44,7 +46,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function ButtonRoot(
     {
       variant = "primary",
-      size = "md",
+      size = "lg",
       loading = false,
       htmlType = "button",
       disabled,
@@ -81,8 +83,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
-export interface ButtonIconProps
-  extends React.HTMLAttributes<HTMLSpanElement> {
+export interface ButtonIconProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** When true, the icon is hidden from assistive tech (purely decorative). */
   decorative?: boolean;
 }
@@ -116,19 +117,14 @@ const ButtonText = React.forwardRef<HTMLSpanElement, ButtonTextProps>(
     useButtonContext("Button.Text");
 
     return (
-      <span
-        ref={ref}
-        className={cn(buttonTextVariants(), className)}
-        {...rest}
-      >
+      <span ref={ref} className={cn(buttonTextVariants(), className)} {...rest}>
         {children}
       </span>
     );
   },
 );
 
-export interface ButtonSpinnerProps
-  extends React.HTMLAttributes<HTMLSpanElement> {
+export interface ButtonSpinnerProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Override the default circular spinner. */
   icon?: React.ReactNode;
   /** Hidden from assistive tech when true (default). */
@@ -136,10 +132,7 @@ export interface ButtonSpinnerProps
 }
 
 const ButtonSpinner = React.forwardRef<HTMLSpanElement, ButtonSpinnerProps>(
-  function ButtonSpinner(
-    { className, icon, decorative = true, ...rest },
-    ref,
-  ) {
+  function ButtonSpinner({ className, icon, decorative = true, ...rest }, ref) {
     const { loading, size } = useButtonContext("Button.Spinner");
 
     if (!loading) return null;

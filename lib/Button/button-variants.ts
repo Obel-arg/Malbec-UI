@@ -24,7 +24,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "ui:bg-primary ui:text-primary-foreground ui:hover:opacity-90 ui:active:opacity-80",
+          "ui:bg-primary ui:text-primary-foreground ui:font-semibold ui:hover:opacity-90 ui:active:opacity-80",
         secondary:
           "ui:bg-background-300 ui:text-primary ui:hover:opacity-90 ui:active:opacity-80",
         ghost:

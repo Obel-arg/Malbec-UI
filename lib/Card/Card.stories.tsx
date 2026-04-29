@@ -46,10 +46,10 @@ export const Default: Story = {
         </p>
       </Card.Content>
       <Card.Footer>
-        <Button variant="outline" size="sm">
+        <Button variant="outline">
           <Button.Text>Cancel</Button.Text>
         </Button>
-        <Button variant="primary" size="sm">
+        <Button variant="primary">
           <Button.Text>Next</Button.Text>
         </Button>
       </Card.Footer>
