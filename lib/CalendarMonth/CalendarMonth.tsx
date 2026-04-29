@@ -7,6 +7,8 @@ import {
   endOfMonth,
   endOfWeek,
   format,
+  getMonth,
+  getYear,
   isSameDay,
   isSameMonth,
   startOfDay,
@@ -18,6 +20,8 @@ import { enUS } from "date-fns/locale";
 import { cn } from "../utils/cn";
 import { Badge } from "../Badge/Badge";
 import type { BadgeVariant } from "../Badge/badge-variants";
+import { Popover } from "../Popover/Popover";
+import { Select } from "../Select/Select";
 import {
   calendarMonthDayCellVariants,
   calendarMonthDayNumberRowVariants,
@@ -29,6 +33,7 @@ import {
   calendarMonthTodayIndicatorVariants,
   calendarMonthWeekRowVariants,
 } from "./calendar-month-variants";
+import { Button } from "../Button/Button";
 
 export type CalendarMonthEventColor =
   | "green"
@@ -66,6 +71,21 @@ function dayKey(d: Date): string {
   return format(d, "yyyy-MM-dd");
 }
 
+const MONTH_DAY_VISIBLE_EVENT_LIMIT = 3;
+
+function compareCalendarMonthEvents(
+  a: CalendarMonthEvent,
+  b: CalendarMonthEvent,
+): number {
+  const ta = a.time ?? "";
+  const tb = b.time ?? "";
+  if (ta !== tb) return ta.localeCompare(tb);
+  return a.title.localeCompare(b.title);
+}
+
+/** Stable fallback so `map.get(k) ?? …` does not allocate a new `[]` each render. */
+const EMPTY_DAY_EVENTS: CalendarMonthEvent[] = [];
+
 type CalendarMonthContextValue = {
   month: Date;
   weekStartsOn: 0 | 1;
@@ -74,6 +94,9 @@ type CalendarMonthContextValue = {
   weeks: Date[][];
   eventsByDayKey: Map<string, CalendarMonthEvent[]>;
   onSelectDay?: (day: Date) => void;
+  onMonthChange?: (month: Date) => void;
+  yearSelectFrom: number;
+  yearSelectTo: number;
 };
 
 const CalendarMonthContext =
@@ -103,6 +126,13 @@ export type CalendarMonthProps = React.ComponentProps<"div"> & {
   /** Weekday row labels. Defaults to English short names (MON, TUE, …). */
   locale?: Locale;
   onSelectDay?: (day: Date) => void;
+  /**
+   * When set, renders a toolbar with month and year `<Select>`s above the grid.
+   * Receives `startOfMonth` for the chosen month.
+   */
+  onMonthChange?: (month: Date) => void;
+  /** Inclusive year bounds for the year select. Defaults to visible year −50 … +25 (expanded to include the visible year). */
+  yearSelectBounds?: { from: number; to: number };
 };
 
 function buildWeeks(month: Date, weekStartsOn: 0 | 1): Date[][] {
@@ -111,6 +141,112 @@ function buildWeeks(month: Date, weekStartsOn: 0 | 1): Date[][] {
   const days = eachDayOfInterval({ start, end });
   return chunkArray(days, 7);
 }
+
+function resolveYearSelectBounds(
+  visibleMonthStart: Date,
+  bounds?: { from: number; to: number },
+): { from: number; to: number } {
+  const visYear = getYear(visibleMonthStart);
+  let from = bounds?.from ?? visYear - 50;
+  let to = bounds?.to ?? visYear + 25;
+  if (from > to) {
+    const t = from;
+    from = to;
+    to = t;
+  }
+  from = Math.min(from, visYear);
+  to = Math.max(to, visYear);
+  return { from, to };
+}
+
+const CalendarMonthToolbarImpl = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div">
+>(function CalendarMonthToolbarImpl({ className, ...rest }, ref) {
+  const {
+    month,
+    locale,
+    onMonthChange,
+    yearSelectFrom,
+    yearSelectTo,
+  } = useCalendarMonthContext("CalendarMonth.Toolbar");
+
+  const y = getYear(month);
+  const m = getMonth(month);
+
+  const years = React.useMemo(() => {
+    const out: number[] = [];
+    for (let yr = yearSelectFrom; yr <= yearSelectTo; yr += 1) out.push(yr);
+    return out;
+  }, [yearSelectFrom, yearSelectTo]);
+
+  const monthItems = React.useMemo(
+    () =>
+      Array.from({ length: 12 }, (_, i) => ({
+        value: String(i),
+        label: format(new Date(2024, i, 1), "LLLL", { locale }),
+      })),
+    [locale],
+  );
+
+  if (!onMonthChange) return null;
+
+  return (
+    <div
+      ref={ref}
+      data-slot="calendar-month-toolbar"
+      className={cn(
+        "ui:flex ui:w-full ui:items-center ui:justify-center ui:gap-2 ui:border-b ui:border-[#e5e5eb] ui:bg-background-200 ui:px-3 ui:py-2",
+        className,
+      )}
+      {...rest}
+    >
+      <Select
+        value={String(m)}
+        onValueChange={(v) => {
+          const nextM = Number(v);
+          onMonthChange(startOfMonth(new Date(y, nextM, 1)));
+        }}
+      >
+        <Select.Trigger
+          aria-label="Month"
+          className="ui:min-w-[min(148px,42vw)] ui:justify-between"
+        >
+          <Select.Value />
+        </Select.Trigger>
+        <Select.Content>
+          {monthItems.map((item) => (
+            <Select.Item key={item.value} value={item.value}>
+              {item.label}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select>
+      <Select
+        value={String(y)}
+        onValueChange={(v) => {
+          const nextY = Number(v);
+          onMonthChange(startOfMonth(new Date(nextY, m, 1)));
+        }}
+      >
+        <Select.Trigger
+          aria-label="Year"
+          className="ui:min-w-[min(100px,28vw)] ui:justify-between"
+        >
+          <Select.Value />
+        </Select.Trigger>
+        <Select.Content>
+          {years.map((yr) => (
+            <Select.Item key={yr} value={String(yr)}>
+              {String(yr)}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select>
+    </div>
+  );
+});
+CalendarMonthToolbarImpl.displayName = "CalendarMonth.Toolbar";
 
 const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
   function CalendarMonthRoot(
@@ -122,11 +258,21 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
       today: todayProp = new Date(),
       locale = enUS,
       onSelectDay,
+      onMonthChange,
+      yearSelectBounds,
       children,
       ...rest
     },
     ref,
   ) {
+    const monthStart = startOfMonth(
+      month instanceof Date ? month : new Date(month as string | number),
+    );
+    const { from: yearSelectFrom, to: yearSelectTo } = resolveYearSelectBounds(
+      monthStart,
+      yearSelectBounds,
+    );
+
     const weeks = React.useMemo(
       () => buildWeeks(month, weekStartsOn),
       [month, weekStartsOn],
@@ -151,9 +297,8 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
               : new Date(ev.date as string | number),
           ),
         );
-        const list = map.get(k) ?? [];
-        list.push(ev);
-        map.set(k, list);
+        const prev = map.get(k) ?? [];
+        map.set(k, [...prev, ev]);
       }
       return map;
     }, [events]);
@@ -167,8 +312,22 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
         weeks,
         eventsByDayKey,
         onSelectDay,
+        onMonthChange,
+        yearSelectFrom,
+        yearSelectTo,
       }),
-      [month, weekStartsOn, today, locale, weeks, eventsByDayKey, onSelectDay],
+      [
+        month,
+        weekStartsOn,
+        today,
+        locale,
+        weeks,
+        eventsByDayKey,
+        onSelectDay,
+        onMonthChange,
+        yearSelectFrom,
+        yearSelectTo,
+      ],
     );
 
     return (
@@ -181,6 +340,7 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
         >
           {children ?? (
             <>
+              {onMonthChange ? <CalendarMonthToolbarImpl /> : null}
               <CalendarMonthHeaderImpl />
               <CalendarMonthBodyImpl />
             </>
@@ -324,7 +484,18 @@ const CalendarMonthDay = React.forwardRef<
   const isToday =
     today !== null && isSameDay(startOfDay(day), startOfDay(today));
   const k = dayKey(day);
-  const list = eventsByDayKey.get(k) ?? [];
+  const dayEvents = eventsByDayKey.get(k) ?? EMPTY_DAY_EVENTS;
+  const sortedDayEvents =
+    dayEvents.length === 0
+      ? dayEvents
+      : [...dayEvents].sort(compareCalendarMonthEvents);
+  const visibleDayEvents = sortedDayEvents.slice(
+    0,
+    MONTH_DAY_VISIBLE_EVENT_LIMIT,
+  );
+  const overflowDayEvents = sortedDayEvents.slice(
+    MONTH_DAY_VISIBLE_EVENT_LIMIT,
+  );
   const selectable = Boolean(onSelectDay);
 
   const handleActivate = () => {
@@ -378,9 +549,9 @@ const CalendarMonthDay = React.forwardRef<
           </span>
         )}
       </div>
-      {list.length > 0 ? (
+      {dayEvents.length > 0 ? (
         <div className={cn(calendarMonthEventsStackVariants())}>
-          {list.map((ev) => (
+          {visibleDayEvents.map((ev) => (
             <CalendarMonthEventBlock
               key={ev.id ?? `${k}-${ev.time}-${ev.title}`}
               color={ev.color}
@@ -388,6 +559,38 @@ const CalendarMonthDay = React.forwardRef<
               title={ev.title}
             />
           ))}
+          {overflowDayEvents.length > 0 ? (
+            <Popover>
+              <Popover.Trigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="ui:w-full ui:p-0 ui:text-left ui:justify-start ui:h-[22px]"
+                  aria-label={`${overflowDayEvents.length} more events`}
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => e.stopPropagation()}
+                >
+                  +{overflowDayEvents.length}
+                </Button>
+              </Popover.Trigger>
+              <Popover.Content
+                align="start"
+                side="bottom"
+                sideOffset={6}
+                className="ui:flex ui:min-w-[220px] ui:max-w-[min(320px,var(--radix-popover-content-available-width))] ui:flex-col ui:gap-1 ui:p-2"
+              >
+                {overflowDayEvents.map((ev, i) => (
+                  <CalendarMonthEventBlock
+                    key={ev.id ?? `${k}-overflow-${i}-${ev.time}-${ev.title}`}
+                    color={ev.color}
+                    time={ev.time}
+                    title={ev.title}
+                  />
+                ))}
+              </Popover.Content>
+            </Popover>
+          ) : null}
         </div>
       ) : null}
     </div>
@@ -431,8 +634,17 @@ const CalendarMonthEventBlock = React.forwardRef<
         className="ui:inline-block ui:h-[6px] ui:min-h-[6px] ui:min-w-[6px] ui:w-[6px] ui:shrink-0 ui:rounded-full"
         style={{ backgroundColor: EVENT_PILL_DOT_COLOR[color] }}
       />
-      {time ? <Badge.Text tone="accent">{time}</Badge.Text> : null}
-      <Badge.Text className="ui:min-w-0 ui:truncate">{title}</Badge.Text>
+      {time ? (
+        <Badge.Text
+          tone="accent"
+          className="ui:shrink-0 ui:min-w-max ui:overflow-visible ui:whitespace-nowrap ui:tabular-nums"
+        >
+          {time}
+        </Badge.Text>
+      ) : null}
+      <Badge.Text className="ui:min-w-0 ui:flex-1 ui:truncate">
+        {title}
+      </Badge.Text>
     </Badge>
   );
 });
@@ -440,6 +652,7 @@ CalendarMonthEventBlock.displayName = "CalendarMonth.Event";
 
 const CalendarMonth = Object.assign(CalendarMonthRoot, {
   Header: CalendarMonthHeaderImpl,
+  Toolbar: CalendarMonthToolbarImpl,
   Body: CalendarMonthBodyImpl,
   Week: CalendarMonthWeek,
   Day: CalendarMonthDay,
@@ -449,6 +662,7 @@ const CalendarMonth = Object.assign(CalendarMonthRoot, {
     React.RefAttributes<HTMLDivElement>
 > & {
   Header: typeof CalendarMonthHeaderImpl;
+  Toolbar: typeof CalendarMonthToolbarImpl;
   Body: typeof CalendarMonthBodyImpl;
   Week: typeof CalendarMonthWeek;
   Day: typeof CalendarMonthDay;
