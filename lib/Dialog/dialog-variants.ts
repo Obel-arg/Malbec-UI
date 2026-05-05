@@ -18,7 +18,7 @@ export const dialogContentVariants = cva([
   "ui:gap-4",
   "ui:rounded-[8px]",
   "ui:bg-background-100",
-  "ui:p-6",
+  "ui:p-10",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
   "ui:data-[state=open]:animate-malbec-dialog-in",

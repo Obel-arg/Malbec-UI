@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../Button/Button";
 import { Dialog } from "./Dialog";
+import { Steps } from "@obel-arg/malbec-ui";
 
 /**
  * `Dialog.Trigger` opens `Dialog.Content` with `Dialog.Header`, `Dialog.Body` / `Dialog.InlineField`, `Dialog.Footer`.
@@ -39,6 +40,7 @@ export const EditProfile: Story = {
       </Dialog.Trigger>
 
       <Dialog.Content>
+        <Steps total={3} value={1} />
         <Dialog.Header>
           <Dialog.Title>Edit profile</Dialog.Title>
           <Dialog.Description>
@@ -60,7 +62,14 @@ export const EditProfile: Story = {
           </Dialog.InlineField>
         </Dialog.Body>
 
-        <Dialog.Footer>
+        <Dialog.Footer className="ui:flex ui:justify-between">
+          <Button
+            variant="outline"
+            size="lg"
+            className="ui:border-background-300"
+          >
+            <Button.Text className="ui:text-sm">Cancel</Button.Text>
+          </Button>
           <Dialog.Action>Save changes</Dialog.Action>
         </Dialog.Footer>
       </Dialog.Content>

@@ -53,7 +53,9 @@ function DialogPortal(
 }
 DialogPortal.displayName = "Dialog.Portal";
 
-export type DialogOverlayProps = React.ComponentProps<typeof DialogPrimitive.Overlay>;
+export type DialogOverlayProps = React.ComponentProps<
+  typeof DialogPrimitive.Overlay
+>;
 
 const DialogOverlay = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Overlay>,
@@ -69,8 +71,9 @@ const DialogOverlay = React.forwardRef<
   );
 });
 
-export interface DialogContentProps
-  extends React.ComponentProps<typeof DialogPrimitive.Content> {
+export interface DialogContentProps extends React.ComponentProps<
+  typeof DialogPrimitive.Content
+> {
   showCloseButton?: boolean;
   /** Merged after default overlay styles. */
   overlayClassName?: string;
@@ -87,7 +90,7 @@ const DialogContent = React.forwardRef<
   {
     className,
     children,
-    showCloseButton = true,
+    showCloseButton = false,
     overlayClassName,
     unstyled,
     container,
@@ -165,7 +168,9 @@ const DialogAction = React.forwardRef<HTMLButtonElement, DialogActionProps>(
   },
 );
 
-export type DialogTitleProps = React.ComponentProps<typeof DialogPrimitive.Title>;
+export type DialogTitleProps = React.ComponentProps<
+  typeof DialogPrimitive.Title
+>;
 
 const DialogTitle = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Title>,
@@ -199,7 +204,9 @@ const DialogDescription = React.forwardRef<
   );
 });
 
-export type DialogCloseProps = React.ComponentProps<typeof DialogPrimitive.Close>;
+export type DialogCloseProps = React.ComponentProps<
+  typeof DialogPrimitive.Close
+>;
 
 const DialogClose = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Close>,
@@ -217,74 +224,73 @@ const DialogClose = React.forwardRef<
 
 export type DialogBodyProps = React.HTMLAttributes<HTMLDivElement>;
 
-const DialogBody = React.forwardRef<HTMLDivElement, DialogBodyProps>(function DialogBody(
-  { className, ...rest },
-  ref,
-) {
+const DialogBody = React.forwardRef<HTMLDivElement, DialogBodyProps>(
+  function DialogBody({ className, ...rest }, ref) {
+    return (
+      <div
+        ref={ref}
+        data-slot="dialog-body"
+        className={cn(dialogBodyVariants(), className)}
+        {...rest}
+      />
+    );
+  },
+);
+
+export type DialogInlineFieldProps = React.HTMLAttributes<HTMLDivElement>;
+
+const DialogInlineField = React.forwardRef<
+  HTMLDivElement,
+  DialogInlineFieldProps
+>(function DialogInlineField({ className, ...rest }, ref) {
   return (
     <div
       ref={ref}
-      data-slot="dialog-body"
-      className={cn(dialogBodyVariants(), className)}
+      data-slot="dialog-inline-field"
+      className={cn(dialogInlineFieldVariants(), className)}
       {...rest}
     />
   );
 });
 
-export type DialogInlineFieldProps = React.HTMLAttributes<HTMLDivElement>;
-
-const DialogInlineField = React.forwardRef<HTMLDivElement, DialogInlineFieldProps>(
-  function DialogInlineField({ className, ...rest }, ref) {
-    return (
-      <div
-        ref={ref}
-        data-slot="dialog-inline-field"
-        className={cn(dialogInlineFieldVariants(), className)}
-        {...rest}
-      />
-    );
-  },
-);
-
 export type DialogInlineLabelProps = React.ComponentProps<"label">;
 
-const DialogInlineLabel = React.forwardRef<HTMLLabelElement, DialogInlineLabelProps>(
-  function DialogInlineLabel({ className, ...rest }, ref) {
-    return (
-      <label
-        ref={ref}
-        data-slot="dialog-inline-label"
-        className={cn(dialogInlineLabelVariants(), className)}
-        {...rest}
-      />
-    );
-  },
-);
+const DialogInlineLabel = React.forwardRef<
+  HTMLLabelElement,
+  DialogInlineLabelProps
+>(function DialogInlineLabel({ className, ...rest }, ref) {
+  return (
+    <label
+      ref={ref}
+      data-slot="dialog-inline-label"
+      className={cn(dialogInlineLabelVariants(), className)}
+      {...rest}
+    />
+  );
+});
 
 export type DialogInlineInputProps = React.ComponentProps<"input">;
 
-const DialogInlineInput = React.forwardRef<HTMLInputElement, DialogInlineInputProps>(
-  function DialogInlineInput({ className, ...rest }, ref) {
-    return (
-      <input
-        ref={ref}
-        data-slot="dialog-inline-input"
-        className={cn(dialogInlineInputVariants(), className)}
-        {...rest}
-      />
-    );
-  },
-);
+const DialogInlineInput = React.forwardRef<
+  HTMLInputElement,
+  DialogInlineInputProps
+>(function DialogInlineInput({ className, ...rest }, ref) {
+  return (
+    <input
+      ref={ref}
+      data-slot="dialog-inline-input"
+      className={cn(dialogInlineInputVariants(), className)}
+      {...rest}
+    />
+  );
+});
 
 export interface DialogCloseIconProps extends React.ComponentProps<"svg"> {
   decorative?: boolean;
 }
 
 const DialogCloseIcon = React.forwardRef<SVGSVGElement, DialogCloseIconProps>(
-  function DialogCloseIcon(
-    { className, decorative = true, ...rest },
-    ref,
-  ) {
+  function DialogCloseIcon({ className, decorative = true, ...rest }, ref) {
     return (
       <svg
         ref={ref}
