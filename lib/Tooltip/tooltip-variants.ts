@@ -13,7 +13,8 @@ export const tooltipSurfaceMotionClasses = [
 
 export const tooltipContentVariants = cva([
   "malbec-font-sans",
-  "ui:z-50 ui:w-auto ui:max-w-(--radix-tooltip-content-available-width)",
+  /** Above modal overlays (`Dialog` / `Sheet` use `z-50`). */
+  "ui:z-100 ui:w-auto ui:max-w-(--radix-tooltip-content-available-width)",
   "ui:rounded-md ui:border ui:border-background-300 ui:bg-background-100",
   "ui:px-3 ui:py-1.5 ui:text-base ui:leading-6 ui:text-text-default",
   "ui:shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] ui:outline-none",

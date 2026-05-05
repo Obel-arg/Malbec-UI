@@ -97,7 +97,8 @@ export const comboboxContentVariants = cva(
   [
     "malbec-font-sans",
     "ui:box-border",
-    "ui:z-50",
+    /** Above modal overlays (`Dialog` / `Sheet` use `z-50`). */
+    "ui:z-100",
     "ui:overflow-hidden",
     "ui:rounded-md",
     "ui:bg-background-100",

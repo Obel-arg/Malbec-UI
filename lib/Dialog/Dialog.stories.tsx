@@ -1,7 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../Button/Button";
+import { Combobox } from "../Combobox/Combobox";
 import { Dialog } from "./Dialog";
 import { Steps } from "@obel-arg/malbec-ui";
+
+const comboboxItems = [
+  "Next.js",
+  "Svelte.js",
+  "Nuxt.js",
+  "Remix",
+  "Astro",
+] as const;
 
 /**
  * `Dialog.Trigger` opens `Dialog.Content` with `Dialog.Header`, `Dialog.Body` / `Dialog.InlineField`, `Dialog.Footer`.
@@ -59,6 +68,30 @@ export const EditProfile: Story = {
               Username
             </Dialog.InlineLabel>
             <Dialog.InlineInput id="dialog-username" defaultValue="@peduarte" />
+          </Dialog.InlineField>
+
+          <Dialog.InlineField>
+            <Dialog.InlineLabel htmlFor="dialog-framework">
+              Framework
+            </Dialog.InlineLabel>
+            <div className="ui:flex-1 ui:min-w-0">
+              <Combobox items={[...comboboxItems]} className="ui:w-full">
+                <Combobox.Input
+                  id="dialog-framework"
+                  placeholder="Select a framework"
+                />
+                <Combobox.Content>
+                  <Combobox.Empty>No items found.</Combobox.Empty>
+                  <Combobox.List>
+                    {(item) => (
+                      <Combobox.Item key={String(item)} value={item}>
+                        {String(item)}
+                      </Combobox.Item>
+                    )}
+                  </Combobox.List>
+                </Combobox.Content>
+              </Combobox>
+            </div>
           </Dialog.InlineField>
         </Dialog.Body>
 
