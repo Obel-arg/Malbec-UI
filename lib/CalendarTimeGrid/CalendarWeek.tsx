@@ -23,7 +23,9 @@ import { CalendarTimeGridNowMarker } from "./CalendarTimeGridNowMarker";
 import {
   buildWeekDays,
   formatGmtOffsetLabel,
+  formatSlotTime24h,
   hourRange,
+  slotFromGridClickY,
 } from "./calendar-timegrid-utils";
 import {
   calendarTimeGridBodyRowVariants,
@@ -68,7 +70,15 @@ export type CalendarWeekProps = Omit<
   onWeekChange?: (week: Date) => void;
   /** Week range title row above the day headers. Default `true`. */
   showWeekToolbar?: boolean;
-  onSelectDay?: (day: Date) => void;
+  onSelectDay?: ({
+    day,
+    time,
+    date,
+  }: {
+    day: Date;
+    time: string;
+    date: string;
+  }) => void;
   onSelectEvent?: (event: CalendarTimeGridEvent) => void;
 };
 
@@ -281,7 +291,24 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
                 )}
                 style={{ minHeight: gridH }}
                 tabIndex={selectable ? 0 : undefined}
-                onClick={() => selectable && onSelectDay?.(startOfDay(day))}
+                onClick={(e) => {
+                  const d = startOfDay(day);
+                  const y =
+                    e.clientY - e.currentTarget.getBoundingClientRect().top;
+                  const { hour, minute } = slotFromGridClickY(
+                    y,
+                    startHour,
+                    endHour,
+                    hourHeightPx,
+                  );
+                  const time = formatSlotTime24h(hour, minute);
+                  if (selectable)
+                    onSelectDay?.({
+                      day: d,
+                      time,
+                      date: format(d, "yyyy-MM-dd"),
+                    });
+                }}
                 onKeyDown={(e) => {
                   if (
                     selectable &&
@@ -289,7 +316,11 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
                     !e.defaultPrevented
                   ) {
                     e.preventDefault();
-                    onSelectDay?.(startOfDay(day));
+                    onSelectDay?.({
+                      day: startOfDay(day),
+                      time: formatSlotTime24h(0, 0),
+                      date: format(startOfDay(day), "yyyy-MM-dd"),
+                    });
                   }
                 }}
               >

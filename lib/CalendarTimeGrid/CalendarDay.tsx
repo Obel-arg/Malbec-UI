@@ -13,7 +13,12 @@ import {
   timedEventHorizontalStyle,
 } from "./calendar-timegrid-layout-utils";
 import { CalendarTimeGridNowMarker } from "./CalendarTimeGridNowMarker";
-import { formatGmtOffsetLabel, hourRange } from "./calendar-timegrid-utils";
+import {
+  formatGmtOffsetLabel,
+  formatSlotTime24h,
+  hourRange,
+  slotFromGridClickY,
+} from "./calendar-timegrid-utils";
 import {
   calendarTimeGridBodyRowVariants,
   calendarTimeGridColumnVariants,
@@ -44,7 +49,15 @@ export type CalendarDayProps = Omit<React.ComponentProps<"div">, "children"> & {
    * (start-of-day). Controlled: update the `day` prop from this callback.
    */
   onDayChange?: (day: Date) => void;
-  onSelectDay?: (day: Date) => void;
+  onSelectDay?: ({
+    day,
+    time,
+    date,
+  }: {
+    day: Date;
+    time: string;
+    date: string;
+  }) => void;
   onSelectEvent?: (event: CalendarTimeGridEvent) => void;
 };
 
@@ -98,9 +111,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
 
     const dayEvents = React.useMemo(
       () =>
-        events.filter((ev) =>
-          isSameDay(startOfDay(ev.start), startOfDay(day)),
-        ),
+        events.filter((ev) => isSameDay(startOfDay(ev.start), startOfDay(day))),
       [events, day],
     );
 
@@ -213,7 +224,22 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
             )}
             style={{ minHeight: gridH }}
             tabIndex={selectable ? 0 : undefined}
-            onClick={() => selectable && onSelectDay?.(day)}
+            onClick={(e) => {
+              const y = e.clientY - e.currentTarget.getBoundingClientRect().top;
+              const { hour, minute } = slotFromGridClickY(
+                y,
+                startHour,
+                endHour,
+                hourHeightPx,
+              );
+              const time = formatSlotTime24h(hour, minute);
+              if (selectable)
+                onSelectDay?.({
+                  day,
+                  time,
+                  date: format(day, "yyyy-MM-dd"),
+                });
+            }}
             onKeyDown={(e) => {
               if (
                 selectable &&
@@ -221,7 +247,11 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
                 !e.defaultPrevented
               ) {
                 e.preventDefault();
-                onSelectDay?.(day);
+                onSelectDay?.({
+                  day,
+                  time: formatSlotTime24h(0, 0),
+                  date: format(day, "yyyy-MM-dd"),
+                });
               }
             }}
           >

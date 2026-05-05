@@ -59,3 +59,25 @@ export function formatGmtOffsetLabel(at: Date): string {
   return `GMT${sign}${h}:${String(m).padStart(2, "0")}`;
 }
 
+/**
+ * Maps a vertical offset within the time grid to an hour row and :00 / :30
+ * (top half of the row → :00, bottom half → :30).
+ */
+export function slotFromGridClickY(
+  offsetY: number,
+  startHour: number,
+  endHour: number,
+  hourHeightPx: number,
+): { hour: number; minute: 0 | 30 } {
+  const rowCount = endHour - startHour + 1;
+  const y = Math.max(0, offsetY);
+  const rowIndex = Math.min(Math.floor(y / hourHeightPx), rowCount - 1);
+  const withinRow = y - rowIndex * hourHeightPx;
+  const minute: 0 | 30 = withinRow < hourHeightPx / 2 ? 0 : 30;
+  return { hour: startHour + rowIndex, minute };
+}
+
+export function formatSlotTime24h(hour: number, minute: 0 | 30): string {
+  return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+}
+
