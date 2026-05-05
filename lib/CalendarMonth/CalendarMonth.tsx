@@ -161,6 +161,15 @@ function resolveYearSelectBounds(
   return { from, to };
 }
 
+/** Matches `CalendarWeek` toolbar: `Button variant="outline" size="sm"` (primary border, transparent fill). */
+const calendarMonthToolbarSelectTriggerClassName = [
+  "ui:h-8 ui:min-h-8 ui:gap-2 ui:rounded-[8px] ui:border-[1.5px] ui:border-primary ui:bg-transparent",
+  "ui:px-3 ui:py-[6px] ui:text-xs ui:font-medium ui:leading-4 ui:tracking-[-0.3px] ui:text-primary ui:shadow-none",
+  "ui:hover:bg-primary/10 ui:active:bg-primary/15",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "[&>span:last-child]:text-primary [&>span:last-child]:opacity-100",
+].join(" ");
+
 const CalendarMonthToolbarImpl = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
@@ -195,7 +204,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
       ref={ref}
       data-slot="calendar-month-toolbar"
       className={cn(
-        "ui:grid ui:w-full ui:grid-cols-[auto_1fr_auto] ui:items-center ui:gap-2 ui:border-b ui:border-[#e5e5eb] ui:bg-background-200 ui:px-3 ui:py-2",
+        "ui:grid ui:w-full ui:grid-cols-[auto_1fr_auto] ui:items-center ui:gap-3 ui:border-b ui:border-[#e0e0e0] ui:bg-[#f0f0f0] ui:px-3 ui:py-2",
         className,
       )}
       {...rest}
@@ -211,7 +220,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
           <ChevronLeft className="ui:size-4" />
         </Button.Icon>
       </Button>
-      <div className="ui:flex ui:min-w-0 ui:items-center ui:justify-center ui:gap-2 ui:justify-self-center">
+      <div className="ui:flex ui:min-w-0 ui:items-center ui:justify-center ui:gap-3 ui:justify-self-center">
         <Select
           value={String(m)}
           onValueChange={(v) => {
@@ -221,13 +230,20 @@ const CalendarMonthToolbarImpl = React.forwardRef<
         >
           <Select.Trigger
             aria-label="Month"
-            className="ui:w-36 ui:max-w-[40vw] ui:shrink-0 ui:justify-between"
+            className={cn(
+              calendarMonthToolbarSelectTriggerClassName,
+              "ui:m-0 ui:min-w-[150px] ui:flex-1 ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default ui:border-none ui:capitalize",
+            )}
           >
             <Select.Value />
           </Select.Trigger>
           <Select.Content>
             {monthItems.map((item) => (
-              <Select.Item key={item.value} value={item.value}>
+              <Select.Item
+                className="ui:capitalize"
+                key={item.value}
+                value={item.value}
+              >
                 {item.label}
               </Select.Item>
             ))}
@@ -242,7 +258,10 @@ const CalendarMonthToolbarImpl = React.forwardRef<
         >
           <Select.Trigger
             aria-label="Year"
-            className="ui:w-24 ui:max-w-[28vw] ui:shrink-0 ui:justify-between"
+            className={cn(
+              calendarMonthToolbarSelectTriggerClassName,
+              "ui:m-0 ui:min-w-[75px] ui:flex-1 ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default ui:border-none ui:tabular-nums",
+            )}
           >
             <Select.Value />
           </Select.Trigger>

@@ -2,18 +2,14 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   addDays,
-  addWeeks,
   endOfMonth,
-  endOfWeek,
   format,
   getDate,
   isSameMonth,
   startOfDay,
   startOfMonth,
-  startOfWeek,
 } from "date-fns";
 import { es } from "date-fns/locale";
-import { Button } from "../Button/Button";
 import { CalendarMonth, type CalendarMonthEvent } from "../CalendarMonth/CalendarMonth";
 import { Tabs } from "../Tabs/Tabs";
 import { CalendarDay } from "./CalendarDay";
@@ -295,40 +291,6 @@ function buildShowcaseEvents(visibleMonth: Date): CalendarMonthEvent[] {
   }));
 }
 
-function ChevronLeftIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-      {...props}
-    >
-      <path d="m15 18-6-6 6-6" />
-    </svg>
-  );
-}
-
-function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-      {...props}
-    >
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  );
-}
-
 function MonthWithSwitcher() {
   const [month, setMonth] = React.useState(() => startOfMonth(new Date()));
   const events = React.useMemo(() => buildShowcaseEvents(month), [month]);
@@ -386,44 +348,13 @@ function WeekPanelControlled({
   focus: Date;
   onFocusChange: (next: Date) => void;
 }) {
-  const ws = startOfWeek(focus, { weekStartsOn: WEEK_STARTS_ON });
-  const we = endOfWeek(focus, { weekStartsOn: WEEK_STARTS_ON });
-  const rangeLabel =
-    ws.getFullYear() === we.getFullYear()
-      ? `${format(ws, "d MMM", { locale: es })} – ${format(we, "d MMM yyyy", { locale: es })}`
-      : `${format(ws, "d MMM yyyy", { locale: es })} – ${format(we, "d MMM yyyy", { locale: es })}`;
-
   return (
-    <div className="ui:mx-auto ui:flex ui:w-full ui:max-w-[min(100%,1200px)] ui:flex-col ui:gap-4">
-      <div className="ui:flex ui:items-center ui:justify-center ui:gap-3">
-        <Button
-          variant="outline"
-          size="sm"
-          aria-label="Semana anterior"
-          onClick={() => onFocusChange(addWeeks(focus, -1))}
-        >
-          <Button.Icon>
-            <ChevronLeftIcon className="ui:size-4" />
-          </Button.Icon>
-        </Button>
-        <h2 className="malbec-font-sans ui:m-0 ui:min-w-[200px] ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default">
-          {rangeLabel}
-        </h2>
-        <Button
-          variant="outline"
-          size="sm"
-          aria-label="Semana siguiente"
-          onClick={() => onFocusChange(addWeeks(focus, 1))}
-        >
-          <Button.Icon>
-            <ChevronRightIcon className="ui:size-4" />
-          </Button.Icon>
-        </Button>
-      </div>
+    <div className="ui:mx-auto ui:flex ui:w-full ui:max-w-[min(100%,1200px)] ui:flex-col">
       <CalendarWeek
         week={focus}
         weekStartsOn={WEEK_STARTS_ON}
         locale={es}
+        onWeekChange={onFocusChange}
         today={new Date()}
         now={new Date()}
         events={demoEvents}
@@ -481,19 +412,25 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const WeekView: Story = {
-  name: "Week (calendarWeek)",
-  render: () => (
+function WeekViewWithNavigation() {
+  const [week, setWeek] = React.useState(() => demoWeekAnchor);
+  return (
     <div className="ui:mx-auto ui:w-full ui:max-w-[min(100%,1200px)]">
       <CalendarWeek
-        week={demoWeekAnchor}
+        week={week}
+        onWeekChange={setWeek}
         locale={es}
         today={new Date()}
         now={new Date()}
         events={demoEvents}
       />
     </div>
-  ),
+  );
+}
+
+export const WeekView: Story = {
+  name: "Week (calendarWeek)",
+  render: () => <WeekViewWithNavigation />,
 };
 
 function DayViewWithNavigation() {

@@ -1,9 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { format, isSameDay, startOfDay } from "date-fns";
+import {
+  addWeeks,
+  endOfWeek,
+  format,
+  isSameDay,
+  startOfDay,
+  startOfWeek,
+} from "date-fns";
 import type { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
+import { Button } from "../Button/Button";
 import { cn } from "../utils/cn";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
 import {
@@ -12,7 +20,11 @@ import {
   timedEventHorizontalStyle,
 } from "./calendar-timegrid-layout-utils";
 import { CalendarTimeGridNowMarker } from "./CalendarTimeGridNowMarker";
-import { buildWeekDays, formatGmtOffsetLabel, hourRange } from "./calendar-timegrid-utils";
+import {
+  buildWeekDays,
+  formatGmtOffsetLabel,
+  hourRange,
+} from "./calendar-timegrid-utils";
 import {
   calendarTimeGridBodyRowVariants,
   calendarTimeGridColumnVariants,
@@ -25,8 +37,12 @@ import {
   calendarTimeGridTodayBadgeVariants,
 } from "./calendar-timegrid-variants";
 import { CalendarTimeGridEventBlock } from "./CalendarTimeGridEventBlock";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export type CalendarWeekProps = Omit<React.ComponentProps<"div">, "children"> & {
+export type CalendarWeekProps = Omit<
+  React.ComponentProps<"div">,
+  "children"
+> & {
   /** Any date inside the week to display. */
   week: Date;
   events?: CalendarTimeGridEvent[];
@@ -45,6 +61,13 @@ export type CalendarWeekProps = Omit<React.ComponentProps<"div">, "children"> & 
   /** Last row hour (inclusive), 24h clock. Default `23` (full day through 23:00–00:00). */
   endHour?: number;
   hourHeightPx?: number;
+  /**
+   * When set, the toolbar shows prev/next week controls. Controlled: update the `week` prop
+   * from this callback (any date in the visible week is fine).
+   */
+  onWeekChange?: (week: Date) => void;
+  /** Week range title row above the day headers. Default `true`. */
+  showWeekToolbar?: boolean;
   onSelectDay?: (day: Date) => void;
   onSelectEvent?: (event: CalendarTimeGridEvent) => void;
 };
@@ -63,12 +86,23 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
       startHour = 0,
       endHour = 23,
       hourHeightPx = 56,
+      onWeekChange,
+      showWeekToolbar = true,
       onSelectDay,
       onSelectEvent,
       ...rest
     },
     ref,
   ) {
+    const weekAnchor = React.useMemo(
+      () =>
+        startOfWeek(
+          week instanceof Date ? week : new Date(week as string | number),
+          { weekStartsOn },
+        ),
+      [week, weekStartsOn],
+    );
+
     const days = React.useMemo(
       () => buildWeekDays(week, weekStartsOn),
       [week, weekStartsOn],
@@ -101,6 +135,12 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
       { locale },
     )}`;
 
+    const weekRangeEnd = endOfWeek(weekAnchor, { weekStartsOn });
+    const weekRangeLabel =
+      weekAnchor.getFullYear() === weekRangeEnd.getFullYear()
+        ? `${format(weekAnchor, "d MMM", { locale })} – ${format(weekRangeEnd, "d MMM yyyy", { locale })}`
+        : `${format(weekAnchor, "d MMM yyyy", { locale })} – ${format(weekRangeEnd, "d MMM yyyy", { locale })}`;
+
     const eventsByDay = React.useMemo(() => {
       const map = new Map<string, CalendarTimeGridEvent[]>();
       for (const ev of events) {
@@ -117,7 +157,8 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
       if (timeZoneLabel !== undefined) {
         return timeZoneLabel.length > 0 ? timeZoneLabel : null;
       }
-      const at = week instanceof Date ? week : new Date(week as string | number);
+      const at =
+        week instanceof Date ? week : new Date(week as string | number);
       return formatGmtOffsetLabel(at);
     }, [timeZoneLabel, week]);
 
@@ -130,6 +171,39 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
         aria-label={weekLabel}
         {...rest}
       >
+        {showWeekToolbar ? (
+          <div
+            className={cn(
+              "ui:flex ui:shrink-0 ui:items-center ui:justify-center ui:gap-3 ui:border-b ui:border-[#e0e0e0] ui:bg-[#f0f0f0] ui:px-3 ui:py-2",
+            )}
+          >
+            <Button
+              variant="outline"
+              size="sm"
+              aria-label="Previous week"
+              disabled={!onWeekChange}
+              onClick={() => onWeekChange?.(addWeeks(weekAnchor, -1))}
+            >
+              <Button.Icon>
+                <CalendarWeekChevronLeftIcon className="ui:size-4" />
+              </Button.Icon>
+            </Button>
+            <h2 className="malbec-font-sans ui:m-0 ui:min-w-[200px] ui:flex-1 ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default">
+              {weekRangeLabel}
+            </h2>
+            <Button
+              variant="outline"
+              size="sm"
+              aria-label="Next week"
+              disabled={!onWeekChange}
+              onClick={() => onWeekChange?.(addWeeks(weekAnchor, 1))}
+            >
+              <Button.Icon>
+                <CalendarWeekChevronRightIcon className="ui:size-4" />
+              </Button.Icon>
+            </Button>
+          </div>
+        ) : null}
         <div className={cn(calendarTimeGridHeaderRowVariants())}>
           <div className={cn(calendarTimeGridGutterHeaderVariants())}>
             {resolvedTimeZoneLabel ? (
@@ -155,7 +229,9 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
                     isTodayCol && "ui:font-semibold ui:text-[#333333]",
                   )}
                 >
-                  {format(day, "EEE", { locale }).toUpperCase().replace(/\.$/, "")}
+                  {format(day, "EEE", { locale })
+                    .toUpperCase()
+                    .replace(/\.$/, "")}
                 </span>
                 {isTodayCol ? (
                   <span className={cn(calendarTimeGridTodayBadgeVariants())}>
@@ -279,5 +355,13 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
   },
 );
 CalendarWeekRoot.displayName = "CalendarWeek";
+
+function CalendarWeekChevronLeftIcon(props: React.SVGProps<SVGSVGElement>) {
+  return <ChevronLeft {...props} />;
+}
+
+function CalendarWeekChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
+  return <ChevronRight {...props} />;
+}
 
 export const CalendarWeek = CalendarWeekRoot;
