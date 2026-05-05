@@ -240,7 +240,7 @@ export function DataTable<TData, TValue>({
             </Table.Row>
           ))}
         </Table.Header>
-        <Table.Body>
+        <Table.Body className="ui:[&>tr]:bg-white ui:[&>tr:hover]:bg-background-100/50">
           {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <Table.Row
