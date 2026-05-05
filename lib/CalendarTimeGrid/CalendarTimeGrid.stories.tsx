@@ -10,7 +10,10 @@ import {
   startOfMonth,
 } from "date-fns";
 import { es } from "date-fns/locale";
-import { CalendarMonth, type CalendarMonthEvent } from "../CalendarMonth/CalendarMonth";
+import {
+  CalendarMonth,
+  type CalendarMonthEvent,
+} from "../CalendarMonth/CalendarMonth";
 import { Tabs } from "../Tabs/Tabs";
 import { CalendarDay } from "./CalendarDay";
 import { CalendarWeek } from "./CalendarWeek";
@@ -354,6 +357,9 @@ function WeekPanelControlled({
         week={focus}
         weekStartsOn={WEEK_STARTS_ON}
         locale={es}
+        onSelectDay={({ day, time, date }) => {
+          console.log("CalendarWeek click", { day, time, date });
+        }}
         onWeekChange={onFocusChange}
         today={new Date()}
         now={new Date()}
@@ -394,6 +400,9 @@ function CalendarFormatsTabs() {
               today={new Date()}
               now={new Date()}
               events={demoEvents}
+              onSelectDay={({ day, time, date }) => {
+                console.log("CalendarDay click", { day, time, date });
+              }}
             />
           </div>
         </Tabs.Content>
@@ -422,6 +431,9 @@ function WeekViewWithNavigation() {
         locale={es}
         today={new Date()}
         now={new Date()}
+        onSelectDay={({ day, time, date }) => {
+          console.log("CalendarDay click", { day, time, date });
+        }}
         events={demoEvents}
       />
     </div>
@@ -443,6 +455,9 @@ function DayViewWithNavigation() {
         locale={es}
         today={new Date()}
         now={new Date()}
+        onSelectDay={({ day, time, date }) => {
+          console.log("CalendarDay click", { day, time, date });
+        }}
         events={demoEvents}
       />
     </div>

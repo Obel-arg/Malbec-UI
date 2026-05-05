@@ -287,10 +287,20 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
                 className={cn(
                   calendarTimeGridColumnVariants({ isLast: i === 6 }),
                   selectable &&
-                    "ui:cursor-pointer ui:outline-none ui:focus-within:ring-2 ui:focus-within:ring-primary",
+                    "ui:cursor-pointer ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-inset ui:focus-visible:ring-primary",
                 )}
                 style={{ minHeight: gridH }}
                 tabIndex={selectable ? 0 : undefined}
+                onMouseDown={(e) => {
+                  if (!selectable || e.button !== 0) return;
+                  if (
+                    (e.target as HTMLElement).closest(
+                      '[data-slot="calendar-timegrid-event"]',
+                    )
+                  )
+                    return;
+                  e.preventDefault();
+                }}
                 onClick={(e) => {
                   const d = startOfDay(day);
                   const y =
