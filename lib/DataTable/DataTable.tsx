@@ -24,7 +24,9 @@ export type DataTableRenderFooterContext<TData> = {
   table: TanStackTable<TData>;
 };
 
-export interface DataTableProps<TData, TValue> {
+type DataTableOnRowSelectionChange<TData> = (selectedRows: TData[]) => void;
+
+interface DataTableBaseProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   /** Shown when there are no rows. */
@@ -63,8 +65,32 @@ export interface DataTableProps<TData, TValue> {
    * Called whenever the row selection changes.
    * Receives the array of currently selected rows.
    */
-  onRowSelectionChange?: (selectedRows: TData[]) => void;
+  /**
+   * Called when a row is clicked (or activated with Enter/Space).
+   * Receives the resolved row id and original row data.
+   */
+  onRowClick?: (rowId: string, rowData: TData) => void;
 }
+
+type DataTableWithRowSelectionProps<TData, TValue> = DataTableBaseProps<
+  TData,
+  TValue
+> & {
+  rowSelection?: true;
+  onRowSelectionChange?: DataTableOnRowSelectionChange<TData>;
+};
+
+type DataTableWithoutRowSelectionProps<TData, TValue> = DataTableBaseProps<
+  TData,
+  TValue
+> & {
+  rowSelection: false;
+  onRowSelectionChange?: () => void;
+};
+
+export type DataTableProps<TData, TValue> =
+  | DataTableWithRowSelectionProps<TData, TValue>
+  | DataTableWithoutRowSelectionProps<TData, TValue>;
 
 function selectColumnDef<TData>(): ColumnDef<TData, unknown> {
   return {
@@ -115,6 +141,7 @@ export function DataTable<TData, TValue>({
   getRowId,
   enableSorting = true,
   onRowSelectionChange,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -146,10 +173,14 @@ export function DataTable<TData, TValue>({
     enableSorting,
   });
 
-  const onRowSelectionChangeRef = useRef(onRowSelectionChange);
+  const onRowSelectionChangeRef = useRef<
+    DataTableOnRowSelectionChange<TData> | undefined
+  >(undefined);
   useEffect(() => {
-    onRowSelectionChangeRef.current = onRowSelectionChange;
-  });
+    onRowSelectionChangeRef.current = rowSelectionEnabled
+      ? (onRowSelectionChange as DataTableOnRowSelectionChange<TData> | undefined)
+      : undefined;
+  }, [onRowSelectionChange, rowSelectionEnabled]);
 
   useEffect(() => {
     if (!rowSelectionEnabled || !onRowSelectionChangeRef.current) return;
@@ -162,6 +193,7 @@ export function DataTable<TData, TValue>({
   const columnCount = table.getVisibleFlatColumns().length;
 
   const footerNode = typeof footer === "function" ? footer({ table }) : footer;
+  const isRowClickable = Boolean(onRowClick);
 
   return (
     <div
@@ -214,6 +246,19 @@ export function DataTable<TData, TValue>({
               <Table.Row
                 key={row.id}
                 data-state={row.getIsSelected() ? "selected" : undefined}
+                className={cn(isRowClickable && "ui:cursor-pointer")}
+                tabIndex={isRowClickable ? 0 : undefined}
+                role={isRowClickable ? "button" : undefined}
+                onClick={(event) => {
+                  if (!onRowClick || shouldIgnoreRowInteraction(event.target)) return;
+                  onRowClick(row.id, row.original);
+                }}
+                onKeyDown={(event) => {
+                  if (!onRowClick || shouldIgnoreRowInteraction(event.target)) return;
+                  if (event.key !== "Enter" && event.key !== " ") return;
+                  event.preventDefault();
+                  onRowClick(row.id, row.original);
+                }}
               >
                 {row.getVisibleCells().map((cell) => (
                   <Table.Cell
@@ -256,6 +301,15 @@ export function DataTable<TData, TValue>({
 }
 
 type ColMeta = { thClassName?: string; tdClassName?: string };
+
+function shouldIgnoreRowInteraction(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  return Boolean(
+    target.closest(
+      'a, button, input, select, textarea, [role="button"], [data-row-click-ignore]',
+    ),
+  );
+}
 
 function headerThClassName(
   header: {
