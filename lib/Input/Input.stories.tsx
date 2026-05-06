@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as React from "react";
 import { Button } from "../Button/Button";
 import { Label } from "../Label/Label";
 import { Input, type InputProps } from "./Input";
@@ -110,6 +111,82 @@ export const Inline: Story = {
         defaultValue="@peduarte"
         autoComplete="username"
       />
+    </div>
+  ),
+};
+
+function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+    </svg>
+  );
+}
+
+function MailIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  );
+}
+
+export const WithStartIcon: Story = {
+  name: "With icon · start",
+  render: () => (
+    <div className="ui:w-[280px]">
+      <Input placeholder="Search">
+        <Input.Icon side="start">
+          <SearchIcon className="ui:size-full" />
+        </Input.Icon>
+      </Input>
+    </div>
+  ),
+};
+
+export const WithEndIcon: Story = {
+  name: "With icon · end",
+  render: () => (
+    <div className="ui:w-[280px]">
+      <Input type="email" placeholder="Email">
+        <Input.Icon side="end">
+          <MailIcon className="ui:size-full" />
+        </Input.Icon>
+      </Input>
+    </div>
+  ),
+};
+
+export const WithBothIcons: Story = {
+  name: "With icons · both sides",
+  render: () => (
+    <div className="ui:w-[280px]">
+      <Input placeholder="Search mail">
+        <Input.Icon side="start">
+          <SearchIcon className="ui:size-full" />
+        </Input.Icon>
+        <Input.Icon side="end">
+          <MailIcon className="ui:size-full" />
+        </Input.Icon>
+      </Input>
     </div>
   ),
 };
