@@ -38,19 +38,23 @@ import { Button } from "../Button/Button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type CalendarMonthEventColor =
-  | "green"
-  | "purple"
-  | "pink"
-  | "indigo"
-  | "amber";
+  | "yellow"
+  | "orange"
+  | "blue"
+  | "violet"
+  | "emerald"
+  | "sage"
+  | "red";
 
-/** Accent dots for event pills (matches `--malbec-*` on categorical `Badge` variants). */
+/** Accent dots for event pills (matches `--malbec-badge-accent` on `Badge` variants). */
 const EVENT_PILL_DOT_COLOR: Record<CalendarMonthEventColor, string> = {
-  green: "#218c33",
-  purple: "#7d3bed",
-  pink: "#db2678",
-  indigo: "#4f4acc",
-  amber: "#d9780a",
+  yellow: "#8a862f",
+  orange: "#8a642f",
+  blue: "#2f628a",
+  violet: "#352a60",
+  emerald: "#2a602c",
+  sage: "#025406",
+  red: "#602a2a",
 };
 
 export interface CalendarMonthEvent {

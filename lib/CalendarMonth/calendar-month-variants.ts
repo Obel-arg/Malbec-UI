@@ -69,7 +69,7 @@ export const calendarMonthDayNumberTextVariants = cva(
 );
 
 export const calendarMonthTodayIndicatorVariants = cva(
-  "ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:bg-[#212138] ui:text-[12px] ui:font-semibold ui:leading-[normal] ui:text-white",
+  "ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:bg-primary ui:text-[12px] ui:font-semibold ui:leading-[normal] ui:text-primary-foreground",
 );
 
 export const calendarMonthEventsStackVariants = cva(

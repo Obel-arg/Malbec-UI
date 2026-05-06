@@ -64,5 +64,5 @@ export const calendarTimeGridColumnVariants = cva(
 
 /** Same circular “today” treatment as `CalendarMonth` (not a wide pill). */
 export const calendarTimeGridTodayBadgeVariants = cva(
-  "ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:bg-[#212138] ui:text-[12px] ui:font-semibold ui:leading-none ui:tabular-nums ui:text-white ui:normal-case",
+  "ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:bg-primary ui:text-[12px] ui:font-semibold ui:leading-none ui:tabular-nums ui:text-primary-foreground ui:normal-case",
 );

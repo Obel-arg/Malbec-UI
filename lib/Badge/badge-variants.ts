@@ -44,17 +44,21 @@ export const badgeVariants = cva(
           "ui:border-transparent ui:bg-transparent ui:text-text-default ui:hover:bg-background-300/60",
         link:
           "ui:border-transparent ui:bg-transparent ui:text-primary ui:underline-offset-4 ui:hover:underline",
-        /** Categorical tints (Calendar month event pills, design system). */
-        green:
-          "ui:border-transparent ui:bg-[#dbfade] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#175c24] [--malbec-badge-accent:#218c33]",
-        purple:
-          "ui:border-transparent ui:bg-[#ede8fc] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#4d1f96] [--malbec-badge-accent:#7d3bed]",
-        pink:
-          "ui:border-transparent ui:bg-[#fce3ed] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#821240] [--malbec-badge-accent:#db2678]",
-        indigo:
-          "ui:border-transparent ui:bg-[#e0e3fc] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#302e80] [--malbec-badge-accent:#4f4acc]",
-        amber:
-          "ui:border-transparent ui:bg-[#fcf2d1] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#914a05] [--malbec-badge-accent:#d9780a]",
+        /** Status chips (Product UI status popover, Figma 651:11230). */
+        yellow:
+          "ui:border-transparent ui:bg-[#efeed4] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#8a862f] [--malbec-badge-accent:#8a862f]",
+        orange:
+          "ui:border-transparent ui:bg-[#efe3d4] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#8a642f] [--malbec-badge-accent:#8a642f]",
+        blue:
+          "ui:border-transparent ui:bg-[#dce6ec] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#2f628a] [--malbec-badge-accent:#2f628a]",
+        violet:
+          "ui:border-transparent ui:bg-[#e5dcec] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#352a60] [--malbec-badge-accent:#352a60]",
+        emerald:
+          "ui:border-transparent ui:bg-[#d0dfd0] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#2a602c] [--malbec-badge-accent:#2a602c]",
+        sage:
+          "ui:border-transparent ui:bg-[#b4c5b5] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#025406] [--malbec-badge-accent:#025406]",
+        red:
+          "ui:border-transparent ui:bg-[#dfd0d0] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#602a2a] [--malbec-badge-accent:#602a2a]",
       },
     },
     defaultVariants: { variant: "default" },

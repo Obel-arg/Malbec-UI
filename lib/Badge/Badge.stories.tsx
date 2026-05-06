@@ -73,11 +73,13 @@ const meta = {
         "destructive",
         "ghost",
         "link",
-        "green",
-        "purple",
-        "pink",
-        "indigo",
-        "amber",
+        "yellow",
+        "orange",
+        "blue",
+        "violet",
+        "emerald",
+        "sage",
+        "red",
       ] satisfies BadgeVariant[],
     },
   },
@@ -88,11 +90,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const categoricalDot: Partial<Record<BadgeVariant, string>> = {
-  green: "#218c33",
-  purple: "#7d3bed",
-  pink: "#db2678",
-  indigo: "#4f4acc",
-  amber: "#d9780a",
+  yellow: "#8a862f",
+  orange: "#8a642f",
+  blue: "#2f628a",
+  violet: "#352a60",
+  emerald: "#2a602c",
+  sage: "#025406",
+  red: "#602a2a",
 };
 
 const labels: Record<BadgeVariant, string> = {
@@ -102,11 +106,13 @@ const labels: Record<BadgeVariant, string> = {
   destructive: "Destructive",
   ghost: "Ghost",
   link: "Link",
-  green: "Green",
-  purple: "Purple",
-  pink: "Pink",
-  indigo: "Indigo",
-  amber: "Amber",
+  yellow: "Yellow",
+  orange: "Orange",
+  blue: "Blue",
+  violet: "Violet",
+  emerald: "Emerald",
+  sage: "Sage",
+  red: "Red",
 };
 
 export const AllVariants: Story = {
@@ -188,11 +194,13 @@ export const CategoricalPills: Story = {
     <div className="ui:flex ui:w-full ui:max-w-md ui:flex-col ui:gap-2">
       {(
         [
-          "green",
-          "purple",
-          "pink",
-          "indigo",
-          "amber",
+          "yellow",
+          "orange",
+          "blue",
+          "violet",
+          "emerald",
+          "sage",
+          "red",
         ] as const satisfies readonly BadgeVariant[]
       ).map((v) => (
         <Badge key={v} variant={v} className="ui:justify-start">

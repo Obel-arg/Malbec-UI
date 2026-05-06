@@ -9,11 +9,13 @@ const EVENT_BLOCK: Record<
   CalendarTimeGridEventColor,
   { bg: string; text: string }
 > = {
-  green: { bg: "#d1fae5", text: "#065f46" },
-  purple: { bg: "#ede9fe", text: "#5b21b6" },
-  pink: { bg: "#fce7f3", text: "#9d174d" },
-  indigo: { bg: "#e0e7ff", text: "#3730a3" },
-  amber: { bg: "#fef3c7", text: "#92400e" },
+  yellow: { bg: "#efeed4", text: "#8a862f" },
+  orange: { bg: "#efe3d4", text: "#8a642f" },
+  blue: { bg: "#dce6ec", text: "#2f628a" },
+  violet: { bg: "#e5dcec", text: "#352a60" },
+  emerald: { bg: "#d0dfd0", text: "#2a602c" },
+  sage: { bg: "#b4c5b5", text: "#025406" },
+  red: { bg: "#dfd0d0", text: "#602a2a" },
 };
 
 export type CalendarTimeGridEventBlockProps = {
@@ -37,7 +39,7 @@ export const CalendarTimeGridEventBlock = React.forwardRef<
     start,
     end,
     columnCount = 1,
-    color = "green",
+    color = "emerald",
     className,
     style,
     onClick,
