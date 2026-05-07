@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.5.0 — 2026-05-07
+
+- feat(storybook,forms): surface version + changelog and unify invalid outline
+
 ## v1.4.9 — 2026-05-07
 
 - refactor(input): update focus styles to use :focus-within for better accessibility
