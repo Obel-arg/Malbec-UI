@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.6.0 — 2026-05-07
+
+- minor(ci): enforce commit format and auto-publish
+
 ## v1.5.1 — 2026-05-07
 
 - fix(storybook): render version in changelog header
