@@ -65,11 +65,11 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   const endIcons = icons.filter((c) => c.props.side === "end");
 
   return (
-    <div
+    <label
       data-slot="input-wrapper"
       className={cn(
         inputVariants(),
-        "ui:gap-2 ui:focus-within:outline-primary",
+        "ui:gap-2 ui:cursor-text ui:focus-within:outline-primary",
         className,
       )}
     >
@@ -82,7 +82,7 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
         {...rest}
       />
       {endIcons}
-    </div>
+    </label>
   );
 }) as InputComponent;
 
