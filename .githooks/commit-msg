@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+# Enforce commit subject format: <level>(<scope>): <description>
+# where <level> is one of: major, minor, patch.
+#
+# Exempt: merge commits, revert commits, chore(release): ... (auto-generated).
+
+msg_file="$1"
+subject=$(head -n 1 "$msg_file")
+
+# Strip any leading comment lines (rare; head -n 1 already grabs the first real line).
+case "$subject" in
+  "Merge "*|"Revert "*|"chore(release):"*)
+    exit 0
+    ;;
+esac
+
+if printf '%s' "$subject" | grep -Eq '^(major|minor|patch)\([^)]+\): .+'; then
+  exit 0
+fi
+
+cat >&2 <<'EOF'
+Aborting commit. Subject must declare a release level:
+
+  <level>(<scope>): <description>
+
+Where <level> is one of: major, minor, patch
+
+Examples:
+  patch(input): fix focus ring color
+  minor(button): add icon-only variant
+  major(tokens): rewrite token API
+
+Exempt: merge commits, revert commits, "chore(release): ...".
+EOF
+exit 1
