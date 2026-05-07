@@ -69,7 +69,7 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
       data-slot="input-wrapper"
       className={cn(
         inputVariants(),
-        "ui:gap-2 ui:cursor-text ui:focus-within:outline-primary",
+        "ui:gap-2 ui:cursor-text",
         className,
       )}
     >

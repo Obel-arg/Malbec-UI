@@ -35,7 +35,13 @@ export const inputVariants = cva(
     "ui:-outline-offset-2",
     "ui:transition-[color,outline-color,box-shadow,opacity]",
     "ui:duration-150",
-    "ui:focus-visible:outline-primary",
+    // `:focus-within` (not `:focus-visible`) so the outline shows for both keyboard
+    // and mouse focus. When a label wraps the input, clicking the label or icon
+    // moves focus to the input via label-association — but browsers don't apply
+    // `:focus-visible` to focus moves caused by mouse, even though `:focus` is set.
+    // `:focus-within` matches on `:focus` regardless of method, and works on the
+    // input itself (standalone) and on the wrapper element (with Input.Icon).
+    "ui:focus-within:outline-primary",
     "ui:disabled:cursor-not-allowed",
     "ui:disabled:opacity-50",
     "ui:file:mr-2",
