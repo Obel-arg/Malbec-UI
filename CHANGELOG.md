@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.5.1 — 2026-05-07
+
+- fix(storybook): render version in changelog header
+
 ## v1.5.0 — 2026-05-07
 
 - feat(storybook,forms): surface version + changelog and unify invalid outline
