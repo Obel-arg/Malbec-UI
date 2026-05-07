@@ -23,12 +23,19 @@ export const inputVariants = cva(
     "ui:tracking-[-0.42px]",
     "ui:text-text-default",
     "ui:placeholder:text-text-default-muted",
-    "ui:outline-none",
-    "ui:transition-[color,box-shadow,opacity]",
-    "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
-    "ui:focus-visible:ring-offset-2",
-    "ui:focus-visible:ring-offset-background-100",
+    // Outline-based focus indicator: kept as a constant 2px solid transparent outline
+    // so the only thing that animates on focus is `outline-color`. Using `outline`
+    // (vs `ring`) gives a smooth native CSS transition — Tailwind's ring relies on
+    // `@property syntax: "*"` custom properties that browsers can't interpolate.
+    // `-outline-offset-2` makes it inset so it can never be clipped by parent
+    // overflow containers and stays visible regardless of consumer bg overrides.
+    "ui:outline-2",
+    "ui:outline-solid",
+    "ui:outline-transparent",
+    "ui:-outline-offset-2",
+    "ui:transition-[color,outline-color,box-shadow,opacity]",
+    "ui:duration-150",
+    "ui:focus-visible:outline-primary",
     "ui:disabled:cursor-not-allowed",
     "ui:disabled:opacity-50",
     "ui:file:mr-2",

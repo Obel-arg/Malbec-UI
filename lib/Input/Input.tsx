@@ -69,7 +69,7 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
       data-slot="input-wrapper"
       className={cn(
         inputVariants(),
-        "ui:gap-2 ui:focus-within:ring-2 ui:focus-within:ring-primary ui:focus-within:ring-offset-2 ui:focus-within:ring-offset-background-100",
+        "ui:gap-2 ui:focus-within:outline-primary",
         className,
       )}
     >
