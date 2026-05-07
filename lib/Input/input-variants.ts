@@ -44,6 +44,13 @@ export const inputVariants = cva(
     "ui:focus-within:outline-primary",
     "ui:disabled:cursor-not-allowed",
     "ui:disabled:opacity-50",
+    /**
+     * Invalid state. `aria-invalid:` matches when the element itself carries the attribute
+     * (bare input render) and `has-[…]` matches when the wrapper label sees an invalid child
+     * (icon render — the attribute lives on the inner input).
+     */
+    "ui:aria-invalid:outline-destructive",
+    "ui:has-[input[aria-invalid='true']]:outline-destructive",
     "ui:file:mr-2",
     "ui:file:inline-flex",
     "ui:file:cursor-pointer",

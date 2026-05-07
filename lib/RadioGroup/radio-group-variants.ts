@@ -42,11 +42,10 @@ export const radioGroupItemVariants = cva([
   "ui:disabled:cursor-not-allowed",
   "ui:disabled:pointer-events-none",
   "ui:disabled:opacity-50",
-  "ui:aria-invalid:border-destructive",
-  "ui:aria-invalid:ring-2",
-  "ui:aria-invalid:ring-destructive/40",
-  "ui:aria-invalid:ring-offset-2",
-  "ui:aria-invalid:ring-offset-background-100",
+  "ui:aria-invalid:outline-2",
+  "ui:aria-invalid:outline-solid",
+  "ui:aria-invalid:outline-destructive",
+  "ui:aria-invalid:outline-offset-2",
 ]);
 
 /** Kept for Radix Presence; fill is drawn on the item via radial-gradient. */
@@ -87,10 +86,9 @@ export const radioGroupCardVariants = cva(
     "ui:disabled:pointer-events-none",
     "ui:disabled:opacity-50",
     "ui:data-[state=checked]:border-primary",
-    "ui:aria-invalid:border-destructive",
-    "ui:aria-invalid:ring-2",
-    "ui:aria-invalid:ring-destructive/40",
-    "ui:aria-invalid:ring-offset-2",
-    "ui:aria-invalid:ring-offset-background-100",
+    "ui:aria-invalid:outline-2",
+    "ui:aria-invalid:outline-solid",
+    "ui:aria-invalid:outline-destructive",
+    "ui:aria-invalid:outline-offset-2",
   ],
 );

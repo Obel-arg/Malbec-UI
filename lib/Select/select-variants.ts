@@ -11,6 +11,11 @@ export const selectTriggerVariants = cva([
   "ui:disabled:cursor-not-allowed",
   "ui:disabled:pointer-events-none ui:disabled:opacity-50",
   "ui:data-placeholder:text-text-default/70",
+  /** Invalid state — set by callers via `aria-invalid` on the trigger. */
+  "ui:aria-invalid:outline-2",
+  "ui:aria-invalid:outline-solid",
+  "ui:aria-invalid:outline-destructive",
+  "ui:aria-invalid:outline-offset-2",
 ]);
 
 export const selectContentVariants = cva([

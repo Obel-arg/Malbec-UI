@@ -50,11 +50,50 @@ jobs:
       - name: Bump version
         id: bump
         run: |
-          NEW_VERSION=$(npm version ${{ inputs.bump }} -m "chore(release): %s [skip ci]")
+          NEW_VERSION=$(npm version ${{ inputs.bump }} --no-git-tag-version)
           echo "new_version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
 
-      - name: Push commit and tag
-        run: git push --follow-tags origin HEAD:${{ github.ref_name }}
+      - name: Update CHANGELOG.md
+        run: |
+          set -e
+          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
+          DATE=$(date -u +%Y-%m-%d)
+          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -n "$PREV_TAG" ]; then
+            NOTES=$(git log "${PREV_TAG}..HEAD" --no-merges \
+              --pretty=format:"- %s" \
+              --invert-grep \
+              --grep='^chore(release)' \
+              --grep='^Merge ')
+          else
+            NOTES=$(git log --no-merges \
+              --pretty=format:"- %s" \
+              --invert-grep \
+              --grep='^chore(release)' \
+              --grep='^Merge ')
+          fi
+
+          if [ -z "$NOTES" ]; then
+            NOTES="_No user-facing changes._"
+          fi
+
+          {
+            printf '# Changelog\n\nAll notable changes to Malbec UI are documented here.\n\n'
+            printf '## %s — %s\n\n%s\n\n' "$NEW_VERSION" "$DATE" "$NOTES"
+            if [ -f CHANGELOG.md ]; then
+              awk '/^## / {found=1} found' CHANGELOG.md
+            fi
+          } > CHANGELOG.md.new
+          mv CHANGELOG.md.new CHANGELOG.md
+
+      - name: Commit, tag and push
+        run: |
+          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
+          git add package.json CHANGELOG.md
+          git commit -m "chore(release): ${NEW_VERSION} [skip ci]"
+          git tag "${NEW_VERSION}"
+          git push --follow-tags origin HEAD:${{ github.ref_name }}
 
       - name: Publish
         run: pnpm publish --no-git-checks

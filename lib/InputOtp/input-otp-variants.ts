@@ -19,6 +19,16 @@ export const inputOtpGroupVariants = cva([
   "ui:border",
   "ui:border-solid",
   "ui:border-background-300",
+  /**
+   * Invalid state. `aria-invalid` is mirrored onto the `.group` wrapper rendered by
+   * `<InputOtp>` (the underlying `<input>` lives in an absolutely-positioned sibling
+   * of the groups, so it can't be targeted via `:has()` from here). Using `outline`
+   * for parity with the rest of the form-control library.
+   */
+  "ui:group-aria-invalid:outline-2",
+  "ui:group-aria-invalid:outline-solid",
+  "ui:group-aria-invalid:outline-destructive",
+  "ui:group-aria-invalid:outline-offset-2",
 ]);
 
 /**
@@ -47,10 +57,12 @@ export const inputOtpSlotVariants = cva([
   "ui:not-first:border-solid",
   "ui:not-first:border-background-300",
   /** Interior focus: thick primary line on the shared divider (not a box ring). */
-  "ui:data-[primary-left]:border-l-2",
-  "ui:data-[primary-left]:border-solid",
-  "ui:data-[primary-left]:border-l-primary",
-  "ui:data-[primary-left]:z-10",
+  "ui:data-primary-left:border-l-2",
+  "ui:data-primary-left:border-solid",
+  "ui:data-primary-left:border-l-primary",
+  "ui:data-primary-left:z-10",
+  /** Invalid: turn the inner dividers destructive so the outline reads through the slots. */
+  "ui:group-aria-invalid:not-first:border-l-destructive",
 ]);
 
 /** 16×16 hit area for the dot separator icon. */

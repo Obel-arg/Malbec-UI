@@ -1,0 +1,11 @@
+import { Meta, Markdown } from "@storybook/addon-docs/blocks";
+import pkg from "../../package.json";
+import changelog from "../../CHANGELOG.md?raw";
+
+<Meta title="Changelog" />
+
+# Malbec UI
+
+**Current version:** `v{pkg.version}` &nbsp;·&nbsp; [npm](https://github.com/Obel-arg/malbec-ui/pkgs/npm/malbec-ui) &nbsp;·&nbsp; [GitHub](https://github.com/Obel-arg/malbec-ui)
+
+<Markdown>{changelog.replace(/^# Changelog[\s\S]*?\n\n/, "")}</Markdown>

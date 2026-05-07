@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/react-vite";
+import { themes } from "storybook/theming";
 import "@fontsource-variable/inter";
 import { MalbecThemeProvider } from "../lib/theme/MalbecThemeProvider";
 import {
@@ -62,6 +63,13 @@ const preview: Preview = {
     // Autodocs shows the meta JSDoc (incl. fenced ```tsx```) as the first “Description” block.
     docs: {
       canvas: { sourceState: "shown" },
+      theme: themes.dark,
+    },
+    backgrounds: { disable: true },
+    options: {
+      storySort: {
+        order: ["Changelog", "*"],
+      },
     },
   },
   decorators: [

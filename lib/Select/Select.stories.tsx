@@ -42,3 +42,21 @@ export const Default: Story = {
     </div>
   ),
 };
+
+export const Invalid: Story = {
+  name: "State · invalid",
+  render: () => (
+    <div className="ui:w-72">
+      <Select>
+        <Select.Trigger aria-invalid aria-label="Example select">
+          <Select.Value placeholder="Choose an option" />
+        </Select.Trigger>
+        <Select.Content>
+          <Select.Item value="a">Option A</Select.Item>
+          <Select.Item value="b">Option B</Select.Item>
+          <Select.Item value="c">Option C</Select.Item>
+        </Select.Content>
+      </Select>
+    </div>
+  ),
+};

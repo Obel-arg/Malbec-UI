@@ -35,8 +35,19 @@ const InputOtpRoot = React.forwardRef<
   React.ComponentRef<typeof OTPInput>,
   React.ComponentPropsWithoutRef<typeof OTPInput>
 >(function InputOtpRoot({ containerClassName, className, ...props }, ref) {
+  /**
+   * `aria-invalid` is forwarded to the hidden `<input>` for accessibility AND mirrored
+   * onto the outer wrapper so descendant Groups can pick it up via `group-aria-invalid:`.
+   * The library's `<input>` lives in an absolutely-positioned sibling of the groups,
+   * so a `:has()`-based selector on the group itself can't see it.
+   */
+  const ariaInvalid = props["aria-invalid"];
   return (
-    <div data-slot="input-otp" className="ui:contents">
+    <div
+      data-slot="input-otp"
+      className="ui:group ui:contents"
+      aria-invalid={ariaInvalid}
+    >
       <OTPInput
         ref={ref}
         containerClassName={cn(inputOtpRootVariants(), containerClassName)}

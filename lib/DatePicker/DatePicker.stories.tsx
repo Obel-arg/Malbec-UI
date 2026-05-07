@@ -84,6 +84,18 @@ export const Closed: Story = {
   ),
 };
 
+export const Invalid: Story = {
+  name: "State · invalid",
+  render: () => (
+    <DatePicker locale={es} state="closed">
+      <DatePicker.Trigger aria-invalid />
+      <DatePicker.Content>
+        <DatePicker.Calendar />
+      </DatePicker.Content>
+    </DatePicker>
+  ),
+};
+
 export const Open: Story = {
   render: () => (
     <DatePicker state="open" locale={es} defaultOpen>

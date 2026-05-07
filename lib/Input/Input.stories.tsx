@@ -59,6 +59,20 @@ export const Disabled: Story = {
   ),
 };
 
+export const Invalid: Story = {
+  name: "State · invalid",
+  render: () => (
+    <div className="ui:flex ui:w-[280px] ui:flex-col ui:gap-1.5">
+      <Input aria-invalid placeholder="Email" />
+      <Input aria-invalid placeholder="Search">
+        <Input.Icon side="start">
+          <SearchIcon className="ui:size-full" />
+        </Input.Icon>
+      </Input>
+    </div>
+  ),
+};
+
 export const File: Story = {
   name: "Type · file",
   render: () => (
@@ -71,6 +85,24 @@ export const File: Story = {
         id="input-story-picture"
         type="file"
         name="input-story-picture"
+      />
+    </div>
+  ),
+};
+
+export const FileInvalid: Story = {
+  name: "Type · file · invalid",
+  render: () => (
+    <div className="malbec-font-sans ui:group ui:flex ui:w-[280px] ui:flex-col ui:items-start ui:gap-1.5">
+      <Label htmlFor="input-story-picture-invalid" weight="regular">
+        Picture
+      </Label>
+      <Input
+        aria-invalid
+        className="ui:pr-0"
+        id="input-story-picture-invalid"
+        type="file"
+        name="input-story-picture-invalid"
       />
     </div>
   ),

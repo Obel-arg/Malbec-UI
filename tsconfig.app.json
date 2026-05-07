@@ -6,6 +6,7 @@
     "module": "esnext",
     "types": ["vite/client"],
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "paths": {
       "@obel-arg/malbec-ui": ["./lib/main.ts"],
       "@obel-arg/malbec-ui/icons": ["./lib/icons/index.ts"],

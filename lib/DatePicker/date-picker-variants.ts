@@ -10,6 +10,11 @@ export const datePickerTriggerVariants = cva(
     "ui:cursor-pointer",
     "ui:disabled:cursor-not-allowed",
     "ui:disabled:pointer-events-none ui:disabled:opacity-50",
+    /** Invalid state — set by callers via `aria-invalid` on the trigger button. */
+    "ui:aria-invalid:outline-2",
+    "ui:aria-invalid:outline-solid",
+    "ui:aria-invalid:outline-destructive",
+    "ui:aria-invalid:outline-offset-2",
   ],
   {
     variants: {

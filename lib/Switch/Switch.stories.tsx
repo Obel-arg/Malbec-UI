@@ -61,6 +61,11 @@ export const Disabled: Story = {
   render: () => <Switch disabled />,
 };
 
+export const Invalid: Story = {
+  name: "State · invalid",
+  render: () => <Switch aria-invalid />,
+};
+
 export const WithLabel: Story = {
   render: () => (
     <div className="ui:flex ui:max-w-md ui:items-center ui:gap-2">

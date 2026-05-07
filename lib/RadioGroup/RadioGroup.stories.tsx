@@ -80,6 +80,24 @@ export const Default: Story = {
   },
 };
 
+export const Invalid: Story = {
+  name: "State · invalid",
+  render: function InvalidRender() {
+    return (
+      <RadioGroup className="ui:w-[140px]">
+        <div className="ui:flex ui:w-full ui:items-center ui:gap-2">
+          <RadioGroup.Item aria-invalid value="one" id="rg-invalid-one" />
+          <Label htmlFor="rg-invalid-one">Option one</Label>
+        </div>
+        <div className="ui:flex ui:w-full ui:items-center ui:gap-2">
+          <RadioGroup.Item aria-invalid value="two" id="rg-invalid-two" />
+          <Label htmlFor="rg-invalid-two">Option two</Label>
+        </div>
+      </RadioGroup>
+    );
+  },
+};
+
 export const WithLabels: Story = {
   render: function WithLabelsRender() {
     return (
