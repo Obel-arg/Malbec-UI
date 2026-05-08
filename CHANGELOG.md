@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.7.2 — 2026-05-08
+
+- patch(types): expose component prop types and add invalid-by-default form story
+
 ## v1.7.1 — 2026-05-08
 
 - patch(theme): render theme tokens and dark class server-side
