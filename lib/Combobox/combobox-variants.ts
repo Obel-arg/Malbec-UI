@@ -33,6 +33,17 @@ export const comboboxTriggerRowVariants = cva(
     "ui:data-disabled:cursor-not-allowed",
     "ui:data-disabled:pointer-events-none",
     "ui:data-disabled:opacity-50",
+    /**
+     * Reflect invalid state from any descendant marked `aria-invalid="true"`
+     * (e.g. the input). Field auto-propagation mutates the DOM attribute, so
+     * this CSS-attribute pattern picks it up without re-rendering React props.
+     */
+    "ui:has-aria-invalid:outline-2",
+    "ui:has-aria-invalid:outline-solid",
+    "ui:has-aria-invalid:outline-destructive",
+    "ui:has-aria-invalid:outline-offset-0",
+    "ui:has-aria-invalid:focus-visible:ring-0",
+    "ui:has-aria-invalid:focus-visible:ring-offset-0",
   ],
   {
     variants: {
