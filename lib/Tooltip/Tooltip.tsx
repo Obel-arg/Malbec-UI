@@ -7,7 +7,11 @@ import { tooltipContentVariants } from "./tooltip-variants";
 
 const TooltipRoot = TooltipPrimitive.Root;
 
-type TooltipProviderProps = React.ComponentPropsWithoutRef<
+export type TooltipProps = React.ComponentPropsWithoutRef<
+  typeof TooltipPrimitive.Root
+>;
+
+export type TooltipProviderProps = React.ComponentPropsWithoutRef<
   typeof TooltipPrimitive.Provider
 >;
 
@@ -21,7 +25,7 @@ const TooltipProvider = function TooltipProvider({
 };
 TooltipProvider.displayName = "Tooltip.Provider";
 
-type TooltipTriggerProps = React.ComponentPropsWithoutRef<
+export type TooltipTriggerProps = React.ComponentPropsWithoutRef<
   typeof TooltipPrimitive.Trigger
 >;
 
@@ -40,7 +44,7 @@ const TooltipTrigger = React.forwardRef<
 });
 TooltipTrigger.displayName = "Tooltip.Trigger";
 
-type TooltipContentProps = React.ComponentPropsWithoutRef<
+export type TooltipContentProps = React.ComponentPropsWithoutRef<
   typeof TooltipPrimitive.Content
 >;
 

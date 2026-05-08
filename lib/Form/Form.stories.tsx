@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { Button } from "../Button/Button";
 import { Field } from "../Field/Field";
@@ -133,6 +133,91 @@ export const Default: Story = {
               {JSON.stringify(submitted, null, 2)}
             </pre>
           ) : null}
+        </div>
+      );
+    };
+    return <Demo />;
+  },
+};
+
+export const InvalidByDefault: Story = {
+  name: "Invalid by default",
+  render: () => {
+    const Demo = () => {
+      const form = useForm({
+        defaultValues: { title: "", email: "", description: "" },
+        validators: { onMount: profileSchema, onSubmit: profileSchema },
+        onSubmit: async () => {},
+      });
+
+      useEffect(() => {
+        for (const name of ["title", "email", "description"] as const) {
+          form.setFieldMeta(name, (prev) => ({
+            ...prev,
+            isTouched: true,
+            isBlurred: true,
+          }));
+        }
+      }, [form]);
+
+      return (
+        <div className="ui:flex ui:flex-col ui:gap-6 ui:w-96">
+          <Form form={form}>
+            <Field.Group>
+              <form.AppField name="title">
+                {(field) => (
+                  <field.Field label="Title" required>
+                    <Input
+                      id={field.name}
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="My new project"
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+
+              <form.AppField name="email">
+                {(field) => (
+                  <field.Field
+                    label="Email"
+                    description="We'll never share it."
+                    required
+                  >
+                    <Input
+                      id={field.name}
+                      type="email"
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="you@example.com"
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+
+              <form.AppField name="description">
+                {(field) => (
+                  <field.Field label="Description" required>
+                    <Input
+                      id={field.name}
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="A short summary…"
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+            </Field.Group>
+
+            <div className="ui:mt-6 ui:flex ui:justify-end">
+              <Button htmlType="submit">
+                <Button.Text>Submit</Button.Text>
+              </Button>
+            </div>
+          </Form>
         </div>
       );
     };

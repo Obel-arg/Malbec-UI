@@ -31,9 +31,11 @@ function DotFilled() {
   );
 }
 
+export type InputOtpProps = React.ComponentPropsWithoutRef<typeof OTPInput>;
+
 const InputOtpRoot = React.forwardRef<
   React.ComponentRef<typeof OTPInput>,
-  React.ComponentPropsWithoutRef<typeof OTPInput>
+  InputOtpProps
 >(function InputOtpRoot({ containerClassName, className, ...props }, ref) {
   /**
    * `aria-invalid` is forwarded to the hidden `<input>` for accessibility AND mirrored
@@ -60,7 +62,7 @@ const InputOtpRoot = React.forwardRef<
 
 InputOtpRoot.displayName = "InputOtp";
 
-interface InputOtpSlotProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface InputOtpSlotProps extends React.HTMLAttributes<HTMLDivElement> {
   index: number;
 }
 
@@ -178,9 +180,11 @@ function scanSlotIndexBounds(
   return { min, max };
 }
 
+export type InputOtpGroupProps = React.ComponentPropsWithoutRef<"div">;
+
 const InputOtpGroup = React.forwardRef<
   HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
+  InputOtpGroupProps
 >(function InputOtpGroup({ className, children, ...props }, ref) {
   const bounds = React.useMemo(() => {
     const { min, max } = scanSlotIndexBounds(InputOtpSlot, children);
@@ -211,9 +215,11 @@ const InputOtpGroup = React.forwardRef<
 
 InputOtpGroup.displayName = "InputOtp.Group";
 
+export type InputOtpSeparatorProps = React.ComponentPropsWithoutRef<"div">;
+
 const InputOtpSeparator = React.forwardRef<
   HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
+  InputOtpSeparatorProps
 >(function InputOtpSeparator({ children, className, ...props }, ref) {
   return (
     <div

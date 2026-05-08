@@ -18,7 +18,7 @@ import {
   dropdownMenuSubTriggerVariants,
 } from "./dropdown-menu-variants";
 
-type DropdownMenuProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Root
 >;
 
@@ -33,7 +33,7 @@ function DropdownMenuRoot({ modal = false, ...props }: DropdownMenuProps) {
 }
 DropdownMenuRoot.displayName = "DropdownMenu";
 
-type DropdownMenuTriggerProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuTriggerProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Trigger
 >;
 
@@ -52,7 +52,7 @@ const DropdownMenuTrigger = React.forwardRef<
 });
 DropdownMenuTrigger.displayName = "DropdownMenu.Trigger";
 
-type DropdownMenuPortalProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuPortalProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Portal
 >;
 
@@ -61,7 +61,7 @@ function DropdownMenuPortal(props: DropdownMenuPortalProps) {
 }
 DropdownMenuPortal.displayName = "DropdownMenu.Portal";
 
-type DropdownMenuContentProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuContentProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Content
 >;
 
@@ -90,7 +90,7 @@ const DropdownMenuContent = React.forwardRef<
 });
 DropdownMenuContent.displayName = "DropdownMenu.Content";
 
-type DropdownMenuGroupProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuGroupProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Group
 >;
 
@@ -109,7 +109,7 @@ const DropdownMenuGroup = React.forwardRef<
 });
 DropdownMenuGroup.displayName = "DropdownMenu.Group";
 
-type DropdownMenuLabelProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuLabelProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Label
 >;
 
@@ -128,7 +128,7 @@ const DropdownMenuLabel = React.forwardRef<
 });
 DropdownMenuLabel.displayName = "DropdownMenu.Label";
 
-type DropdownMenuItemProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuItemProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Item
 >;
 
@@ -147,7 +147,7 @@ const DropdownMenuItem = React.forwardRef<
 });
 DropdownMenuItem.displayName = "DropdownMenu.Item";
 
-type DropdownMenuCheckboxItemProps =
+export type DropdownMenuCheckboxItemProps =
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>;
 
 const DropdownMenuCheckboxItem = React.forwardRef<
@@ -174,7 +174,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
 });
 DropdownMenuCheckboxItem.displayName = "DropdownMenu.CheckboxItem";
 
-type DropdownMenuRadioGroupProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuRadioGroupProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.RadioGroup
 >;
 
@@ -193,7 +193,7 @@ const DropdownMenuRadioGroup = React.forwardRef<
 });
 DropdownMenuRadioGroup.displayName = "DropdownMenu.RadioGroup";
 
-type DropdownMenuRadioItemProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuRadioItemProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.RadioItem
 >;
 
@@ -227,7 +227,7 @@ const DropdownMenuRadioItem = React.forwardRef<
 });
 DropdownMenuRadioItem.displayName = "DropdownMenu.RadioItem";
 
-type DropdownMenuItemIndicatorProps =
+export type DropdownMenuItemIndicatorProps =
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.ItemIndicator>;
 
 const DropdownMenuItemIndicator = React.forwardRef<
@@ -245,7 +245,7 @@ const DropdownMenuItemIndicator = React.forwardRef<
 });
 DropdownMenuItemIndicator.displayName = "DropdownMenu.ItemIndicator";
 
-type DropdownMenuSeparatorProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuSeparatorProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Separator
 >;
 
@@ -264,7 +264,7 @@ const DropdownMenuSeparator = React.forwardRef<
 });
 DropdownMenuSeparator.displayName = "DropdownMenu.Separator";
 
-type DropdownMenuShortcutProps = React.ComponentPropsWithoutRef<"span">;
+export type DropdownMenuShortcutProps = React.ComponentPropsWithoutRef<"span">;
 
 const DropdownMenuShortcut = React.forwardRef<
   HTMLSpanElement,
@@ -281,7 +281,7 @@ const DropdownMenuShortcut = React.forwardRef<
 });
 DropdownMenuShortcut.displayName = "DropdownMenu.Shortcut";
 
-type DropdownMenuSubProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuSubProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Sub
 >;
 
@@ -290,7 +290,7 @@ function DropdownMenuSub(props: DropdownMenuSubProps) {
 }
 DropdownMenuSub.displayName = "DropdownMenu.Sub";
 
-type DropdownMenuSubTriggerProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuSubTriggerProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.SubTrigger
 >;
 
@@ -350,7 +350,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
 });
 DropdownMenuSubTrigger.displayName = "DropdownMenu.SubTrigger";
 
-type DropdownMenuSubContentProps = React.ComponentPropsWithoutRef<
+export type DropdownMenuSubContentProps = React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.SubContent
 >;
 
@@ -376,11 +376,13 @@ const DropdownMenuSubContent = React.forwardRef<
 });
 DropdownMenuSubContent.displayName = "DropdownMenu.SubContent";
 
+export type DropdownMenuItemIconProps = React.ComponentPropsWithoutRef<"span">;
+
 /** Optional leading icon slot for items (Figma 14px + mr-2). */
 function DropdownMenuItemIconSlot({
   className,
   ...rest
-}: React.ComponentPropsWithoutRef<"span">) {
+}: DropdownMenuItemIconProps) {
   return (
     <span
       data-slot="dropdown-menu-item-icon"
