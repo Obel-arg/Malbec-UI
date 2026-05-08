@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.7.4 — 2026-05-08
+
+- patch(combobox): reflect aria-invalid via :has() so Field auto-propagation styles the trigger
+
 ## v1.7.3 — 2026-05-08
 
 - patch(forms): tighten invalid outline offset and suppress focus ring when invalid
