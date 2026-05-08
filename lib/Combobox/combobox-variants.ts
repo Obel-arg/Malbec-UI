@@ -39,7 +39,7 @@ export const comboboxTriggerRowVariants = cva(
       variant: {
         default: "",
         invalid:
-          "ui:outline-2 ui:outline-solid ui:outline-destructive ui:outline-offset-2",
+          "ui:outline-2 ui:outline-solid ui:outline-destructive ui:outline-offset-0",
       },
     },
     defaultVariants: { variant: "default" },

@@ -2,10 +2,26 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { Button } from "../Button/Button";
+import { Combobox } from "../Combobox/Combobox";
+import { DatePicker } from "../DatePicker/DatePicker";
 import { Field } from "../Field/Field";
 import { Input } from "../Input/Input";
+import { InputOtp } from "../InputOtp/InputOtp";
+import { Label } from "../Label/Label";
+import { RadioGroup } from "../RadioGroup/RadioGroup";
+import { Select } from "../Select/Select";
+import { ToggleGroup } from "../ToggleGroup/ToggleGroup";
 import { Form } from "./Form";
 import { useForm } from "./use-form";
+
+/** True once the field has been visited (touched/blurred) AND has errors. */
+function fieldIsInvalid(meta: {
+  isTouched: boolean;
+  isBlurred: boolean;
+  errors: unknown[];
+}): boolean {
+  return (meta.isTouched || meta.isBlurred) && meta.errors.length > 0;
+}
 
 /**
  * `Form` is a thin layer over [TanStack Form](https://tanstack.com/form) that
@@ -140,18 +156,62 @@ export const Default: Story = {
   },
 };
 
+const allInputsSchema = z.object({
+  title: z.string().min(5, "At least 5 characters"),
+  email: z.email("Enter a valid email address"),
+  avatar: z
+    .union([z.instanceof(File), z.null()])
+    .refine((v): v is File => v instanceof File, "Choose a file"),
+  description: z.string().min(20, "Tell us a bit more (min 20 chars)"),
+  country: z.string().min(1, "Select a country"),
+  framework: z.string().min(1, "Pick a framework"),
+  birthday: z.date({ message: "Choose a date" }),
+  otp: z.string().length(6, "Enter all 6 digits"),
+  format: z.string().min(1, "Pick a format"),
+  alignment: z.string().min(1, "Pick alignment"),
+});
+
+const allInputsFieldNames = [
+  "title",
+  "email",
+  "avatar",
+  "description",
+  "country",
+  "framework",
+  "birthday",
+  "otp",
+  "format",
+  "alignment",
+] as const;
+
+const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
+
 export const InvalidByDefault: Story = {
   name: "Invalid by default",
   render: () => {
     const Demo = () => {
       const form = useForm({
-        defaultValues: { title: "", email: "", description: "" },
-        validators: { onMount: profileSchema, onSubmit: profileSchema },
+        defaultValues: {
+          title: "",
+          email: "",
+          avatar: null as File | null,
+          description: "",
+          country: "",
+          framework: "",
+          birthday: undefined as Date | undefined,
+          otp: "",
+          format: "",
+          alignment: "",
+        },
+        validators: {
+          onMount: allInputsSchema,
+          onSubmit: allInputsSchema,
+        },
         onSubmit: async () => {},
       });
 
       useEffect(() => {
-        for (const name of ["title", "email", "description"] as const) {
+        for (const name of allInputsFieldNames) {
           form.setFieldMeta(name, (prev) => ({
             ...prev,
             isTouched: true,
@@ -161,7 +221,7 @@ export const InvalidByDefault: Story = {
       }, [form]);
 
       return (
-        <div className="ui:flex ui:flex-col ui:gap-6 ui:w-96">
+        <div className="ui:flex ui:flex-col ui:gap-6 ui:w-[28rem]">
           <Form form={form}>
             <Field.Group>
               <form.AppField name="title">
@@ -197,6 +257,21 @@ export const InvalidByDefault: Story = {
                 )}
               </form.AppField>
 
+              <form.AppField name="avatar">
+                {(field) => (
+                  <field.Field label="Avatar" required>
+                    <Input
+                      id={field.name}
+                      type="file"
+                      onChange={(e) =>
+                        field.handleChange(e.target.files?.[0] ?? null)
+                      }
+                      onBlur={field.handleBlur}
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+
               <form.AppField name="description">
                 {(field) => (
                   <field.Field label="Description" required>
@@ -209,6 +284,193 @@ export const InvalidByDefault: Story = {
                     />
                   </field.Field>
                 )}
+              </form.AppField>
+
+              <form.AppField name="country">
+                {(field) => (
+                  <field.Field label="Country" required>
+                    <Select
+                      value={field.state.value || undefined}
+                      onValueChange={(v) => {
+                        field.handleChange(v);
+                        field.handleBlur();
+                      }}
+                    >
+                      <Select.Trigger id={field.name} aria-label="Country">
+                        <Select.Value placeholder="Choose a country" />
+                      </Select.Trigger>
+                      <Select.Content>
+                        <Select.Item value="ar">Argentina</Select.Item>
+                        <Select.Item value="cl">Chile</Select.Item>
+                        <Select.Item value="uy">Uruguay</Select.Item>
+                      </Select.Content>
+                    </Select>
+                  </field.Field>
+                )}
+              </form.AppField>
+
+              <form.AppField name="framework">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Framework" required>
+                      <Combobox
+                        items={frameworks}
+                        value={field.state.value || null}
+                        onValueChange={(v) => {
+                          field.handleChange(typeof v === "string" ? v : "");
+                          field.handleBlur();
+                        }}
+                        className="ui:w-full"
+                      >
+                        <Combobox.Input
+                          id={field.name}
+                          placeholder="Pick a framework"
+                          aria-invalid={invalid || undefined}
+                        />
+                        <Combobox.Content>
+                          <Combobox.List>
+                            {(item) => (
+                              <Combobox.Item
+                                key={String(item)}
+                                value={item}
+                              >
+                                {String(item)}
+                              </Combobox.Item>
+                            )}
+                          </Combobox.List>
+                        </Combobox.Content>
+                      </Combobox>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+
+              <form.AppField name="birthday">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Birthday" required>
+                      <DatePicker
+                        date={field.state.value}
+                        onDateChange={(d) => {
+                          field.handleChange(d);
+                          field.handleBlur();
+                        }}
+                      >
+                        <DatePicker.Trigger
+                          id={field.name}
+                          aria-invalid={invalid || undefined}
+                        />
+                        <DatePicker.Content>
+                          <DatePicker.Calendar />
+                        </DatePicker.Content>
+                      </DatePicker>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+
+              <form.AppField name="otp">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="One-time code" required>
+                      <InputOtp
+                        id={field.name}
+                        maxLength={6}
+                        value={field.state.value}
+                        onChange={(v) => field.handleChange(v)}
+                        onBlur={field.handleBlur}
+                        aria-invalid={invalid || undefined}
+                      >
+                        <InputOtp.Group>
+                          <InputOtp.Slot index={0} />
+                          <InputOtp.Slot index={1} />
+                          <InputOtp.Slot index={2} />
+                        </InputOtp.Group>
+                        <InputOtp.Separator />
+                        <InputOtp.Group>
+                          <InputOtp.Slot index={3} />
+                          <InputOtp.Slot index={4} />
+                          <InputOtp.Slot index={5} />
+                        </InputOtp.Group>
+                      </InputOtp>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+
+              <form.AppField name="format">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Preferred format" required>
+                      <RadioGroup
+                        value={field.state.value}
+                        onValueChange={(v) => {
+                          field.handleChange(v);
+                          field.handleBlur();
+                        }}
+                        className="ui:gap-3"
+                      >
+                        <div className="ui:flex ui:items-center ui:gap-2">
+                          <RadioGroup.Item
+                            value="vinyl"
+                            id={`${field.name}-vinyl`}
+                            aria-invalid={invalid || undefined}
+                          />
+                          <Label htmlFor={`${field.name}-vinyl`}>Vinyl</Label>
+                        </div>
+                        <div className="ui:flex ui:items-center ui:gap-2">
+                          <RadioGroup.Item
+                            value="cd"
+                            id={`${field.name}-cd`}
+                            aria-invalid={invalid || undefined}
+                          />
+                          <Label htmlFor={`${field.name}-cd`}>CD</Label>
+                        </div>
+                        <div className="ui:flex ui:items-center ui:gap-2">
+                          <RadioGroup.Item
+                            value="digital"
+                            id={`${field.name}-digital`}
+                            aria-invalid={invalid || undefined}
+                          />
+                          <Label htmlFor={`${field.name}-digital`}>Digital</Label>
+                        </div>
+                      </RadioGroup>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+
+              <form.AppField name="alignment">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Alignment" required>
+                      <ToggleGroup
+                        type="single"
+                        value={field.state.value}
+                        onValueChange={(v) => {
+                          field.handleChange(v);
+                          field.handleBlur();
+                        }}
+                        aria-invalid={invalid || undefined}
+                      >
+                        <ToggleGroup.Item value="left" aria-label="Left">
+                          Left
+                        </ToggleGroup.Item>
+                        <ToggleGroup.Item value="center" aria-label="Center">
+                          Center
+                        </ToggleGroup.Item>
+                        <ToggleGroup.Item value="right" aria-label="Right">
+                          Right
+                        </ToggleGroup.Item>
+                      </ToggleGroup>
+                    </field.Field>
+                  );
+                }}
               </form.AppField>
             </Field.Group>
 

@@ -45,7 +45,7 @@ export const radioGroupItemVariants = cva([
   "ui:aria-invalid:outline-2",
   "ui:aria-invalid:outline-solid",
   "ui:aria-invalid:outline-destructive",
-  "ui:aria-invalid:outline-offset-2",
+  "ui:aria-invalid:outline-offset-0",
 ]);
 
 /** Kept for Radix Presence; fill is drawn on the item via radial-gradient. */
@@ -89,6 +89,6 @@ export const radioGroupCardVariants = cva(
     "ui:aria-invalid:outline-2",
     "ui:aria-invalid:outline-solid",
     "ui:aria-invalid:outline-destructive",
-    "ui:aria-invalid:outline-offset-2",
+    "ui:aria-invalid:outline-offset-0",
   ],
 );

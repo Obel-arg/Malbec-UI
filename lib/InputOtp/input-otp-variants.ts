@@ -28,7 +28,7 @@ export const inputOtpGroupVariants = cva([
   "ui:group-aria-invalid:outline-2",
   "ui:group-aria-invalid:outline-solid",
   "ui:group-aria-invalid:outline-destructive",
-  "ui:group-aria-invalid:outline-offset-2",
+  "ui:group-aria-invalid:outline-offset-0",
 ]);
 
 /**

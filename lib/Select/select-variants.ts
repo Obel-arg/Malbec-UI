@@ -7,6 +7,7 @@ export const selectTriggerVariants = cva([
   "ui:bg-background-100 ui:px-4 ui:py-2 ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
   "ui:outline-none ui:transition-[opacity,box-shadow]",
   "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:aria-invalid:focus-visible:ring-0 ui:aria-invalid:focus-visible:ring-offset-0",
   "ui:cursor-pointer",
   "ui:disabled:cursor-not-allowed",
   "ui:disabled:pointer-events-none ui:disabled:opacity-50",
@@ -15,7 +16,7 @@ export const selectTriggerVariants = cva([
   "ui:aria-invalid:outline-2",
   "ui:aria-invalid:outline-solid",
   "ui:aria-invalid:outline-destructive",
-  "ui:aria-invalid:outline-offset-2",
+  "ui:aria-invalid:outline-offset-0",
 ]);
 
 export const selectContentVariants = cva([

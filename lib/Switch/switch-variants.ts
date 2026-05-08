@@ -33,7 +33,7 @@ export const switchRootVariants = cva(
     "ui:aria-invalid:outline-2",
     "ui:aria-invalid:outline-solid",
     "ui:aria-invalid:outline-destructive",
-    "ui:aria-invalid:outline-offset-2",
+    "ui:aria-invalid:outline-offset-0",
   ],
 );
 
