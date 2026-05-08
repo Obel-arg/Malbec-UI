@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.7.3 — 2026-05-08
+
+- patch(forms): tighten invalid outline offset and suppress focus ring when invalid
+
 ## v1.7.2 — 2026-05-08
 
 - patch(types): expose component prop types and add invalid-by-default form story
