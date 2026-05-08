@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.7.1 — 2026-05-08
+
+- patch(theme): render theme tokens and dark class server-side
+
 ## v1.7.0 — 2026-05-08
 
 - minor(form): add Form and Field with TanStack Form integration
