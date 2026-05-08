@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.7.0 — 2026-05-08
+
+- minor(form): add Form and Field with TanStack Form integration
+
 ## v1.6.0 — 2026-05-07
 
 - minor(ci): enforce commit format and auto-publish
