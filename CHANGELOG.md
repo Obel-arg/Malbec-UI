@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.7.7 — 2026-05-11
+
+- patch(data-card): switch accent to stripe wrapper + inner panel, add panelClassName and UpcomingShow story
+
 ## v1.7.6 — 2026-05-11
 
 - patch(avatar): export AvatarGroupCount and attach as AvatarGroup.Count
