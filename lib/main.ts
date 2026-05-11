@@ -8,7 +8,7 @@ export { Spinner } from "./Spinner/Spinner";
 export { Button } from "./Button/Button";
 export { Alert } from "./Alert/Alert";
 export { AlertDialog } from "./AlertDialog/AlertDialog";
-export { Avatar, AvatarGroup } from "./Avatar/Avatar";
+export { Avatar, AvatarGroup, AvatarGroupCount } from "./Avatar/Avatar";
 export { Badge } from "./Badge/Badge";
 export { Breadcrumb } from "./Breadcrumb/Breadcrumb";
 export { Checkbox } from "./Checkbox/Checkbox";

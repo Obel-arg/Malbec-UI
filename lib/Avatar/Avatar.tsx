@@ -130,7 +130,7 @@ export type AvatarGroupProps = React.ComponentPropsWithoutRef<"div"> & {
   size?: AvatarSize;
 };
 
-const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
+const AvatarGroupRoot = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
   function AvatarGroup({ className, size = "default", ...rest }, ref) {
     const ctx = React.useMemo<AvatarGroupContextValue>(() => ({ size }), [size]);
 
@@ -174,5 +174,12 @@ export const Avatar = AvatarRoot as AvatarComponent;
 Avatar.Image = AvatarImage;
 Avatar.Fallback = AvatarFallback;
 Avatar.Badge = AvatarBadge;
+
+type AvatarGroupComponent = typeof AvatarGroupRoot & {
+  Count: typeof AvatarGroupCount;
+};
+
+const AvatarGroup = AvatarGroupRoot as AvatarGroupComponent;
+AvatarGroup.Count = AvatarGroupCount;
 
 export { AvatarImage, AvatarFallback, AvatarBadge, AvatarGroup, AvatarGroupCount };
