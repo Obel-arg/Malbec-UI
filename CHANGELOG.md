@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.7.6 — 2026-05-11
+
+- patch(avatar): export AvatarGroupCount and attach as AvatarGroup.Count
+
 ## v1.7.5 — 2026-05-11
 
 - patch(avatar): export AvatarGroup from package entry
