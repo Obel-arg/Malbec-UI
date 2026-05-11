@@ -1,29 +1,38 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
-/** Which edge carries the thick primary accent border. */
+/** Which edge carries the thick primary accent stripe. */
 export type DataCardAccentSide = NonNullable<
   VariantProps<typeof dataCardRootVariants>["accentSide"]
 >;
 
-const shellBase = [
+const rootBase = [
   "ui:malbec-font-sans",
-  "ui:bg-background-200",
+  "ui:bg-primary",
   "ui:rounded-xl",
-  "ui:border ui:border-solid ui:border-background-300",
-  "ui:p-6",
-  "ui:shadow-[0px_0px_0.65px_rgba(0,0,0,0.2)]",
+  "ui:flex",
+  "ui:w-full",
+  "ui:shrink-0",
 ];
 
-export const dataCardRootVariants = cva(shellBase, {
+export const dataCardRootVariants = cva(rootBase, {
   variants: {
     accentSide: {
-      top: "ui:border-t-[3px] ui:border-t-primary",
-      right: "ui:border-r-[3px] ui:border-r-primary",
-      bottom: "ui:border-b-[3px] ui:border-b-primary",
-      left: "ui:border-l-[3px] ui:border-l-primary",
+      top: "ui:pt-1",
+      right: "ui:pr-1",
+      bottom: "ui:pb-1",
+      left: "ui:pl-1",
     },
   },
   defaultVariants: {
     accentSide: "top",
   },
 });
+
+export const dataCardPanelVariants = cva([
+  "ui:bg-background-200",
+  "ui:rounded-xl",
+  "ui:p-6",
+  "ui:w-full",
+  "ui:min-w-0",
+  "ui:flex-1",
+]);

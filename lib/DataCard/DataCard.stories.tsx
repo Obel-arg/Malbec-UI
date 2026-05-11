@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Equal, Tag, Ticket, Users } from "lucide-react";
+import { CalendarDays, Equal, MapPin, Tag, Ticket, Users } from "lucide-react";
+import { Badge } from "../Badge/Badge";
 import { DataCard, type DataCardProps } from "./DataCard";
 
 /**
@@ -130,6 +131,52 @@ export const MetricsRow: Story = {
               {index < metrics.length - 1 ? <VerticalRule /> : null}
             </div>
           ))}
+        </div>
+      </DataCard>
+    );
+  },
+};
+
+/**
+ * Compact upcoming-show summary: left accent stripe, square cover image, artist name,
+ * venue + date rows, and an "Active" pill. Layout is story-only — `DataCard` stays a shell.
+ */
+export const UpcomingShow: Story = {
+  render: function UpcomingShowRender() {
+    return (
+      <DataCard
+        accentSide="left"
+        className="ui:max-w-[280px]"
+        panelClassName="ui:p-1.5"
+      >
+        <div className="ui:flex ui:w-full ui:min-w-0 ui:items-center ui:gap-2">
+          <div className="ui:relative ui:size-14 ui:shrink-0 ui:overflow-hidden ui:rounded-md ui:bg-background-300">
+            <img
+              alt="Airbag"
+              src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=112&h=112&fit=crop"
+              className="ui:size-full ui:object-cover"
+            />
+          </div>
+
+          <div className="ui:min-w-0 ui:flex-1 ui:space-y-1 ui:text-left">
+            <p className="ui:m-0 ui:truncate ui:text-sm ui:font-medium ui:leading-tight ui:tracking-tight ui:text-text-default">
+              Airbag
+            </p>
+            <div className="ui:flex ui:items-center ui:gap-1.5 ui:text-xs ui:leading-snug ui:text-text-default-muted">
+              <MapPin className="ui:size-3 ui:shrink-0" aria-hidden />
+              <span className="ui:min-w-0 ui:truncate">River Plate</span>
+            </div>
+            <div className="ui:flex ui:items-center ui:gap-1.5 ui:text-xs ui:leading-snug ui:text-text-default-muted">
+              <CalendarDays className="ui:size-3 ui:shrink-0" aria-hidden />
+              <span className="ui:truncate">23/05/2026</span>
+            </div>
+          </div>
+
+          <div className="ui:shrink-0 ui:self-start">
+            <Badge variant="emerald">
+              <Badge.Text>Active</Badge.Text>
+            </Badge>
+          </div>
         </div>
       </DataCard>
     );
