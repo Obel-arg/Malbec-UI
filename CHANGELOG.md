@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.8.1 — 2026-05-11
+
+- patch(theming): use theme tokens for badge fg/accent vars, calendar borders, and timegrid grid lines
+
 ## v1.8.0 — 2026-05-11
 
 - minor(floating-bar): add FloatingBar component with animated open/close
