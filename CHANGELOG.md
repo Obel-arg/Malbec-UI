@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.8.0 — 2026-05-11
+
+- minor(floating-bar): add FloatingBar component with animated open/close
+
 ## v1.7.7 — 2026-05-11
 
 - patch(data-card): switch accent to stripe wrapper + inner panel, add panelClassName and UpcomingShow story
