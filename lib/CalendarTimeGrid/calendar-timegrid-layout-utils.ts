@@ -9,7 +9,7 @@ import {
 
 export function gridBackgroundStyle(hourHeightPx: number): CSSProperties {
   return {
-    backgroundImage: `repeating-linear-gradient(to bottom, transparent 0px, transparent ${hourHeightPx - 1}px, #e0e0e0 ${hourHeightPx - 1}px, #e0e0e0 ${hourHeightPx}px)`,
+    backgroundImage: `repeating-linear-gradient(to bottom, transparent 0px, transparent ${hourHeightPx - 1}px, var(--color-background-300) ${hourHeightPx - 1}px, var(--color-background-300) ${hourHeightPx}px)`,
   };
 }
 

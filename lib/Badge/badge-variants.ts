@@ -46,19 +46,19 @@ export const badgeVariants = cva(
           "ui:border-transparent ui:bg-transparent ui:text-primary ui:underline-offset-4 ui:hover:underline",
         /** Status chips (Product UI status popover, Figma 651:11230). */
         yellow:
-          "ui:border-transparent ui:bg-[#efeed4] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#8a862f] [--malbec-badge-accent:#8a862f]",
+          "ui:border-transparent ui:bg-[#efeed4] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#8a862f] ui:[--malbec-badge-accent:#8a862f]",
         orange:
-          "ui:border-transparent ui:bg-[#efe3d4] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#8a642f] [--malbec-badge-accent:#8a642f]",
+          "ui:border-transparent ui:bg-[#efe3d4] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#8a642f] ui:[--malbec-badge-accent:#8a642f]",
         blue:
-          "ui:border-transparent ui:bg-[#dce6ec] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#2f628a] [--malbec-badge-accent:#2f628a]",
+          "ui:border-transparent ui:bg-[#dce6ec] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#2f628a] ui:[--malbec-badge-accent:#2f628a]",
         violet:
-          "ui:border-transparent ui:bg-[#e5dcec] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#352a60] [--malbec-badge-accent:#352a60]",
+          "ui:border-transparent ui:bg-[#e5dcec] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#352a60] ui:[--malbec-badge-accent:#352a60]",
         emerald:
-          "ui:border-transparent ui:bg-[#d0dfd0] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#2a602c] [--malbec-badge-accent:#2a602c]",
+          "ui:border-transparent ui:bg-[#d0dfd0] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#2a602c] ui:[--malbec-badge-accent:#2a602c]",
         sage:
-          "ui:border-transparent ui:bg-[#b4c5b5] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#025406] [--malbec-badge-accent:#025406]",
+          "ui:border-transparent ui:bg-[#b4c5b5] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#025406] ui:[--malbec-badge-accent:#025406]",
         red:
-          "ui:border-transparent ui:bg-[#dfd0d0] ui:text-(--malbec-badge-fg) [--malbec-badge-fg:#602a2a] [--malbec-badge-accent:#602a2a]",
+          "ui:border-transparent ui:bg-[#dfd0d0] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#602a2a] ui:[--malbec-badge-accent:#602a2a]",
       },
     },
     defaultVariants: { variant: "default" },

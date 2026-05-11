@@ -217,6 +217,30 @@ export const CategoricalPills: Story = {
   ),
 };
 
+export const StatusVariants: Story = {
+  name: "Status variants (Figma 651:11230)",
+  render: () => {
+    const rows: { variant: BadgeVariant; label: string }[] = [
+      { variant: "yellow", label: "Presupuesto solicitado" },
+      { variant: "orange", label: "Pendiente aprobación" },
+      { variant: "blue", label: "Presupuesto a pagar" },
+      { variant: "violet", label: "Formal recibido aprobado" },
+      { variant: "emerald", label: "Aprobado" },
+      { variant: "sage", label: "Pagado" },
+      { variant: "red", label: "No aplica" },
+    ];
+    return (
+      <div className="ui:flex ui:w-[180px] ui:flex-col ui:gap-1">
+        {rows.map(({ variant, label }) => (
+          <Badge key={variant} variant={variant} className="ui:w-full">
+            <Badge.Text>{label}</Badge.Text>
+          </Badge>
+        ))}
+      </div>
+    );
+  },
+};
+
 export const AsChildLink: Story = {
   name: "asChild (link)",
   render: () => (

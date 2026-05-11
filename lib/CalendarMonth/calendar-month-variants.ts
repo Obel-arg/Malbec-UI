@@ -4,19 +4,19 @@ export const calendarMonthRootVariants = cva(
   [
     "malbec-font-sans",
     "ui:flex ui:w-full ui:flex-col ui:overflow-hidden",
-    "ui:rounded-xl ui:border ui:border-[#e5e5eb] ui:bg-background-100",
+    "ui:rounded-xl ui:border ui:border-sidebar-border ui:bg-background-100",
     "ui:shadow-[0_2px_12px_0_rgba(0,0,0,0.07)]",
   ],
 );
 
 export const calendarMonthHeaderRowVariants = cva(
-  "ui:flex ui:h-10 ui:shrink-0 ui:border-b ui:border-[#e5e5eb] ui:bg-background-200",
+  "ui:flex ui:h-10 ui:shrink-0 ui:border-b ui:border-sidebar-border ui:bg-background-200",
 );
 
 export const calendarMonthHeaderCellVariants = cva(
   [
     "ui:flex ui:flex-1 ui:items-center ui:justify-center",
-    "ui:border-r ui:border-[#e5e5eb]",
+    "ui:border-r ui:border-sidebar-border",
     "ui:text-[11px] ui:font-medium ui:uppercase ui:leading-[normal] ui:text-[#a6a6ad]",
   ],
   {
@@ -37,7 +37,7 @@ export const calendarMonthWeekRowVariants = cva(
 export const calendarMonthDayCellVariants = cva(
   [
     "ui:relative ui:box-border ui:flex ui:min-w-0 ui:flex-1 ui:flex-col ui:items-stretch",
-    "ui:gap-1 ui:overflow-hidden ui:border-r ui:border-t ui:border-[#e5e5eb] ui:p-2",
+    "ui:gap-1 ui:overflow-hidden ui:border-r ui:border-t ui:border-sidebar-border ui:p-2",
     "ui:bg-background-100",
   ],
   {
