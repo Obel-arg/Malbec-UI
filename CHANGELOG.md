@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.7.5 — 2026-05-11
+
+- patch(avatar): export AvatarGroup from package entry
+
 ## v1.7.4 — 2026-05-08
 
 - patch(combobox): reflect aria-invalid via :has() so Field auto-propagation styles the trigger
