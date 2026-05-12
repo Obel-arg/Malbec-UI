@@ -2,6 +2,11 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.8.2 — 2026-05-12
+
+- patch(date-picker): set content background to background-100
+- patch(combobox): make chevron button toggle popover open state
+
 ## v1.8.1 — 2026-05-11
 
 - patch(theming): use theme tokens for badge fg/accent vars, calendar borders, and timegrid grid lines
