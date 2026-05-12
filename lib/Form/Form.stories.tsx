@@ -487,6 +487,122 @@ export const InvalidByDefault: Story = {
   },
 };
 
+type ContractRow = {
+  rowKey: string;
+  categoryId: string | null;
+  percentInput: string;
+};
+
+const contractRowsSchema = z.object({
+  contractRows: z.array(
+    z.object({
+      rowKey: z.string(),
+      categoryId: z.string().nullable(),
+      percentInput: z
+        .string()
+        .min(1, "Required")
+        .refine((v) => !Number.isNaN(Number(v)), "Must be a number")
+        .refine((v) => {
+          const n = Number(v);
+          return n >= 0 && n <= 100;
+        }, "Must be between 0 and 100"),
+    }),
+  ),
+});
+
+export const ArrayField: Story = {
+  name: "Array field",
+  render: () => {
+    const Demo = () => {
+      const [submitted, setSubmitted] = useState<unknown>(null);
+      const form = useForm({
+        defaultValues: {
+          contractRows: [
+            {
+              rowKey: crypto.randomUUID(),
+              categoryId: null,
+              percentInput: "",
+            },
+          ] as ContractRow[],
+        },
+        validators: { onChange: contractRowsSchema, onSubmit: contractRowsSchema },
+        onSubmit: async ({ value }) => {
+          setSubmitted(value);
+        },
+      });
+
+      return (
+        <div className="ui:flex ui:flex-col ui:gap-6 ui:w-[28rem]">
+          <Form form={form}>
+            <form.AppField mode="array" name="contractRows">
+              {(arrayField) => (
+                <div className="ui:flex ui:flex-col ui:gap-3">
+                  {arrayField.state.value.map((row, i) => (
+                    <div
+                      key={row.rowKey}
+                      className="ui:flex ui:items-end ui:gap-2"
+                    >
+                      <form.AppField name={`contractRows[${i}].percentInput`}>
+                        {(percentField) => (
+                          <percentField.Field label={`Row ${i + 1} %`}>
+                            <Input
+                              id={percentField.name}
+                              type="number"
+                              value={percentField.state.value}
+                              onChange={(e) =>
+                                percentField.handleChange(e.target.value)
+                              }
+                              onBlur={percentField.handleBlur}
+                              placeholder="0"
+                            />
+                          </percentField.Field>
+                        )}
+                      </form.AppField>
+                      <Button
+                        variant="secondary"
+                        onClick={() => arrayField.removeValue(i)}
+                      >
+                        <Button.Text>Remove</Button.Text>
+                      </Button>
+                    </div>
+                  ))}
+                  <div>
+                    <Button
+                      variant="secondary"
+                      onClick={() =>
+                        arrayField.pushValue({
+                          rowKey: crypto.randomUUID(),
+                          categoryId: null,
+                          percentInput: "",
+                        })
+                      }
+                    >
+                      <Button.Text>Add row</Button.Text>
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </form.AppField>
+
+            <div className="ui:mt-6 ui:flex ui:justify-end">
+              <Button htmlType="submit">
+                <Button.Text>Submit</Button.Text>
+              </Button>
+            </div>
+          </Form>
+
+          {submitted ? (
+            <pre className="ui:rounded ui:bg-background-100 ui:p-3 ui:text-[12px] ui:text-text-default">
+              {JSON.stringify(submitted, null, 2)}
+            </pre>
+          ) : null}
+        </div>
+      );
+    };
+    return <Demo />;
+  },
+};
+
 export const PerFieldValidators: Story = {
   name: "Per-field validators",
   render: () => {
