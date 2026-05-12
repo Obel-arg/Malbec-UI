@@ -578,7 +578,16 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
                 ? "invalid"
                 : triggerVariant,
           }),
+          !disabled && "ui:cursor-text",
         )}
+        onMouseDown={(e) => {
+          if (disabled) return;
+          if (e.target !== inputRef.current) {
+            e.preventDefault();
+            inputRef.current?.focus();
+            if (!ctx.open) ctx.setOpen(true);
+          }
+        }}
       >
         {inputEl}
         <div className="ui:flex ui:shrink-0 ui:items-center ui:gap-1">
@@ -587,7 +596,10 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
               type="button"
               data-slot="combobox-clear"
               className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors hover:ui:bg-background-200 focus-visible:ui:ring-2 focus-visible:ui:ring-primary"
-              onMouseDown={(e) => e.preventDefault()}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
               onClick={clear}
               aria-label="Clear selection"
             >
@@ -614,7 +626,10 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
               aria-expanded={ctx.open}
               aria-controls={ctx.listId}
               className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:opacity-50 ui:outline-none ui:transition-colors hover:ui:opacity-100 focus-visible:ui:ring-2 focus-visible:ui:ring-primary"
-              onMouseDown={(e) => e.preventDefault()}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
               onClick={() => {
                 if (disabled) return;
                 ctx.setOpen(!ctx.open);
