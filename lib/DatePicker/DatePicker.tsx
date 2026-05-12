@@ -411,7 +411,7 @@ const DatePickerContent = React.forwardRef<
       align={align}
       sideOffset={sideOffset}
       className={cn(
-        "ui:w-fit ui:min-w-(--radix-popover-trigger-width,280px) ui:max-w-(--radix-popover-content-available-width)",
+        "ui:w-fit ui:min-w-(--radix-popover-trigger-width,280px) ui:max-w-(--radix-popover-content-available-width) ui:bg-background-100",
         className,
       )}
       {...rest}
