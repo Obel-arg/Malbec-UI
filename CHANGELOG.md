@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.8.3 — 2026-05-12
+
+- patch(combobox): open popover when clicking anywhere on trigger row
+
 ## v1.8.2 — 2026-05-12
 
 - patch(date-picker): set content background to background-100
