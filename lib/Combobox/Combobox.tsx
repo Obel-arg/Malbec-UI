@@ -16,6 +16,7 @@ import {
   comboboxTriggerRowVariants,
 } from "./combobox-variants";
 import type { ComboboxTriggerRowVariant } from "./combobox-variants";
+import { ChevronDown } from "../icons";
 
 type ComboboxMode = "inline" | "trigger";
 
@@ -396,24 +397,6 @@ function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function ChevronsUpDownIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-      {...props}
-    >
-      <path d="m7 15 5 5 5-5" />
-      <path d="m7 9 5-5 5 5" />
-    </svg>
-  );
-}
-
 const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
   function ComboboxInput(
     {
@@ -622,12 +605,26 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
             </button>
           ) : null}
           {showTrigger ? (
-            <span
-              className="ui:pointer-events-none ui:inline-flex ui:size-4 ui:text-text-default ui:opacity-50"
-              aria-hidden
+            <button
+              type="button"
+              data-slot="combobox-trigger-toggle"
+              tabIndex={-1}
+              disabled={disabled}
+              aria-label={ctx.open ? "Close" : "Open"}
+              aria-expanded={ctx.open}
+              aria-controls={ctx.listId}
+              className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:opacity-50 ui:outline-none ui:transition-colors hover:ui:opacity-100 focus-visible:ui:ring-2 focus-visible:ui:ring-primary"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                if (disabled) return;
+                ctx.setOpen(!ctx.open);
+                inputRef.current?.focus();
+              }}
             >
-              <ChevronsUpDownIcon className="ui:size-full" />
-            </span>
+              <span className="ui:inline-flex ui:size-4">
+                <ChevronDown className="ui:size-full" />
+              </span>
+            </button>
           ) : null}
         </div>
       </div>
@@ -721,7 +718,7 @@ const ComboboxTrigger = React.forwardRef<
           {label}
         </span>
         <span className="ui:ml-2 ui:inline-flex ui:size-4 ui:shrink-0 ui:text-text-default ui:opacity-50">
-          <ChevronsUpDownIcon className="ui:size-full" />
+          <ChevronDown className="ui:size-full" />
         </span>
       </button>
     </Popover.Trigger>
