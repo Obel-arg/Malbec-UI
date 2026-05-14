@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 export const floatingBarVariants = cva([
   "malbec-font-sans",
   "ui:inline-flex ui:items-center ui:gap-4",
-  "ui:rounded-[10px] ui:border ui:border-background-100",
+  "ui:rounded-[10px] ui:border ui:border-background-300",
   "ui:bg-background-200 ui:text-text-default",
   "ui:px-5 ui:py-2",
   "ui:shadow-[0_1px_2px_rgba(0,0,0,0.25)]",
@@ -14,7 +14,7 @@ export const floatingBarVariants = cva([
 
 export const floatingBarCountVariants = cva([
   "ui:inline-flex ui:items-center ui:shrink-0",
-  "ui:text-[12px] ui:font-medium ui:leading-[1.3] ui:tracking-[-0.48px]",
+  "ui:text-[13px] ui:font-medium ui:leading-[1.3] ui:tracking-[-0.48px]",
   "ui:text-text-default ui:whitespace-nowrap",
   "ui:[&>strong]:font-bold ui:[&>b]:font-bold",
 ]);
@@ -28,7 +28,7 @@ export const floatingBarTriggerVariants = cva(
     "ui:inline-flex ui:items-center ui:justify-center ui:gap-[5px]",
     "ui:rounded-[7px] ui:px-[10px] ui:py-[10px]",
     "ui:text-text-default",
-    "ui:text-[12px] ui:font-medium ui:leading-[1.3] ui:tracking-[-0.48px]",
+    "ui:text-[13px] ui:font-medium ui:leading-[1.3] ui:tracking-[-0.48px]",
     "ui:whitespace-nowrap ui:select-none ui:cursor-pointer",
     "ui:transition-[background-color,opacity,box-shadow]",
     "ui:outline-none",
@@ -61,7 +61,7 @@ export type FloatingBarTriggerEmphasis = "default" | "strong";
 
 export const floatingBarTriggerIconVariants = cva([
   "ui:inline-flex ui:shrink-0 ui:items-center ui:justify-center",
-  "ui:size-[13px]",
+  "ui:size-[14px]",
   "ui:[&>svg]:size-full",
 ]);
 
