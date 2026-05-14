@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.8.5 — 2026-05-14
+
+- patch(floating-bar): tweak border tone, bump count/trigger text to 13px, and icon to 14px
+
 ## v1.8.4 — 2026-05-12
 
 - patch(form): destructure useForm export and add array-field story with zod 0-100 validation
