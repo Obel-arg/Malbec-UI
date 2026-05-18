@@ -2,6 +2,12 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.9.0 — 2026-05-18
+
+- minor(file-dropzone): add FileDropzone component with disabled and invalid states
+- minor(textarea): add Textarea component mirroring Input surface tokens
+- patch(form-controls): soften focus ring to 1px background-300, persist on popover open, unify invalid outline to 1px
+
 ## v1.8.5 — 2026-05-14
 
 - patch(floating-bar): tweak border tone, bump count/trigger text to 13px, and icon to 14px
