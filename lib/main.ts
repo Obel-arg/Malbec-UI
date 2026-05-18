@@ -33,6 +33,7 @@ export { Sheet } from "./Sheet/Sheet";
 export { Sidebar, useSidebar } from "./Sidebar/Sidebar";
 export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Field } from "./Field/Field";
+export { FileDropzone } from "./FileDropzone/FileDropzone";
 export { FloatingBar } from "./FloatingBar/FloatingBar";
 export { Form } from "./Form/Form";
 export { useForm, withForm, withFieldGroup } from "./Form/use-form";

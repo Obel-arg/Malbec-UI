@@ -5,6 +5,8 @@ import { Button } from "../Button/Button";
 import { Combobox } from "../Combobox/Combobox";
 import { DatePicker } from "../DatePicker/DatePicker";
 import { Field } from "../Field/Field";
+import { FileDropzone } from "../FileDropzone/FileDropzone";
+import { Upload } from "../icons";
 import { Input } from "../Input/Input";
 import { InputOtp } from "../InputOtp/InputOtp";
 import { Label } from "../Label/Label";
@@ -165,6 +167,9 @@ const allInputsSchema = z.object({
     .refine((v): v is File => v instanceof File, "Choose a file"),
   description: z.string().min(20, "Tell us a bit more (min 20 chars)"),
   bio: z.string().min(20, "Tell us a bit more (min 20 chars)"),
+  dataset: z
+    .union([z.instanceof(File), z.null()])
+    .refine((v): v is File => v instanceof File, "Drop a file or pick one"),
   country: z.string().min(1, "Select a country"),
   framework: z.string().min(1, "Pick a framework"),
   birthday: z.date({ message: "Choose a date" }),
@@ -179,6 +184,7 @@ const allInputsFieldNames = [
   "avatar",
   "description",
   "bio",
+  "dataset",
   "country",
   "framework",
   "birthday",
@@ -201,6 +207,7 @@ export const AllInputs: Story = {
           avatar: null as File | null,
           description: "",
           bio: "",
+          dataset: null as File | null,
           country: "",
           framework: "",
           birthday: undefined as Date | undefined,
@@ -292,6 +299,34 @@ export const AllInputs: Story = {
                     />
                   </field.Field>
                 )}
+              </form.AppField>
+
+              <form.AppField name="dataset">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Dataset" required>
+                      <FileDropzone
+                        accept=".xlsx,.csv,.tsv,.numbers"
+                        aria-invalid={invalid || undefined}
+                        onFilesSelected={(files) => {
+                          field.handleChange(files[0] ?? null);
+                          field.handleBlur();
+                        }}
+                      >
+                        <FileDropzone.Icon>
+                          <Upload />
+                        </FileDropzone.Icon>
+                        <FileDropzone.Caption>
+                          {field.state.value
+                            ? field.state.value.name
+                            : "Add your .xslx, .csv, .tsv or numbers file"}
+                        </FileDropzone.Caption>
+                        <FileDropzone.Action>Subir archivo</FileDropzone.Action>
+                      </FileDropzone>
+                    </field.Field>
+                  );
+                }}
               </form.AppField>
 
               <form.AppField name="country">
@@ -519,6 +554,7 @@ export const InvalidByDefault: Story = {
           avatar: null as File | null,
           description: "",
           bio: "",
+          dataset: null as File | null,
           country: "",
           framework: "",
           birthday: undefined as Date | undefined,
@@ -621,6 +657,34 @@ export const InvalidByDefault: Story = {
                     />
                   </field.Field>
                 )}
+              </form.AppField>
+
+              <form.AppField name="dataset">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Dataset" required>
+                      <FileDropzone
+                        accept=".xlsx,.csv,.tsv,.numbers"
+                        aria-invalid={invalid || undefined}
+                        onFilesSelected={(files) => {
+                          field.handleChange(files[0] ?? null);
+                          field.handleBlur();
+                        }}
+                      >
+                        <FileDropzone.Icon>
+                          <Upload />
+                        </FileDropzone.Icon>
+                        <FileDropzone.Caption>
+                          {field.state.value
+                            ? field.state.value.name
+                            : "Add your .xslx, .csv, .tsv or numbers file"}
+                        </FileDropzone.Caption>
+                        <FileDropzone.Action>Subir archivo</FileDropzone.Action>
+                      </FileDropzone>
+                    </field.Field>
+                  );
+                }}
               </form.AppField>
 
               <form.AppField name="country">
