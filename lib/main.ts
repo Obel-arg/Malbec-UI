@@ -43,6 +43,7 @@ export { Switch } from "./Switch/Switch";
 export { Toggle } from "./Toggle/Toggle";
 export { ToggleGroup } from "./ToggleGroup/ToggleGroup";
 export { Tabs } from "./Tabs/Tabs";
+export { Textarea } from "./Textarea/Textarea";
 export { Tooltip } from "./Tooltip/Tooltip";
 export { Card } from "./Card/Card";
 export { Chart } from "./Chart/Chart";
@@ -275,6 +276,7 @@ export type {
   TabsTriggerProps,
   TabsContentProps,
 } from "./Tabs/Tabs";
+export type { TextareaProps } from "./Textarea/Textarea";
 export type {
   ToggleProps,
   ToggleIconProps,

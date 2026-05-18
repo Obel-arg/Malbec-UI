@@ -10,6 +10,7 @@ import { InputOtp } from "../InputOtp/InputOtp";
 import { Label } from "../Label/Label";
 import { RadioGroup } from "../RadioGroup/RadioGroup";
 import { Select } from "../Select/Select";
+import { Textarea } from "../Textarea/Textarea";
 import { ToggleGroup } from "../ToggleGroup/ToggleGroup";
 import { Form } from "./Form";
 import { useForm } from "./use-form";
@@ -163,6 +164,7 @@ const allInputsSchema = z.object({
     .union([z.instanceof(File), z.null()])
     .refine((v): v is File => v instanceof File, "Choose a file"),
   description: z.string().min(20, "Tell us a bit more (min 20 chars)"),
+  bio: z.string().min(20, "Tell us a bit more (min 20 chars)"),
   country: z.string().min(1, "Select a country"),
   framework: z.string().min(1, "Pick a framework"),
   birthday: z.date({ message: "Choose a date" }),
@@ -176,6 +178,7 @@ const allInputsFieldNames = [
   "email",
   "avatar",
   "description",
+  "bio",
   "country",
   "framework",
   "birthday",
@@ -197,6 +200,7 @@ export const AllInputs: Story = {
           email: "",
           avatar: null as File | null,
           description: "",
+          bio: "",
           country: "",
           framework: "",
           birthday: undefined as Date | undefined,
@@ -271,6 +275,20 @@ export const AllInputs: Story = {
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
                       placeholder="A short summary…"
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+
+              <form.AppField name="bio">
+                {(field) => (
+                  <field.Field label="Bio" required>
+                    <Textarea
+                      id={field.name}
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="Tell us a bit about you…"
                     />
                   </field.Field>
                 )}
@@ -500,6 +518,7 @@ export const InvalidByDefault: Story = {
           email: "",
           avatar: null as File | null,
           description: "",
+          bio: "",
           country: "",
           framework: "",
           birthday: undefined as Date | undefined,
@@ -585,6 +604,20 @@ export const InvalidByDefault: Story = {
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
                       placeholder="A short summary…"
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+
+              <form.AppField name="bio">
+                {(field) => (
+                  <field.Field label="Bio" required>
+                    <Textarea
+                      id={field.name}
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="Tell us a bit about you…"
                     />
                   </field.Field>
                 )}
