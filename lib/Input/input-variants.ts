@@ -29,10 +29,10 @@ export const inputVariants = cva(
     // `@property syntax: "*"` custom properties that browsers can't interpolate.
     // `-outline-offset-2` makes it inset so it can never be clipped by parent
     // overflow containers and stays visible regardless of consumer bg overrides.
-    "ui:outline-2",
+    "ui:outline-1",
     "ui:outline-solid",
     "ui:outline-transparent",
-    "ui:-outline-offset-2",
+    "ui:-outline-offset-1",
     "ui:transition-[color,outline-color,box-shadow,opacity]",
     "ui:duration-150",
     // `:focus-within` (not `:focus-visible`) so the outline shows for both keyboard
@@ -41,7 +41,7 @@ export const inputVariants = cva(
     // `:focus-visible` to focus moves caused by mouse, even though `:focus` is set.
     // `:focus-within` matches on `:focus` regardless of method, and works on the
     // input itself (standalone) and on the wrapper element (with Input.Icon).
-    "ui:focus-within:outline-primary",
+    "ui:focus-within:outline-background-300",
     "ui:disabled:cursor-not-allowed",
     "ui:disabled:opacity-50",
     /**

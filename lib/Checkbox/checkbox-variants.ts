@@ -33,7 +33,7 @@ export const checkboxRootVariants = cva(
     "ui:data-[state=checked]:border-primary",
     "ui:data-[state=indeterminate]:bg-primary",
     "ui:data-[state=indeterminate]:border-primary",
-    "ui:aria-invalid:outline-2",
+    "ui:aria-invalid:outline-1",
     "ui:aria-invalid:outline-solid",
     "ui:aria-invalid:outline-destructive",
     "ui:aria-invalid:outline-offset-0",

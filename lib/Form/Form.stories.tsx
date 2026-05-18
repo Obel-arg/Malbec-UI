@@ -186,6 +186,310 @@ const allInputsFieldNames = [
 
 const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
 
+export const AllInputs: Story = {
+  name: "All inputs",
+  render: () => {
+    const Demo = () => {
+      const [submitted, setSubmitted] = useState<unknown>(null);
+      const form = useForm({
+        defaultValues: {
+          title: "",
+          email: "",
+          avatar: null as File | null,
+          description: "",
+          country: "",
+          framework: "",
+          birthday: undefined as Date | undefined,
+          otp: "",
+          format: "",
+          alignment: "",
+        },
+        validators: { onSubmit: allInputsSchema },
+        onSubmit: async ({ value }) => {
+          setSubmitted(value);
+        },
+      });
+
+      return (
+        <div className="ui:flex ui:flex-col ui:gap-6 ui:w-[28rem]">
+          <Form form={form}>
+            <Field.Group>
+              <form.AppField name="title">
+                {(field) => (
+                  <field.Field label="Title" required>
+                    <Input
+                      id={field.name}
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="My new project"
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+
+              <form.AppField name="email">
+                {(field) => (
+                  <field.Field
+                    label="Email"
+                    description="We'll never share it."
+                    required
+                  >
+                    <Input
+                      id={field.name}
+                      type="email"
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="you@example.com"
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+
+              <form.AppField name="avatar">
+                {(field) => (
+                  <field.Field label="Avatar" required>
+                    <Input
+                      id={field.name}
+                      type="file"
+                      onChange={(e) =>
+                        field.handleChange(e.target.files?.[0] ?? null)
+                      }
+                      onBlur={field.handleBlur}
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+
+              <form.AppField name="description">
+                {(field) => (
+                  <field.Field label="Description" required>
+                    <Input
+                      id={field.name}
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="A short summary…"
+                    />
+                  </field.Field>
+                )}
+              </form.AppField>
+
+              <form.AppField name="country">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Country" required>
+                      <Select
+                        value={field.state.value || undefined}
+                        onValueChange={(v) => {
+                          field.handleChange(v);
+                          field.handleBlur();
+                        }}
+                      >
+                        <Select.Trigger
+                          id={field.name}
+                          aria-label="Country"
+                          aria-invalid={invalid || undefined}
+                        >
+                          <Select.Value placeholder="Choose a country" />
+                        </Select.Trigger>
+                        <Select.Content>
+                          <Select.Item value="ar">Argentina</Select.Item>
+                          <Select.Item value="cl">Chile</Select.Item>
+                          <Select.Item value="uy">Uruguay</Select.Item>
+                        </Select.Content>
+                      </Select>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+
+              <form.AppField name="framework">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Framework" required>
+                      <Combobox
+                        items={frameworks}
+                        value={field.state.value || null}
+                        onValueChange={(v) => {
+                          field.handleChange(typeof v === "string" ? v : "");
+                          field.handleBlur();
+                        }}
+                        className="ui:w-full"
+                      >
+                        <Combobox.Input
+                          id={field.name}
+                          placeholder="Pick a framework"
+                          aria-invalid={invalid || undefined}
+                        />
+                        <Combobox.Content>
+                          <Combobox.List>
+                            {(item) => (
+                              <Combobox.Item
+                                key={String(item)}
+                                value={item}
+                              >
+                                {String(item)}
+                              </Combobox.Item>
+                            )}
+                          </Combobox.List>
+                        </Combobox.Content>
+                      </Combobox>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+
+              <form.AppField name="birthday">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Birthday" required>
+                      <DatePicker
+                        date={field.state.value}
+                        onDateChange={(d) => {
+                          field.handleChange(d);
+                          field.handleBlur();
+                        }}
+                      >
+                        <DatePicker.Trigger
+                          id={field.name}
+                          aria-invalid={invalid || undefined}
+                        />
+                        <DatePicker.Content>
+                          <DatePicker.Calendar />
+                        </DatePicker.Content>
+                      </DatePicker>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+
+              <form.AppField name="otp">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="One-time code" required>
+                      <InputOtp
+                        id={field.name}
+                        maxLength={6}
+                        value={field.state.value}
+                        onChange={(v) => field.handleChange(v)}
+                        onBlur={field.handleBlur}
+                        aria-invalid={invalid || undefined}
+                      >
+                        <InputOtp.Group>
+                          <InputOtp.Slot index={0} />
+                          <InputOtp.Slot index={1} />
+                          <InputOtp.Slot index={2} />
+                        </InputOtp.Group>
+                        <InputOtp.Separator />
+                        <InputOtp.Group>
+                          <InputOtp.Slot index={3} />
+                          <InputOtp.Slot index={4} />
+                          <InputOtp.Slot index={5} />
+                        </InputOtp.Group>
+                      </InputOtp>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+
+              <form.AppField name="format">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Preferred format" required>
+                      <RadioGroup
+                        value={field.state.value}
+                        onValueChange={(v) => {
+                          field.handleChange(v);
+                          field.handleBlur();
+                        }}
+                        className="ui:gap-3"
+                      >
+                        <div className="ui:flex ui:items-center ui:gap-2">
+                          <RadioGroup.Item
+                            value="vinyl"
+                            id={`${field.name}-vinyl`}
+                            aria-invalid={invalid || undefined}
+                          />
+                          <Label htmlFor={`${field.name}-vinyl`}>Vinyl</Label>
+                        </div>
+                        <div className="ui:flex ui:items-center ui:gap-2">
+                          <RadioGroup.Item
+                            value="cd"
+                            id={`${field.name}-cd`}
+                            aria-invalid={invalid || undefined}
+                          />
+                          <Label htmlFor={`${field.name}-cd`}>CD</Label>
+                        </div>
+                        <div className="ui:flex ui:items-center ui:gap-2">
+                          <RadioGroup.Item
+                            value="digital"
+                            id={`${field.name}-digital`}
+                            aria-invalid={invalid || undefined}
+                          />
+                          <Label htmlFor={`${field.name}-digital`}>Digital</Label>
+                        </div>
+                      </RadioGroup>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+
+              <form.AppField name="alignment">
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Alignment" required>
+                      <ToggleGroup
+                        type="single"
+                        value={field.state.value}
+                        onValueChange={(v) => {
+                          field.handleChange(v);
+                          field.handleBlur();
+                        }}
+                        aria-invalid={invalid || undefined}
+                      >
+                        <ToggleGroup.Item value="left" aria-label="Left">
+                          Left
+                        </ToggleGroup.Item>
+                        <ToggleGroup.Item value="center" aria-label="Center">
+                          Center
+                        </ToggleGroup.Item>
+                        <ToggleGroup.Item value="right" aria-label="Right">
+                          Right
+                        </ToggleGroup.Item>
+                      </ToggleGroup>
+                    </field.Field>
+                  );
+                }}
+              </form.AppField>
+            </Field.Group>
+
+            <div className="ui:mt-6 ui:flex ui:justify-end">
+              <Button htmlType="submit">
+                <Button.Text>Submit</Button.Text>
+              </Button>
+            </div>
+          </Form>
+
+          {submitted ? (
+            <pre className="ui:rounded ui:bg-background-100 ui:p-3 ui:text-[12px] ui:text-text-default">
+              {JSON.stringify(submitted, null, 2)}
+            </pre>
+          ) : null}
+        </div>
+      );
+    };
+    return <Demo />;
+  },
+};
+
 export const InvalidByDefault: Story = {
   name: "Invalid by default",
   render: () => {
@@ -287,26 +591,33 @@ export const InvalidByDefault: Story = {
               </form.AppField>
 
               <form.AppField name="country">
-                {(field) => (
-                  <field.Field label="Country" required>
-                    <Select
-                      value={field.state.value || undefined}
-                      onValueChange={(v) => {
-                        field.handleChange(v);
-                        field.handleBlur();
-                      }}
-                    >
-                      <Select.Trigger id={field.name} aria-label="Country">
-                        <Select.Value placeholder="Choose a country" />
-                      </Select.Trigger>
-                      <Select.Content>
-                        <Select.Item value="ar">Argentina</Select.Item>
-                        <Select.Item value="cl">Chile</Select.Item>
-                        <Select.Item value="uy">Uruguay</Select.Item>
-                      </Select.Content>
-                    </Select>
-                  </field.Field>
-                )}
+                {(field) => {
+                  const invalid = fieldIsInvalid(field.state.meta);
+                  return (
+                    <field.Field label="Country" required>
+                      <Select
+                        value={field.state.value || undefined}
+                        onValueChange={(v) => {
+                          field.handleChange(v);
+                          field.handleBlur();
+                        }}
+                      >
+                        <Select.Trigger
+                          id={field.name}
+                          aria-label="Country"
+                          aria-invalid={invalid || undefined}
+                        >
+                          <Select.Value placeholder="Choose a country" />
+                        </Select.Trigger>
+                        <Select.Content>
+                          <Select.Item value="ar">Argentina</Select.Item>
+                          <Select.Item value="cl">Chile</Select.Item>
+                          <Select.Item value="uy">Uruguay</Select.Item>
+                        </Select.Content>
+                      </Select>
+                    </field.Field>
+                  );
+                }}
               </form.AppField>
 
               <form.AppField name="framework">

@@ -25,7 +25,7 @@ export const inputOtpGroupVariants = cva([
    * of the groups, so it can't be targeted via `:has()` from here). Using `outline`
    * for parity with the rest of the form-control library.
    */
-  "ui:group-aria-invalid:outline-2",
+  "ui:group-aria-invalid:outline-1",
   "ui:group-aria-invalid:outline-solid",
   "ui:group-aria-invalid:outline-destructive",
   "ui:group-aria-invalid:outline-offset-0",

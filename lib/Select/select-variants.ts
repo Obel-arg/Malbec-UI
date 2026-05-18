@@ -3,17 +3,22 @@ import { popoverSurfaceTransitionMotionClasses } from "../Popover/popover-varian
 
 export const selectTriggerVariants = cva([
   "malbec-font-sans",
-  "ui:flex ui:h-9 ui:w-full ui:items-center ui:justify-between ui:rounded-md ui:border ui:border-background-300",
+  "ui:flex ui:h-9 ui:w-full ui:items-center ui:justify-between ui:rounded-md",
   "ui:bg-background-100 ui:px-4 ui:py-2 ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
+  "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none ui:transition-[opacity,box-shadow]",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
-  "ui:aria-invalid:focus-visible:ring-0 ui:aria-invalid:focus-visible:ring-offset-0",
+  "ui:focus-visible:ring-1 ui:focus-visible:ring-background-300",
+  // Keep the ring visible while the popover is open, since Radix moves focus
+  // into the listbox and the trigger no longer matches `:focus-visible`.
+  "ui:aria-expanded:ring-1 ui:aria-expanded:ring-background-300",
+  "ui:aria-invalid:focus-visible:ring-0",
+  "ui:aria-invalid:aria-expanded:ring-0",
   "ui:cursor-pointer",
   "ui:disabled:cursor-not-allowed",
   "ui:disabled:pointer-events-none ui:disabled:opacity-50",
   "ui:data-placeholder:text-text-default/70",
   /** Invalid state — set by callers via `aria-invalid` on the trigger. */
-  "ui:aria-invalid:outline-2",
+  "ui:aria-invalid:outline-1",
   "ui:aria-invalid:outline-solid",
   "ui:aria-invalid:outline-destructive",
   "ui:aria-invalid:outline-offset-0",

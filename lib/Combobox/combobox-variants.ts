@@ -25,10 +25,17 @@ export const comboboxTriggerRowVariants = cva(
     "ui:text-text-default",
     "ui:outline-none",
     "ui:transition-[color,box-shadow,opacity]",
-    "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
-    "ui:focus-visible:ring-offset-2",
-    "ui:focus-visible:ring-offset-background-100",
+    "ui:focus-visible:ring-1",
+    "ui:focus-visible:ring-background-300",
+    /**
+     * Keep the ring visible while the popover is open. Covers two render shapes:
+     * the trigger row IS the button (own `aria-expanded`), or it's a wrapper
+     * `<div>` whose child input/button carries `aria-expanded` (Combobox.Input).
+     */
+    "ui:aria-expanded:ring-1",
+    "ui:aria-expanded:ring-background-300",
+    "ui:has-[[aria-expanded=true]]:ring-1",
+    "ui:has-[[aria-expanded=true]]:ring-background-300",
     "ui:cursor-pointer",
     "ui:data-disabled:cursor-not-allowed",
     "ui:data-disabled:pointer-events-none",
@@ -38,19 +45,20 @@ export const comboboxTriggerRowVariants = cva(
      * (e.g. the input). Field auto-propagation mutates the DOM attribute, so
      * this CSS-attribute pattern picks it up without re-rendering React props.
      */
-    "ui:has-aria-invalid:outline-2",
+    "ui:has-aria-invalid:outline-1",
     "ui:has-aria-invalid:outline-solid",
     "ui:has-aria-invalid:outline-destructive",
     "ui:has-aria-invalid:outline-offset-0",
     "ui:has-aria-invalid:focus-visible:ring-0",
-    "ui:has-aria-invalid:focus-visible:ring-offset-0",
+    "ui:has-aria-invalid:aria-expanded:ring-0",
+    "ui:has-aria-invalid:has-[[aria-expanded=true]]:ring-0",
   ],
   {
     variants: {
       variant: {
         default: "",
         invalid:
-          "ui:outline-2 ui:outline-solid ui:outline-destructive ui:outline-offset-0",
+          "ui:outline-1 ui:outline-solid ui:outline-destructive ui:outline-offset-0",
       },
     },
     defaultVariants: { variant: "default" },

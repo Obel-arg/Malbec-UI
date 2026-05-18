@@ -42,7 +42,7 @@ export const radioGroupItemVariants = cva([
   "ui:disabled:cursor-not-allowed",
   "ui:disabled:pointer-events-none",
   "ui:disabled:opacity-50",
-  "ui:aria-invalid:outline-2",
+  "ui:aria-invalid:outline-1",
   "ui:aria-invalid:outline-solid",
   "ui:aria-invalid:outline-destructive",
   "ui:aria-invalid:outline-offset-0",

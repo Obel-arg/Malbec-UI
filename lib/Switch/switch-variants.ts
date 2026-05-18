@@ -30,7 +30,7 @@ export const switchRootVariants = cva(
     "ui:data-[state=checked]:bg-background-200",
     "ui:data-[state=checked]:border-background-300",
     /** Invalid state. */
-    "ui:aria-invalid:outline-2",
+    "ui:aria-invalid:outline-1",
     "ui:aria-invalid:outline-solid",
     "ui:aria-invalid:outline-destructive",
     "ui:aria-invalid:outline-offset-0",
