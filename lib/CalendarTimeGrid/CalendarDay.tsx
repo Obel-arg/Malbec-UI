@@ -6,6 +6,8 @@ import type { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Button } from "../Button/Button";
 import { cn } from "../utils/cn";
+import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
+import { CalendarTimeGridAllDayStrip } from "./CalendarTimeGridAllDayStrip";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
 import {
   gridBackgroundStyle,
@@ -109,11 +111,30 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
     const isTodayCol = today !== null && isSameDay(day, today);
     const dayKey = format(day, "yyyy-MM-dd");
 
+    /**
+     * Single-day timed events on this day. All-day / multi-day events that
+     * touch this day are surfaced separately in the all-day strip.
+     */
     const dayEvents = React.useMemo(
       () =>
-        events.filter((ev) => isSameDay(startOfDay(ev.start), startOfDay(day))),
+        events.filter(
+          (ev) =>
+            !isMultiDayOrAllDay(ev.start, ev.end, ev.allDay) &&
+            isSameDay(startOfDay(ev.start), startOfDay(day)),
+        ),
       [events, day],
     );
+
+    /** Events that overlap this single day, including spans starting earlier or ending later. */
+    const dayStripEvents = React.useMemo(() => {
+      const dayStart = startOfDay(day);
+      return events.filter((ev) => {
+        if (!isMultiDayOrAllDay(ev.start, ev.end, ev.allDay)) return false;
+        const evStart = startOfDay(ev.start);
+        const evEnd = startOfDay(ev.end);
+        return evStart <= dayStart && dayStart <= evEnd;
+      });
+    }, [events, day]);
 
     const selectable = Boolean(onSelectDay);
     const dayLabel = format(day, "PPP", { locale });
@@ -196,6 +217,12 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
             )}
           </div>
         </div>
+
+        <CalendarTimeGridAllDayStrip
+          days={[day]}
+          events={dayStripEvents}
+          onSelectEvent={onSelectEvent}
+        />
 
         <div className={cn(calendarTimeGridBodyRowVariants())}>
           <div

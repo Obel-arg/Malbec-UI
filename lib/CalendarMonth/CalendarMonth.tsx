@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   addDays,
   addMonths,
+  differenceInCalendarDays,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
@@ -31,9 +32,17 @@ import {
   calendarMonthHeaderCellVariants,
   calendarMonthHeaderRowVariants,
   calendarMonthRootVariants,
+  calendarMonthSpanBarVariants,
+  calendarMonthSpanOverlayVariants,
   calendarMonthTodayIndicatorVariants,
   calendarMonthWeekRowVariants,
 } from "./calendar-month-variants";
+import {
+  clipDayRangeToRow,
+  isMultiDayOrAllDay,
+  layoutCalendarSpans,
+  type CalendarSpanLayout,
+} from "./calendar-span-layout";
 import { Button } from "../Button/Button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -60,6 +69,17 @@ const EVENT_PILL_DOT_COLOR: Record<CalendarMonthEventColor, string> = {
 export interface CalendarMonthEvent {
   id?: string;
   date: Date;
+  /**
+   * Inclusive last day for multi-day events. When set and after `date`, the
+   * event renders as a horizontal bar spanning `date`…`endDate` (split at
+   * week boundaries).
+   */
+  endDate?: Date;
+  /**
+   * All-day event. Rendered as a horizontal bar (no time). Implied `true`
+   * when `endDate` is set after `date`.
+   */
+  allDay?: boolean;
   time?: string;
   title: string;
   color: CalendarMonthEventColor;
@@ -79,6 +99,20 @@ function dayKey(d: Date): string {
 
 const MONTH_DAY_VISIBLE_EVENT_LIMIT = 3;
 
+/**
+ * Geometry of the per-day events stack, used to align the absolutely-
+ * positioned span-bar overlay with the timed-event pills below it.
+ * Mirrors `calendar-month-variants.ts`: cell `p-2`, day number row `h-5`,
+ * stack `gap-1`, pill height 22px.
+ */
+const MONTH_SPAN_BAR_HEIGHT_PX = 22;
+const MONTH_SPAN_BAR_GAP_PX = 4;
+const MONTH_SPAN_BAR_ROW_PX = MONTH_SPAN_BAR_HEIGHT_PX + MONTH_SPAN_BAR_GAP_PX;
+/** Top of the first span lane inside a week row: cell pad (8) + day number (20) + gap (4). */
+const MONTH_SPAN_BAR_TOP_OFFSET_PX = 8 + 20 + MONTH_SPAN_BAR_GAP_PX;
+/** Visual indent of a span bar from the leftmost / rightmost cell edges. */
+const MONTH_SPAN_BAR_INSET_PX = 4;
+
 function compareCalendarMonthEvents(
   a: CalendarMonthEvent,
   b: CalendarMonthEvent,
@@ -87,6 +121,14 @@ function compareCalendarMonthEvents(
   const tb = b.time ?? "";
   if (ta !== tb) return ta.localeCompare(tb);
   return a.title.localeCompare(b.title);
+}
+
+function eventInclusiveEnd(ev: CalendarMonthEvent): Date {
+  return startOfDay(ev.endDate ?? ev.date);
+}
+
+function isSpanCalendarMonthEvent(ev: CalendarMonthEvent): boolean {
+  return isMultiDayOrAllDay(ev.date, eventInclusiveEnd(ev), ev.allDay);
 }
 
 /** Stable fallback so `map.get(k) ?? …` does not allocate a new `[]` each render. */
@@ -99,7 +141,12 @@ type CalendarMonthContextValue = {
   locale: Locale;
   weeks: Date[][];
   eventsByDayKey: Map<string, CalendarMonthEvent[]>;
+  /** Span (multi-day / all-day) event layouts per visible week. */
+  weekSpanLayouts: CalendarSpanLayout<CalendarMonthEvent>[];
+  /** dayKey → containing week index in `weeks`. */
+  weekIndexByDayKey: Map<string, number>;
   onSelectDay?: (day: Date) => void;
+  onSelectEvent?: (event: CalendarMonthEvent) => void;
   onMonthChange?: (month: Date) => void;
   yearSelectFrom: number;
   yearSelectTo: number;
@@ -132,6 +179,11 @@ export type CalendarMonthProps = React.ComponentProps<"div"> & {
   /** Weekday row labels. Defaults to English short names (MON, TUE, …). */
   locale?: Locale;
   onSelectDay?: (day: Date) => void;
+  /**
+   * Click handler for any event (timed pill or multi-day / all-day bar). When
+   * present, events become focusable / clickable.
+   */
+  onSelectEvent?: (event: CalendarMonthEvent) => void;
   /**
    * When set, renders a toolbar with month and year `<Select>`s above the grid.
    * Receives `startOfMonth` for the chosen month.
@@ -236,7 +288,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
             aria-label="Month"
             className={cn(
               calendarMonthToolbarSelectTriggerClassName,
-              "ui:m-0 ui:min-w-[150px] ui:flex-1 ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default ui:border-none ui:capitalize",
+              "ui:m-0 ui:min-w-37.5 ui:flex-1 ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default ui:border-none ui:capitalize",
             )}
           >
             <Select.Value />
@@ -264,7 +316,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
             aria-label="Year"
             className={cn(
               calendarMonthToolbarSelectTriggerClassName,
-              "ui:m-0 ui:min-w-[75px] ui:flex-1 ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default ui:border-none ui:tabular-nums",
+              "ui:m-0 ui:min-w-18.75 ui:flex-1 ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default ui:border-none ui:tabular-nums",
             )}
           >
             <Select.Value />
@@ -304,6 +356,7 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
       today: todayProp = new Date(),
       locale = enUS,
       onSelectDay,
+      onSelectEvent,
       onMonthChange,
       yearSelectBounds,
       children,
@@ -333,9 +386,11 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
               : new Date(todayProp as string | number),
           );
 
+    /** Timed (single-day, no `allDay`) events keyed by start day. */
     const eventsByDayKey = React.useMemo(() => {
       const map = new Map<string, CalendarMonthEvent[]>();
       for (const ev of events) {
+        if (isSpanCalendarMonthEvent(ev)) continue;
         const k = dayKey(
           startOfDay(
             ev.date instanceof Date
@@ -349,6 +404,44 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
       return map;
     }, [events]);
 
+    /** Multi-day / all-day events packed into lanes for each visible week. */
+    const weekSpanLayouts = React.useMemo<
+      CalendarSpanLayout<CalendarMonthEvent>[]
+    >(() => {
+      const spans = events.filter(isSpanCalendarMonthEvent);
+      return weeks.map((days) => {
+        const rowStart = days[0]!;
+        const segments = spans
+          .map((ev) => {
+            const clip = clipDayRangeToRow(
+              ev.date,
+              eventInclusiveEnd(ev),
+              rowStart,
+              7,
+            );
+            return clip ? { event: ev, ...clip } : null;
+          })
+          .filter(
+            (
+              s,
+            ): s is {
+              event: CalendarMonthEvent;
+              startIdx: number;
+              endIdx: number;
+            } => s !== null,
+          );
+        return layoutCalendarSpans(segments);
+      });
+    }, [events, weeks]);
+
+    const weekIndexByDayKey = React.useMemo(() => {
+      const m = new Map<string, number>();
+      weeks.forEach((days, wi) => {
+        for (const d of days) m.set(dayKey(d), wi);
+      });
+      return m;
+    }, [weeks]);
+
     const value = React.useMemo<CalendarMonthContextValue>(
       () => ({
         month,
@@ -357,7 +450,10 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
         locale,
         weeks,
         eventsByDayKey,
+        weekSpanLayouts,
+        weekIndexByDayKey,
         onSelectDay,
+        onSelectEvent,
         onMonthChange,
         yearSelectFrom,
         yearSelectTo,
@@ -369,7 +465,10 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
         locale,
         weeks,
         eventsByDayKey,
+        weekSpanLayouts,
+        weekIndexByDayKey,
         onSelectDay,
+        onSelectEvent,
         onMonthChange,
         yearSelectFrom,
         yearSelectTo,
@@ -474,13 +573,29 @@ const CalendarMonthBodyImpl = React.forwardRef<
 
 export type CalendarMonthWeekProps = React.ComponentProps<"div"> & {
   days: Date[];
+  /**
+   * Index of this week within the visible month. When omitted, derived from
+   * the parent `CalendarMonth` context.
+   */
+  weekIndex?: number;
   children?: React.ReactNode;
 };
 
 const CalendarMonthWeek = React.forwardRef<
   HTMLDivElement,
   CalendarMonthWeekProps
->(function CalendarMonthWeek({ className, days, children, ...rest }, ref) {
+>(function CalendarMonthWeek(
+  { className, days, weekIndex, children, ...rest },
+  ref,
+) {
+  const { weekSpanLayouts, weekIndexByDayKey, onSelectEvent } =
+    useCalendarMonthContext("CalendarMonth.Week");
+
+  const resolvedWeekIndex =
+    weekIndex ?? weekIndexByDayKey.get(dayKey(days[0]!)) ?? -1;
+  const spanLayout =
+    resolvedWeekIndex >= 0 ? weekSpanLayouts[resolvedWeekIndex] : undefined;
+
   return (
     <div
       ref={ref}
@@ -493,6 +608,50 @@ const CalendarMonthWeek = React.forwardRef<
         days.map((d, i) => (
           <CalendarMonthDay key={dayKey(d)} date={d} isLastInRow={i === 6} />
         ))}
+      {spanLayout && spanLayout.layout.length > 0 ? (
+        <div
+          aria-hidden="false"
+          data-slot="calendar-month-span-overlay"
+          className={cn(calendarMonthSpanOverlayVariants())}
+        >
+          {spanLayout.layout.map((item) => {
+            const ev = item.event;
+            const eventStart = startOfDay(ev.date);
+            const eventEnd = eventInclusiveEnd(ev);
+            const rowStart = startOfDay(days[0]!);
+            const rowEnd = startOfDay(days[6]!);
+            const continuesLeft =
+              differenceInCalendarDays(eventStart, rowStart) < 0;
+            const continuesRight =
+              differenceInCalendarDays(eventEnd, rowEnd) > 0;
+            const widthPct = ((item.endIdx - item.startIdx + 1) / 7) * 100;
+            const leftPct = (item.startIdx / 7) * 100;
+            return (
+              <CalendarMonthSpanBlock
+                key={
+                  ev.id ?? `span-${dayKey(eventStart)}-${item.lane}-${ev.title}`
+                }
+                color={ev.color}
+                title={ev.title}
+                continuesLeft={continuesLeft}
+                continuesRight={continuesRight}
+                onClick={onSelectEvent ? () => onSelectEvent(ev) : undefined}
+                style={{
+                  top:
+                    MONTH_SPAN_BAR_TOP_OFFSET_PX +
+                    item.lane * MONTH_SPAN_BAR_ROW_PX,
+                  height: MONTH_SPAN_BAR_HEIGHT_PX,
+                  left: `calc(${leftPct}% + ${continuesLeft ? 0 : MONTH_SPAN_BAR_INSET_PX}px)`,
+                  width: `calc(${widthPct}% - ${
+                    (continuesLeft ? 0 : MONTH_SPAN_BAR_INSET_PX) +
+                    (continuesRight ? 0 : MONTH_SPAN_BAR_INSET_PX)
+                  }px)`,
+                }}
+              />
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 });
@@ -521,8 +680,16 @@ const CalendarMonthDay = React.forwardRef<
   },
   ref,
 ) {
-  const { month, today, eventsByDayKey, onSelectDay, locale } =
-    useCalendarMonthContext("CalendarMonth.Day");
+  const {
+    month,
+    today,
+    eventsByDayKey,
+    weekSpanLayouts,
+    weekIndexByDayKey,
+    onSelectDay,
+    onSelectEvent,
+    locale,
+  } = useCalendarMonthContext("CalendarMonth.Day");
   const day = startOfDay(
     dateProp instanceof Date ? dateProp : new Date(dateProp as string | number),
   );
@@ -535,13 +702,20 @@ const CalendarMonthDay = React.forwardRef<
     dayEvents.length === 0
       ? dayEvents
       : [...dayEvents].sort(compareCalendarMonthEvents);
-  const visibleDayEvents = sortedDayEvents.slice(
-    0,
-    MONTH_DAY_VISIBLE_EVENT_LIMIT,
+  const weekIndex = weekIndexByDayKey.get(k);
+  const spanLanes =
+    weekIndex !== undefined ? (weekSpanLayouts[weekIndex]?.lanes ?? 0) : 0;
+  /**
+   * Reserve at least one timed-pill slot when there are timed events, even if
+   * span bars have already eaten the visible budget. Span bars sit on the
+   * absolute overlay, so the cell only needs to skip lanes for spacing.
+   */
+  const remainingForTimed = Math.max(
+    sortedDayEvents.length > 0 ? 1 : 0,
+    MONTH_DAY_VISIBLE_EVENT_LIMIT - spanLanes,
   );
-  const overflowDayEvents = sortedDayEvents.slice(
-    MONTH_DAY_VISIBLE_EVENT_LIMIT,
-  );
+  const visibleDayEvents = sortedDayEvents.slice(0, remainingForTimed);
+  const overflowDayEvents = sortedDayEvents.slice(remainingForTimed);
   const selectable = Boolean(onSelectDay);
 
   const handleActivate = () => {
@@ -595,14 +769,37 @@ const CalendarMonthDay = React.forwardRef<
           </span>
         )}
       </div>
-      {dayEvents.length > 0 ? (
+      {dayEvents.length > 0 || spanLanes > 0 ? (
         <div className={cn(calendarMonthEventsStackVariants())}>
+          {/**
+           * Invisible spacers reserving vertical space for the week's span-bar
+           * lanes, so timed-event pills sit directly below the bars (which are
+           * rendered on the week-level absolute overlay).
+           */}
+          {spanLanes > 0
+            ? Array.from({ length: spanLanes }, (_, i) => (
+                <div
+                  key={`span-lane-${i}`}
+                  aria-hidden
+                  className="ui:h-5.5 ui:shrink-0"
+                />
+              ))
+            : null}
           {visibleDayEvents.map((ev) => (
             <CalendarMonthEventBlock
               key={ev.id ?? `${k}-${ev.time}-${ev.title}`}
               color={ev.color}
               time={ev.time}
               title={ev.title}
+              onClick={
+                onSelectEvent
+                  ? (e) => {
+                      e.stopPropagation();
+                      onSelectEvent(ev);
+                    }
+                  : undefined
+              }
+              className={onSelectEvent ? "ui:cursor-pointer" : undefined}
             />
           ))}
           {overflowDayEvents.length > 0 ? (
@@ -611,7 +808,7 @@ const CalendarMonthDay = React.forwardRef<
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="ui:w-full ui:p-0 ui:text-left ui:justify-start ui:h-[22px]"
+                  className="ui:w-full ui:p-0 ui:text-left ui:justify-start ui:h-5.5"
                   aria-label={`${overflowDayEvents.length} more events`}
                   onClick={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
@@ -624,7 +821,7 @@ const CalendarMonthDay = React.forwardRef<
                 align="start"
                 side="bottom"
                 sideOffset={6}
-                className="ui:flex ui:min-w-[220px] ui:max-w-[min(320px,var(--radix-popover-content-available-width))] ui:flex-col ui:gap-1 ui:p-2"
+                className="ui:flex ui:min-w-55 ui:max-w-[min(320px,var(--radix-popover-content-available-width))] ui:flex-col ui:gap-1 ui:p-2"
               >
                 {overflowDayEvents.map((ev, i) => (
                   <CalendarMonthEventBlock
@@ -632,6 +829,15 @@ const CalendarMonthDay = React.forwardRef<
                     color={ev.color}
                     time={ev.time}
                     title={ev.title}
+                    onClick={
+                      onSelectEvent
+                        ? (e) => {
+                            e.stopPropagation();
+                            onSelectEvent(ev);
+                          }
+                        : undefined
+                    }
+                    className={onSelectEvent ? "ui:cursor-pointer" : undefined}
                   />
                 ))}
               </Popover.Content>
@@ -645,11 +851,25 @@ const CalendarMonthDay = React.forwardRef<
 
 // ——— Event (pill)
 
-export type CalendarMonthEventBlockProps = {
+export type CalendarMonthEventBlockProps = Omit<
+  React.ComponentPropsWithoutRef<"div">,
+  "color" | "title"
+> & {
   color: CalendarMonthEventColor;
   time?: string;
   title: string;
-  className?: string;
+};
+
+export type CalendarMonthSpanBlockProps = Omit<
+  React.ComponentPropsWithoutRef<"div">,
+  "color" | "title"
+> & {
+  color: CalendarMonthEventColor;
+  title: string;
+  /** Bar continues from the previous week (square left edge). */
+  continuesLeft?: boolean;
+  /** Bar continues into the next week (square right edge). */
+  continuesRight?: boolean;
 };
 
 const eventPillClassName =
@@ -677,7 +897,7 @@ const CalendarMonthEventBlock = React.forwardRef<
        */}
       <span
         aria-hidden
-        className="ui:inline-block ui:h-[6px] ui:min-h-[6px] ui:min-w-[6px] ui:w-[6px] ui:shrink-0 ui:rounded-full"
+        className="ui:inline-block ui:h-1.5 ui:min-h-1.5 ui:min-w-1.5 ui:w-1.5 ui:shrink-0 ui:rounded-full"
         style={{ backgroundColor: EVENT_PILL_DOT_COLOR[color] }}
       />
       {time ? (
@@ -696,6 +916,50 @@ const CalendarMonthEventBlock = React.forwardRef<
 });
 CalendarMonthEventBlock.displayName = "CalendarMonth.Event";
 
+// ——— Span bar (multi-day / all-day)
+
+const CalendarMonthSpanBlock = React.forwardRef<
+  HTMLDivElement,
+  CalendarMonthSpanBlockProps
+>(function CalendarMonthSpanBlock(
+  {
+    color,
+    title,
+    continuesLeft = false,
+    continuesRight = false,
+    className,
+    onClick,
+    ...rest
+  },
+  ref,
+) {
+  return (
+    <Badge
+      ref={ref}
+      data-slot="calendar-month-span"
+      variant={color as BadgeVariant}
+      onClick={onClick}
+      className={cn(
+        calendarMonthSpanBarVariants({
+          continuesLeft,
+          continuesRight,
+          interactive: Boolean(onClick),
+        }),
+        className,
+      )}
+      {...rest}
+    >
+      <Badge.Text
+        tone="accent"
+        className="ui:min-w-0 ui:flex-1 ui:truncate ui:text-left"
+      >
+        {title}
+      </Badge.Text>
+    </Badge>
+  );
+});
+CalendarMonthSpanBlock.displayName = "CalendarMonth.SpanEvent";
+
 const CalendarMonth = Object.assign(CalendarMonthRoot, {
   Header: CalendarMonthHeaderImpl,
   Toolbar: CalendarMonthToolbarImpl,
@@ -703,6 +967,7 @@ const CalendarMonth = Object.assign(CalendarMonthRoot, {
   Week: CalendarMonthWeek,
   Day: CalendarMonthDay,
   Event: CalendarMonthEventBlock,
+  SpanEvent: CalendarMonthSpanBlock,
 }) as React.ForwardRefExoticComponent<
   React.PropsWithoutRef<CalendarMonthProps> &
     React.RefAttributes<HTMLDivElement>
@@ -713,6 +978,7 @@ const CalendarMonth = Object.assign(CalendarMonthRoot, {
   Week: typeof CalendarMonthWeek;
   Day: typeof CalendarMonthDay;
   Event: typeof CalendarMonthEventBlock;
+  SpanEvent: typeof CalendarMonthSpanBlock;
 };
 
 export { CalendarMonth };
