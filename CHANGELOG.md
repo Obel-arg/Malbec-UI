@@ -2,6 +2,13 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.10.0 — 2026-06-17
+
+- patch(ci): split release workflow into release-PR + publish stages
+- minor(inbox): add Inbox compound component matching Figma notification surface
+- minor(calendar): support multi-day and all-day events across month/week/day views
+- chore(package.json): make public
+
 ## v1.9.0 — 2026-05-18
 
 - minor(file-dropzone): add FileDropzone component with disabled and invalid states
