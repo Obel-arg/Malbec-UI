@@ -4,6 +4,15 @@ on:
   push:
     branches:
       - main
+  # Manual recovery: trigger from the Actions tab with a version (e.g. `v1.10.0`)
+  # to skip detection and run the publish job directly. Useful when a release
+  # commit landed on main but the auto-detect missed it (merge-vs-squash, etc.).
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g. v1.10.0). Must already be in package.json on main."
+        required: true
+        type: string
 
 # Two-stage release flow so we never push directly to a protected `main`:
 #   1. `release-pr`: when a `minor()/major()/patch()` commit lands on main,
@@ -31,24 +40,40 @@ jobs:
         id: detect
         run: |
           set -e
-          HEAD_SUBJECT=$(git log -1 --pretty=%s)
 
-          # Stage 2: the squashed release PR has landed on main → publish.
-          if printf '%s' "$HEAD_SUBJECT" | grep -Eq '^chore\(release\): v[0-9]+\.[0-9]+\.[0-9]+'; then
-            VERSION=$(printf '%s' "$HEAD_SUBJECT" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1)
-            echo "Detected release commit; will publish ${VERSION}."
+          # Manual dispatch always takes the publish path with the given version.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.version }}"
+            echo "Manual dispatch; publishing ${VERSION}."
             echo "mode=publish" >> "$GITHUB_OUTPUT"
             echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # Stage 1: any releasable commits since last tag → open release PR.
           PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
           if [ -n "$PREV_TAG" ]; then
             RANGE="${PREV_TAG}..HEAD"
           else
             RANGE="HEAD"
           fi
+
+          # Stage 2: any `chore(release): vX.Y.Z` commit in the range without a
+          # matching tag → publish. Scans the full range (not just HEAD) so it
+          # handles both squash and standard merge commits.
+          RELEASE_SUBJECT=$(git log $RANGE --pretty=format:"%s" | grep -E '^chore\(release\): v[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)
+          if [ -n "$RELEASE_SUBJECT" ]; then
+            VERSION=$(printf '%s' "$RELEASE_SUBJECT" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+            if git rev-parse -q --verify "refs/tags/${VERSION}" >/dev/null; then
+              echo "Release commit for ${VERSION} found but tag already exists; skipping."
+            else
+              echo "Pending release commit for ${VERSION}; will publish."
+              echo "mode=publish" >> "$GITHUB_OUTPUT"
+              echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          # Stage 1: releasable commits since last tag → open release PR.
           SUBJECTS=$(git log $RANGE --no-merges --pretty=format:"%s")
 
           BUMP=""
