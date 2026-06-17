@@ -5,27 +5,50 @@ on:
     branches:
       - main
 
+# Two-stage release flow so we never push directly to a protected `main`:
+#   1. `release-pr`: when a `minor()/major()/patch()` commit lands on main,
+#      open a release branch + PR with the version bump and CHANGELOG entry,
+#      and enable auto-merge (squash). The PR satisfies the repo rule that
+#      "changes must be made through a pull request".
+#   2. `publish`: when the squashed release commit itself lands on main
+#      (HEAD subject starts with `chore(release): v…`), tag, `pnpm publish`,
+#      and create the GitHub Release. Tags are pushed to `refs/tags/*`,
+#      which is not gated by the branch ruleset.
+
 jobs:
   detect:
     runs-on: ubuntu-latest
     outputs:
+      mode: ${{ steps.detect.outputs.mode }}
       bump: ${{ steps.detect.outputs.bump }}
+      version: ${{ steps.detect.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Detect bump level since last tag
+      - name: Detect mode (release-pr | publish | none)
         id: detect
         run: |
           set -e
+          HEAD_SUBJECT=$(git log -1 --pretty=%s)
+
+          # Stage 2: the squashed release PR has landed on main → publish.
+          if printf '%s' "$HEAD_SUBJECT" | grep -Eq '^chore\(release\): v[0-9]+\.[0-9]+\.[0-9]+'; then
+            VERSION=$(printf '%s' "$HEAD_SUBJECT" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+            echo "Detected release commit; will publish ${VERSION}."
+            echo "mode=publish" >> "$GITHUB_OUTPUT"
+            echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Stage 1: any releasable commits since last tag → open release PR.
           PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
           if [ -n "$PREV_TAG" ]; then
             RANGE="${PREV_TAG}..HEAD"
           else
             RANGE="HEAD"
           fi
-
           SUBJECTS=$(git log $RANGE --no-merges --pretty=format:"%s")
 
           BUMP=""
@@ -38,19 +61,21 @@ jobs:
           fi
 
           if [ -z "$BUMP" ]; then
-            echo "No releasable commits since ${PREV_TAG:-<root>}; skipping publish."
+            echo "No releasable commits since ${PREV_TAG:-<root>}; skipping."
+            echo "mode=" >> "$GITHUB_OUTPUT"
           else
-            echo "Detected bump level: $BUMP"
+            echo "Releasable commits found; will open release PR (${BUMP})."
+            echo "mode=release-pr" >> "$GITHUB_OUTPUT"
+            echo "bump=${BUMP}" >> "$GITHUB_OUTPUT"
           fi
-          echo "bump=$BUMP" >> "$GITHUB_OUTPUT"
 
-  publish:
+  release-pr:
     needs: detect
-    if: needs.detect.outputs.bump != ''
+    if: needs.detect.outputs.mode == 'release-pr'
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      packages: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,18 +90,11 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-          registry-url: https://npm.pkg.github.com
-          scope: '@obel-arg'
-
-      - name: Configure git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
+      - name: Build (verify before opening release PR)
         run: pnpm build
 
       - name: Bump version
@@ -120,21 +138,77 @@ jobs:
           } > CHANGELOG.md.new
           mv CHANGELOG.md.new CHANGELOG.md
 
+          # Write notes to a file so `gh pr create --body-file` survives any
+          # backticks / quotes inside commit subjects.
           {
-            echo "notes<<__EOF__"
-            echo "$NOTES"
-            echo "__EOF__"
-          } >> "$GITHUB_OUTPUT"
+            printf '## Notes\n\n%s\n' "$NOTES"
+          } > /tmp/release-notes.md
 
-      - name: Commit, tag and push
+      - name: Open release PR with auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -e
           NEW_VERSION="${{ steps.bump.outputs.new_version }}"
-          git add package.json CHANGELOG.md
-          git commit -m "chore(release): ${NEW_VERSION} [skip ci]"
-          git tag "${NEW_VERSION}"
-          git push --follow-tags origin HEAD:${{ github.ref_name }}
+          BRANCH="release/${NEW_VERSION}"
 
-      - name: Publish
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "$BRANCH"
+          git add package.json CHANGELOG.md
+          git commit -m "chore(release): ${NEW_VERSION}"
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "chore(release): ${NEW_VERSION}" \
+            --body-file /tmp/release-notes.md
+
+          # Squash so the resulting commit subject keeps the `chore(release): vX.Y.Z`
+          # prefix that the Stage 2 detection step looks for.
+          gh pr merge "$BRANCH" --auto --squash --delete-branch
+
+  publish:
+    needs: detect
+    if: needs.detect.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          registry-url: https://npm.pkg.github.com
+          scope: '@obel-arg'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Tag and push
+        run: |
+          VERSION="${{ needs.detect.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "${VERSION}"
+          git push origin "${VERSION}"
+
+      - name: Publish to GitHub Packages
         run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -142,7 +216,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.bump.outputs.new_version }}
-          name: ${{ steps.bump.outputs.new_version }}
-          body: ${{ steps.changelog.outputs.notes }}
+          tag_name: ${{ needs.detect.outputs.version }}
+          name: ${{ needs.detect.outputs.version }}
           generate_release_notes: true
