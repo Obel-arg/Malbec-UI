@@ -28,8 +28,42 @@ const demoWeekAnchor = new Date(2026, 3, 28);
 /**
  * Demo grid: días antes/después con eventos dispersos; el 29 abr tiene 5 (incl. dos solapados tarde).
  * Mes JS 3 = abril; 4 = mayo.
+ *
+ * Incluye además eventos `allDay` y multi-día para demostrar el strip superior y las barras
+ * que cruzan días/semanas (estilo Google Calendar).
  */
 const demoEvents: CalendarTimeGridEvent[] = [
+  // —— all-day y multi-día ——
+  {
+    id: "span-ocupado",
+    title: "Ocupado — workshop",
+    start: new Date(2026, 3, 27, 0, 0, 0),
+    end: new Date(2026, 3, 29, 23, 59, 0),
+    color: "yellow",
+  },
+  {
+    id: "span-vacaciones",
+    title: "Vacaciones",
+    start: new Date(2026, 3, 30, 0, 0, 0),
+    end: new Date(2026, 4, 4, 23, 59, 0),
+    color: "emerald",
+  },
+  {
+    id: "allday-feriado",
+    title: "Feriado nacional",
+    start: new Date(2026, 4, 1, 0, 0, 0),
+    end: new Date(2026, 4, 1, 23, 59, 0),
+    allDay: true,
+    color: "red",
+  },
+  {
+    id: "allday-cumple",
+    title: "Cumple de Caro",
+    start: new Date(2026, 3, 24, 0, 0, 0),
+    end: new Date(2026, 3, 24, 23, 59, 0),
+    allDay: true,
+    color: "violet",
+  },
   // —— antes (abr 22–28) ——
   {
     id: "pre-22-a",
@@ -228,13 +262,20 @@ const demoEvents: CalendarTimeGridEvent[] = [
 function timeGridEventsToMonthEvents(
   events: CalendarTimeGridEvent[],
 ): CalendarMonthEvent[] {
-  return events.map((ev) => ({
-    id: ev.id,
-    date: startOfDay(ev.start),
-    time: format(ev.start, "HH:mm"),
-    title: ev.title,
-    color: ev.color ?? "emerald",
-  }));
+  return events.map((ev) => {
+    const startDay = startOfDay(ev.start);
+    const endDay = startOfDay(ev.end);
+    const isSpan = ev.allDay || endDay.getTime() > startDay.getTime();
+    return {
+      id: ev.id,
+      date: startDay,
+      endDate: isSpan ? endDay : undefined,
+      allDay: ev.allDay,
+      time: isSpan ? undefined : format(ev.start, "HH:mm"),
+      title: ev.title,
+      color: ev.color ?? "emerald",
+    };
+  });
 }
 
 const demoDayWithEvents = new Date(2026, 3, 29);
@@ -472,6 +513,25 @@ export const DayView: Story = {
 export const MonthGrid: Story = {
   name: "Month (calendarMonth)",
   render: () => <MonthWithSwitcher />,
+};
+
+function MonthMultiDayShowcase() {
+  const [month, setMonth] = React.useState(() => startOfMonth(demoWeekAnchor));
+  return (
+    <div className="ui:mx-auto ui:w-full ui:max-w-[min(100%,1197px)]">
+      <CalendarMonth
+        month={month}
+        events={timeGridEventsToMonthEvents(demoEvents)}
+        locale={es}
+        onMonthChange={setMonth}
+      />
+    </div>
+  );
+}
+
+export const MonthMultiDay: Story = {
+  name: "Month — multi-día / all-day",
+  render: () => <MonthMultiDayShowcase />,
 };
 
 export const FormatsWithTabs: Story = {

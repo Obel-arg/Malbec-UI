@@ -13,6 +13,8 @@ import type { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Button } from "../Button/Button";
 import { cn } from "../utils/cn";
+import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
+import { CalendarTimeGridAllDayStrip } from "./CalendarTimeGridAllDayStrip";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
 import {
   gridBackgroundStyle,
@@ -151,9 +153,11 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
         ? `${format(weekAnchor, "d MMM", { locale })} – ${format(weekRangeEnd, "d MMM yyyy", { locale })}`
         : `${format(weekAnchor, "d MMM yyyy", { locale })} – ${format(weekRangeEnd, "d MMM yyyy", { locale })}`;
 
+    /** Single-day timed events bucketed by start day. Span events are surfaced in the all-day strip. */
     const eventsByDay = React.useMemo(() => {
       const map = new Map<string, CalendarTimeGridEvent[]>();
       for (const ev of events) {
+        if (isMultiDayOrAllDay(ev.start, ev.end, ev.allDay)) continue;
         const k = format(startOfDay(ev.start), "yyyy-MM-dd");
         const list = map.get(k) ?? [];
         list.push(ev);
@@ -256,6 +260,12 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
             );
           })}
         </div>
+
+        <CalendarTimeGridAllDayStrip
+          days={days}
+          events={events}
+          onSelectEvent={onSelectEvent}
+        />
 
         <div className={cn(calendarTimeGridBodyRowVariants())}>
           <div

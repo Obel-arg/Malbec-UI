@@ -23,6 +23,7 @@ export type { CalendarWeekProps } from "./CalendarTimeGrid/CalendarWeek";
 export type { CalendarDayProps } from "./CalendarTimeGrid/CalendarDay";
 export { formatGmtOffsetLabel } from "./CalendarTimeGrid/calendar-timegrid-utils";
 export { DatePicker } from "./DatePicker/DatePicker";
+export { Inbox } from "./Inbox/Inbox";
 export { Input } from "./Input/Input";
 export { InputOtp } from "./InputOtp/InputOtp";
 export { Label } from "./Label/Label";
@@ -200,6 +201,25 @@ export type {
 } from "./Field/Field";
 export type { FormProps } from "./Form/Form";
 export type { FieldLayoutProps } from "./Form/FieldLayout";
+export type {
+  InboxProps,
+  InboxFilterItem,
+  InboxMoreActionItem,
+  InboxTabsProps,
+  InboxTabProps,
+  InboxListProps,
+  InboxItemProps,
+  InboxItemAvatarProps,
+  InboxItemContentProps,
+  InboxItemTitleProps,
+  InboxItemBodyProps,
+  InboxItemActionsProps,
+  InboxItemFooterProps,
+  InboxItemUnreadDotProps,
+  InboxItemHoverActionsProps,
+  InboxItemHoverActionProps,
+  InboxSkeletonProps,
+} from "./Inbox/Inbox";
 export type {
   InputProps,
   InputIconProps,

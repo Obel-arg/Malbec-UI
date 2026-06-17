@@ -66,3 +66,47 @@ export const calendarTimeGridColumnVariants = cva(
 export const calendarTimeGridTodayBadgeVariants = cva(
   "ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:bg-primary ui:text-[12px] ui:font-semibold ui:leading-none ui:tabular-nums ui:text-primary-foreground ui:normal-case",
 );
+
+/** Container row holding the gutter label + per-column track for span (all-day / multi-day) bars. */
+export const calendarTimeGridAllDayRowVariants = cva(
+  "ui:flex ui:shrink-0 ui:border-b ui:border-[#e0e0e0] ui:bg-[#f9f9f9]",
+);
+
+export const calendarTimeGridAllDayGutterVariants = cva(
+  "ui:flex ui:w-14 ui:shrink-0 ui:items-start ui:justify-end ui:border-r ui:border-[#e0e0e0] ui:px-2 ui:pt-1.5 ui:pb-1",
+);
+
+/** Per-week (or per-day) track absolutely positioned span bars sit inside. */
+export const calendarTimeGridAllDayTrackVariants = cva(
+  "ui:relative ui:flex-1",
+);
+
+/** Same look as `calendarMonthSpanBarVariants` but locally owned to keep import boundaries clean. */
+export const calendarTimeGridAllDayBarVariants = cva(
+  [
+    "ui:absolute ui:flex ui:items-center ui:gap-1 ui:overflow-hidden",
+    "ui:border-transparent ui:px-2 ui:py-0 ui:text-[11px] ui:font-medium ui:leading-[normal] ui:tracking-normal",
+    "ui:min-w-0",
+  ],
+  {
+    variants: {
+      continuesLeft: {
+        true: "ui:rounded-l-none",
+        false: "ui:rounded-l-[4px]",
+      },
+      continuesRight: {
+        true: "ui:rounded-r-none",
+        false: "ui:rounded-r-[4px]",
+      },
+      interactive: {
+        true: "ui:cursor-pointer ui:hover:brightness-95",
+        false: "",
+      },
+    },
+    defaultVariants: {
+      continuesLeft: false,
+      continuesRight: false,
+      interactive: false,
+    },
+  },
+);

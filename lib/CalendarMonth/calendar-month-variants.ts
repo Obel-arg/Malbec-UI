@@ -31,7 +31,45 @@ export const calendarMonthHeaderCellVariants = cva(
 );
 
 export const calendarMonthWeekRowVariants = cva(
-  "ui:flex ui:h-[140px] ui:shrink-0",
+  "ui:relative ui:flex ui:min-h-[140px] ui:shrink-0",
+);
+
+/** Pointer-event-transparent absolute layer used to draw span (multi-day) bars across day cells. */
+export const calendarMonthSpanOverlayVariants = cva(
+  "ui:pointer-events-none ui:absolute ui:inset-0 ui:z-10",
+);
+
+/**
+ * Span bar visual. Outer corners flatten when the bar continues into the
+ * previous/next week (mirrors Google Calendar's multi-week treatment).
+ */
+export const calendarMonthSpanBarVariants = cva(
+  [
+    "ui:pointer-events-auto ui:absolute ui:flex ui:items-center ui:gap-1 ui:overflow-hidden",
+    "ui:border-transparent ui:px-2 ui:py-0 ui:text-[11px] ui:font-medium ui:leading-[normal] ui:tracking-normal",
+    "ui:min-w-0",
+  ],
+  {
+    variants: {
+      continuesLeft: {
+        true: "ui:rounded-l-none",
+        false: "ui:rounded-l-[4px]",
+      },
+      continuesRight: {
+        true: "ui:rounded-r-none",
+        false: "ui:rounded-r-[4px]",
+      },
+      interactive: {
+        true: "ui:cursor-pointer ui:hover:brightness-95",
+        false: "",
+      },
+    },
+    defaultVariants: {
+      continuesLeft: false,
+      continuesRight: false,
+      interactive: false,
+    },
+  },
 );
 
 export const calendarMonthDayCellVariants = cva(
