@@ -814,6 +814,15 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
             backgroundColor: groupContainerBg(ev.color),
             borderColor: groupContainerBorder(ev.color),
             borderStyle: tourUnconfirmed ? "dashed" : undefined,
+            // Unconfirmed: square top + no top border so the container reads as
+            // continuing straight down from the header (one shape, not two boxes).
+            ...(tourUnconfirmed
+              ? {
+                  borderTopWidth: 0,
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 0,
+                }
+              : null),
           }}
         />
       ) : null}
