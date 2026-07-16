@@ -97,9 +97,9 @@ function OverlappingToursShowcase() {
       endDate: addDays(base, 7), // spills into next week
       color: "violet",
     },
-    { parentId: "fecha-europa", date: addDays(base, 2), time: "19:30", title: "Berlín", color: "blue" },
-    { parentId: "fecha-europa", date: addDays(base, 3), time: "18:00", title: "París", color: "blue" },
-    { parentId: "fecha-europa", date: addDays(base, 6), time: "20:00", title: "Madrid", color: "blue" },
+    { parentId: "fecha-europa", date: addDays(base, 2), time: "19:30", title: "Berlín", color: "orange" },
+    { parentId: "fecha-europa", date: addDays(base, 3), time: "18:00", title: "París", color: "orange" },
+    { parentId: "fecha-europa", date: addDays(base, 6), time: "20:00", title: "Madrid", color: "orange" },
   ];
 
   return (
