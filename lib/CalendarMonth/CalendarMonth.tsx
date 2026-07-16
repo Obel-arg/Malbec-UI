@@ -838,6 +838,11 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
           height: MONTH_SPAN_BAR_HEIGHT_PX,
           left: header.left,
           width: header.width,
+          // Square the bottom corners so the header flows into the container
+          // below as one continuous shape (unconfirmed tours only).
+          ...(tourUnconfirmed && hasContainer
+            ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }
+            : null),
         }}
       />
       {cols.map((col) => {
