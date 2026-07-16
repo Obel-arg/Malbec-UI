@@ -123,6 +123,61 @@ export const OverlappingTours: Story = {
 };
 
 /**
+ * Unconfirmed (tentative) events render with no fill and a dashed accent
+ * outline (`confirmed: false`); a tentative tour also gets a dashed container.
+ * Here a confirmed tour has a mix of confirmed / tentative shows, next to a
+ * fully tentative tour.
+ */
+function UnconfirmedShowcase() {
+  const [month, setMonth] = React.useState(() => startOfMonth(anchor));
+  const base = new Date(2026, 5, 15); // Mon Jun 15
+  const events: CalendarMonthEvent[] = [
+    {
+      id: "gira-confirmada",
+      title: "Gira Confirmada",
+      date: base,
+      endDate: addDays(base, 4),
+      color: "sage",
+    },
+    { parentId: "gira-confirmada", date: addDays(base, 0), time: "21:00", title: "Rosario", color: "yellow" },
+    { parentId: "gira-confirmada", date: addDays(base, 1), time: "21:00", title: "Córdoba", color: "yellow" },
+    { parentId: "gira-confirmada", date: addDays(base, 3), time: "20:00", title: "Mendoza (tentativa)", color: "yellow", confirmed: false },
+    { parentId: "gira-confirmada", date: addDays(base, 4), time: "20:00", title: "Neuquén (tentativa)", color: "yellow", confirmed: false },
+    {
+      id: "gira-tentativa",
+      title: "Gira Tentativa",
+      date: addDays(base, 2),
+      endDate: addDays(base, 6),
+      color: "violet",
+      confirmed: false,
+    },
+    { parentId: "gira-tentativa", date: addDays(base, 2), time: "19:30", title: "Berlín", color: "orange", confirmed: false },
+    { parentId: "gira-tentativa", date: addDays(base, 5), time: "18:00", title: "Madrid", color: "orange", confirmed: false },
+    // A standalone tentative event (no tour).
+    { date: addDays(base, 1), time: "10:00", title: "Reunión a confirmar", color: "blue", confirmed: false },
+  ];
+
+  return (
+    <Frame>
+      <CalendarMonth
+        month={month}
+        events={events}
+        locale={es}
+        onMonthChange={setMonth}
+        onSelectEvent={(ev) => console.log("select", ev.title)}
+        today={startOfDay(new Date(2026, 5, 16))}
+        weekStartsOn={1}
+      />
+    </Frame>
+  );
+}
+
+export const Unconfirmed: Story = {
+  name: "Unconfirmed / tentative (dashed outline)",
+  render: () => <UnconfirmedShowcase />,
+};
+
+/**
  * A day under a tour with more shows than fit: extra shows collapse into a
  * `+N` chip inside the container that opens a popover.
  */

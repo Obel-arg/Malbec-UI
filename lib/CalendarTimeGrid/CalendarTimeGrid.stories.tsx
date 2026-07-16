@@ -275,6 +275,7 @@ function timeGridEventsToMonthEvents(
       title: ev.title,
       color: ev.color ?? "emerald",
       parentId: ev.parentId,
+      confirmed: ev.confirmed,
     };
   });
 }
@@ -559,20 +560,21 @@ const tourAcrossViewsEvents: CalendarTimeGridEvent[] = [
   },
   ...(
     [
-      [0, "QA Globo Rosario"],
-      [1, "QA Globo Córdoba"],
-      [2, "QA Globo Mendoza"],
-      [3, "QA Globo Neuquén"],
-      [4, "QA Globo Bariloche"],
-      [5, "QA Globo Ushuaia"],
+      [0, "QA Globo Rosario", true],
+      [1, "QA Globo Córdoba", true],
+      [2, "QA Globo Mendoza", true],
+      [3, "QA Globo Neuquén", true],
+      [4, "QA Globo Bariloche", false], // tentativa
+      [5, "QA Globo Ushuaia", false], // tentativa
     ] as const
-  ).map(([offset, title]) => ({
+  ).map(([offset, title, confirmed]) => ({
     id: `gira-show-${offset}`,
     parentId: "gira-qa-globo",
     title,
     start: new Date(2026, 3, 27 + offset, 21, 0, 0),
     end: new Date(2026, 3, 27 + offset, 23, 0, 0),
     color: "yellow" as const,
+    confirmed,
   })),
 ];
 
