@@ -2,6 +2,11 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.11.0 — 2026-07-16
+
+- minor(calendar): group shows under their tour via `parentId` — a tinted container spanning the tour's dates in the month view, and shared tour color + accent rail in the day/week time grid
+- minor(calendar): add unconfirmed/tentative event state (`confirmed: false`) rendered as a fill-less, dashed-outline chip for shows and tours
+
 ## v1.10.0 — 2026-06-17
 
 - patch(ci): split release workflow into release-PR + publish stages
