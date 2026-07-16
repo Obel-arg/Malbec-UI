@@ -61,7 +61,7 @@ export type CalendarMonthEventColor =
  * lighter than any show chip so the child chips stay legible on top of it.
  */
 function groupContainerBg(color: CalendarMonthEventColor): string {
-  return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 6%, transparent)`;
+  return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 8%, transparent)`;
 }
 /** Container border matches the tour header chip's fill (the `Badge` tint). */
 function groupContainerBorder(color: CalendarMonthEventColor): string {
@@ -881,7 +881,9 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                               }
                             : undefined
                         }
-                        className={onSelectEvent ? "ui:cursor-pointer" : undefined}
+                        className={
+                          onSelectEvent ? "ui:cursor-pointer" : undefined
+                        }
                       />
                     ))}
                   </Popover.Content>
