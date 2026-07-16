@@ -1247,6 +1247,8 @@ const CalendarMonthEventBlock = React.forwardRef<
       )}
       style={{
         ...(unconfirmed ? unconfirmedChipStyle(color) : null),
+        // Shows nested in a tour (they carry a rail) take a thinner outline.
+        ...(unconfirmed && railColor ? { borderWidth: 1 } : null),
         ...style,
       }}
       {...rest}
