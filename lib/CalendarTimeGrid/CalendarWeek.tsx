@@ -17,6 +17,7 @@ import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
 import { CalendarTimeGridAllDayStrip } from "./CalendarTimeGridAllDayStrip";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
 import {
+  buildTourColorMap,
   gridBackgroundStyle,
   layoutTimedEventsForDayColumn,
   timedEventHorizontalStyle,
@@ -41,6 +42,7 @@ import {
   calendarTimeGridTodayBadgeVariants,
 } from "./calendar-timegrid-variants";
 import { CalendarTimeGridEventBlock } from "./CalendarTimeGridEventBlock";
+import { timeGridEventAccentColor } from "./calendar-timegrid-colors";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type CalendarWeekProps = Omit<
@@ -165,6 +167,12 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
       }
       return map;
     }, [events]);
+
+    /** Tour id → color, so child shows can inherit their tour's color. */
+    const tourColorMap = React.useMemo(
+      () => buildTourColorMap(events),
+      [events],
+    );
 
     const resolvedTimeZoneLabel = React.useMemo(() => {
       if (timeZoneLabel === null) return null;
@@ -366,6 +374,9 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
                     hourHeightPx,
                   ).map((item) => {
                     const ev = item.event;
+                    const tourColor = ev.parentId
+                      ? tourColorMap.get(ev.parentId)
+                      : undefined;
                     return (
                       <CalendarTimeGridEventBlock
                         key={ev.id ?? `${key}-${ev.start.toISOString()}`}
@@ -373,7 +384,12 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
                         start={ev.start}
                         end={ev.end}
                         columnCount={item.columnCount}
-                        color={ev.color}
+                        color={tourColor ?? ev.color}
+                        railColor={
+                          tourColor
+                            ? timeGridEventAccentColor(tourColor)
+                            : undefined
+                        }
                         className={cn(
                           "ui:absolute",
                           onSelectEvent && "ui:cursor-pointer",

@@ -1,11 +1,33 @@
 import { isSameDay, startOfDay } from "date-fns";
 import type { CSSProperties } from "react";
-import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
+import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
+import type {
+  CalendarTimeGridEvent,
+  CalendarTimeGridEventColor,
+} from "./calendar-timegrid-types";
 import {
   eventHeightPx,
   eventTopPx,
   minutesSinceGridStart,
 } from "./calendar-timegrid-utils";
+
+/**
+ * Map of tour id → color for span (all-day / multi-day) events that own child
+ * shows. A timed event whose `parentId` matches a key inherits that color.
+ * Defaults to `"blue"` to match the all-day strip's fallback bar color.
+ */
+export function buildTourColorMap(
+  events: CalendarTimeGridEvent[],
+): Map<string, CalendarTimeGridEventColor> {
+  const map = new Map<string, CalendarTimeGridEventColor>();
+  for (const ev of events) {
+    if (!ev.id) continue;
+    if (isMultiDayOrAllDay(ev.start, ev.end, ev.allDay)) {
+      map.set(ev.id, ev.color ?? "blue");
+    }
+  }
+  return map;
+}
 
 export function gridBackgroundStyle(hourHeightPx: number): CSSProperties {
   return {
