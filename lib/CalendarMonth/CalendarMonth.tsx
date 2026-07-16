@@ -810,9 +810,10 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
             {list.slice(0, visibleCount).map((kid, i) => (
               <CalendarMonthEventBlock
                 key={kid.id ?? `child-${col}-${i}-${kid.time}-${kid.title}`}
-                color={kid.color}
+                color={ev.color}
                 time={kid.time}
                 title={kid.title}
+                showDot={false}
                 onClick={
                   onSelectEvent
                     ? (e) => {
@@ -823,6 +824,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                 }
                 className={cn(
                   calendarMonthGroupChildVariants(),
+                  "ui:rounded-l-[2px]",
                   onSelectEvent && "ui:cursor-pointer",
                 )}
                 style={{
@@ -830,6 +832,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                   height: MONTH_SPAN_BAR_HEIGHT_PX,
                   left: box.left,
                   width: box.width,
+                  borderLeft: `3px solid ${EVENT_PILL_DOT_COLOR[ev.color]}`,
                 }}
               />
             ))}
@@ -868,9 +871,10 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                           kid.id ??
                           `child-of-${col}-${i}-${kid.time}-${kid.title}`
                         }
-                        color={kid.color}
+                        color={ev.color}
                         time={kid.time}
                         title={kid.title}
+                        showDot={false}
                         onClick={
                           onSelectEvent
                             ? (e) => {
@@ -879,7 +883,13 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                               }
                             : undefined
                         }
-                        className={onSelectEvent ? "ui:cursor-pointer" : undefined}
+                        className={cn(
+                          "ui:rounded-l-[2px]",
+                          onSelectEvent && "ui:cursor-pointer",
+                        )}
+                        style={{
+                          borderLeft: `3px solid ${EVENT_PILL_DOT_COLOR[ev.color]}`,
+                        }}
                       />
                     ))}
                   </Popover.Content>
@@ -1142,6 +1152,8 @@ export type CalendarMonthEventBlockProps = Omit<
   color: CalendarMonthEventColor;
   time?: string;
   title: string;
+  /** Show the leading accent dot. Defaults to `true`. */
+  showDot?: boolean;
 };
 
 export type CalendarMonthSpanBlockProps = Omit<
@@ -1163,7 +1175,7 @@ const CalendarMonthEventBlock = React.forwardRef<
   HTMLDivElement,
   CalendarMonthEventBlockProps
 >(function CalendarMonthEventBlock(
-  { color, time, title, className, ...rest },
+  { color, time, title, className, showDot = true, ...rest },
   ref,
 ) {
   return (
@@ -1179,11 +1191,13 @@ const CalendarMonthEventBlock = React.forwardRef<
        * fights a 6px fill) and avoid Tailwind `bg-(--var)` not resolving. Inline fill is
        * reliable next to the categorical `Badge` tints.
        */}
-      <span
-        aria-hidden
-        className="ui:inline-block ui:h-1.5 ui:min-h-1.5 ui:min-w-1.5 ui:w-1.5 ui:shrink-0 ui:rounded-full"
-        style={{ backgroundColor: EVENT_PILL_DOT_COLOR[color] }}
-      />
+      {showDot ? (
+        <span
+          aria-hidden
+          className="ui:inline-block ui:h-1.5 ui:min-h-1.5 ui:min-w-1.5 ui:w-1.5 ui:shrink-0 ui:rounded-full"
+          style={{ backgroundColor: EVENT_PILL_DOT_COLOR[color] }}
+        />
+      ) : null}
       {time ? (
         <Badge.Text
           tone="accent"
