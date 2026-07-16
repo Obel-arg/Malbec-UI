@@ -60,10 +60,21 @@ export type CalendarMonthEventColor =
 function groupContainerBg(color: CalendarMonthEventColor): string {
   return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 10%, transparent)`;
 }
-/** Container border derived from a tour's accent. */
+/** Container border matches the tour header chip's fill (the `Badge` tint). */
 function groupContainerBorder(color: CalendarMonthEventColor): string {
-  return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 34%, transparent)`;
+  return EVENT_CHIP_BG_COLOR[color];
 }
+
+/** Header/pill fill per color (matches `Badge` variant backgrounds). */
+const EVENT_CHIP_BG_COLOR: Record<CalendarMonthEventColor, string> = {
+  yellow: "#efeed4",
+  orange: "#efe3d4",
+  blue: "#dce6ec",
+  violet: "#e5dcec",
+  emerald: "#d0dfd0",
+  sage: "#b4c5b5",
+  red: "#dfd0d0",
+};
 
 /** Accent dots for event pills (matches `--malbec-badge-accent` on `Badge` variants). */
 const EVENT_PILL_DOT_COLOR: Record<CalendarMonthEventColor, string> = {

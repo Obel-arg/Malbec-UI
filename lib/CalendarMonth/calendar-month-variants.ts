@@ -95,9 +95,9 @@ export const calendarMonthGroupContainerVariants = cva(
   },
 );
 
-/** Elevation applied to child show pills so they lift off the group container. */
+/** Positioning for child show pills laid over the group container (no shadow). */
 export const calendarMonthGroupChildVariants = cva(
-  "ui:pointer-events-auto ui:absolute ui:shadow-[0_2px_5px_0_rgba(0,0,0,0.16),0_0_0_1px_rgba(0,0,0,0.03)]",
+  "ui:pointer-events-auto ui:absolute",
 );
 
 export const calendarMonthDayCellVariants = cva(
