@@ -773,11 +773,20 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
     MONTH_SPAN_BAR_INSET_PX,
   );
   const hasContainer = group.childRows > 0;
+  /**
+   * Confirmed tours straddle the header's middle (the opaque header hides the
+   * fill above it). Unconfirmed headers are fill-less, so start the container at
+   * the header's bottom instead — otherwise the container tint shows through the
+   * transparent header and reads as a clip line across the title.
+   */
+  const containerTopInset = tourUnconfirmed
+    ? MONTH_SPAN_BAR_HEIGHT_PX
+    : MONTH_GROUP_CONTAINER_TOP_INSET_PX;
   const containerHeight =
     group.childRows * MONTH_SPAN_BAR_ROW_PX +
     MONTH_SPAN_BAR_HEIGHT_PX +
     MONTH_GROUP_CONTAINER_BOTTOM_PAD_PX -
-    MONTH_GROUP_CONTAINER_TOP_INSET_PX;
+    containerTopInset;
 
   const rowTop = (offset: number) =>
     headerTop + (1 + offset) * MONTH_SPAN_BAR_ROW_PX;
@@ -798,7 +807,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
             }),
           )}
           style={{
-            top: headerTop + MONTH_GROUP_CONTAINER_TOP_INSET_PX,
+            top: headerTop + containerTopInset,
             height: containerHeight,
             left: header.left,
             width: header.width,
