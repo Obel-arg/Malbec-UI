@@ -56,16 +56,16 @@ export type CalendarMonthEventColor =
   | "sage"
   | "red";
 
-/** Faint container background derived from a tour's accent (over the cell fill). */
-function groupContainerBg(color: CalendarMonthEventColor): string {
-  return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 10%, transparent)`;
-}
 /**
- * Container border: the tour header chip's fill, darkened toward its accent so
- * every variant keeps a defined edge (pale tints like violet otherwise vanish).
+ * Container background: a very faint accent wash over the cell fill — kept
+ * lighter than any show chip so the child chips stay legible on top of it.
  */
+function groupContainerBg(color: CalendarMonthEventColor): string {
+  return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 6%, transparent)`;
+}
+/** Container border matches the tour header chip's fill (the `Badge` tint). */
 function groupContainerBorder(color: CalendarMonthEventColor): string {
-  return `color-mix(in srgb, ${EVENT_CHIP_BG_COLOR[color]} 60%, ${EVENT_PILL_DOT_COLOR[color]} 40%)`;
+  return EVENT_CHIP_BG_COLOR[color];
 }
 
 /** Header/pill fill per color (matches `Badge` variant backgrounds). */
