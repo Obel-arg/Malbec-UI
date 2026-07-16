@@ -813,7 +813,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                 color={ev.color}
                 time={kid.time}
                 title={kid.title}
-                showDot={false}
+                railColor={EVENT_PILL_DOT_COLOR[ev.color]}
                 onClick={
                   onSelectEvent
                     ? (e) => {
@@ -824,7 +824,6 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                 }
                 className={cn(
                   calendarMonthGroupChildVariants(),
-                  "ui:rounded-l-[2px]",
                   onSelectEvent && "ui:cursor-pointer",
                 )}
                 style={{
@@ -832,7 +831,6 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                   height: MONTH_SPAN_BAR_HEIGHT_PX,
                   left: box.left,
                   width: box.width,
-                  borderLeft: `3px solid ${EVENT_PILL_DOT_COLOR[ev.color]}`,
                 }}
               />
             ))}
@@ -874,7 +872,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                         color={ev.color}
                         time={kid.time}
                         title={kid.title}
-                        showDot={false}
+                        railColor={EVENT_PILL_DOT_COLOR[ev.color]}
                         onClick={
                           onSelectEvent
                             ? (e) => {
@@ -883,13 +881,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                               }
                             : undefined
                         }
-                        className={cn(
-                          "ui:rounded-l-[2px]",
-                          onSelectEvent && "ui:cursor-pointer",
-                        )}
-                        style={{
-                          borderLeft: `3px solid ${EVENT_PILL_DOT_COLOR[ev.color]}`,
-                        }}
+                        className={onSelectEvent ? "ui:cursor-pointer" : undefined}
                       />
                     ))}
                   </Popover.Content>
@@ -1152,8 +1144,12 @@ export type CalendarMonthEventBlockProps = Omit<
   color: CalendarMonthEventColor;
   time?: string;
   title: string;
-  /** Show the leading accent dot. Defaults to `true`. */
-  showDot?: boolean;
+  /**
+   * When set, replaces the leading accent dot with a full-height rail flush to
+   * the pill's left edge (used to mark shows nested in a tour). Rendered as an
+   * absolute element clipped by the pill's rounded corners — no sharp edges.
+   */
+  railColor?: string;
 };
 
 export type CalendarMonthSpanBlockProps = Omit<
@@ -1175,7 +1171,7 @@ const CalendarMonthEventBlock = React.forwardRef<
   HTMLDivElement,
   CalendarMonthEventBlockProps
 >(function CalendarMonthEventBlock(
-  { color, time, title, className, showDot = true, ...rest },
+  { color, time, title, className, railColor, ...rest },
   ref,
 ) {
   return (
@@ -1183,21 +1179,32 @@ const CalendarMonthEventBlock = React.forwardRef<
       ref={ref}
       data-slot="calendar-month-event"
       variant={color as BadgeVariant}
-      className={cn(eventPillClassName, className)}
+      className={cn(
+        eventPillClassName,
+        railColor && "ui:relative ui:overflow-hidden ui:pl-2.5",
+        className,
+      )}
       {...rest}
     >
       {/**
-       * Solid dot: avoid `Badge.Icon` + `badgeIconVariants` (fixed `size-3` / `inline-flex`
-       * fights a 6px fill) and avoid Tailwind `bg-(--var)` not resolving. Inline fill is
-       * reliable next to the categorical `Badge` tints.
+       * Leading indicator. A `railColor` renders a full-height rail flush to the
+       * left edge (marks a show nested in a tour); the pill's `overflow-hidden`
+       * clips its corners to the rounded shape. Otherwise a solid accent dot —
+       * inline fill avoids `Badge.Icon` sizing / `bg-(--var)` resolution issues.
        */}
-      {showDot ? (
+      {railColor ? (
+        <span
+          aria-hidden
+          className="ui:absolute ui:inset-y-0 ui:left-0 ui:w-[3px]"
+          style={{ backgroundColor: railColor }}
+        />
+      ) : (
         <span
           aria-hidden
           className="ui:inline-block ui:h-1.5 ui:min-h-1.5 ui:min-w-1.5 ui:w-1.5 ui:shrink-0 ui:rounded-full"
           style={{ backgroundColor: EVENT_PILL_DOT_COLOR[color] }}
         />
-      ) : null}
+      )}
       {time ? (
         <Badge.Text
           tone="accent"
