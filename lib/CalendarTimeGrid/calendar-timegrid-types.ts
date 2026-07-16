@@ -14,4 +14,16 @@ export interface CalendarTimeGridEvent {
    */
   allDay?: boolean;
   color?: CalendarTimeGridEventColor;
+  /**
+   * Links a timed show to its parent tour — the `id` of a multi-day / all-day
+   * event in the same list. Child shows inherit their tour's color and carry a
+   * leading accent rail, matching the `CalendarMonth` tour/show treatment.
+   * Ignored when no span event with a matching `id` is present.
+   */
+  parentId?: string;
+  /**
+   * Confirmation state. Defaults to `true` (solid fill). When `false`, the
+   * event renders as tentative — no fill, a dashed accent outline.
+   */
+  confirmed?: boolean;
 }

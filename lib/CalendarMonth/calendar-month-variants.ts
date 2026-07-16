@@ -72,6 +72,34 @@ export const calendarMonthSpanBarVariants = cva(
   },
 );
 
+/**
+ * Tinted, bordered container that wraps a tour (span) header and its stacked
+ * child shows across the tour's date range. Outer corners flatten when the
+ * container continues into the previous/next week. Colors are applied inline
+ * (derived from the tour's accent) so the wash stays faint over any cell.
+ */
+export const calendarMonthGroupContainerVariants = cva(
+  ["ui:pointer-events-none ui:absolute ui:border"],
+  {
+    variants: {
+      continuesLeft: {
+        true: "ui:rounded-l-none ui:border-l-0",
+        false: "ui:rounded-l-[8px]",
+      },
+      continuesRight: {
+        true: "ui:rounded-r-none ui:border-r-0",
+        false: "ui:rounded-r-[8px]",
+      },
+    },
+    defaultVariants: { continuesLeft: false, continuesRight: false },
+  },
+);
+
+/** Positioning for child show pills laid over the group container (no shadow). */
+export const calendarMonthGroupChildVariants = cva(
+  "ui:pointer-events-auto ui:absolute",
+);
+
 export const calendarMonthDayCellVariants = cva(
   [
     "ui:relative ui:box-border ui:flex ui:min-w-0 ui:flex-1 ui:flex-col ui:items-stretch",
