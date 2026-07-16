@@ -29,6 +29,8 @@ import {
   calendarMonthDayNumberRowVariants,
   calendarMonthDayNumberTextVariants,
   calendarMonthEventsStackVariants,
+  calendarMonthGroupChildVariants,
+  calendarMonthGroupContainerVariants,
   calendarMonthHeaderCellVariants,
   calendarMonthHeaderRowVariants,
   calendarMonthRootVariants,
@@ -40,8 +42,7 @@ import {
 import {
   clipDayRangeToRow,
   isMultiDayOrAllDay,
-  layoutCalendarSpans,
-  type CalendarSpanLayout,
+  layoutCalendarGroups,
 } from "./calendar-span-layout";
 import { Button } from "../Button/Button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -54,6 +55,15 @@ export type CalendarMonthEventColor =
   | "emerald"
   | "sage"
   | "red";
+
+/** Faint container background derived from a tour's accent (over the cell fill). */
+function groupContainerBg(color: CalendarMonthEventColor): string {
+  return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 10%, transparent)`;
+}
+/** Container border derived from a tour's accent. */
+function groupContainerBorder(color: CalendarMonthEventColor): string {
+  return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 34%, transparent)`;
+}
 
 /** Accent dots for event pills (matches `--malbec-badge-accent` on `Badge` variants). */
 const EVENT_PILL_DOT_COLOR: Record<CalendarMonthEventColor, string> = {
@@ -83,6 +93,13 @@ export interface CalendarMonthEvent {
   time?: string;
   title: string;
   color: CalendarMonthEventColor;
+  /**
+   * Links a timed show to its parent tour (a multi-day / all-day event whose
+   * `id` equals this value). Child shows render stacked on top of their tour's
+   * container instead of as standalone day pills. Ignored when no span event
+   * with a matching `id` is present.
+   */
+  parentId?: string;
 }
 
 function chunkArray<T>(items: T[], size: number): T[][] {
@@ -110,8 +127,34 @@ const MONTH_SPAN_BAR_GAP_PX = 4;
 const MONTH_SPAN_BAR_ROW_PX = MONTH_SPAN_BAR_HEIGHT_PX + MONTH_SPAN_BAR_GAP_PX;
 /** Top of the first span lane inside a week row: cell pad (8) + day number (20) + gap (4). */
 const MONTH_SPAN_BAR_TOP_OFFSET_PX = 8 + 20 + MONTH_SPAN_BAR_GAP_PX;
-/** Visual indent of a span bar from the leftmost / rightmost cell edges. */
+/** Visual indent of a span bar / container from the leftmost / rightmost cell edges. */
 const MONTH_SPAN_BAR_INSET_PX = 4;
+/** Cell horizontal padding — child show chips align to the timed-pill inset. */
+const MONTH_CELL_PAD_PX = 8;
+/** Max child rows a tour container shows per column before an overflow chip. */
+const MONTH_GROUP_CHILD_ROW_CAP = 3;
+/** Container top straddles the header bar's vertical middle. */
+const MONTH_GROUP_CONTAINER_TOP_INSET_PX = 11;
+/** Extra room below the last child row inside the container. */
+const MONTH_GROUP_CONTAINER_BOTTOM_PAD_PX = 4;
+
+/** Horizontal `left`/`width` for a bar/container spanning `startIdx…endIdx`. */
+function spanBox(
+  startIdx: number,
+  endIdx: number,
+  continuesLeft: boolean,
+  continuesRight: boolean,
+  insetPx: number,
+): { left: string; width: string } {
+  const leftPct = (startIdx / 7) * 100;
+  const widthPct = ((endIdx - startIdx + 1) / 7) * 100;
+  const leftInset = continuesLeft ? 0 : insetPx;
+  const rightInset = continuesRight ? 0 : insetPx;
+  return {
+    left: `calc(${leftPct}% + ${leftInset}px)`,
+    width: `calc(${widthPct}% - ${leftInset + rightInset}px)`,
+  };
+}
 
 function compareCalendarMonthEvents(
   a: CalendarMonthEvent,
@@ -134,6 +177,28 @@ function isSpanCalendarMonthEvent(ev: CalendarMonthEvent): boolean {
 /** Stable fallback so `map.get(k) ?? …` does not allocate a new `[]` each render. */
 const EMPTY_DAY_EVENTS: CalendarMonthEvent[] = [];
 
+/** A tour (span) placed in a week, with its child shows bucketed by column. */
+type CalendarWeekTourGroup = {
+  event: CalendarMonthEvent;
+  startIdx: number;
+  endIdx: number;
+  continuesLeft: boolean;
+  continuesRight: boolean;
+  lane: number;
+  topRow: number;
+  rowSpan: number;
+  /** Visible child rows reserved below the header (after the overflow cap). */
+  childRows: number;
+  /** colIdx (0–6) → child shows on that day, sorted. */
+  childrenByCol: Map<number, CalendarMonthEvent[]>;
+};
+
+type CalendarWeekLayout = {
+  groups: CalendarWeekTourGroup[];
+  /** Total pill rows the group stack reserves at the top of the week. */
+  totalRows: number;
+};
+
 type CalendarMonthContextValue = {
   month: Date;
   weekStartsOn: 0 | 1;
@@ -141,8 +206,8 @@ type CalendarMonthContextValue = {
   locale: Locale;
   weeks: Date[][];
   eventsByDayKey: Map<string, CalendarMonthEvent[]>;
-  /** Span (multi-day / all-day) event layouts per visible week. */
-  weekSpanLayouts: CalendarSpanLayout<CalendarMonthEvent>[];
+  /** Tour-group layouts (span header + stacked child shows) per visible week. */
+  weekLayouts: CalendarWeekLayout[];
   /** dayKey → containing week index in `weeks`. */
   weekIndexByDayKey: Map<string, number>;
   onSelectDay?: (day: Date) => void;
@@ -386,11 +451,27 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
               : new Date(todayProp as string | number),
           );
 
-    /** Timed (single-day, no `allDay`) events keyed by start day. */
+    /** Span (tour) events, and the set of ids that can own child shows. */
+    const { spanEvents, childrenByTourId, tourIdSet } = React.useMemo(() => {
+      const spans = events.filter(isSpanCalendarMonthEvent);
+      const ids = new Set<string>();
+      for (const s of spans) if (s.id) ids.add(s.id);
+      const byParent = new Map<string, CalendarMonthEvent[]>();
+      for (const ev of events) {
+        if (isSpanCalendarMonthEvent(ev)) continue;
+        if (!ev.parentId || !ids.has(ev.parentId)) continue;
+        const prev = byParent.get(ev.parentId) ?? [];
+        byParent.set(ev.parentId, [...prev, ev]);
+      }
+      return { spanEvents: spans, childrenByTourId: byParent, tourIdSet: ids };
+    }, [events]);
+
+    /** Standalone timed events (no span, not owned by a tour) keyed by day. */
     const eventsByDayKey = React.useMemo(() => {
       const map = new Map<string, CalendarMonthEvent[]>();
       for (const ev of events) {
         if (isSpanCalendarMonthEvent(ev)) continue;
+        if (ev.parentId && tourIdSet.has(ev.parentId)) continue;
         const k = dayKey(
           startOfDay(
             ev.date instanceof Date
@@ -402,16 +483,16 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
         map.set(k, [...prev, ev]);
       }
       return map;
-    }, [events]);
+    }, [events, tourIdSet]);
 
-    /** Multi-day / all-day events packed into lanes for each visible week. */
-    const weekSpanLayouts = React.useMemo<
-      CalendarSpanLayout<CalendarMonthEvent>[]
-    >(() => {
-      const spans = events.filter(isSpanCalendarMonthEvent);
+    /** Tour groups (span header + stacked child shows) packed per visible week. */
+    const weekLayouts = React.useMemo<CalendarWeekLayout[]>(() => {
       return weeks.map((days) => {
-        const rowStart = days[0]!;
-        const segments = spans
+        const rowStart = startOfDay(days[0]!);
+        const rowEnd = startOfDay(days[6]!);
+
+        // Bucket each span's children into this week's columns.
+        const prepared = spanEvents
           .map((ev) => {
             const clip = clipDayRangeToRow(
               ev.date,
@@ -419,20 +500,75 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
               rowStart,
               7,
             );
-            return clip ? { event: ev, ...clip } : null;
+            if (!clip) return null;
+
+            const childrenByCol = new Map<number, CalendarMonthEvent[]>();
+            const kids = ev.id ? (childrenByTourId.get(ev.id) ?? []) : [];
+            for (const kid of kids) {
+              const col = differenceInCalendarDays(
+                startOfDay(
+                  kid.date instanceof Date
+                    ? kid.date
+                    : new Date(kid.date as string | number),
+                ),
+                rowStart,
+              );
+              if (col < clip.startIdx || col > clip.endIdx) continue;
+              const prev = childrenByCol.get(col) ?? [];
+              childrenByCol.set(col, [...prev, kid]);
+            }
+
+            let maxCol = 0;
+            for (const [, list] of childrenByCol) {
+              list.sort(compareCalendarMonthEvents);
+              maxCol = Math.max(maxCol, list.length);
+            }
+            const childRows = Math.min(maxCol, MONTH_GROUP_CHILD_ROW_CAP);
+
+            return {
+              event: ev,
+              startIdx: clip.startIdx,
+              endIdx: clip.endIdx,
+              continuesLeft:
+                differenceInCalendarDays(startOfDay(ev.date), rowStart) < 0,
+              continuesRight:
+                differenceInCalendarDays(eventInclusiveEnd(ev), rowEnd) > 0,
+              childrenByCol,
+              childRows,
+            };
           })
-          .filter(
-            (
-              s,
-            ): s is {
-              event: CalendarMonthEvent;
-              startIdx: number;
-              endIdx: number;
-            } => s !== null,
-          );
-        return layoutCalendarSpans(segments);
+          .filter((s): s is NonNullable<typeof s> => s !== null);
+
+        const { layout, totalRows } = layoutCalendarGroups(
+          prepared.map((p) => ({
+            event: p.event,
+            startIdx: p.startIdx,
+            endIdx: p.endIdx,
+            childRows: p.childRows,
+          })),
+        );
+
+        // Merge lane/topRow back onto the prepared groups (matched by identity).
+        const byEvent = new Map(layout.map((l) => [l.event, l]));
+        const groups: CalendarWeekTourGroup[] = prepared.map((p) => {
+          const l = byEvent.get(p.event)!;
+          return {
+            event: p.event,
+            startIdx: p.startIdx,
+            endIdx: p.endIdx,
+            continuesLeft: p.continuesLeft,
+            continuesRight: p.continuesRight,
+            lane: l.lane,
+            topRow: l.topRow,
+            rowSpan: l.rowSpan,
+            childRows: p.childRows,
+            childrenByCol: p.childrenByCol,
+          };
+        });
+
+        return { groups, totalRows };
       });
-    }, [events, weeks]);
+    }, [spanEvents, childrenByTourId, weeks]);
 
     const weekIndexByDayKey = React.useMemo(() => {
       const m = new Map<string, number>();
@@ -450,7 +586,7 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
         locale,
         weeks,
         eventsByDayKey,
-        weekSpanLayouts,
+        weekLayouts,
         weekIndexByDayKey,
         onSelectDay,
         onSelectEvent,
@@ -465,7 +601,7 @@ const CalendarMonthRoot = React.forwardRef<HTMLDivElement, CalendarMonthProps>(
         locale,
         weeks,
         eventsByDayKey,
-        weekSpanLayouts,
+        weekLayouts,
         weekIndexByDayKey,
         onSelectDay,
         onSelectEvent,
@@ -581,6 +717,168 @@ export type CalendarMonthWeekProps = React.ComponentProps<"div"> & {
   children?: React.ReactNode;
 };
 
+/**
+ * One tour group on the week overlay: a faint bordered container wrapping the
+ * tour's date range (drawn only when it has children), the tour header bar
+ * straddling the container's top edge, and the child show chips elevated on top
+ * of the container surface — one column per day, with a `+N` overflow chip.
+ */
+function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
+  const { onSelectEvent } = useCalendarMonthContext("CalendarMonth.Week");
+  const ev = group.event;
+
+  const headerTop =
+    MONTH_SPAN_BAR_TOP_OFFSET_PX + group.topRow * MONTH_SPAN_BAR_ROW_PX;
+  const header = spanBox(
+    group.startIdx,
+    group.endIdx,
+    group.continuesLeft,
+    group.continuesRight,
+    MONTH_SPAN_BAR_INSET_PX,
+  );
+  const hasContainer = group.childRows > 0;
+  const containerHeight =
+    group.childRows * MONTH_SPAN_BAR_ROW_PX +
+    MONTH_SPAN_BAR_HEIGHT_PX +
+    MONTH_GROUP_CONTAINER_BOTTOM_PAD_PX -
+    MONTH_GROUP_CONTAINER_TOP_INSET_PX;
+
+  const rowTop = (offset: number) =>
+    headerTop + (1 + offset) * MONTH_SPAN_BAR_ROW_PX;
+
+  const cols: number[] = [];
+  for (let c = group.startIdx; c <= group.endIdx; c += 1) cols.push(c);
+
+  return (
+    <>
+      {hasContainer ? (
+        <div
+          aria-hidden
+          data-slot="calendar-month-group-container"
+          className={cn(
+            calendarMonthGroupContainerVariants({
+              continuesLeft: group.continuesLeft,
+              continuesRight: group.continuesRight,
+            }),
+          )}
+          style={{
+            top: headerTop + MONTH_GROUP_CONTAINER_TOP_INSET_PX,
+            height: containerHeight,
+            left: header.left,
+            width: header.width,
+            backgroundColor: groupContainerBg(ev.color),
+            borderColor: groupContainerBorder(ev.color),
+          }}
+        />
+      ) : null}
+      <CalendarMonthSpanBlock
+        color={ev.color}
+        title={ev.title}
+        continuesLeft={group.continuesLeft}
+        continuesRight={group.continuesRight}
+        onClick={onSelectEvent ? () => onSelectEvent(ev) : undefined}
+        style={{
+          top: headerTop,
+          height: MONTH_SPAN_BAR_HEIGHT_PX,
+          left: header.left,
+          width: header.width,
+        }}
+      />
+      {cols.map((col) => {
+        const list = group.childrenByCol.get(col);
+        if (!list || list.length === 0) return null;
+        const overflow = list.length > group.childRows;
+        const visibleCount = overflow ? group.childRows - 1 : list.length;
+        const box = spanBox(col, col, false, false, MONTH_CELL_PAD_PX);
+        const overflowList = list.slice(visibleCount);
+        return (
+          <React.Fragment key={`group-col-${col}`}>
+            {list.slice(0, visibleCount).map((kid, i) => (
+              <CalendarMonthEventBlock
+                key={kid.id ?? `child-${col}-${i}-${kid.time}-${kid.title}`}
+                color={kid.color}
+                time={kid.time}
+                title={kid.title}
+                onClick={
+                  onSelectEvent
+                    ? (e) => {
+                        e.stopPropagation();
+                        onSelectEvent(kid);
+                      }
+                    : undefined
+                }
+                className={cn(
+                  calendarMonthGroupChildVariants(),
+                  onSelectEvent && "ui:cursor-pointer",
+                )}
+                style={{
+                  top: rowTop(i),
+                  height: MONTH_SPAN_BAR_HEIGHT_PX,
+                  left: box.left,
+                  width: box.width,
+                }}
+              />
+            ))}
+            {overflow ? (
+              <div
+                className="ui:pointer-events-auto ui:absolute"
+                style={{
+                  top: rowTop(visibleCount),
+                  height: MONTH_SPAN_BAR_HEIGHT_PX,
+                  left: box.left,
+                  width: box.width,
+                }}
+              >
+                <Popover>
+                  <Popover.Trigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="ui:h-[22px] ui:w-full ui:justify-start ui:p-0 ui:px-1.5 ui:text-[10px]"
+                      aria-label={`${overflowList.length} more shows`}
+                      onClick={(e) => e.stopPropagation()}
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
+                      +{overflowList.length}
+                    </Button>
+                  </Popover.Trigger>
+                  <Popover.Content
+                    align="start"
+                    side="bottom"
+                    sideOffset={6}
+                    className="ui:flex ui:min-w-55 ui:max-w-[min(320px,var(--radix-popover-content-available-width))] ui:flex-col ui:gap-1 ui:p-2"
+                  >
+                    {overflowList.map((kid, i) => (
+                      <CalendarMonthEventBlock
+                        key={
+                          kid.id ??
+                          `child-of-${col}-${i}-${kid.time}-${kid.title}`
+                        }
+                        color={kid.color}
+                        time={kid.time}
+                        title={kid.title}
+                        onClick={
+                          onSelectEvent
+                            ? (e) => {
+                                e.stopPropagation();
+                                onSelectEvent(kid);
+                              }
+                            : undefined
+                        }
+                        className={onSelectEvent ? "ui:cursor-pointer" : undefined}
+                      />
+                    ))}
+                  </Popover.Content>
+                </Popover>
+              </div>
+            ) : null}
+          </React.Fragment>
+        );
+      })}
+    </>
+  );
+}
+
 const CalendarMonthWeek = React.forwardRef<
   HTMLDivElement,
   CalendarMonthWeekProps
@@ -588,13 +886,13 @@ const CalendarMonthWeek = React.forwardRef<
   { className, days, weekIndex, children, ...rest },
   ref,
 ) {
-  const { weekSpanLayouts, weekIndexByDayKey, onSelectEvent } =
+  const { weekLayouts, weekIndexByDayKey } =
     useCalendarMonthContext("CalendarMonth.Week");
 
   const resolvedWeekIndex =
     weekIndex ?? weekIndexByDayKey.get(dayKey(days[0]!)) ?? -1;
-  const spanLayout =
-    resolvedWeekIndex >= 0 ? weekSpanLayouts[resolvedWeekIndex] : undefined;
+  const layout =
+    resolvedWeekIndex >= 0 ? weekLayouts[resolvedWeekIndex] : undefined;
 
   return (
     <div
@@ -608,48 +906,21 @@ const CalendarMonthWeek = React.forwardRef<
         days.map((d, i) => (
           <CalendarMonthDay key={dayKey(d)} date={d} isLastInRow={i === 6} />
         ))}
-      {spanLayout && spanLayout.layout.length > 0 ? (
+      {layout && layout.groups.length > 0 ? (
         <div
           aria-hidden="false"
           data-slot="calendar-month-span-overlay"
           className={cn(calendarMonthSpanOverlayVariants())}
         >
-          {spanLayout.layout.map((item) => {
-            const ev = item.event;
-            const eventStart = startOfDay(ev.date);
-            const eventEnd = eventInclusiveEnd(ev);
-            const rowStart = startOfDay(days[0]!);
-            const rowEnd = startOfDay(days[6]!);
-            const continuesLeft =
-              differenceInCalendarDays(eventStart, rowStart) < 0;
-            const continuesRight =
-              differenceInCalendarDays(eventEnd, rowEnd) > 0;
-            const widthPct = ((item.endIdx - item.startIdx + 1) / 7) * 100;
-            const leftPct = (item.startIdx / 7) * 100;
-            return (
-              <CalendarMonthSpanBlock
-                key={
-                  ev.id ?? `span-${dayKey(eventStart)}-${item.lane}-${ev.title}`
-                }
-                color={ev.color}
-                title={ev.title}
-                continuesLeft={continuesLeft}
-                continuesRight={continuesRight}
-                onClick={onSelectEvent ? () => onSelectEvent(ev) : undefined}
-                style={{
-                  top:
-                    MONTH_SPAN_BAR_TOP_OFFSET_PX +
-                    item.lane * MONTH_SPAN_BAR_ROW_PX,
-                  height: MONTH_SPAN_BAR_HEIGHT_PX,
-                  left: `calc(${leftPct}% + ${continuesLeft ? 0 : MONTH_SPAN_BAR_INSET_PX}px)`,
-                  width: `calc(${widthPct}% - ${
-                    (continuesLeft ? 0 : MONTH_SPAN_BAR_INSET_PX) +
-                    (continuesRight ? 0 : MONTH_SPAN_BAR_INSET_PX)
-                  }px)`,
-                }}
-              />
-            );
-          })}
+          {layout.groups.map((group) => (
+            <CalendarMonthGroupBlock
+              key={
+                group.event.id ??
+                `group-${group.lane}-${group.startIdx}-${group.event.title}`
+              }
+              group={group}
+            />
+          ))}
         </div>
       ) : null}
     </div>
@@ -684,7 +955,7 @@ const CalendarMonthDay = React.forwardRef<
     month,
     today,
     eventsByDayKey,
-    weekSpanLayouts,
+    weekLayouts,
     weekIndexByDayKey,
     onSelectDay,
     onSelectEvent,
@@ -703,17 +974,18 @@ const CalendarMonthDay = React.forwardRef<
       ? dayEvents
       : [...dayEvents].sort(compareCalendarMonthEvents);
   const weekIndex = weekIndexByDayKey.get(k);
-  const spanLanes =
-    weekIndex !== undefined ? (weekSpanLayouts[weekIndex]?.lanes ?? 0) : 0;
   /**
-   * Reserve at least one timed-pill slot when there are timed events, even if
-   * span bars have already eaten the visible budget. Span bars sit on the
-   * absolute overlay, so the cell only needs to skip lanes for spacing.
+   * Vertical space the week's tour-group stack (headers + child rows) reserves
+   * at the top of every cell, so standalone timed pills sit below it. Groups
+   * are drawn on the week-level absolute overlay; the cell only skips the space.
    */
-  const remainingForTimed = Math.max(
-    sortedDayEvents.length > 0 ? 1 : 0,
-    MONTH_DAY_VISIBLE_EVENT_LIMIT - spanLanes,
-  );
+  const groupReserveRows =
+    weekIndex !== undefined ? (weekLayouts[weekIndex]?.totalRows ?? 0) : 0;
+  const groupReservePx =
+    groupReserveRows > 0
+      ? groupReserveRows * MONTH_SPAN_BAR_ROW_PX - MONTH_SPAN_BAR_GAP_PX
+      : 0;
+  const remainingForTimed = MONTH_DAY_VISIBLE_EVENT_LIMIT;
   const visibleDayEvents = sortedDayEvents.slice(0, remainingForTimed);
   const overflowDayEvents = sortedDayEvents.slice(remainingForTimed);
   const selectable = Boolean(onSelectDay);
@@ -769,22 +1041,20 @@ const CalendarMonthDay = React.forwardRef<
           </span>
         )}
       </div>
-      {dayEvents.length > 0 || spanLanes > 0 ? (
+      {dayEvents.length > 0 || groupReserveRows > 0 ? (
         <div className={cn(calendarMonthEventsStackVariants())}>
           {/**
-           * Invisible spacers reserving vertical space for the week's span-bar
-           * lanes, so timed-event pills sit directly below the bars (which are
-           * rendered on the week-level absolute overlay).
+           * Invisible spacer reserving vertical space for the week's tour-group
+           * stack (headers + child rows), so standalone timed pills sit directly
+           * below it (the groups are drawn on the week-level absolute overlay).
            */}
-          {spanLanes > 0
-            ? Array.from({ length: spanLanes }, (_, i) => (
-                <div
-                  key={`span-lane-${i}`}
-                  aria-hidden
-                  className="ui:h-5.5 ui:shrink-0"
-                />
-              ))
-            : null}
+          {groupReservePx > 0 ? (
+            <div
+              aria-hidden
+              className="ui:shrink-0"
+              style={{ height: groupReservePx }}
+            />
+          ) : null}
           {visibleDayEvents.map((ev) => (
             <CalendarMonthEventBlock
               key={ev.id ?? `${k}-${ev.time}-${ev.title}`}

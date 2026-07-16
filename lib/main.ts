@@ -113,6 +113,8 @@ export type {
   CalendarMonthWeekProps,
   CalendarMonthDayProps,
   CalendarMonthEventBlockProps,
+  CalendarMonthEvent,
+  CalendarMonthEventColor,
 } from "./CalendarMonth/CalendarMonth";
 export type { CalendarTimeGridEventBlockProps } from "./CalendarTimeGrid/CalendarTimeGridEventBlock";
 export type {
