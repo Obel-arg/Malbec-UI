@@ -274,6 +274,7 @@ function timeGridEventsToMonthEvents(
       time: isSpan ? undefined : format(ev.start, "HH:mm"),
       title: ev.title,
       color: ev.color ?? "emerald",
+      parentId: ev.parentId,
     };
   });
 }
@@ -537,4 +538,106 @@ export const MonthMultiDay: Story = {
 export const FormatsWithTabs: Story = {
   name: "Mes / semana / día (tabs)",
   render: () => <CalendarFormatsTabs />,
+};
+
+// —— Tour + shows across views ——
+
+/**
+ * The same tour/show data the `CalendarMonth` grouping consumes, viewed in all
+ * three formats. The tour is a multi-day span (all-day strip in the time grid,
+ * container in the month grid); each show is a timed event linked via
+ * `parentId`, so it inherits the tour's color and carries the accent rail.
+ * Anchored to the week of Mon Apr 27 2026.
+ */
+const tourAcrossViewsEvents: CalendarTimeGridEvent[] = [
+  {
+    id: "gira-qa-globo",
+    title: "Gira QA Globo 2026",
+    start: new Date(2026, 3, 27, 0, 0, 0),
+    end: new Date(2026, 4, 2, 23, 59, 0),
+    color: "sage",
+  },
+  ...(
+    [
+      [0, "QA Globo Rosario"],
+      [1, "QA Globo Córdoba"],
+      [2, "QA Globo Mendoza"],
+      [3, "QA Globo Neuquén"],
+      [4, "QA Globo Bariloche"],
+      [5, "QA Globo Ushuaia"],
+    ] as const
+  ).map(([offset, title]) => ({
+    id: `gira-show-${offset}`,
+    parentId: "gira-qa-globo",
+    title,
+    start: new Date(2026, 3, 27 + offset, 21, 0, 0),
+    end: new Date(2026, 3, 27 + offset, 23, 0, 0),
+    color: "yellow" as const,
+  })),
+];
+
+function TourAcrossViewsShowcase() {
+  const [focus, setFocus] = React.useState(() => new Date(2026, 3, 28));
+  const [tab, setTab] = React.useState("week");
+  const monthEvents = React.useMemo(
+    () => timeGridEventsToMonthEvents(tourAcrossViewsEvents),
+    [],
+  );
+
+  return (
+    <div className="ui:mx-auto ui:flex ui:w-full ui:max-w-[min(100%,1200px)] ui:flex-col ui:gap-4">
+      <Tabs value={tab} onValueChange={setTab}>
+        <Tabs.List className="ui:w-full ui:max-w-md ui:self-center">
+          <Tabs.Trigger value="month">Mes</Tabs.Trigger>
+          <Tabs.Trigger value="week">Semana</Tabs.Trigger>
+          <Tabs.Trigger value="day">Día</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="month" className="ui:pt-2">
+          <div className="ui:mx-auto ui:w-full ui:max-w-[min(100%,1197px)]">
+            <CalendarMonth
+              month={startOfMonth(focus)}
+              events={monthEvents}
+              locale={es}
+              onMonthChange={setFocus}
+              onSelectEvent={(ev) => console.log("select", ev.title)}
+            />
+          </div>
+        </Tabs.Content>
+        <Tabs.Content value="week" className="ui:pt-2">
+          <CalendarWeek
+            week={focus}
+            weekStartsOn={WEEK_STARTS_ON}
+            locale={es}
+            onWeekChange={setFocus}
+            today={null}
+            now={null}
+            startHour={18}
+            endHour={23}
+            events={tourAcrossViewsEvents}
+            onSelectEvent={(ev) => console.log("select", ev.title)}
+          />
+        </Tabs.Content>
+        <Tabs.Content value="day" className="ui:pt-2">
+          <div className="ui:mx-auto ui:w-full ui:max-w-[min(100%,560px)]">
+            <CalendarDay
+              day={startOfDay(focus)}
+              onDayChange={setFocus}
+              locale={es}
+              today={null}
+              now={null}
+              startHour={18}
+              endHour={23}
+              events={tourAcrossViewsEvents}
+              onSelectEvent={(ev) => console.log("select", ev.title)}
+            />
+          </div>
+        </Tabs.Content>
+      </Tabs>
+    </div>
+  );
+}
+
+export const TourAcrossViews: Story = {
+  name: "Tour + shows across views (parentId)",
+  render: () => <TourAcrossViewsShowcase />,
 };
