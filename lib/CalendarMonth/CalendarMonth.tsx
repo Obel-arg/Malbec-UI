@@ -234,6 +234,25 @@ type CalendarWeekLayout = {
   totalRows: number;
 };
 
+/**
+ * Rows the tour stack occupies in a single column — only the groups that
+ * actually cover that day. Standalone timed pills reserve this (not the whole
+ * week's `totalRows`) so they sit directly below their column's tours instead
+ * of below every lane in the week.
+ */
+function weekColumnReserveRows(
+  layout: CalendarWeekLayout,
+  col: number,
+): number {
+  let rows = 0;
+  for (const g of layout.groups) {
+    if (col >= g.startIdx && col <= g.endIdx) {
+      rows = Math.max(rows, g.topRow + g.rowSpan);
+    }
+  }
+  return rows;
+}
+
 type CalendarMonthContextValue = {
   month: Date;
   weekStartsOn: 0 | 1;
@@ -1022,6 +1041,7 @@ const CalendarMonthDay = React.forwardRef<
     month,
     today,
     eventsByDayKey,
+    weeks,
     weekLayouts,
     weekIndexByDayKey,
     onSelectDay,
@@ -1042,12 +1062,20 @@ const CalendarMonthDay = React.forwardRef<
       : [...dayEvents].sort(compareCalendarMonthEvents);
   const weekIndex = weekIndexByDayKey.get(k);
   /**
-   * Vertical space the week's tour-group stack (headers + child rows) reserves
-   * at the top of every cell, so standalone timed pills sit below it. Groups
-   * are drawn on the week-level absolute overlay; the cell only skips the space.
+   * Vertical space the tour-group stack reserves at the top of THIS cell, so
+   * standalone timed pills sit below it. Reserved per column (only the tours
+   * covering this day), so a pill isn't pushed below lanes that don't reach it.
+   * Groups are drawn on the week-level absolute overlay; the cell skips space.
    */
+  const weekLayout = weekIndex !== undefined ? weekLayouts[weekIndex] : undefined;
+  const colIndex =
+    weekIndex !== undefined
+      ? (weeks[weekIndex]?.findIndex((d) => isSameDay(startOfDay(d), day)) ?? -1)
+      : -1;
   const groupReserveRows =
-    weekIndex !== undefined ? (weekLayouts[weekIndex]?.totalRows ?? 0) : 0;
+    weekLayout && colIndex >= 0
+      ? weekColumnReserveRows(weekLayout, colIndex)
+      : 0;
   const groupReservePx =
     groupReserveRows > 0
       ? groupReserveRows * MONTH_SPAN_BAR_ROW_PX - MONTH_SPAN_BAR_GAP_PX
