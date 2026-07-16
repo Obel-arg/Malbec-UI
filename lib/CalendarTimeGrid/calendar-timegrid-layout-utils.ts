@@ -1,4 +1,4 @@
-import { isSameDay, startOfDay } from "date-fns";
+import { differenceInCalendarDays, isSameDay, startOfDay } from "date-fns";
 import type { CSSProperties } from "react";
 import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
 import type {
@@ -27,6 +27,150 @@ export function buildTourColorMap(
     }
   }
   return map;
+}
+
+/** Height of a show's padding base line (travel / rest support days). */
+export const TIMED_PAD_LINE_HEIGHT_PX = 6;
+/** Line inset from a padding day's outer column edge (matches event-block pad). */
+const TIMED_PAD_OUTER_INSET_PX = 4;
+/** Event-block horizontal inset — the show-facing end butts the block's rail here. */
+const TIMED_PAD_BLOCK_INSET_PX = 4;
+
+/**
+ * One continuous padding run (all `daysBefore` or all `daysAfter` of a show),
+ * resolved to CSS against a columns-wide overlay so its show-facing end butts
+ * the show block's rail exactly (no gap) and its outer end insets + rounds. `left`
+ * / `width` are percentages of the columns area (gutter excluded).
+ */
+export type TimedPaddingRun = {
+  top: number;
+  height: number;
+  color: CalendarTimeGridEventColor;
+  left: string;
+  width: string;
+  /** Round the outer end; the show-facing end is always square (butts the block). */
+  roundLeft: boolean;
+  roundRight: boolean;
+  key: string;
+};
+
+/**
+ * Padding runs for every timed show carrying `daysBefore` / `daysAfter`, laid out
+ * for a single absolute overlay spanning the day columns (so a run can butt the
+ * show block's rail across the column boundary). Percentages are of the columns
+ * area — render inside an overlay offset past the time gutter. Works for any
+ * column count (7 in `CalendarWeek`, 1 in `CalendarDay`): a run shows whenever a
+ * padding day is visible, even if the show's own day is off-view. Clipped to the
+ * parent tour's span; shows outside the visible hours cast nothing.
+ */
+export function buildTimedPaddingRuns(
+  events: CalendarTimeGridEvent[],
+  days: Date[],
+  startHour: number,
+  endHour: number,
+  hourHeightPx: number,
+): TimedPaddingRun[] {
+  if (days.length === 0) return [];
+  const dayCount = days.length;
+  const rowStart = startOfDay(days[0]!);
+  const lastCol = dayCount - 1;
+  const w = 100 / dayCount; // percent per column
+
+  // Tour column span + color, keyed by span id, so padding clips to the tour.
+  const tourById = new Map<
+    string,
+    { startCol: number; endCol: number; color: CalendarTimeGridEventColor }
+  >();
+  for (const ev of events) {
+    if (!ev.id) continue;
+    if (!isMultiDayOrAllDay(ev.start, ev.end, ev.allDay)) continue;
+    tourById.set(ev.id, {
+      startCol: differenceInCalendarDays(startOfDay(ev.start), rowStart),
+      endCol: differenceInCalendarDays(startOfDay(ev.end), rowStart),
+      color: ev.color ?? "blue",
+    });
+  }
+
+  const runs: TimedPaddingRun[] = [];
+  events.forEach((ev, idx) => {
+    if (isMultiDayOrAllDay(ev.start, ev.end, ev.allDay)) return;
+    const before = Math.floor(ev.daysBefore ?? 0);
+    const after = Math.floor(ev.daysAfter ?? 0);
+    if (before < 1 && after < 1) return;
+
+    // Vertical level: the show's own block, centred. Time-based, so it is the
+    // same in any column — including a padding column whose show is off-view.
+    const box = layoutTimedEvent(
+      ev,
+      startOfDay(ev.start),
+      startHour,
+      endHour,
+      hourHeightPx,
+    );
+    if (!box) return;
+    const top = box.top + box.height / 2 - TIMED_PAD_LINE_HEIGHT_PX / 2;
+
+    const showCol = differenceInCalendarDays(startOfDay(ev.start), rowStart);
+    const showVisible = showCol >= 0 && showCol <= lastCol;
+    const tour = ev.parentId ? tourById.get(ev.parentId) : undefined;
+    const color = tour?.color ?? ev.color ?? "blue";
+    const tourStart = tour ? tour.startCol : -Infinity;
+    const tourEnd = tour ? tour.endCol : Infinity;
+    const keyBase = ev.id ?? `${ev.start.toISOString()}-${idx}`;
+
+    if (before >= 1) {
+      const clampStart = Math.max(tourStart, showCol - before);
+      const s = Math.max(0, clampStart);
+      const e = Math.min(lastCol, showCol - 1);
+      if (e >= s) {
+        // Outer (left) end: inset + rounded at the true start, else flush.
+        const roundLeft = clampStart >= 0;
+        const leftPx = roundLeft ? TIMED_PAD_OUTER_INSET_PX : 0;
+        // Show-facing (right) end: butt the block's rail, or flush to the view
+        // edge when the show sits off-view to the right.
+        const rightPct = showVisible ? showCol * w : 100;
+        const rightPx = showVisible ? TIMED_PAD_BLOCK_INSET_PX : 0;
+        runs.push({
+          top,
+          height: TIMED_PAD_LINE_HEIGHT_PX,
+          color,
+          left: `calc(${s * w}% + ${leftPx}px)`,
+          width: `calc(${rightPct - s * w}% + ${rightPx - leftPx}px)`,
+          roundLeft,
+          roundRight: false,
+          key: `${keyBase}-before`,
+        });
+      }
+    }
+
+    if (after >= 1) {
+      const clampEnd = Math.min(tourEnd, showCol + after);
+      const s = Math.max(0, showCol + 1);
+      const e = Math.min(lastCol, clampEnd);
+      if (e >= s) {
+        // Show-facing (left) end: butt the block's right edge, or flush to the
+        // view edge when the show sits off-view to the left.
+        const leftPct = showVisible ? (showCol + 1) * w : 0;
+        const leftPx = showVisible ? -TIMED_PAD_BLOCK_INSET_PX : 0;
+        // Outer (right) end: inset + rounded at the true end, else flush.
+        const roundRight = clampEnd <= lastCol;
+        const rightPct = (e + 1) * w;
+        const rightPx = roundRight ? -TIMED_PAD_OUTER_INSET_PX : 0;
+        runs.push({
+          top,
+          height: TIMED_PAD_LINE_HEIGHT_PX,
+          color,
+          left: `calc(${leftPct}% + ${leftPx}px)`,
+          width: `calc(${rightPct - leftPct}% + ${rightPx - leftPx}px)`,
+          roundLeft: false,
+          roundRight,
+          key: `${keyBase}-after`,
+        });
+      }
+    }
+  });
+
+  return runs;
 }
 
 export function gridBackgroundStyle(hourHeightPx: number): CSSProperties {

@@ -17,11 +17,13 @@ import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
 import { CalendarTimeGridAllDayStrip } from "./CalendarTimeGridAllDayStrip";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
 import {
+  buildTimedPaddingRuns,
   buildTourColorMap,
   gridBackgroundStyle,
   layoutTimedEventsForDayColumn,
   timedEventHorizontalStyle,
 } from "./calendar-timegrid-layout-utils";
+import { CalendarTimeGridPaddingOverlay } from "./CalendarTimeGridPaddingLine";
 import { CalendarTimeGridNowMarker } from "./CalendarTimeGridNowMarker";
 import {
   buildWeekDays,
@@ -172,6 +174,13 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
     const tourColorMap = React.useMemo(
       () => buildTourColorMap(events),
       [events],
+    );
+
+    /** Show padding base lines (travel / rest days), laid out over the columns. */
+    const paddingRuns = React.useMemo(
+      () =>
+        buildTimedPaddingRuns(events, days, startHour, endHour, hourHeightPx),
+      [events, days, startHour, endHour, hourHeightPx],
     );
 
     const resolvedTimeZoneLabel = React.useMemo(() => {
@@ -417,6 +426,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
               </div>
             );
           })}
+          <CalendarTimeGridPaddingOverlay runs={paddingRuns} />
         </div>
       </div>
     );

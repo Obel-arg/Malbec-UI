@@ -276,6 +276,8 @@ function timeGridEventsToMonthEvents(
       color: ev.color ?? "emerald",
       parentId: ev.parentId,
       confirmed: ev.confirmed,
+      daysBefore: ev.daysBefore,
+      daysAfter: ev.daysAfter,
     };
   });
 }
@@ -642,4 +644,117 @@ function TourAcrossViewsShowcase() {
 export const TourAcrossViews: Story = {
   name: "Tour + shows across views (parentId)",
   render: () => <TourAcrossViewsShowcase />,
+};
+
+// —— Tour + shows with padding days across views ——
+
+/**
+ * A tour whose shows reserve support days around their date (`daysBefore` /
+ * `daysAfter`). In the month grid the padding is a base line butted against the
+ * show chip; in the day/week grid it renders in the padding day's column at the
+ * show's own time level, so it reads as sitting beside the show. Tour Mon Apr 27
+ * → Sun May 3 2026; the shows sit apart so the padding reads cleanly.
+ */
+const tourPaddingAcrossViewsEvents: CalendarTimeGridEvent[] = [
+  {
+    id: "gira-andes",
+    title: "Gira Andes 2026",
+    start: new Date(2026, 3, 27, 0, 0, 0),
+    end: new Date(2026, 4, 3, 23, 59, 0),
+    color: "violet",
+  },
+  {
+    id: "andes-santiago",
+    parentId: "gira-andes",
+    title: "Santiago",
+    start: new Date(2026, 3, 28, 21, 0, 0), // Tue — travels in Mon
+    end: new Date(2026, 3, 28, 23, 0, 0),
+    color: "yellow",
+    daysBefore: 1,
+  },
+  {
+    id: "andes-mendoza",
+    parentId: "gira-andes",
+    title: "Mendoza",
+    start: new Date(2026, 3, 30, 21, 0, 0), // Thu — pads both sides
+    end: new Date(2026, 3, 30, 23, 0, 0),
+    color: "yellow",
+    daysBefore: 1,
+    daysAfter: 1,
+  },
+  {
+    id: "andes-cordoba",
+    parentId: "gira-andes",
+    title: "Córdoba",
+    start: new Date(2026, 4, 2, 21, 0, 0), // Sat — rests Sun
+    end: new Date(2026, 4, 2, 23, 0, 0),
+    color: "yellow",
+    daysAfter: 1,
+  },
+];
+
+function TourPaddingAcrossViewsShowcase() {
+  const [focus, setFocus] = React.useState(() => new Date(2026, 3, 28));
+  const [tab, setTab] = React.useState("week");
+  const monthEvents = React.useMemo(
+    () => timeGridEventsToMonthEvents(tourPaddingAcrossViewsEvents),
+    [],
+  );
+
+  return (
+    <div className="ui:mx-auto ui:flex ui:w-full ui:max-w-[min(100%,1200px)] ui:flex-col ui:gap-4">
+      <Tabs value={tab} onValueChange={setTab}>
+        <Tabs.List className="ui:w-full ui:max-w-md ui:self-center">
+          <Tabs.Trigger value="month">Mes</Tabs.Trigger>
+          <Tabs.Trigger value="week">Semana</Tabs.Trigger>
+          <Tabs.Trigger value="day">Día</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="month" className="ui:pt-2">
+          <div className="ui:mx-auto ui:w-full ui:max-w-[min(100%,1197px)]">
+            <CalendarMonth
+              month={startOfMonth(focus)}
+              events={monthEvents}
+              locale={es}
+              onMonthChange={setFocus}
+              onSelectEvent={(ev) => console.log("select", ev.title)}
+            />
+          </div>
+        </Tabs.Content>
+        <Tabs.Content value="week" className="ui:pt-2">
+          <CalendarWeek
+            week={focus}
+            weekStartsOn={WEEK_STARTS_ON}
+            locale={es}
+            onWeekChange={setFocus}
+            today={null}
+            now={null}
+            startHour={18}
+            endHour={23}
+            events={tourPaddingAcrossViewsEvents}
+            onSelectEvent={(ev) => console.log("select", ev.title)}
+          />
+        </Tabs.Content>
+        <Tabs.Content value="day" className="ui:pt-2">
+          <div className="ui:mx-auto ui:w-full ui:max-w-[min(100%,560px)]">
+            <CalendarDay
+              day={startOfDay(focus)}
+              onDayChange={setFocus}
+              locale={es}
+              today={null}
+              now={null}
+              startHour={18}
+              endHour={23}
+              events={tourPaddingAcrossViewsEvents}
+              onSelectEvent={(ev) => console.log("select", ev.title)}
+            />
+          </div>
+        </Tabs.Content>
+      </Tabs>
+    </div>
+  );
+}
+
+export const TourPaddingAcrossViews: Story = {
+  name: "Tour + show padding days across views",
+  render: () => <TourPaddingAcrossViewsShowcase />,
 };

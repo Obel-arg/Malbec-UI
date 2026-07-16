@@ -36,7 +36,7 @@ export const calendarTimeGridDayHeaderVariants = cva(
 );
 
 export const calendarTimeGridBodyRowVariants = cva(
-  "ui:flex ui:min-h-0 ui:flex-1 ui:overflow-hidden",
+  "ui:relative ui:flex ui:min-h-0 ui:flex-1 ui:overflow-hidden",
 );
 
 export const calendarTimeGridTimeGutterVariants = cva(
