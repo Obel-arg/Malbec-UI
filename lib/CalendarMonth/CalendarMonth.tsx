@@ -1181,7 +1181,7 @@ const CalendarMonthEventBlock = React.forwardRef<
       variant={color as BadgeVariant}
       className={cn(
         eventPillClassName,
-        railColor && "ui:relative ui:overflow-hidden ui:pl-2.5",
+        railColor && "ui:relative ui:overflow-hidden ui:border-0 ui:pl-2.5",
         className,
       )}
       {...rest}
