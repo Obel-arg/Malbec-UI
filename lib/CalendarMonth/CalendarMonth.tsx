@@ -135,6 +135,18 @@ export interface CalendarMonthEvent {
    * container gets a dashed border.
    */
   confirmed?: boolean;
+  /**
+   * Support days a show reserves before its performance date (travel in,
+   * load-in). Rendered as a thin accent base line butted against the left of the
+   * show chip, running through its vertical center, clipped to the parent tour's
+   * visible span. Only meaningful for a timed child of a tour. Defaults to `0`.
+   */
+  daysBefore?: number;
+  /**
+   * Support days a show reserves after its performance date (rest, travel out).
+   * Rendered as a base line off the right of the chip. See {@link daysBefore}.
+   */
+  daysAfter?: number;
 }
 
 function chunkArray<T>(items: T[], size: number): T[][] {
@@ -172,6 +184,10 @@ const MONTH_GROUP_CHILD_ROW_CAP = 3;
 const MONTH_GROUP_CONTAINER_TOP_INSET_PX = 11;
 /** Extra room below the last child row inside the container. */
 const MONTH_GROUP_CONTAINER_BOTTOM_PAD_PX = 4;
+/** Height of a show's padding base line (travel / rest support days). */
+const MONTH_PAD_LINE_HEIGHT_PX = 6;
+/** Padding base line opacity — dimmer than the show's solid accent rail. */
+const MONTH_PAD_LINE_OPACITY = 0.55;
 
 /** Horizontal `left`/`width` for a bar/container spanning `startIdx…endIdx`. */
 function spanBox(
@@ -188,6 +204,53 @@ function spanBox(
   return {
     left: `calc(${leftPct}% + ${leftInset}px)`,
     width: `calc(${widthPct}% - ${leftInset + rightInset}px)`,
+  };
+}
+
+/**
+ * Horizontal `left`/`width` for a show's padding base line on one side. The bar
+ * butts flush against the show chip (square inner corner) and insets + rounds at
+ * the outer end, clipped to the tour's visible span `[spanStart, spanEnd]`. When
+ * the run reaches a span edge that continues into an adjacent week, the outer
+ * corner squares and drops its inset (mirrors the span-bar continuation). Returns
+ * `null` when there are no padding days on that side within the span.
+ */
+function paddingLineBox(
+  col: number,
+  days: number | undefined,
+  side: "before" | "after",
+  spanStart: number,
+  spanEnd: number,
+  continuesLeft: boolean,
+  continuesRight: boolean,
+): { left: string; width: string; squareOuter: boolean } | null {
+  const n = Math.floor(days ?? 0);
+  if (n < 1) return null;
+
+  if (side === "before") {
+    const start = Math.max(spanStart, col - n);
+    if (col - 1 < start) return null;
+    const outerContinues = col - n < spanStart && continuesLeft;
+    const outerInset = outerContinues ? 0 : MONTH_CELL_PAD_PX;
+    const leftPct = (start / 7) * 100;
+    const rightPct = (col / 7) * 100; // chip left edge sits at col/7 + CELL_PAD.
+    return {
+      left: `calc(${leftPct}% + ${outerInset}px)`,
+      width: `calc(${rightPct - leftPct}% + ${MONTH_CELL_PAD_PX - outerInset}px)`,
+      squareOuter: outerContinues,
+    };
+  }
+
+  const end = Math.min(spanEnd, col + n);
+  if (end < col + 1) return null;
+  const outerContinues = col + n > spanEnd && continuesRight;
+  const outerInset = outerContinues ? 0 : MONTH_CELL_PAD_PX;
+  const leftPct = ((col + 1) / 7) * 100; // chip right edge sits at (col+1)/7 − CELL_PAD.
+  const rightPct = ((end + 1) / 7) * 100;
+  return {
+    left: `calc(${leftPct}% - ${MONTH_CELL_PAD_PX}px)`,
+    width: `calc(${rightPct - leftPct}% + ${MONTH_CELL_PAD_PX - outerInset}px)`,
+    squareOuter: outerContinues,
   };
 }
 
@@ -864,6 +927,87 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
             : null),
         }}
       />
+      {/**
+       * Padding base lines — travel / rest support days a show reserves around
+       * its date. Drawn before the chips so a line reaching into a neighbouring
+       * column always sits beneath that column's chip. Only visible (non-overflow)
+       * shows carry padding; clipped to the tour's span.
+       */}
+      {cols.map((col) => {
+        const list = group.childrenByCol.get(col);
+        if (!list || list.length === 0) return null;
+        const overflow = list.length > group.childRows;
+        const visibleCount = overflow ? group.childRows - 1 : list.length;
+        const barColor = EVENT_PILL_DOT_COLOR[ev.color];
+        return list.slice(0, visibleCount).map((kid, i) => {
+          const before = paddingLineBox(
+            col,
+            kid.daysBefore,
+            "before",
+            group.startIdx,
+            group.endIdx,
+            group.continuesLeft,
+            group.continuesRight,
+          );
+          const after = paddingLineBox(
+            col,
+            kid.daysAfter,
+            "after",
+            group.startIdx,
+            group.endIdx,
+            group.continuesLeft,
+            group.continuesRight,
+          );
+          if (!before && !after) return null;
+          const top =
+            rowTop(i) + (MONTH_SPAN_BAR_HEIGHT_PX - MONTH_PAD_LINE_HEIGHT_PX) / 2;
+          const baseStyle: React.CSSProperties = {
+            top,
+            height: MONTH_PAD_LINE_HEIGHT_PX,
+            backgroundColor: barColor,
+            opacity: MONTH_PAD_LINE_OPACITY,
+            borderRadius: 3,
+          };
+          return (
+            <React.Fragment key={`group-pad-${col}-${i}`}>
+              {before ? (
+                <span
+                  aria-hidden
+                  data-slot="calendar-month-pad"
+                  className="ui:pointer-events-none ui:absolute"
+                  style={{
+                    ...baseStyle,
+                    left: before.left,
+                    width: before.width,
+                    borderTopRightRadius: 0,
+                    borderBottomRightRadius: 0,
+                    ...(before.squareOuter
+                      ? { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }
+                      : null),
+                  }}
+                />
+              ) : null}
+              {after ? (
+                <span
+                  aria-hidden
+                  data-slot="calendar-month-pad"
+                  className="ui:pointer-events-none ui:absolute"
+                  style={{
+                    ...baseStyle,
+                    left: after.left,
+                    width: after.width,
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    ...(after.squareOuter
+                      ? { borderTopRightRadius: 0, borderBottomRightRadius: 0 }
+                      : null),
+                  }}
+                />
+              ) : null}
+            </React.Fragment>
+          );
+        });
+      })}
       {cols.map((col) => {
         const list = group.childrenByCol.get(col);
         if (!list || list.length === 0) return null;
