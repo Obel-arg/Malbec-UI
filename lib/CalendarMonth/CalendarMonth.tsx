@@ -68,6 +68,21 @@ function groupContainerBorder(color: CalendarMonthEventColor): string {
   return EVENT_CHIP_BG_COLOR[color];
 }
 
+/**
+ * Inline treatment for an unconfirmed (tentative) chip: no fill, dashed accent
+ * outline. Text color is left to the `Badge` variant so it stays legible.
+ */
+function unconfirmedChipStyle(
+  color: CalendarMonthEventColor,
+): React.CSSProperties {
+  return {
+    backgroundColor: "transparent",
+    borderColor: `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 60%, transparent)`,
+    borderStyle: "dashed",
+    borderWidth: 1.5,
+  };
+}
+
 /** Header/pill fill per color (matches `Badge` variant backgrounds). */
 const EVENT_CHIP_BG_COLOR: Record<CalendarMonthEventColor, string> = {
   yellow: "#efeed4",
@@ -114,6 +129,12 @@ export interface CalendarMonthEvent {
    * with a matching `id` is present.
    */
   parentId?: string;
+  /**
+   * Confirmation state. Defaults to `true` (solid fill). When `false`, the
+   * event renders as tentative — no fill, a dashed accent outline — and a tour
+   * container gets a dashed border.
+   */
+  confirmed?: boolean;
 }
 
 function chunkArray<T>(items: T[], size: number): T[][] {
@@ -740,6 +761,7 @@ export type CalendarMonthWeekProps = React.ComponentProps<"div"> & {
 function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
   const { onSelectEvent } = useCalendarMonthContext("CalendarMonth.Week");
   const ev = group.event;
+  const tourUnconfirmed = ev.confirmed === false;
 
   const headerTop =
     MONTH_SPAN_BAR_TOP_OFFSET_PX + group.topRow * MONTH_SPAN_BAR_ROW_PX;
@@ -782,6 +804,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
             width: header.width,
             backgroundColor: groupContainerBg(ev.color),
             borderColor: groupContainerBorder(ev.color),
+            borderStyle: tourUnconfirmed ? "dashed" : undefined,
           }}
         />
       ) : null}
@@ -790,6 +813,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
         title={ev.title}
         continuesLeft={group.continuesLeft}
         continuesRight={group.continuesRight}
+        unconfirmed={tourUnconfirmed}
         onClick={onSelectEvent ? () => onSelectEvent(ev) : undefined}
         style={{
           top: headerTop,
@@ -814,6 +838,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                 time={kid.time}
                 title={kid.title}
                 railColor={EVENT_PILL_DOT_COLOR[ev.color]}
+                unconfirmed={kid.confirmed === false}
                 onClick={
                   onSelectEvent
                     ? (e) => {
@@ -873,6 +898,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                         time={kid.time}
                         title={kid.title}
                         railColor={EVENT_PILL_DOT_COLOR[ev.color]}
+                        unconfirmed={kid.confirmed === false}
                         onClick={
                           onSelectEvent
                             ? (e) => {
@@ -1079,6 +1105,7 @@ const CalendarMonthDay = React.forwardRef<
               color={ev.color}
               time={ev.time}
               title={ev.title}
+              unconfirmed={ev.confirmed === false}
               onClick={
                 onSelectEvent
                   ? (e) => {
@@ -1117,6 +1144,7 @@ const CalendarMonthDay = React.forwardRef<
                     color={ev.color}
                     time={ev.time}
                     title={ev.title}
+                    unconfirmed={ev.confirmed === false}
                     onClick={
                       onSelectEvent
                         ? (e) => {
@@ -1152,6 +1180,8 @@ export type CalendarMonthEventBlockProps = Omit<
    * absolute element clipped by the pill's rounded corners — no sharp edges.
    */
   railColor?: string;
+  /** Tentative state: no fill, dashed accent outline. */
+  unconfirmed?: boolean;
 };
 
 export type CalendarMonthSpanBlockProps = Omit<
@@ -1164,6 +1194,8 @@ export type CalendarMonthSpanBlockProps = Omit<
   continuesLeft?: boolean;
   /** Bar continues into the next week (square right edge). */
   continuesRight?: boolean;
+  /** Tentative state: no fill, dashed accent outline. */
+  unconfirmed?: boolean;
 };
 
 const eventPillClassName =
@@ -1173,19 +1205,27 @@ const CalendarMonthEventBlock = React.forwardRef<
   HTMLDivElement,
   CalendarMonthEventBlockProps
 >(function CalendarMonthEventBlock(
-  { color, time, title, className, railColor, ...rest },
+  { color, time, title, className, railColor, unconfirmed, style, ...rest },
   ref,
 ) {
   return (
     <Badge
       ref={ref}
       data-slot="calendar-month-event"
+      data-unconfirmed={unconfirmed ? "true" : undefined}
       variant={color as BadgeVariant}
       className={cn(
         eventPillClassName,
-        railColor && "ui:relative ui:overflow-hidden ui:border-0 ui:pl-2.5",
+        railColor &&
+          (unconfirmed
+            ? "ui:relative ui:overflow-hidden ui:pl-2.5"
+            : "ui:relative ui:overflow-hidden ui:border-0 ui:pl-2.5"),
         className,
       )}
+      style={{
+        ...(unconfirmed ? unconfirmedChipStyle(color) : null),
+        ...style,
+      }}
       {...rest}
     >
       {/**
@@ -1198,7 +1238,10 @@ const CalendarMonthEventBlock = React.forwardRef<
         <span
           aria-hidden
           className="ui:absolute ui:inset-y-0 ui:left-0 ui:w-[3px]"
-          style={{ backgroundColor: railColor }}
+          style={{
+            backgroundColor: railColor,
+            opacity: unconfirmed ? 0.55 : 1,
+          }}
         />
       ) : (
         <span
@@ -1234,7 +1277,9 @@ const CalendarMonthSpanBlock = React.forwardRef<
     title,
     continuesLeft = false,
     continuesRight = false,
+    unconfirmed,
     className,
+    style,
     onClick,
     ...rest
   },
@@ -1244,6 +1289,7 @@ const CalendarMonthSpanBlock = React.forwardRef<
     <Badge
       ref={ref}
       data-slot="calendar-month-span"
+      data-unconfirmed={unconfirmed ? "true" : undefined}
       variant={color as BadgeVariant}
       onClick={onClick}
       className={cn(
@@ -1254,6 +1300,10 @@ const CalendarMonthSpanBlock = React.forwardRef<
         }),
         className,
       )}
+      style={{
+        ...(unconfirmed ? unconfirmedChipStyle(color) : null),
+        ...style,
+      }}
       {...rest}
     >
       <Badge.Text

@@ -390,6 +390,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
                             ? timeGridEventAccentColor(tourColor)
                             : undefined
                         }
+                        unconfirmed={ev.confirmed === false}
                         className={cn(
                           "ui:absolute",
                           onSelectEvent && "ui:cursor-pointer",

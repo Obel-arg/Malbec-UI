@@ -21,4 +21,9 @@ export interface CalendarTimeGridEvent {
    * Ignored when no span event with a matching `id` is present.
    */
   parentId?: string;
+  /**
+   * Confirmation state. Defaults to `true` (solid fill). When `false`, the
+   * event renders as tentative — no fill, a dashed accent outline.
+   */
+  confirmed?: boolean;
 }

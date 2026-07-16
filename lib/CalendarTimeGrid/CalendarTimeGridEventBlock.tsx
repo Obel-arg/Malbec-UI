@@ -4,7 +4,10 @@ import * as React from "react";
 import { format } from "date-fns";
 import { cn } from "../utils/cn";
 import type { CalendarTimeGridEventColor } from "./calendar-timegrid-types";
-import { CALENDAR_TIMEGRID_EVENT_COLORS } from "./calendar-timegrid-colors";
+import {
+  CALENDAR_TIMEGRID_EVENT_COLORS,
+  timeGridUnconfirmedStyle,
+} from "./calendar-timegrid-colors";
 
 export type CalendarTimeGridEventBlockProps = {
   title: string;
@@ -18,6 +21,8 @@ export type CalendarTimeGridEventBlockProps = {
    * a show nested in a tour). The block's `overflow-hidden` clips its corners.
    */
   railColor?: string;
+  /** Tentative state: no fill, dashed accent outline. */
+  unconfirmed?: boolean;
   className?: string;
   style?: React.CSSProperties;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -34,6 +39,7 @@ export const CalendarTimeGridEventBlock = React.forwardRef<
     columnCount = 1,
     color = "emerald",
     railColor,
+    unconfirmed,
     className,
     style,
     onClick,
@@ -50,6 +56,7 @@ export const CalendarTimeGridEventBlock = React.forwardRef<
     <div
       ref={ref}
       data-slot="calendar-timegrid-event"
+      data-unconfirmed={unconfirmed ? "true" : undefined}
       className={cn(
         "ui:pointer-events-auto ui:z-20 ui:overflow-hidden ui:rounded-md ui:p-1",
         railColor && "ui:pl-2",
@@ -58,6 +65,7 @@ export const CalendarTimeGridEventBlock = React.forwardRef<
       style={{
         backgroundColor: tint.bg,
         color: tint.text,
+        ...(unconfirmed ? timeGridUnconfirmedStyle(color) : null),
         ...style,
       }}
       onClick={(e) => {
@@ -70,7 +78,10 @@ export const CalendarTimeGridEventBlock = React.forwardRef<
         <span
           aria-hidden
           className="ui:absolute ui:inset-y-0 ui:left-0 ui:w-[3px]"
-          style={{ backgroundColor: railColor }}
+          style={{
+            backgroundColor: railColor,
+            opacity: unconfirmed ? 0.55 : 1,
+          }}
         />
       ) : null}
       <div

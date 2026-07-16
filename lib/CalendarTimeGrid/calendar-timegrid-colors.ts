@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { CalendarTimeGridEventColor } from "./calendar-timegrid-types";
 
 /** Timed event block fill (`bg`) and accent (`text` / rail) per color. */
@@ -19,4 +20,19 @@ export function timeGridEventAccentColor(
   color: CalendarTimeGridEventColor,
 ): string {
   return CALENDAR_TIMEGRID_EVENT_COLORS[color].text;
+}
+
+/**
+ * Inline treatment for an unconfirmed (tentative) event: no fill, dashed accent
+ * outline. Text color is applied separately so it stays legible.
+ */
+export function timeGridUnconfirmedStyle(
+  color: CalendarTimeGridEventColor,
+): CSSProperties {
+  return {
+    backgroundColor: "transparent",
+    borderColor: `color-mix(in srgb, ${CALENDAR_TIMEGRID_EVENT_COLORS[color].text} 60%, transparent)`,
+    borderStyle: "dashed",
+    borderWidth: 1.5,
+  };
 }

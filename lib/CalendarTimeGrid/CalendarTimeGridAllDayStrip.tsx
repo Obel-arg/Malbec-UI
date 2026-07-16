@@ -11,6 +11,7 @@ import {
 } from "../CalendarMonth/calendar-span-layout";
 import { cn } from "../utils/cn";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
+import { timeGridUnconfirmedStyle } from "./calendar-timegrid-colors";
 import {
   calendarTimeGridAllDayBarVariants,
   calendarTimeGridAllDayGutterVariants,
@@ -135,6 +136,8 @@ export function CalendarTimeGridAllDayStrip({
           const leftPct = item.startIdx * widthPctPerDay;
           const widthPct = span * widthPctPerDay;
           const interactive = Boolean(onSelectEvent);
+          const unconfirmed = ev.confirmed === false;
+          const color = ev.color ?? "blue";
 
           return (
             <Badge
@@ -143,7 +146,8 @@ export function CalendarTimeGridAllDayStrip({
                 `span-${ev.start.toISOString()}-${item.lane}-${ev.title}`
               }
               data-slot="calendar-timegrid-all-day-bar"
-              variant={(ev.color ?? "blue") as BadgeVariant}
+              data-unconfirmed={unconfirmed ? "true" : undefined}
+              variant={color as BadgeVariant}
               onClick={
                 interactive
                   ? (e) => {
@@ -170,6 +174,7 @@ export function CalendarTimeGridAllDayStrip({
                   (continuesLeft ? 0 : ALL_DAY_BAR_HORIZONTAL_INSET_PX) +
                   (continuesRight ? 0 : ALL_DAY_BAR_HORIZONTAL_INSET_PX)
                 }px)`,
+                ...(unconfirmed ? timeGridUnconfirmedStyle(color) : null),
               }}
             >
               <Badge.Text

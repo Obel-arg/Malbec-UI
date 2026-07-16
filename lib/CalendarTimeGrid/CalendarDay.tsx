@@ -339,6 +339,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
                         ? timeGridEventAccentColor(tourColor)
                         : undefined
                     }
+                    unconfirmed={ev.confirmed === false}
                     className={cn(
                       "ui:absolute",
                       onSelectEvent && "ui:cursor-pointer",
