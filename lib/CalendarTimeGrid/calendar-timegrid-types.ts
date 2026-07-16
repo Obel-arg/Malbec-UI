@@ -26,4 +26,16 @@ export interface CalendarTimeGridEvent {
    * event renders as tentative — no fill, a dashed accent outline.
    */
   confirmed?: boolean;
+  /**
+   * Support days a show reserves before its date (travel in, load-in). In the
+   * day/week grid these render as a thin accent base line across the padding day
+   * columns in the all-day strip, clipped to the parent tour's span. Defaults to
+   * `0`.
+   */
+  daysBefore?: number;
+  /**
+   * Support days a show reserves after its date (rest, travel out). See
+   * {@link daysBefore}.
+   */
+  daysAfter?: number;
 }

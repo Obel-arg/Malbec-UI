@@ -10,11 +10,13 @@ import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
 import { CalendarTimeGridAllDayStrip } from "./CalendarTimeGridAllDayStrip";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
 import {
+  buildTimedPaddingRuns,
   buildTourColorMap,
   gridBackgroundStyle,
   layoutTimedEventsForDayColumn,
   timedEventHorizontalStyle,
 } from "./calendar-timegrid-layout-utils";
+import { CalendarTimeGridPaddingOverlay } from "./CalendarTimeGridPaddingLine";
 import { CalendarTimeGridNowMarker } from "./CalendarTimeGridNowMarker";
 import {
   formatGmtOffsetLabel,
@@ -127,21 +129,20 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
       [events, day],
     );
 
-    /** Events that overlap this single day, including spans starting earlier or ending later. */
-    const dayStripEvents = React.useMemo(() => {
-      const dayStart = startOfDay(day);
-      return events.filter((ev) => {
-        if (!isMultiDayOrAllDay(ev.start, ev.end, ev.allDay)) return false;
-        const evStart = startOfDay(ev.start);
-        const evEnd = startOfDay(ev.end);
-        return evStart <= dayStart && dayStart <= evEnd;
-      });
-    }, [events, day]);
-
     /** Tour id → color, so child shows can inherit their tour's color. */
     const tourColorMap = React.useMemo(
       () => buildTourColorMap(events),
       [events],
+    );
+
+    /**
+     * Show padding base lines for this single day column. Built from the full
+     * event list so a show on an adjacent (off-view) day still casts its line.
+     */
+    const paddingRuns = React.useMemo(
+      () =>
+        buildTimedPaddingRuns(events, [day], startHour, endHour, hourHeightPx),
+      [events, day, startHour, endHour, hourHeightPx],
     );
 
     const selectable = Boolean(onSelectDay);
@@ -226,9 +227,13 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
           </div>
         </div>
 
+        {/**
+         * The strip receives the full event list and clips spans to this day
+         * itself (matching `CalendarWeek`); timed events are ignored there.
+         */}
         <CalendarTimeGridAllDayStrip
           days={[day]}
-          events={dayStripEvents}
+          events={events}
           onSelectEvent={onSelectEvent}
         />
 
@@ -364,6 +369,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
               })}
             </div>
           </div>
+          <CalendarTimeGridPaddingOverlay runs={paddingRuns} />
         </div>
       </div>
     );

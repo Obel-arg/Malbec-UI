@@ -71,6 +71,72 @@ export const TourWithShows: Story = {
 };
 
 /**
+ * Shows reserve support days around their date — travel in, load-in, rest,
+ * travel out — via `daysBefore` / `daysAfter`. Each renders as a thin accent
+ * base line butted against the show chip and running through its vertical
+ * centre, clipped to the tour's span. Here the opening show travels in a day,
+ * the closing show rests a day after, and the middle show pads both sides.
+ */
+function TourWithPaddingDaysShowcase() {
+  const [month, setMonth] = React.useState(() => startOfMonth(anchor));
+  // Tour spans the full week so the padding stays inside the container.
+  const tourStart = new Date(2026, 5, 15); // Mon Jun 15
+  const events: CalendarMonthEvent[] = [
+    {
+      id: "gira-andes",
+      title: "Gira Andes 2026",
+      date: tourStart,
+      endDate: addDays(tourStart, 6), // Mon → Sun
+      color: "violet",
+    },
+    {
+      parentId: "gira-andes",
+      date: addDays(tourStart, 1), // Tue — travels in Mon
+      time: "21:00",
+      title: "Santiago",
+      color: "yellow",
+      daysBefore: 1,
+    },
+    {
+      parentId: "gira-andes",
+      date: addDays(tourStart, 3), // Thu — pads both sides
+      time: "20:00",
+      title: "Mendoza",
+      color: "yellow",
+      daysBefore: 1,
+      daysAfter: 1,
+    },
+    {
+      parentId: "gira-andes",
+      date: addDays(tourStart, 5), // Sat — rests Sun
+      time: "21:00",
+      title: "Córdoba",
+      color: "yellow",
+      daysAfter: 1,
+    },
+  ];
+
+  return (
+    <Frame>
+      <CalendarMonth
+        month={month}
+        events={events}
+        locale={es}
+        onMonthChange={setMonth}
+        onSelectEvent={(ev) => console.log("select", ev.title)}
+        today={startOfDay(new Date(2026, 5, 16))}
+        weekStartsOn={1}
+      />
+    </Frame>
+  );
+}
+
+export const TourWithPaddingDays: Story = {
+  name: "Tour with show padding days (daysBefore / daysAfter)",
+  render: () => <TourWithPaddingDaysShowcase />,
+};
+
+/**
  * Two tours overlapping the same days. Each keeps its own container; the
  * variable-height lane packing stacks them vertically so neither collides. The
  * second tour crosses the week boundary (square right edge, continues into the
