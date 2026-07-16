@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.11.1 — 2026-07-16
+
+- patch(calendar): add show padding days (`daysBefore` / `daysAfter`) — reserved travel / rest days around a show, drawn as a thin accent base line butted against the show chip in the month view, and beside the show at its own time level in the day/week time grid
+
 ## v1.11.0 — 2026-07-16
 
 - minor(calendar): group shows under their tour via `parentId` — a tinted container spanning the tour's dates in the month view, and shared tour color + accent rail in the day/week time grid
