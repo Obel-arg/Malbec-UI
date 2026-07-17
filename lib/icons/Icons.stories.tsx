@@ -49,6 +49,18 @@ type Story = StoryObj<typeof meta>;
 
 export const Grid: Story = {
   name: "Custom icons",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Artist, Stadium, Ticket } from "@obel-arg/malbec-ui/icons/custom";
+
+// Icons inherit color via currentColor and size via className.
+<Artist className="size-5 text-text-default" aria-hidden />
+<Stadium className="size-8" aria-hidden />
+<Ticket className="size-6" aria-label="Tickets" />`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:min-h-screen ui:bg-background-100 ui:p-8">
       <div className="ui:mx-auto ui:max-w-4xl">

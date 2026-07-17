@@ -38,6 +38,29 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { FileDropzone } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <FileDropzone accept=".xlsx,.csv,.tsv,.numbers">
+      <FileDropzone.Icon>
+        <UploadIcon /> {/* your icon */}
+      </FileDropzone.Icon>
+      <FileDropzone.Caption>
+        Add your .xslx, .csv, .tsv
+        <br />
+        or numbers file
+      </FileDropzone.Caption>
+    </FileDropzone>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:w-[472px]">
       <FileDropzone accept=".xlsx,.csv,.tsv,.numbers">
@@ -56,6 +79,30 @@ export const Default: Story = {
 
 export const WithAction: Story = {
   name: "With action",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { FileDropzone } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <FileDropzone accept=".xlsx,.csv,.tsv,.numbers">
+      <FileDropzone.Icon>
+        <UploadIcon /> {/* your icon */}
+      </FileDropzone.Icon>
+      <FileDropzone.Caption>
+        Add your .xslx, .csv, .tsv
+        <br />
+        or numbers file
+      </FileDropzone.Caption>
+      <FileDropzone.Action>Subir archivo</FileDropzone.Action>
+    </FileDropzone>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:w-[472px]">
       <FileDropzone accept=".xlsx,.csv,.tsv,.numbers">
@@ -75,6 +122,30 @@ export const WithAction: Story = {
 
 export const Disabled: Story = {
   name: "State · disabled",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { FileDropzone } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <FileDropzone disabled accept=".xlsx,.csv,.tsv,.numbers">
+      <FileDropzone.Icon>
+        <UploadIcon /> {/* your icon */}
+      </FileDropzone.Icon>
+      <FileDropzone.Caption>
+        Add your .xslx, .csv, .tsv
+        <br />
+        or numbers file
+      </FileDropzone.Caption>
+      <FileDropzone.Action>Subir archivo</FileDropzone.Action>
+    </FileDropzone>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:w-[472px]">
       <FileDropzone disabled accept=".xlsx,.csv,.tsv,.numbers">
@@ -94,6 +165,30 @@ export const Disabled: Story = {
 
 export const Invalid: Story = {
   name: "State · invalid",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { FileDropzone } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <FileDropzone aria-invalid accept=".xlsx,.csv,.tsv,.numbers">
+      <FileDropzone.Icon>
+        <UploadIcon /> {/* your icon */}
+      </FileDropzone.Icon>
+      <FileDropzone.Caption>
+        Add your .xslx, .csv, .tsv
+        <br />
+        or numbers file
+      </FileDropzone.Caption>
+      <FileDropzone.Action>Subir archivo</FileDropzone.Action>
+    </FileDropzone>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:w-[472px]">
       <FileDropzone aria-invalid accept=".xlsx,.csv,.tsv,.numbers">
@@ -112,6 +207,47 @@ export const Invalid: Story = {
 };
 
 export const Controlled: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { FileDropzone } from "@obel-arg/malbec-ui";
+
+function Example() {
+  const [files, setFiles] = useState<File[]>([]);
+  return (
+    <div className="flex flex-col gap-3">
+      <FileDropzone
+        multiple
+        accept=".xlsx,.csv,.tsv,.numbers"
+        onFilesSelected={(next) => setFiles(next)}
+      >
+        <FileDropzone.Icon>
+          <UploadIcon /> {/* your icon */}
+        </FileDropzone.Icon>
+        <FileDropzone.Caption>
+          Add your .xslx, .csv, .tsv
+          <br />
+          or numbers file
+        </FileDropzone.Caption>
+        <FileDropzone.Action>Subir archivo</FileDropzone.Action>
+      </FileDropzone>
+      {files.length > 0 ? (
+        <ul>
+          {files.map((f) => (
+            <li key={f.name + f.size}>
+              {f.name} — {f.size} bytes
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => {
     const Demo = () => {
       const [files, setFiles] = useState<File[]>([]);

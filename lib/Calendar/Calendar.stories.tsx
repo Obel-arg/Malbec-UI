@@ -51,6 +51,41 @@ export const Single: Story = {
       </Popover.Content>
     </Popover>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { Calendar, Popover } from "@obel-arg/malbec-ui";
+import { es } from "date-fns/locale";
+
+function Example() {
+  const [date, setDate] = useState<Date | undefined>(new Date(2024, 8, 17));
+
+  return (
+    <Popover defaultOpen>
+      <Popover.Trigger asChild>
+        <button
+          type="button"
+          className="rounded-md border border-background-300 bg-background-100 px-4 py-2 text-sm text-text-default"
+        >
+          Open calendar
+        </button>
+      </Popover.Trigger>
+      <Popover.Content className="w-[max(var(--radix-popover-trigger-width,0px),280px)]">
+        <Calendar
+          locale={es}
+          mode="single"
+          defaultMonth={new Date(2024, 8, 1)}
+          selected={date}
+          onSelect={setDate}
+        />
+      </Popover.Content>
+    </Popover>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const Range: Story = {
@@ -82,5 +117,47 @@ export const Range: Story = {
         </Popover.Content>
       </Popover>
     );
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import type { DateRange } from "react-day-picker";
+import { Calendar, Popover } from "@obel-arg/malbec-ui";
+import { es } from "date-fns/locale";
+
+function Example() {
+  const [range, setRange] = useState<DateRange | undefined>({
+    from: new Date(2026, 0, 12),
+    to: new Date(2026, 1, 11),
+  });
+
+  return (
+    <Popover defaultOpen>
+      <Popover.Trigger asChild>
+        <button
+          type="button"
+          className="rounded-md border border-background-300 bg-background-100 px-4 py-2 text-sm text-text-default"
+        >
+          Open range
+        </button>
+      </Popover.Trigger>
+      <Popover.Content className="w-[max(var(--radix-popover-trigger-width,0px),560px)]">
+        <Calendar
+          mode="range"
+          locale={es}
+          numberOfMonths={2}
+          pagedNavigation
+          showTodayStyle={false}
+          defaultMonth={new Date(2026, 0, 1)}
+          selected={range}
+          onSelect={setRange}
+        />
+      </Popover.Content>
+    </Popover>
+  );
+}`,
+      },
+    },
   },
 };

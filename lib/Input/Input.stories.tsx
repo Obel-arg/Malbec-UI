@@ -48,6 +48,15 @@ export const Default: Story = {
       <Input placeholder="Email" />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input } from "@obel-arg/malbec-ui";
+
+<Input placeholder="Email" />`,
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
@@ -57,6 +66,15 @@ export const Disabled: Story = {
       <Input disabled placeholder="Email" />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input } from "@obel-arg/malbec-ui";
+
+<Input disabled placeholder="Email" />`,
+      },
+    },
+  },
 };
 
 export const Invalid: Story = {
@@ -71,6 +89,22 @@ export const Invalid: Story = {
       </Input>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input } from "@obel-arg/malbec-ui";
+
+<div className="flex flex-col gap-1.5">
+  <Input aria-invalid placeholder="Email" />
+  <Input aria-invalid placeholder="Search">
+    <Input.Icon side="start">
+      <SearchIcon className="size-full" /> {/* your icon */}
+    </Input.Icon>
+  </Input>
+</div>`,
+      },
+    },
+  },
 };
 
 export const File: Story = {
@@ -88,6 +122,20 @@ export const File: Story = {
       />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input, Label } from "@obel-arg/malbec-ui";
+
+<div className="flex flex-col items-start gap-1.5">
+  <Label htmlFor="picture" weight="regular">
+    Picture
+  </Label>
+  <Input className="pr-0" id="picture" type="file" name="picture" />
+</div>`,
+      },
+    },
+  },
 };
 
 export const FileInvalid: Story = {
@@ -106,6 +154,20 @@ export const FileInvalid: Story = {
       />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input, Label } from "@obel-arg/malbec-ui";
+
+<div className="flex flex-col items-start gap-1.5">
+  <Label htmlFor="picture" weight="regular">
+    Picture
+  </Label>
+  <Input aria-invalid className="pr-0" id="picture" type="file" name="picture" />
+</div>`,
+      },
+    },
+  },
 };
 
 export const WithLabel: Story = {
@@ -123,6 +185,20 @@ export const WithLabel: Story = {
       />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input, Label } from "@obel-arg/malbec-ui";
+
+<div className="flex flex-col gap-1.5">
+  <Label htmlFor="email" weight="regular">
+    Email
+  </Label>
+  <Input id="email" type="email" autoComplete="email" placeholder="Email" />
+</div>`,
+      },
+    },
+  },
 };
 
 export const Inline: Story = {
@@ -145,6 +221,26 @@ export const Inline: Story = {
       />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input, Label } from "@obel-arg/malbec-ui";
+
+<div className="flex items-center gap-4">
+  <Label className="flex-1" htmlFor="username" weight="regular">
+    Username
+  </Label>
+  <Input
+    className="w-[240px] shrink-0"
+    id="username"
+    type="text"
+    defaultValue="@peduarte"
+    autoComplete="username"
+  />
+</div>`,
+      },
+    },
+  },
 };
 
 function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -192,6 +288,19 @@ export const WithStartIcon: Story = {
       </Input>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input } from "@obel-arg/malbec-ui";
+
+<Input placeholder="Search">
+  <Input.Icon side="start">
+    <SearchIcon className="size-full" /> {/* your icon */}
+  </Input.Icon>
+</Input>`,
+      },
+    },
+  },
 };
 
 export const WithEndIcon: Story = {
@@ -205,6 +314,19 @@ export const WithEndIcon: Story = {
       </Input>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input } from "@obel-arg/malbec-ui";
+
+<Input type="email" placeholder="Email">
+  <Input.Icon side="end">
+    <MailIcon className="size-full" /> {/* your icon */}
+  </Input.Icon>
+</Input>`,
+      },
+    },
+  },
 };
 
 export const WithBothIcons: Story = {
@@ -221,6 +343,22 @@ export const WithBothIcons: Story = {
       </Input>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input } from "@obel-arg/malbec-ui";
+
+<Input placeholder="Search mail">
+  <Input.Icon side="start">
+    <SearchIcon className="size-full" /> {/* your icon */}
+  </Input.Icon>
+  <Input.Icon side="end">
+    <MailIcon className="size-full" /> {/* your icon */}
+  </Input.Icon>
+</Input>`,
+      },
+    },
+  },
 };
 
 export const WithButton: Story = {
@@ -244,4 +382,29 @@ export const WithButton: Story = {
       </Button>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, Input } from "@obel-arg/malbec-ui";
+
+<div className="flex items-center gap-1.5">
+  <Input
+    className="w-[175px] shrink-0"
+    type="email"
+    autoComplete="email"
+    placeholder="Email"
+    aria-label="Email"
+  />
+  <Button
+    className="w-[97px] shrink-0"
+    htmlType="button"
+    size="md"
+    variant="primary"
+  >
+    <Button.Text>Subscribe</Button.Text>
+  </Button>
+</div>`,
+      },
+    },
+  },
 };

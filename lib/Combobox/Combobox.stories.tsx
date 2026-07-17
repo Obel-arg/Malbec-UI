@@ -90,6 +90,33 @@ export const WithClear: Story = {
       </Combobox.Content>
     </Combobox>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Combobox } from "@obel-arg/malbec-ui";
+
+const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
+
+function Example() {
+  return (
+    <Combobox items={frameworks} defaultValue="Next.js" className="w-[200px]">
+      <Combobox.Input placeholder="Select a framework" showClear />
+      <Combobox.Content>
+        <Combobox.Empty>No items found.</Combobox.Empty>
+        <Combobox.List>
+          {(item) => (
+            <Combobox.Item key={String(item)} value={item}>
+              {String(item)}
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
@@ -109,6 +136,33 @@ export const Disabled: Story = {
       </Combobox.Content>
     </Combobox>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Combobox } from "@obel-arg/malbec-ui";
+
+const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
+
+function Example() {
+  return (
+    <Combobox items={frameworks} disabled className="w-[200px]">
+      <Combobox.Input placeholder="Select a framework" />
+      <Combobox.Content>
+        <Combobox.Empty>No items found.</Combobox.Empty>
+        <Combobox.List>
+          {(item) => (
+            <Combobox.Item key={String(item)} value={item}>
+              {String(item)}
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const Invalid: Story = {
@@ -128,6 +182,33 @@ export const Invalid: Story = {
       </Combobox.Content>
     </Combobox>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Combobox } from "@obel-arg/malbec-ui";
+
+const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
+
+function Example() {
+  return (
+    <Combobox items={frameworks} className="w-[200px]">
+      <Combobox.Input placeholder="Select a framework" aria-invalid />
+      <Combobox.Content>
+        <Combobox.Empty>No items found.</Combobox.Empty>
+        <Combobox.List>
+          {(item) => (
+            <Combobox.Item key={String(item)} value={item}>
+              {String(item)}
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const AutoHighlight: Story = {
@@ -147,6 +228,33 @@ export const AutoHighlight: Story = {
       </Combobox.Content>
     </Combobox>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Combobox } from "@obel-arg/malbec-ui";
+
+const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
+
+function Example() {
+  return (
+    <Combobox items={frameworks} autoHighlight className="w-[200px]">
+      <Combobox.Input placeholder="Select a framework" />
+      <Combobox.Content>
+        <Combobox.Empty>No items found.</Combobox.Empty>
+        <Combobox.List>
+          {(item) => (
+            <Combobox.Item key={String(item)} value={item}>
+              {String(item)}
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const MultipleWithChips: Story = {
@@ -185,6 +293,52 @@ export const MultipleWithChips: Story = {
       </Combobox.Content>
     </Combobox>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Combobox } from "@obel-arg/malbec-ui";
+
+const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
+
+function Example() {
+  return (
+    <Combobox
+      multiple
+      autoHighlight
+      items={frameworks}
+      defaultValue={["Next.js"]}
+      className="w-[min(320px,100%)]"
+    >
+      <Combobox.Chips className="max-w-xs">
+        <Combobox.Value>
+          {(values) => (
+            <>
+              {values.map((item) => (
+                <Combobox.Chip key={String(item)} value={item}>
+                  {String(item)}
+                </Combobox.Chip>
+              ))}
+              <Combobox.ChipsInput placeholder="Add framework" />
+            </>
+          )}
+        </Combobox.Value>
+      </Combobox.Chips>
+      <Combobox.Content>
+        <Combobox.Empty>No items found.</Combobox.Empty>
+        <Combobox.List>
+          {(item) => (
+            <Combobox.Item key={String(item)} value={item}>
+              {String(item)}
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const TriggerWithSearchField: Story = {
@@ -209,4 +363,36 @@ export const TriggerWithSearchField: Story = {
       </Combobox.Content>
     </Combobox>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Combobox } from "@obel-arg/malbec-ui";
+
+const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
+
+function Example() {
+  return (
+    <Combobox mode="trigger" items={frameworks} className="w-[200px]">
+      <Combobox.Trigger placeholder="Select framework…" />
+      <Combobox.Content>
+        <Combobox.Input
+          filterPlacement="content"
+          placeholder="Search framework…"
+          showTrigger={false}
+        />
+        <Combobox.Empty>No items found.</Combobox.Empty>
+        <Combobox.List>
+          {(item) => (
+            <Combobox.Item key={String(item)} value={item}>
+              {String(item)}
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox>
+  );
+}`,
+      },
+    },
+  },
 };

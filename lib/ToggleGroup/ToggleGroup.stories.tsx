@@ -102,6 +102,25 @@ export const Default: Story = {
       </ToggleGroup.Item>
     </ToggleGroup>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
+
+<ToggleGroup type="single" aria-label="Text formatting" size="md" variant="default">
+  <ToggleGroup.Item value="bold" aria-label="Bold">
+    <BoldIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="italic" aria-label="Italic">
+    <ItalicIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="underline" aria-label="Underline">
+    <UnderlineIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+</ToggleGroup>`,
+      },
+    },
+  },
 };
 
 export const Outline: Story = {
@@ -130,6 +149,25 @@ export const Outline: Story = {
       </ToggleGroup.Item>
     </ToggleGroup>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
+
+<ToggleGroup type="single" aria-label="Text formatting" size="md" variant="outline">
+  <ToggleGroup.Item value="bold" aria-label="Bold">
+    <BoldIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="italic" aria-label="Italic">
+    <ItalicIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="underline" aria-label="Underline">
+    <UnderlineIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+</ToggleGroup>`,
+      },
+    },
+  },
 };
 
 export const Small: Story = {
@@ -159,6 +197,25 @@ export const Small: Story = {
       </ToggleGroup.Item>
     </ToggleGroup>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
+
+<ToggleGroup type="single" aria-label="Text formatting" size="sm" variant="default">
+  <ToggleGroup.Item value="bold" aria-label="Bold">
+    <BoldIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="italic" aria-label="Italic">
+    <ItalicIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="underline" aria-label="Underline">
+    <UnderlineIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+</ToggleGroup>`,
+      },
+    },
+  },
 };
 
 export const Large: Story = {
@@ -188,6 +245,25 @@ export const Large: Story = {
       </ToggleGroup.Item>
     </ToggleGroup>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
+
+<ToggleGroup type="single" aria-label="Text formatting" size="lg" variant="default">
+  <ToggleGroup.Item value="bold" aria-label="Bold">
+    <BoldIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="italic" aria-label="Italic">
+    <ItalicIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="underline" aria-label="Underline">
+    <UnderlineIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+</ToggleGroup>`,
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
@@ -217,4 +293,23 @@ export const Disabled: Story = {
       </ToggleGroup.Item>
     </ToggleGroup>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
+
+<ToggleGroup type="single" aria-label="Text formatting" size="md" variant="outline" disabled>
+  <ToggleGroup.Item value="bold" aria-label="Bold">
+    <BoldIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="italic" aria-label="Italic">
+    <ItalicIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="underline" aria-label="Underline">
+    <UnderlineIcon /> {/* your icon */}
+  </ToggleGroup.Item>
+</ToggleGroup>`,
+      },
+    },
+  },
 };

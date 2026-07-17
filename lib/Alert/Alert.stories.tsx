@@ -85,6 +85,33 @@ export const Default: Story = {
 
 export const MalbecDestructive: Story = {
   name: "Destructive",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Alert } from "@obel-arg/malbec-ui";
+
+<Alert variant="destructive">
+  <Alert.Icon>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden
+    >
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+  </Alert.Icon>
+  <Alert.Title>Error</Alert.Title>
+  <Alert.Description>
+    Your session has expired. Please log in again.
+  </Alert.Description>
+</Alert>`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:w-full ui:max-w-sm">
       <Alert variant="destructive">
@@ -101,6 +128,25 @@ export const MalbecDestructive: Story = {
 };
 
 export const WithAction: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Alert, Button } from "@obel-arg/malbec-ui";
+
+<Alert>
+  <Alert.Title>Dark mode is now available</Alert.Title>
+  <Alert.Description>
+    Enable it under your profile settings to get started.
+  </Alert.Description>
+  <Alert.Action>
+    <Button size="sm" variant="primary">
+      <Button.Text>Enable</Button.Text>
+    </Button>
+  </Alert.Action>
+</Alert>`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:w-full ui:max-w-sm">
       <Alert>

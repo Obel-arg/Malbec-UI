@@ -65,4 +65,44 @@ export const EditProfile: Story = {
       </Sheet.Content>
     </Sheet>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Sheet, Button } from "@obel-arg/malbec-ui";
+
+<Sheet>
+  <Sheet.Trigger asChild>
+    <Button variant="outline" size="md">
+      <Button.Text>Open sheet</Button.Text>
+    </Button>
+  </Sheet.Trigger>
+
+  <Sheet.Content side="right">
+    <Sheet.Header>
+      <Sheet.Title>Edit profile</Sheet.Title>
+      <Sheet.Description>
+        Make changes to your profile here. Click save when you're done.
+      </Sheet.Description>
+    </Sheet.Header>
+
+    <Sheet.Body>
+      <Sheet.InlineField>
+        <Sheet.InlineLabel htmlFor="name">Name</Sheet.InlineLabel>
+        <Sheet.InlineInput id="name" defaultValue="@peduarte" />
+      </Sheet.InlineField>
+
+      <Sheet.InlineField>
+        <Sheet.InlineLabel htmlFor="username">Username</Sheet.InlineLabel>
+        <Sheet.InlineInput id="username" defaultValue="@peduarte" />
+      </Sheet.InlineField>
+    </Sheet.Body>
+
+    <Sheet.Footer>
+      <Sheet.Action>Save changes</Sheet.Action>
+    </Sheet.Footer>
+  </Sheet.Content>
+</Sheet>`,
+      },
+    },
+  },
 };

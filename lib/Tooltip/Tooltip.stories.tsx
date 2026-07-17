@@ -28,6 +28,24 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, Tooltip } from "@obel-arg/malbec-ui";
+
+<Tooltip.Provider>
+  <Tooltip>
+    <Tooltip.Trigger asChild>
+      <Button variant="outline" size="md">
+        <Button.Text>Hover</Button.Text>
+      </Button>
+    </Tooltip.Trigger>
+    <Tooltip.Content>Add to library</Tooltip.Content>
+  </Tooltip>
+</Tooltip.Provider>`,
+      },
+    },
+  },
   render: () => (
     <Tooltip.Provider>
       <Tooltip defaultOpen>

@@ -84,6 +84,45 @@ const TrashIcon = () => (
 );
 
 export const Playground: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { FloatingBar } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <FloatingBar>
+      <FloatingBar.Count>
+        <strong>2&nbsp;</strong>
+        <span>Selected</span>
+      </FloatingBar.Count>
+      <FloatingBar.Actions>
+        <FloatingBar.Trigger emphasis="strong">
+          <FloatingBar.Trigger.Icon>
+            <AssignPeopleIcon /> {/* your icon */}
+          </FloatingBar.Trigger.Icon>
+          <FloatingBar.Trigger.Text>Asignar personas</FloatingBar.Trigger.Text>
+        </FloatingBar.Trigger>
+        <FloatingBar.Trigger>
+          <FloatingBar.Trigger.Icon>
+            <SquarePenIcon /> {/* your icon */}
+          </FloatingBar.Trigger.Icon>
+          <FloatingBar.Trigger.Text>Editar</FloatingBar.Trigger.Text>
+        </FloatingBar.Trigger>
+        <FloatingBar.Trigger>
+          <FloatingBar.Trigger.Icon>
+            <TrashIcon /> {/* your icon */}
+          </FloatingBar.Trigger.Icon>
+          <FloatingBar.Trigger.Text>Borrar</FloatingBar.Trigger.Text>
+        </FloatingBar.Trigger>
+      </FloatingBar.Actions>
+      <FloatingBar.Close aria-label="Clear selection" />
+    </FloatingBar>
+  );
+}`,
+      },
+    },
+  },
   render: () => (
     <FloatingBar>
       <FloatingBar.Count>
@@ -117,6 +156,33 @@ export const Playground: Story = {
 
 export const TextOnlyTriggers: Story = {
   name: "Composition · Text-only triggers",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { FloatingBar } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <FloatingBar>
+      <FloatingBar.Count>
+        <strong>2&nbsp;</strong>
+        <span>Selected</span>
+      </FloatingBar.Count>
+      <FloatingBar.Actions>
+        <FloatingBar.Trigger>
+          <FloatingBar.Trigger.Text>Approve</FloatingBar.Trigger.Text>
+        </FloatingBar.Trigger>
+        <FloatingBar.Trigger>
+          <FloatingBar.Trigger.Text>Archive</FloatingBar.Trigger.Text>
+        </FloatingBar.Trigger>
+      </FloatingBar.Actions>
+      <FloatingBar.Close />
+    </FloatingBar>
+  );
+}`,
+      },
+    },
+  },
   render: () => (
     <FloatingBar>
       <FloatingBar.Count>
@@ -138,6 +204,32 @@ export const TextOnlyTriggers: Story = {
 
 export const WithoutClose: Story = {
   name: "Composition · No close",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { FloatingBar } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <FloatingBar>
+      <FloatingBar.Count>
+        <strong>2&nbsp;</strong>
+        <span>Selected</span>
+      </FloatingBar.Count>
+      <FloatingBar.Actions>
+        <FloatingBar.Trigger>
+          <FloatingBar.Trigger.Icon>
+            <SquarePenIcon /> {/* your icon */}
+          </FloatingBar.Trigger.Icon>
+          <FloatingBar.Trigger.Text>Editar</FloatingBar.Trigger.Text>
+        </FloatingBar.Trigger>
+      </FloatingBar.Actions>
+    </FloatingBar>
+  );
+}`,
+      },
+    },
+  },
   render: () => (
     <FloatingBar>
       <FloatingBar.Count>
@@ -158,6 +250,39 @@ export const WithoutClose: Story = {
 
 export const DisabledTrigger: Story = {
   name: "State · Disabled trigger",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { FloatingBar } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <FloatingBar>
+      <FloatingBar.Count>
+        <strong>2&nbsp;</strong>
+        <span>Selected</span>
+      </FloatingBar.Count>
+      <FloatingBar.Actions>
+        <FloatingBar.Trigger>
+          <FloatingBar.Trigger.Icon>
+            <SquarePenIcon /> {/* your icon */}
+          </FloatingBar.Trigger.Icon>
+          <FloatingBar.Trigger.Text>Editar</FloatingBar.Trigger.Text>
+        </FloatingBar.Trigger>
+        <FloatingBar.Trigger disabled>
+          <FloatingBar.Trigger.Icon>
+            <TrashIcon /> {/* your icon */}
+          </FloatingBar.Trigger.Icon>
+          <FloatingBar.Trigger.Text>Borrar</FloatingBar.Trigger.Text>
+        </FloatingBar.Trigger>
+      </FloatingBar.Actions>
+      <FloatingBar.Close />
+    </FloatingBar>
+  );
+}`,
+      },
+    },
+  },
   render: () => (
     <FloatingBar>
       <FloatingBar.Count>

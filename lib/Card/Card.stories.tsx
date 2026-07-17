@@ -31,6 +31,32 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, Card, Steps } from "@obel-arg/malbec-ui";
+
+<Card className="w-[500px]">
+  <Steps total={3} value={1} />
+  <Card.Header>
+    <Card.Title>Create project</Card.Title>
+    <Card.Description>Enter the details below to get started.</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <p>Form fields and other content go here.</p>
+  </Card.Content>
+  <Card.Footer>
+    <Button variant="outline">
+      <Button.Text>Cancel</Button.Text>
+    </Button>
+    <Button variant="primary">
+      <Button.Text>Next</Button.Text>
+    </Button>
+  </Card.Footer>
+</Card>`,
+      },
+    },
+  },
   render: () => (
     <Card className="ui:w-[500px]">
       <Steps total={3} value={1} />
@@ -58,6 +84,42 @@ export const Default: Story = {
 };
 
 export const WithAction: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, Card, Steps } from "@obel-arg/malbec-ui";
+
+<Card>
+  <Steps total={3} value={2} />
+  <Card.Header>
+    <Card.Title>Configuration</Card.Title>
+    <Card.Description>Adjust settings for this step.</Card.Description>
+    <Card.Action>
+      <Button variant="ghost" size="sm">
+        <Button.Text>Help</Button.Text>
+      </Button>
+    </Card.Action>
+  </Card.Header>
+  <Card.Content>
+    <p>Main body content.</p>
+  </Card.Content>
+  <Card.Footer>
+    <div className="flex gap-2">
+      <Button variant="outline" size="sm">
+        <Button.Text>Cancel</Button.Text>
+      </Button>
+      <Button variant="outline" size="sm">
+        <Button.Text>Back</Button.Text>
+      </Button>
+    </div>
+    <Button variant="primary" size="sm">
+      <Button.Text>Next</Button.Text>
+    </Button>
+  </Card.Footer>
+</Card>`,
+      },
+    },
+  },
   render: () => (
     <Card>
       <Steps total={3} value={2} />

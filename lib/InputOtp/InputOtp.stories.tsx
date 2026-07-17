@@ -84,6 +84,28 @@ export const Default: Story = {
       </InputOtp>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { InputOtp } from "@obel-arg/malbec-ui";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+
+<InputOtp maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
+  <InputOtp.Group>
+    <InputOtp.Slot index={0} />
+    <InputOtp.Slot index={1} />
+    <InputOtp.Slot index={2} />
+  </InputOtp.Group>
+  <InputOtp.Separator />
+  <InputOtp.Group>
+    <InputOtp.Slot index={3} />
+    <InputOtp.Slot index={4} />
+    <InputOtp.Slot index={5} />
+  </InputOtp.Group>
+</InputOtp>`,
+      },
+    },
+  },
 };
 
 export const Invalid: Story = {
@@ -106,6 +128,28 @@ export const Invalid: Story = {
       </InputOtp>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { InputOtp } from "@obel-arg/malbec-ui";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+
+<InputOtp aria-invalid maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
+  <InputOtp.Group>
+    <InputOtp.Slot index={0} />
+    <InputOtp.Slot index={1} />
+    <InputOtp.Slot index={2} />
+  </InputOtp.Group>
+  <InputOtp.Separator />
+  <InputOtp.Group>
+    <InputOtp.Slot index={3} />
+    <InputOtp.Slot index={4} />
+    <InputOtp.Slot index={5} />
+  </InputOtp.Group>
+</InputOtp>`,
+      },
+    },
+  },
 };
 
 export const WithSeparators: Story = {
@@ -130,6 +174,31 @@ export const WithSeparators: Story = {
       </InputOtp>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { InputOtp } from "@obel-arg/malbec-ui";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+
+<InputOtp maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
+  <InputOtp.Group>
+    <InputOtp.Slot index={0} />
+    <InputOtp.Slot index={1} />
+  </InputOtp.Group>
+  <InputOtp.Separator />
+  <InputOtp.Group>
+    <InputOtp.Slot index={2} />
+    <InputOtp.Slot index={3} />
+  </InputOtp.Group>
+  <InputOtp.Separator />
+  <InputOtp.Group>
+    <InputOtp.Slot index={4} />
+    <InputOtp.Slot index={5} />
+  </InputOtp.Group>
+</InputOtp>`,
+      },
+    },
+  },
 };
 
 export const Controlled: Story = {
@@ -159,5 +228,39 @@ export const Controlled: Story = {
         </p>
       </div>
     );
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `import { InputOtp } from "@obel-arg/malbec-ui";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useState } from "react";
+
+function OtpField() {
+  const [value, setValue] = useState("");
+
+  return (
+    <div className="flex flex-col items-stretch">
+      <InputOtp
+        maxLength={6}
+        pattern={REGEXP_ONLY_DIGITS}
+        value={value}
+        onChange={setValue}
+      >
+        <InputOtp.Group>
+          <InputOtp.Slot index={0} />
+          <InputOtp.Slot index={1} />
+          <InputOtp.Slot index={2} />
+          <InputOtp.Slot index={3} />
+          <InputOtp.Slot index={4} />
+          <InputOtp.Slot index={5} />
+        </InputOtp.Group>
+      </InputOtp>
+      <p>Enter your one-time password.</p>
+    </div>
+  );
+}`,
+      },
+    },
   },
 };

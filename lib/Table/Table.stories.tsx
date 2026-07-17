@@ -41,6 +41,45 @@ type Story = StoryObj<typeof meta>;
 
 export const EventsShell: Story = {
   name: "Composition · events",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Table } from "@obel-arg/malbec-ui";
+
+// Compose the table by hand: an optional <colgroup> for column widths, then
+// Table.Header / Table.Body with Table.Row, Table.Head and Table.Cell.
+function EventsTable({ rows }: { rows: EventRow[] }) {
+  return (
+    <Table>
+      <colgroup>
+        <col className="w-[300px]" />
+        <col className="w-[240px]" />
+        <col />
+      </colgroup>
+      <Table.Header>
+        <Table.Row>
+          <Table.Head>Artista</Table.Head>
+          <Table.Head>Venue</Table.Head>
+          <Table.Head className="text-right">Acciones</Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {rows.map((row) => (
+          <Table.Row key={row.id}>
+            <Table.Cell>{row.artist}</Table.Cell>
+            <Table.Cell className="font-medium uppercase">{row.venue}</Table.Cell>
+            <Table.Cell className="text-right">
+              <MoreActionButton />
+            </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+}`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:mx-auto ui:max-w-[1085px]">
       <Table>
@@ -242,4 +281,57 @@ function EventsSortableTable() {
 export const EventsSortable: Story = {
   name: "Sortable · events",
   render: () => <EventsSortableTable />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useMemo, useState } from "react";
+import { Table } from "@obel-arg/malbec-ui";
+
+type Row = { id: string; artist: string; venue: string };
+type Sort = { key: keyof Row; direction: "asc" | "desc" } | null;
+
+function SortableTable({ rows }: { rows: Row[] }) {
+  const [sort, setSort] = useState<Sort>(null);
+
+  const sortedRows = useMemo(() => {
+    if (!sort) return rows;
+    const dir = sort.direction === "asc" ? 1 : -1;
+    return [...rows].sort((a, b) => a[sort.key].localeCompare(b[sort.key]) * dir);
+  }, [rows, sort]);
+
+  const toggle = (key: keyof Row) =>
+    setSort((prev) =>
+      prev?.key === key && prev.direction === "asc"
+        ? { key, direction: "desc" }
+        : { key, direction: "asc" },
+    );
+
+  return (
+    <Table>
+      <Table.Header>
+        <Table.Row>
+          <Table.Head>
+            <button type="button" onClick={() => toggle("artist")}>
+              Artista {sort?.key === "artist" ? (sort.direction === "asc" ? "↑" : "↓") : ""}
+            </button>
+          </Table.Head>
+          <Table.Head>
+            <button type="button" onClick={() => toggle("venue")}>Venue</button>
+          </Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {sortedRows.map((row) => (
+          <Table.Row key={row.id}>
+            <Table.Cell>{row.artist}</Table.Cell>
+            <Table.Cell className="ui:uppercase">{row.venue}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+}`,
+      },
+    },
+  },
 };

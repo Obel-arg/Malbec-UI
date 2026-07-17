@@ -61,6 +61,17 @@ export const Unchecked: Story = {
       <Checkbox.Indicator />
     </Checkbox>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Checkbox } from "@obel-arg/malbec-ui";
+
+<Checkbox defaultChecked={false}>
+  <Checkbox.Indicator />
+</Checkbox>`,
+      },
+    },
+  },
 };
 
 export const Checked: Story = {
@@ -69,6 +80,17 @@ export const Checked: Story = {
       <Checkbox.Indicator />
     </Checkbox>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Checkbox } from "@obel-arg/malbec-ui";
+
+<Checkbox defaultChecked>
+  <Checkbox.Indicator />
+</Checkbox>`,
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
@@ -77,6 +99,17 @@ export const Disabled: Story = {
       <Checkbox.Indicator />
     </Checkbox>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Checkbox } from "@obel-arg/malbec-ui";
+
+<Checkbox disabled>
+  <Checkbox.Indicator />
+</Checkbox>`,
+      },
+    },
+  },
 };
 
 export const Indeterminate: Story = {
@@ -94,6 +127,31 @@ export const Indeterminate: Story = {
         <Checkbox.Indicator />
       </Checkbox>
     );
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { Checkbox } from "@obel-arg/malbec-ui";
+
+function IndeterminateExample() {
+  const [checked, setChecked] = useState<"indeterminate" | boolean>(
+    "indeterminate",
+  );
+
+  return (
+    <Checkbox
+      checked={checked}
+      onCheckedChange={(v) =>
+        setChecked(v === "indeterminate" ? "indeterminate" : v === true)
+      }
+    >
+      <Checkbox.Indicator />
+    </Checkbox>
+  );
+}`,
+      },
+    },
   },
 };
 
@@ -144,6 +202,36 @@ export const SwitchableStates: Story = {
       </div>
     );
   },
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { Checkbox } from "@obel-arg/malbec-ui";
+
+type TriState = false | true | "indeterminate";
+
+function SwitchableCheckbox() {
+  const [value, setValue] = useState<TriState>(false);
+
+  return (
+    <Checkbox
+      aria-label="Tap or press Space to cycle state"
+      checked={value}
+      onCheckedChange={() => {
+        setValue((v) => {
+          if (v === false) return true;
+          if (v === true) return "indeterminate";
+          return false;
+        });
+      }}
+    >
+      <Checkbox.Indicator />
+    </Checkbox>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const WithLabel: Story = {
@@ -165,6 +253,30 @@ export const WithLabel: Story = {
       </div>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Checkbox } from "@obel-arg/malbec-ui";
+
+<div className="flex max-w-md items-start gap-3">
+  <Checkbox id="terms">
+    <Checkbox.Indicator />
+  </Checkbox>
+  <div className="flex flex-col gap-1">
+    <label
+      htmlFor="terms"
+      className="cursor-pointer text-label-semibold text-text-default"
+    >
+      Accept terms and conditions
+    </label>
+    <p className="text-muted text-text-default-muted">
+      You agree to our Terms of Service and Privacy Policy.
+    </p>
+  </div>
+</div>`,
+      },
+    },
+  },
 };
 
 export const Invalid: Story = {
@@ -181,6 +293,25 @@ export const Invalid: Story = {
       </label>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Checkbox } from "@obel-arg/malbec-ui";
+
+<div className="flex items-start gap-3">
+  <Checkbox id="required-field" aria-invalid>
+    <Checkbox.Indicator />
+  </Checkbox>
+  <label
+    htmlFor="required-field"
+    className="cursor-pointer text-label-semibold text-text-default"
+  >
+    Required field
+  </label>
+</div>`,
+      },
+    },
+  },
 };
 
 export const Group: Story = {
@@ -245,5 +376,76 @@ export const Group: Story = {
         </ul>
       </fieldset>
     );
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { Checkbox } from "@obel-arg/malbec-ui";
+
+function DesktopItems() {
+  const [values, setValues] = useState({
+    disks: true,
+    external: false,
+    optical: false,
+  });
+
+  const toggle =
+    (key: keyof typeof values) => (v: boolean | "indeterminate") => {
+      if (v === "indeterminate") return;
+      setValues((s) => ({ ...s, [key]: v }));
+    };
+
+  return (
+    <fieldset className="flex flex-col gap-4 border-0 p-0">
+      <legend className="mb-1 text-p font-semibold text-text-default">
+        Show on the desktop
+      </legend>
+      <p className="mb-2 text-muted text-text-default-muted">
+        Select the items you want to show.
+      </p>
+      <ul className="m-0 flex list-none flex-col gap-3 p-0">
+        <li className="flex items-center gap-3">
+          <Checkbox
+            id="disks"
+            checked={values.disks}
+            onCheckedChange={toggle("disks")}
+          >
+            <Checkbox.Indicator />
+          </Checkbox>
+          <label htmlFor="disks" className="text-p text-text-default">
+            Hard disks
+          </label>
+        </li>
+        <li className="flex items-center gap-3">
+          <Checkbox
+            id="external"
+            checked={values.external}
+            onCheckedChange={toggle("external")}
+          >
+            <Checkbox.Indicator />
+          </Checkbox>
+          <label htmlFor="external" className="text-p text-text-default">
+            External disks
+          </label>
+        </li>
+        <li className="flex items-center gap-3">
+          <Checkbox
+            id="optical"
+            checked={values.optical}
+            onCheckedChange={toggle("optical")}
+          >
+            <Checkbox.Indicator />
+          </Checkbox>
+          <label htmlFor="optical" className="text-p text-text-default">
+            CDs, DVDs, and similar
+          </label>
+        </li>
+      </ul>
+    </fieldset>
+  );
+}`,
+      },
+    },
   },
 };

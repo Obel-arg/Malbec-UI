@@ -51,19 +51,55 @@ export const Playground: Story = {
 
 export const Off: Story = {
   render: () => <Switch defaultChecked={false} />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Switch } from "@obel-arg/malbec-ui";
+
+<Switch defaultChecked={false} />`,
+      },
+    },
+  },
 };
 
 export const On: Story = {
   render: () => <Switch defaultChecked />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Switch } from "@obel-arg/malbec-ui";
+
+<Switch defaultChecked />`,
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
   render: () => <Switch disabled />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Switch } from "@obel-arg/malbec-ui";
+
+<Switch disabled />`,
+      },
+    },
+  },
 };
 
 export const Invalid: Story = {
   name: "State · invalid",
   render: () => <Switch aria-invalid />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Switch } from "@obel-arg/malbec-ui";
+
+<Switch aria-invalid />`,
+      },
+    },
+  },
 };
 
 export const WithLabel: Story = {
@@ -75,4 +111,18 @@ export const WithLabel: Story = {
       </Label>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Switch, Label } from "@obel-arg/malbec-ui";
+
+<div className="flex max-w-md items-center gap-2">
+  <Switch id="airplane-mode" defaultChecked={false} />
+  <Label htmlFor="airplane-mode" className="mb-0">
+    Default
+  </Label>
+</div>`,
+      },
+    },
+  },
 };

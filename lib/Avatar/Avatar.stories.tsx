@@ -91,6 +91,19 @@ export const Sizes: Story = {
       </Avatar>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Avatar, AvatarImage, AvatarFallback } from "@obel-arg/malbec-ui";
+
+// size: "sm" | "default" | "lg"
+<Avatar size="lg">
+  <AvatarImage src="https://github.com/shadcn.png" alt="" />
+  <AvatarFallback>CN</AvatarFallback>
+</Avatar>`,
+      },
+    },
+  },
 };
 
 export const WithBadge: Story = {
@@ -101,6 +114,19 @@ export const WithBadge: Story = {
       <AvatarBadge />
     </Avatar>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from "@obel-arg/malbec-ui";
+
+<Avatar>
+  <AvatarImage src="https://github.com/shadcn.png" alt="" />
+  <AvatarFallback>CN</AvatarFallback>
+  <AvatarBadge />
+</Avatar>`,
+      },
+    },
+  },
 };
 
 export const WithBadgeIcon: Story = {
@@ -113,6 +139,24 @@ export const WithBadgeIcon: Story = {
       </AvatarBadge>
     </Avatar>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from "@obel-arg/malbec-ui";
+
+<Avatar>
+  <AvatarImage src="https://github.com/shadcn.png" alt="" />
+  <AvatarFallback>CN</AvatarFallback>
+  <AvatarBadge>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <path d="M5 12h14" />
+      <path d="M12 5v14" />
+    </svg>
+  </AvatarBadge>
+</Avatar>`,
+      },
+    },
+  },
 };
 
 export const Group: Story = {
@@ -130,6 +174,26 @@ export const Group: Story = {
       </Avatar>
     </AvatarGroup>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@obel-arg/malbec-ui";
+
+<AvatarGroup>
+  <Avatar>
+    <AvatarImage src="https://github.com/shadcn.png" alt="" />
+    <AvatarFallback>CN</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>LR</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>ER</AvatarFallback>
+  </Avatar>
+</AvatarGroup>`,
+      },
+    },
+  },
 };
 
 export const GroupWithCount: Story = {
@@ -148,6 +212,27 @@ export const GroupWithCount: Story = {
       <AvatarGroupCount>+3</AvatarGroupCount>
     </AvatarGroup>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Avatar, AvatarImage, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@obel-arg/malbec-ui";
+
+<AvatarGroup>
+  <Avatar>
+    <AvatarImage src="https://github.com/shadcn.png" alt="" />
+    <AvatarFallback>CN</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>LR</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>ER</AvatarFallback>
+  </Avatar>
+  <AvatarGroupCount>+3</AvatarGroupCount>
+</AvatarGroup>`,
+      },
+    },
+  },
 };
 
 export const GroupWithIconCount: Story = {
@@ -168,4 +253,30 @@ export const GroupWithIconCount: Story = {
       </AvatarGroupCount>
     </AvatarGroup>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Avatar, AvatarImage, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@obel-arg/malbec-ui";
+
+<AvatarGroup>
+  <Avatar>
+    <AvatarImage src="https://github.com/shadcn.png" alt="" />
+    <AvatarFallback>CN</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>LR</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>ER</AvatarFallback>
+  </Avatar>
+  <AvatarGroupCount>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <path d="M5 12h14" />
+      <path d="M12 5v14" />
+    </svg>
+  </AvatarGroupCount>
+</AvatarGroup>`,
+      },
+    },
+  },
 };

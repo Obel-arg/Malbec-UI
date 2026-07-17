@@ -60,6 +60,28 @@ export const Playground: Story = {
 
 /** Three stacked options with the middle value selected (design reference layout). */
 export const Default: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Label, RadioGroup } from "@obel-arg/malbec-ui";
+
+<RadioGroup defaultValue="comfortable">
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="default" id="rg-default" />
+    <Label htmlFor="rg-default">Default</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="comfortable" id="rg-comfortable" />
+    <Label htmlFor="rg-comfortable">Comfortable</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="compact" id="rg-compact" />
+    <Label htmlFor="rg-compact">Compact</Label>
+  </div>
+</RadioGroup>`,
+      },
+    },
+  },
   render: function DefaultRender() {
     return (
       <RadioGroup defaultValue="comfortable" className="ui:w-[108px]">
@@ -82,6 +104,25 @@ export const Default: Story = {
 
 export const Invalid: Story = {
   name: "State · invalid",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Label, RadioGroup } from "@obel-arg/malbec-ui";
+
+// Mark items with aria-invalid to show the error state.
+<RadioGroup>
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item aria-invalid value="one" id="rg-invalid-one" />
+    <Label htmlFor="rg-invalid-one">Option one</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item aria-invalid value="two" id="rg-invalid-two" />
+    <Label htmlFor="rg-invalid-two">Option two</Label>
+  </div>
+</RadioGroup>`,
+      },
+    },
+  },
   render: function InvalidRender() {
     return (
       <RadioGroup className="ui:w-[140px]">
@@ -99,6 +140,24 @@ export const Invalid: Story = {
 };
 
 export const WithLabels: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Label, RadioGroup } from "@obel-arg/malbec-ui";
+
+<RadioGroup defaultValue="one" className="items-start">
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="one" id="wl-one" />
+    <Label htmlFor="wl-one">Option one</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="two" id="wl-two" />
+    <Label htmlFor="wl-two">Option two</Label>
+  </div>
+</RadioGroup>`,
+      },
+    },
+  },
   render: function WithLabelsRender() {
     return (
       <RadioGroup defaultValue="one" className="ui:items-start">
@@ -116,6 +175,24 @@ export const WithLabels: Story = {
 };
 
 export const Disabled: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Label, RadioGroup } from "@obel-arg/malbec-ui";
+
+<RadioGroup defaultValue="a">
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="a" id="dis-a" />
+    <Label htmlFor="dis-a">Available</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="b" id="dis-b" disabled />
+    <Label htmlFor="dis-b">Disabled</Label>
+  </div>
+</RadioGroup>`,
+      },
+    },
+  },
   render: function DisabledRender() {
     return (
       <RadioGroup defaultValue="a">
@@ -153,6 +230,25 @@ function CreditCardIcon(props: React.SVGProps<SVGSVGElement>) {
 
 /** Card-style options: inactive border vs active primary border. */
 export const Cards: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { RadioGroup } from "@obel-arg/malbec-ui";
+
+// Use RadioGroup.Card for card-style options (active shows a primary border).
+<RadioGroup defaultValue="card-b" className="w-[177px] gap-3">
+  <RadioGroup.Card value="card-a" aria-label="Radio card label">
+    <CreditCardIcon /> {/* your icon */}
+    <span>Radio card label</span>
+  </RadioGroup.Card>
+  <RadioGroup.Card value="card-b" aria-label="Radio card label">
+    <CreditCardIcon /> {/* your icon */}
+    <span>Radio card label</span>
+  </RadioGroup.Card>
+</RadioGroup>`,
+      },
+    },
+  },
   render: function CardsRender() {
     return (
       <RadioGroup

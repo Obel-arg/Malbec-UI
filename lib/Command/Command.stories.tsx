@@ -178,6 +178,64 @@ export const WithGroups: Story = {
       </Command>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Command } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <Command defaultValue="calendar" label="Command menu">
+      <Command.Input placeholder="Do stuff or ask questions" />
+      <Command.List>
+        <Command.Empty>No results found.</Command.Empty>
+        <Command.Group heading="Suggestions">
+          <Command.Item value="calendar">
+            <span className="mr-2 inline-flex items-center">
+              <CalendarIcon /> {/* your icon */}
+            </span>
+            Create new show
+          </Command.Item>
+          <Command.Item value="emoji">
+            <span className="mr-2 inline-flex items-center">
+              <SmileIcon /> {/* your icon */}
+            </span>
+            Search emoji
+          </Command.Item>
+          <Command.Item value="calculator" disabled>
+            <span className="mr-2 inline-flex items-center">
+              <CalculatorIcon /> {/* your icon */}
+            </span>
+            Calculator
+          </Command.Item>
+        </Command.Group>
+        <Command.Group heading="Settings">
+          <Command.Item value="profile">
+            <span className="mr-2 inline-flex items-center">
+              <UserIcon /> {/* your icon */}
+            </span>
+            Profile
+          </Command.Item>
+          <Command.Item value="billing">
+            <span className="mr-2 inline-flex items-center">
+              <CreditCardIcon /> {/* your icon */}
+            </span>
+            Billing
+          </Command.Item>
+          <Command.Item value="settings">
+            <span className="mr-2 inline-flex items-center">
+              <SettingsIcon /> {/* your icon */}
+            </span>
+            Go to settings
+          </Command.Item>
+        </Command.Group>
+      </Command.List>
+    </Command>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const InDialog: Story = {
@@ -220,5 +278,50 @@ export const InDialog: Story = {
         </Command.Dialog>
       </div>
     );
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { Button, Command } from "@obel-arg/malbec-ui";
+
+function CommandPalette() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button htmlType="button" variant="secondary" onClick={() => setOpen(true)}>
+        Open palette
+      </Button>
+      <Command.Dialog
+        open={open}
+        onOpenChange={setOpen}
+        label="Command palette"
+        defaultValue="calendar"
+      >
+        <Command.Input placeholder="Do stuff or ask questions" />
+        <Command.List>
+          <Command.Empty>No results found.</Command.Empty>
+          <Command.Group heading="Suggestions">
+            <Command.Item value="calendar" onSelect={() => setOpen(false)}>
+              <span className="mr-2 inline-flex items-center">
+                <CalendarIcon /> {/* your icon */}
+              </span>
+              Create new show
+            </Command.Item>
+            <Command.Item value="emoji" onSelect={() => setOpen(false)}>
+              <span className="mr-2 inline-flex items-center">
+                <SmileIcon /> {/* your icon */}
+              </span>
+              Search emoji
+            </Command.Item>
+          </Command.Group>
+        </Command.List>
+      </Command.Dialog>
+    </>
+  );
+}`,
+      },
+    },
   },
 };

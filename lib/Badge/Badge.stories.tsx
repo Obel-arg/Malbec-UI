@@ -134,6 +134,32 @@ export const AllVariants: Story = {
       ))}
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge } from "@obel-arg/malbec-ui";
+
+<Badge variant="default">
+  <Badge.Text>Badge</Badge.Text>
+</Badge>
+<Badge variant="secondary">
+  <Badge.Text>Secondary</Badge.Text>
+</Badge>
+<Badge variant="outline">
+  <Badge.Text>Outline</Badge.Text>
+</Badge>
+<Badge variant="destructive">
+  <Badge.Text>Destructive</Badge.Text>
+</Badge>
+<Badge variant="ghost">
+  <Badge.Text>Ghost</Badge.Text>
+</Badge>
+<Badge variant="link">
+  <Badge.Text>Link</Badge.Text>
+</Badge>`,
+      },
+    },
+  },
 };
 
 export const WithIconInlineStart: Story = {
@@ -154,6 +180,26 @@ export const WithIconInlineStart: Story = {
       </Badge>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge } from "@obel-arg/malbec-ui";
+
+<Badge>
+  <Badge.Icon>
+    <CheckIcon /> {/* your icon */}
+  </Badge.Icon>
+  <Badge.Text>Verified</Badge.Text>
+</Badge>
+<Badge variant="secondary">
+  <Badge.Icon>
+    <BookmarkIcon /> {/* your icon */}
+  </Badge.Icon>
+  <Badge.Text>Bookmark</Badge.Text>
+</Badge>`,
+      },
+    },
+  },
 };
 
 export const WithIconInlineEnd: Story = {
@@ -166,6 +212,20 @@ export const WithIconInlineEnd: Story = {
       </Badge.Icon>
     </Badge>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge } from "@obel-arg/malbec-ui";
+
+<Badge variant="outline">
+  <Badge.Text>Status</Badge.Text>
+  <Badge.Icon>
+    <CheckIcon /> {/* your icon */}
+  </Badge.Icon>
+</Badge>`,
+      },
+    },
+  },
 };
 
 export const WithSpinner: Story = {
@@ -186,6 +246,26 @@ export const WithSpinner: Story = {
       </Badge>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge, Spinner } from "@obel-arg/malbec-ui";
+
+<Badge>
+  <Badge.Icon>
+    <Spinner className="size-full" />
+  </Badge.Icon>
+  <Badge.Text>Deleting</Badge.Text>
+</Badge>
+<Badge variant="secondary">
+  <Badge.Text>Generating</Badge.Text>
+  <Badge.Icon>
+    <Spinner className="size-full" />
+  </Badge.Icon>
+</Badge>`,
+      },
+    },
+  },
 };
 
 export const CategoricalPills: Story = {
@@ -215,6 +295,24 @@ export const CategoricalPills: Story = {
       ))}
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge } from "@obel-arg/malbec-ui";
+
+<Badge variant="blue" className="justify-start">
+  <span
+    aria-hidden
+    className="inline-block h-[6px] min-h-[6px] w-[6px] min-w-[6px] shrink-0 rounded-full"
+    style={{ backgroundColor: "#2f628a" }}
+  />
+  <Badge.Text tone="accent">20:00</Badge.Text>
+  <Badge.Text>Blue</Badge.Text>
+</Badge>
+// … repeat for other categorical variants (yellow, orange, violet, emerald, sage, red)`,
+      },
+    },
+  },
 };
 
 export const StatusVariants: Story = {
@@ -239,6 +337,24 @@ export const StatusVariants: Story = {
       </div>
     );
   },
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge } from "@obel-arg/malbec-ui";
+
+<Badge variant="yellow" className="w-full">
+  <Badge.Text>Presupuesto solicitado</Badge.Text>
+</Badge>
+<Badge variant="emerald" className="w-full">
+  <Badge.Text>Aprobado</Badge.Text>
+</Badge>
+<Badge variant="red" className="w-full">
+  <Badge.Text>No aplica</Badge.Text>
+</Badge>
+// … other statuses: orange, blue, violet, sage`,
+      },
+    },
+  },
 };
 
 export const AsChildLink: Story = {
@@ -258,6 +374,27 @@ export const AsChildLink: Story = {
       </a>
     </Badge>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge } from "@obel-arg/malbec-ui";
+
+<Badge asChild>
+  <a
+    className="cursor-pointer"
+    href="https://ui.shadcn.com/docs/components/radix/badge"
+    target="_blank"
+    rel="noreferrer"
+  >
+    <Badge.Text>Open shadcn Badge</Badge.Text>
+    <Badge.Icon>
+      <ArrowUpRightIcon /> {/* your icon */}
+    </Badge.Icon>
+  </a>
+</Badge>`,
+      },
+    },
+  },
 };
 
 export const Default: Story = {

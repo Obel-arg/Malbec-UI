@@ -66,4 +66,23 @@ export const WithInput: Story = {
       />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Label } from "@obel-arg/malbec-ui";
+
+// The "group" wrapper lets the label reflect a disabled control
+// via Label's group-has-[:disabled] styles.
+<div className="group flex w-[280px] flex-col gap-1.5">
+  <Label htmlFor="email">Email</Label>
+  <input
+    id="email"
+    type="email"
+    placeholder="name@example.com"
+    className="w-full rounded-md border border-background-300 bg-white px-3 py-2 text-sm"
+  />
+</div>`,
+      },
+    },
+  },
 };

@@ -172,6 +172,50 @@ export const TwoSeriesLines: Story = {
       </RechartsLineChart>
     </Chart>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Chart } from "@obel-arg/malbec-ui";
+import { Line, LineChart } from "recharts";
+
+const lineData = [
+  { x: 0, series1: 52, series2: 48 },
+  { x: 1, series1: 45, series2: 44 },
+  { x: 2, series1: 72, series2: 38 },
+  // …
+];
+
+const chartConfig = {
+  series1: { label: "This week", color: "var(--chart-1)" },
+  series2: { label: "Typical", color: "var(--chart-2)" },
+};
+
+const dot = (color) => ({ r: 3, fill: color, stroke: "var(--color-background-100)", strokeWidth: 1 });
+const activeDot = (color) => ({ r: 4, fill: "var(--color-background-100)", stroke: color, strokeWidth: 2 });
+
+<Chart config={chartConfig} className="h-[200px] w-full">
+  <LineChart accessibilityLayer data={lineData} margin={{ top: 4, right: 8, left: 8, bottom: 4 }}>
+    <Line
+      type="monotone"
+      dataKey="series1"
+      stroke="var(--color-series1)"
+      strokeWidth={2}
+      dot={dot("var(--color-series1)")}
+      activeDot={activeDot("var(--color-series1)")}
+    />
+    <Line
+      type="monotone"
+      dataKey="series2"
+      stroke="var(--color-series2)"
+      strokeWidth={2}
+      dot={dot("var(--color-series2)")}
+      activeDot={activeDot("var(--color-series2)")}
+    />
+  </LineChart>
+</Chart>`,
+      },
+    },
+  },
 };
 
 export const WithTooltip: Story = {
@@ -205,6 +249,51 @@ export const WithTooltip: Story = {
       </RechartsLineChart>
     </Chart>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Chart } from "@obel-arg/malbec-ui";
+import { Line, LineChart } from "recharts";
+
+const lineData = [
+  { x: 0, series1: 52, series2: 48 },
+  { x: 1, series1: 45, series2: 44 },
+  { x: 2, series1: 72, series2: 38 },
+  // …
+];
+
+const chartConfig = {
+  series1: { label: "This week", color: "var(--chart-1)" },
+  series2: { label: "Typical", color: "var(--chart-2)" },
+};
+
+const dot = (color) => ({ r: 3, fill: color, stroke: "var(--color-background-100)", strokeWidth: 1 });
+const activeDot = (color) => ({ r: 4, fill: "var(--color-background-100)", stroke: color, strokeWidth: 2 });
+
+<Chart config={chartConfig} className="h-[200px] w-full">
+  <LineChart accessibilityLayer data={lineData} margin={{ top: 4, right: 8, left: 8, bottom: 4 }}>
+    <Chart.Tooltip content={<Chart.TooltipContent indicator="dot" hideLabel />} />
+    <Line
+      type="monotone"
+      dataKey="series1"
+      stroke="var(--color-series1)"
+      strokeWidth={2}
+      dot={dot("var(--color-series1)")}
+      activeDot={activeDot("var(--color-series1)")}
+    />
+    <Line
+      type="monotone"
+      dataKey="series2"
+      stroke="var(--color-series2)"
+      strokeWidth={2}
+      dot={dot("var(--color-series2)")}
+      activeDot={activeDot("var(--color-series2)")}
+    />
+  </LineChart>
+</Chart>`,
+      },
+    },
+  },
 };
 
 export const InCard: Story = {
@@ -247,6 +336,60 @@ export const InCard: Story = {
       </Card.Content>
     </Card>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Card, Chart } from "@obel-arg/malbec-ui";
+import { Line, LineChart } from "recharts";
+
+const lineData = [
+  { x: 0, series1: 52, series2: 48 },
+  { x: 1, series1: 45, series2: 44 },
+  { x: 2, series1: 72, series2: 38 },
+  // …
+];
+
+const chartConfig = {
+  series1: { label: "This week", color: "var(--chart-1)" },
+  series2: { label: "Typical", color: "var(--chart-2)" },
+};
+
+const dot = (color) => ({ r: 3, fill: color, stroke: "var(--color-background-100)", strokeWidth: 1 });
+const activeDot = (color) => ({ r: 4, fill: "var(--color-background-100)", stroke: color, strokeWidth: 2 });
+
+<Card className="max-w-[717px] rounded-xl">
+  <Card.Header>
+    <Card.Title>Exercise minutes</Card.Title>
+    <Card.Description>
+      Your exercise minutes are ahead of where you normally are.
+    </Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <Chart config={chartConfig} className="h-[200px] w-full">
+      <LineChart accessibilityLayer data={lineData} margin={{ top: 4, right: 8, left: 8, bottom: 4 }}>
+        <Line
+          type="monotone"
+          dataKey="series1"
+          stroke="var(--color-series1)"
+          strokeWidth={2}
+          dot={dot("var(--color-series1)")}
+          activeDot={activeDot("var(--color-series1)")}
+        />
+        <Line
+          type="monotone"
+          dataKey="series2"
+          stroke="var(--color-series2)"
+          strokeWidth={2}
+          dot={dot("var(--color-series2)")}
+          activeDot={activeDot("var(--color-series2)")}
+        />
+      </LineChart>
+    </Chart>
+  </Card.Content>
+</Card>`,
+      },
+    },
+  },
 };
 
 export const BarGrouped: Story = {
@@ -273,6 +416,44 @@ export const BarGrouped: Story = {
       </BarChart>
     </Chart>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Chart } from "@obel-arg/malbec-ui";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
+const barMonthly = [
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  // …
+];
+
+const barChartConfig = {
+  desktop: { label: "Desktop", color: "var(--chart-1)" },
+  mobile: { label: "Mobile", color: "var(--chart-2)" },
+};
+
+<Chart config={barChartConfig} className="h-[280px] w-full">
+  <BarChart accessibilityLayer data={barMonthly} margin={{ left: 12, right: 12 }}>
+    <CartesianGrid vertical={false} />
+    <XAxis
+      dataKey="month"
+      tickLine={false}
+      tickMargin={10}
+      axisLine={false}
+      tickFormatter={(value) => value.slice(0, 3)}
+    />
+    <YAxis tickLine={false} axisLine={false} tickMargin={8} width={32} />
+    <Chart.Tooltip content={<Chart.TooltipContent />} />
+    <Chart.Legend content={<Chart.LegendContent />} />
+    <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+    <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+  </BarChart>
+</Chart>`,
+      },
+    },
+  },
 };
 
 export const AreaStacked: Story = {
@@ -310,6 +491,55 @@ export const AreaStacked: Story = {
       </AreaChart>
     </Chart>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Chart } from "@obel-arg/malbec-ui";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+
+const areaMonthly = [
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  // …
+];
+
+const areaChartConfig = {
+  desktop: { label: "Desktop", color: "var(--chart-1)" },
+  mobile: { label: "Mobile", color: "var(--chart-2)" },
+};
+
+<Chart config={areaChartConfig} className="h-[280px] w-full">
+  <AreaChart accessibilityLayer data={areaMonthly} margin={{ left: 12, right: 12 }}>
+    <CartesianGrid vertical={false} />
+    <XAxis
+      dataKey="month"
+      tickLine={false}
+      tickMargin={10}
+      axisLine={false}
+      tickFormatter={(value) => value.slice(0, 3)}
+    />
+    <Chart.Tooltip content={<Chart.TooltipContent />} />
+    <Chart.Legend content={<Chart.LegendContent />} />
+    <Area
+      type="monotone"
+      dataKey="mobile"
+      stackId="1"
+      stroke="var(--color-mobile)"
+      fill="var(--color-mobile)"
+    />
+    <Area
+      type="monotone"
+      dataKey="desktop"
+      stackId="1"
+      stroke="var(--color-desktop)"
+      fill="var(--color-desktop)"
+    />
+  </AreaChart>
+</Chart>`,
+      },
+    },
+  },
 };
 
 export const PieDonut: Story = {
@@ -344,4 +574,51 @@ export const PieDonut: Story = {
       </PieChart>
     </Chart>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Chart } from "@obel-arg/malbec-ui";
+import { Cell, Pie, PieChart } from "recharts";
+
+const pieSegments = [
+  { name: "chrome", value: 275, fill: "var(--color-chrome)" },
+  { name: "safari", value: 200, fill: "var(--color-safari)" },
+  { name: "firefox", value: 120, fill: "var(--color-firefox)" },
+  // …
+];
+
+const pieChartConfig = {
+  visitors: { label: "Visitors" },
+  chrome: { label: "Chrome", color: "var(--chart-1)" },
+  safari: { label: "Safari", color: "var(--chart-2)" },
+  firefox: { label: "Firefox", color: "var(--chart-3)" },
+  edge: { label: "Edge", color: "var(--chart-4)" },
+};
+
+<Chart config={pieChartConfig} className="mx-auto aspect-square h-[280px] max-w-[320px]">
+  <PieChart>
+    <Chart.Tooltip content={<Chart.TooltipContent hideLabel nameKey="name" />} />
+    <Pie
+      data={pieSegments}
+      dataKey="value"
+      nameKey="name"
+      innerRadius={56}
+      strokeWidth={2}
+      stroke="var(--color-background-100)"
+    >
+      {pieSegments.map((entry) => (
+        <Cell key={entry.name} fill={entry.fill} />
+      ))}
+    </Pie>
+    <Chart.Legend
+      content={<Chart.LegendContent nameKey="name" />}
+      layout="horizontal"
+      verticalAlign="bottom"
+      align="center"
+    />
+  </PieChart>
+</Chart>`,
+      },
+    },
+  },
 };
