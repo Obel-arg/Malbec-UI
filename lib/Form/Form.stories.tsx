@@ -77,6 +77,97 @@ const profileSchema = z.object({
 });
 
 export const Default: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { z } from "zod";
+import { Button, Field, Form, Input, useForm } from "@obel-arg/malbec-ui";
+
+const profileSchema = z.object({
+  title: z
+    .string()
+    .min(5, "At least 5 characters")
+    .max(32, "At most 32 characters"),
+  email: z.email("Enter a valid email address"),
+  description: z.string().min(20, "Tell us a bit more (min 20 chars)"),
+});
+
+function ProfileForm() {
+  const [submitted, setSubmitted] = useState<unknown>(null);
+  const form = useForm({
+    defaultValues: { title: "", email: "", description: "" },
+    validators: { onSubmit: profileSchema },
+    onSubmit: async ({ value }) => {
+      setSubmitted(value);
+    },
+  });
+
+  return (
+    <>
+      <Form form={form}>
+        <Field.Group>
+          <form.AppField name="title">
+            {(field) => (
+              <field.Field label="Title" required>
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder="My new project"
+                />
+              </field.Field>
+            )}
+          </form.AppField>
+
+          <form.AppField name="email">
+            {(field) => (
+              <field.Field
+                label="Email"
+                description="We'll never share it."
+                required
+              >
+                <Input
+                  id={field.name}
+                  type="email"
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder="you@example.com"
+                />
+              </field.Field>
+            )}
+          </form.AppField>
+
+          <form.AppField name="description">
+            {(field) => (
+              <field.Field label="Description" required>
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder="A short summary…"
+                />
+              </field.Field>
+            )}
+          </form.AppField>
+        </Field.Group>
+
+        <Button htmlType="submit">
+          <Button.Text>Submit</Button.Text>
+        </Button>
+      </Form>
+
+      {submitted ? <pre>{JSON.stringify(submitted, null, 2)}</pre> : null}
+    </>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => {
     const Demo = () => {
       const [submitted, setSubmitted] = useState<unknown>(null);
@@ -197,6 +288,351 @@ const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
 
 export const AllInputs: Story = {
   name: "All inputs",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { z } from "zod";
+import {
+  Button,
+  Combobox,
+  DatePicker,
+  Field,
+  FileDropzone,
+  Form,
+  Input,
+  InputOtp,
+  Label,
+  RadioGroup,
+  Select,
+  Textarea,
+  ToggleGroup,
+  useForm,
+} from "@obel-arg/malbec-ui";
+
+/** True once the field has been visited (touched/blurred) AND has errors. */
+function fieldIsInvalid(meta: {
+  isTouched: boolean;
+  isBlurred: boolean;
+  errors: unknown[];
+}): boolean {
+  return (meta.isTouched || meta.isBlurred) && meta.errors.length > 0;
+}
+
+const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
+
+const schema = z.object({
+  title: z.string().min(5, "At least 5 characters"),
+  email: z.email("Enter a valid email address"),
+  avatar: z
+    .union([z.instanceof(File), z.null()])
+    .refine((v): v is File => v instanceof File, "Choose a file"),
+  bio: z.string().min(20, "Tell us a bit more (min 20 chars)"),
+  dataset: z
+    .union([z.instanceof(File), z.null()])
+    .refine((v): v is File => v instanceof File, "Drop a file or pick one"),
+  country: z.string().min(1, "Select a country"),
+  framework: z.string().min(1, "Pick a framework"),
+  birthday: z.date({ message: "Choose a date" }),
+  otp: z.string().length(6, "Enter all 6 digits"),
+  format: z.string().min(1, "Pick a format"),
+  alignment: z.string().min(1, "Pick alignment"),
+});
+
+function AllInputsForm() {
+  const [submitted, setSubmitted] = useState<unknown>(null);
+  const form = useForm({
+    defaultValues: {
+      title: "",
+      email: "",
+      avatar: null as File | null,
+      bio: "",
+      dataset: null as File | null,
+      country: "",
+      framework: "",
+      birthday: undefined as Date | undefined,
+      otp: "",
+      format: "",
+      alignment: "",
+    },
+    validators: { onSubmit: schema },
+    onSubmit: async ({ value }) => {
+      setSubmitted(value);
+    },
+  });
+
+  return (
+    <Form form={form}>
+      <Field.Group>
+        <form.AppField name="title">
+          {(field) => (
+            <field.Field label="Title" required>
+              <Input
+                id={field.name}
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
+                placeholder="My new project"
+              />
+            </field.Field>
+          )}
+        </form.AppField>
+
+        <form.AppField name="email">
+          {(field) => (
+            <field.Field label="Email" required>
+              <Input
+                id={field.name}
+                type="email"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
+                placeholder="you@example.com"
+              />
+            </field.Field>
+          )}
+        </form.AppField>
+
+        <form.AppField name="avatar">
+          {(field) => (
+            <field.Field label="Avatar" required>
+              <Input
+                id={field.name}
+                type="file"
+                onChange={(e) => field.handleChange(e.target.files?.[0] ?? null)}
+                onBlur={field.handleBlur}
+              />
+            </field.Field>
+          )}
+        </form.AppField>
+
+        <form.AppField name="bio">
+          {(field) => (
+            <field.Field label="Bio" required>
+              <Textarea
+                id={field.name}
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
+                placeholder="Tell us a bit about you…"
+              />
+            </field.Field>
+          )}
+        </form.AppField>
+
+        <form.AppField name="dataset">
+          {(field) => {
+            const invalid = fieldIsInvalid(field.state.meta);
+            return (
+              <field.Field label="Dataset" required>
+                <FileDropzone
+                  accept=".xlsx,.csv,.tsv,.numbers"
+                  aria-invalid={invalid || undefined}
+                  onFilesSelected={(files) => {
+                    field.handleChange(files[0] ?? null);
+                    field.handleBlur();
+                  }}
+                >
+                  <FileDropzone.Icon>
+                    <UploadIcon /> {/* your icon */}
+                  </FileDropzone.Icon>
+                  <FileDropzone.Caption>
+                    {field.state.value
+                      ? field.state.value.name
+                      : "Add your .xslx, .csv, .tsv or numbers file"}
+                  </FileDropzone.Caption>
+                  <FileDropzone.Action>Subir archivo</FileDropzone.Action>
+                </FileDropzone>
+              </field.Field>
+            );
+          }}
+        </form.AppField>
+
+        <form.AppField name="country">
+          {(field) => {
+            const invalid = fieldIsInvalid(field.state.meta);
+            return (
+              <field.Field label="Country" required>
+                <Select
+                  value={field.state.value || undefined}
+                  onValueChange={(v) => {
+                    field.handleChange(v);
+                    field.handleBlur();
+                  }}
+                >
+                  <Select.Trigger
+                    id={field.name}
+                    aria-label="Country"
+                    aria-invalid={invalid || undefined}
+                  >
+                    <Select.Value placeholder="Choose a country" />
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Item value="ar">Argentina</Select.Item>
+                    <Select.Item value="cl">Chile</Select.Item>
+                    {/* … */}
+                  </Select.Content>
+                </Select>
+              </field.Field>
+            );
+          }}
+        </form.AppField>
+
+        <form.AppField name="framework">
+          {(field) => {
+            const invalid = fieldIsInvalid(field.state.meta);
+            return (
+              <field.Field label="Framework" required>
+                <Combobox
+                  items={frameworks}
+                  value={field.state.value || null}
+                  onValueChange={(v) => {
+                    field.handleChange(typeof v === "string" ? v : "");
+                    field.handleBlur();
+                  }}
+                >
+                  <Combobox.Input
+                    id={field.name}
+                    placeholder="Pick a framework"
+                    aria-invalid={invalid || undefined}
+                  />
+                  <Combobox.Content>
+                    <Combobox.List>
+                      {(item) => (
+                        <Combobox.Item key={String(item)} value={item}>
+                          {String(item)}
+                        </Combobox.Item>
+                      )}
+                    </Combobox.List>
+                  </Combobox.Content>
+                </Combobox>
+              </field.Field>
+            );
+          }}
+        </form.AppField>
+
+        <form.AppField name="birthday">
+          {(field) => {
+            const invalid = fieldIsInvalid(field.state.meta);
+            return (
+              <field.Field label="Birthday" required>
+                <DatePicker
+                  date={field.state.value}
+                  onDateChange={(d) => {
+                    field.handleChange(d);
+                    field.handleBlur();
+                  }}
+                >
+                  <DatePicker.Trigger
+                    id={field.name}
+                    aria-invalid={invalid || undefined}
+                  />
+                  <DatePicker.Content>
+                    <DatePicker.Calendar />
+                  </DatePicker.Content>
+                </DatePicker>
+              </field.Field>
+            );
+          }}
+        </form.AppField>
+
+        <form.AppField name="otp">
+          {(field) => {
+            const invalid = fieldIsInvalid(field.state.meta);
+            return (
+              <field.Field label="One-time code" required>
+                <InputOtp
+                  id={field.name}
+                  maxLength={6}
+                  value={field.state.value}
+                  onChange={(v) => field.handleChange(v)}
+                  onBlur={field.handleBlur}
+                  aria-invalid={invalid || undefined}
+                >
+                  <InputOtp.Group>
+                    <InputOtp.Slot index={0} />
+                    <InputOtp.Slot index={1} />
+                    <InputOtp.Slot index={2} />
+                  </InputOtp.Group>
+                  <InputOtp.Separator />
+                  <InputOtp.Group>
+                    <InputOtp.Slot index={3} />
+                    <InputOtp.Slot index={4} />
+                    <InputOtp.Slot index={5} />
+                  </InputOtp.Group>
+                </InputOtp>
+              </field.Field>
+            );
+          }}
+        </form.AppField>
+
+        <form.AppField name="format">
+          {(field) => {
+            const invalid = fieldIsInvalid(field.state.meta);
+            return (
+              <field.Field label="Preferred format" required>
+                <RadioGroup
+                  value={field.state.value}
+                  onValueChange={(v) => {
+                    field.handleChange(v);
+                    field.handleBlur();
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroup.Item
+                      value="vinyl"
+                      id={field.name + "-vinyl"}
+                      aria-invalid={invalid || undefined}
+                    />
+                    <Label htmlFor={field.name + "-vinyl"}>Vinyl</Label>
+                  </div>
+                  {/* … more options (cd, digital) */}
+                </RadioGroup>
+              </field.Field>
+            );
+          }}
+        </form.AppField>
+
+        <form.AppField name="alignment">
+          {(field) => {
+            const invalid = fieldIsInvalid(field.state.meta);
+            return (
+              <field.Field label="Alignment" required>
+                <ToggleGroup
+                  type="single"
+                  value={field.state.value}
+                  onValueChange={(v) => {
+                    field.handleChange(v);
+                    field.handleBlur();
+                  }}
+                  aria-invalid={invalid || undefined}
+                >
+                  <ToggleGroup.Item value="left" aria-label="Left">
+                    Left
+                  </ToggleGroup.Item>
+                  <ToggleGroup.Item value="center" aria-label="Center">
+                    Center
+                  </ToggleGroup.Item>
+                  <ToggleGroup.Item value="right" aria-label="Right">
+                    Right
+                  </ToggleGroup.Item>
+                </ToggleGroup>
+              </field.Field>
+            );
+          }}
+        </form.AppField>
+      </Field.Group>
+
+      <Button htmlType="submit">
+        <Button.Text>Submit</Button.Text>
+      </Button>
+    </Form>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => {
     const Demo = () => {
       const [submitted, setSubmitted] = useState<unknown>(null);
@@ -545,6 +981,88 @@ export const AllInputs: Story = {
 
 export const InvalidByDefault: Story = {
   name: "Invalid by default",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useEffect } from "react";
+import { z } from "zod";
+import { Button, Field, Form, Input, useForm } from "@obel-arg/malbec-ui";
+
+const fieldNames = ["title", "email" /* … */] as const;
+
+const schema = z.object({
+  title: z.string().min(5, "At least 5 characters"),
+  email: z.email("Enter a valid email address"),
+  // …other fields
+});
+
+function PrefilledInvalidForm() {
+  const form = useForm({
+    defaultValues: { title: "", email: "" /* … */ },
+    validators: {
+      // onMount runs validation immediately so errors exist on first render.
+      onMount: schema,
+      onSubmit: schema,
+    },
+    onSubmit: async () => {},
+  });
+
+  // Mark every field touched + blurred on mount so those errors show up.
+  useEffect(() => {
+    for (const name of fieldNames) {
+      form.setFieldMeta(name, (prev) => ({
+        ...prev,
+        isTouched: true,
+        isBlurred: true,
+      }));
+    }
+  }, [form]);
+
+  return (
+    <Form form={form}>
+      <Field.Group>
+        <form.AppField name="title">
+          {(field) => (
+            <field.Field label="Title" required>
+              <Input
+                id={field.name}
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
+                placeholder="My new project"
+              />
+            </field.Field>
+          )}
+        </form.AppField>
+
+        <form.AppField name="email">
+          {(field) => (
+            <field.Field label="Email" required>
+              <Input
+                id={field.name}
+                type="email"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
+                placeholder="you@example.com"
+              />
+            </field.Field>
+          )}
+        </form.AppField>
+
+        {/* …remaining fields — see the All inputs example */}
+      </Field.Group>
+
+      <Button htmlType="submit">
+        <Button.Text>Submit</Button.Text>
+      </Button>
+    </Form>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => {
     const Demo = () => {
       const form = useForm({
@@ -920,6 +1438,109 @@ const contractRowsSchema = z.object({
 
 export const ArrayField: Story = {
   name: "Array field",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { z } from "zod";
+import { Button, Form, Input, useForm } from "@obel-arg/malbec-ui";
+
+type ContractRow = {
+  rowKey: string;
+  categoryId: string | null;
+  percentInput: string;
+};
+
+const schema = z.object({
+  contractRows: z.array(
+    z.object({
+      rowKey: z.string(),
+      categoryId: z.string().nullable(),
+      percentInput: z
+        .string()
+        .min(1, "Required")
+        .refine((v) => !Number.isNaN(Number(v)), "Must be a number")
+        .refine((v) => {
+          const n = Number(v);
+          return n >= 0 && n <= 100;
+        }, "Must be between 0 and 100"),
+    }),
+  ),
+});
+
+function ContractRowsForm() {
+  const [submitted, setSubmitted] = useState<unknown>(null);
+  const form = useForm({
+    defaultValues: {
+      contractRows: [
+        { rowKey: crypto.randomUUID(), categoryId: null, percentInput: "" },
+      ] as ContractRow[],
+    },
+    validators: { onChange: schema, onSubmit: schema },
+    onSubmit: async ({ value }) => {
+      setSubmitted(value);
+    },
+  });
+
+  return (
+    <Form form={form}>
+      <form.AppField mode="array" name="contractRows">
+        {(arrayField) => (
+          <div className="flex flex-col gap-3">
+            {arrayField.state.value.map((row, i) => (
+              <div key={row.rowKey} className="flex items-end gap-2">
+                <form.AppField name={"contractRows[" + i + "].percentInput"}>
+                  {(percentField) => (
+                    <percentField.Field label={"Row " + (i + 1) + " %"}>
+                      <Input
+                        id={percentField.name}
+                        type="number"
+                        value={percentField.state.value}
+                        onChange={(e) =>
+                          percentField.handleChange(e.target.value)
+                        }
+                        onBlur={percentField.handleBlur}
+                        placeholder="0"
+                      />
+                    </percentField.Field>
+                  )}
+                </form.AppField>
+                <Button
+                  variant="secondary"
+                  onClick={() => arrayField.removeValue(i)}
+                >
+                  <Button.Text>Remove</Button.Text>
+                </Button>
+              </div>
+            ))}
+            <div>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  arrayField.pushValue({
+                    rowKey: crypto.randomUUID(),
+                    categoryId: null,
+                    percentInput: "",
+                  })
+                }
+              >
+                <Button.Text>Add row</Button.Text>
+              </Button>
+            </div>
+          </div>
+        )}
+      </form.AppField>
+
+      <Button htmlType="submit">
+        <Button.Text>Submit</Button.Text>
+      </Button>
+    </Form>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => {
     const Demo = () => {
       const [submitted, setSubmitted] = useState<unknown>(null);
@@ -1013,6 +1634,57 @@ export const ArrayField: Story = {
 
 export const PerFieldValidators: Story = {
   name: "Per-field validators",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, Form, Input, useForm } from "@obel-arg/malbec-ui";
+
+function UsernameForm() {
+  const form = useForm({
+    defaultValues: { username: "" },
+    onSubmit: async ({ value }) => alert(JSON.stringify(value)),
+  });
+
+  return (
+    <Form form={form}>
+      <form.AppField
+        name="username"
+        validators={{
+          onChange: ({ value }) => {
+            if (value.length < 3) return "Too short";
+            if (value.length > 16) return "Too long";
+            if (!/^[a-z0-9]+$/.test(value)) return "Invalid characters";
+            return undefined;
+          },
+        }}
+      >
+        {(field) => (
+          <field.Field
+            label="Username"
+            description="3–16 characters, lowercase letters and digits."
+            required
+          >
+            <Input
+              id={field.name}
+              value={field.state.value}
+              onChange={(e) => field.handleChange(e.target.value)}
+              onBlur={field.handleBlur}
+              placeholder="janedoe"
+            />
+          </field.Field>
+        )}
+      </form.AppField>
+
+      <Button htmlType="submit" size="sm">
+        <Button.Text>Submit</Button.Text>
+      </Button>
+    </Form>
+  );
+}
+`,
+      },
+    },
+  },
   render: () => {
     const Demo = () => {
       const form = useForm({

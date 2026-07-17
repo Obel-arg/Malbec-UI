@@ -119,6 +119,38 @@ const metrics = [
  * Layout is story-only; `DataCard` stays a shell.
  */
 export const MetricsRow: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DataCard } from "@obel-arg/malbec-ui";
+import { Equal, Tag, Ticket, Users } from "lucide-react";
+
+// DataCard is a presentational shell — you compose the layout inside.
+const metrics = [
+  { icon: <Equal className="size-5" />, label: "Avg. Daily sales", value: "1.231" },
+  { icon: <Tag className="size-5" />, label: "Total sales", value: "64.000" },
+  { icon: <Users className="size-5" />, label: "Capacity", value: "80.000" },
+  { icon: <Ticket className="size-5" />, label: "Avg. Sold", value: "%87" },
+];
+
+<DataCard accentSide="top" className="w-full max-w-[960px]">
+  <div className="flex items-center justify-around">
+    {metrics.map((m) => (
+      <div key={m.label} className="flex items-center gap-4">
+        <div className="flex size-[34px] items-center justify-center rounded-full border border-dashed border-background-300 text-text-default-muted">
+          {m.icon}
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <span className="text-text-default-muted">{m.label}</span>
+          <span className="text-xl font-semibold">{m.value}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</DataCard>`,
+      },
+    },
+  },
   render: function MetricsRowRender() {
     return (
       <DataCard accentSide="top" className="ui:w-full ui:max-w-[960px]">
@@ -142,6 +174,36 @@ export const MetricsRow: Story = {
  * venue + date rows, and an "Active" pill. Layout is story-only — `DataCard` stays a shell.
  */
 export const UpcomingShow: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge, DataCard } from "@obel-arg/malbec-ui";
+import { CalendarDays, MapPin } from "lucide-react";
+
+<DataCard accentSide="left" className="max-w-[280px]" panelClassName="p-1.5">
+  <div className="flex w-full min-w-0 items-center gap-2">
+    <div className="relative size-14 shrink-0 overflow-hidden rounded-md bg-background-300">
+      <img alt="Airbag" src="/cover.jpg" className="size-full object-cover" />
+    </div>
+    <div className="min-w-0 flex-1 space-y-1 text-left">
+      <p className="m-0 truncate text-sm font-medium text-text-default">Airbag</p>
+      <div className="flex items-center gap-1.5 text-xs text-text-default-muted">
+        <MapPin className="size-3 shrink-0" />
+        <span className="min-w-0 truncate">River Plate</span>
+      </div>
+      <div className="flex items-center gap-1.5 text-xs text-text-default-muted">
+        <CalendarDays className="size-3 shrink-0" />
+        <span className="truncate">23/05/2026</span>
+      </div>
+    </div>
+    <Badge variant="emerald">
+      <Badge.Text>Active</Badge.Text>
+    </Badge>
+  </div>
+</DataCard>`,
+      },
+    },
+  },
   render: function UpcomingShowRender() {
     return (
       <DataCard
@@ -184,6 +246,20 @@ export const UpcomingShow: Story = {
 };
 
 export const AccentSides: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DataCard } from "@obel-arg/malbec-ui";
+
+// One edge uses the thick primary accent; pick it with accentSide.
+{(["top", "right", "bottom", "left"] as const).map((side) => (
+  <DataCard key={side} accentSide={side} className="min-h-[100px]">
+    <p className="m-0 text-sm capitalize text-text-default">accentSide="{side}"</p>
+  </DataCard>
+))}`,
+      },
+    },
+  },
   render: function AccentSidesRender() {
     const sides = ["top", "right", "bottom", "left"] as const;
     return (

@@ -27,6 +27,24 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Select } from "@obel-arg/malbec-ui";
+
+<Select defaultValue="a">
+  <Select.Trigger aria-label="Example select">
+    <Select.Value placeholder="Choose an option" />
+  </Select.Trigger>
+  <Select.Content>
+    <Select.Item value="a">Option A</Select.Item>
+    <Select.Item value="b">Option B</Select.Item>
+    <Select.Item value="c">Option C</Select.Item>
+  </Select.Content>
+</Select>`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:w-72">
       <Select defaultValue="a">
@@ -45,6 +63,24 @@ export const Default: Story = {
 
 export const Invalid: Story = {
   name: "State · invalid",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Select } from "@obel-arg/malbec-ui";
+
+<Select>
+  <Select.Trigger aria-invalid aria-label="Example select">
+    <Select.Value placeholder="Choose an option" />
+  </Select.Trigger>
+  <Select.Content>
+    <Select.Item value="a">Option A</Select.Item>
+    <Select.Item value="b">Option B</Select.Item>
+    <Select.Item value="c">Option C</Select.Item>
+  </Select.Content>
+</Select>`,
+      },
+    },
+  },
   render: () => (
     <div className="ui:w-72">
       <Select>

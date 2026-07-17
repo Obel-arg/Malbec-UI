@@ -105,6 +105,19 @@ export const Default: Story = {
       </Toggle>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Toggle } from "@obel-arg/malbec-ui";
+
+<Toggle aria-label="Bold" size="md" variant="default">
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>`,
+      },
+    },
+  },
 };
 
 export const Outline: Story = {
@@ -127,6 +140,19 @@ export const Outline: Story = {
       </Toggle>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Toggle } from "@obel-arg/malbec-ui";
+
+<Toggle aria-label="Bold" size="md" variant="outline">
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>`,
+      },
+    },
+  },
 };
 
 export const Small: Story = {
@@ -150,6 +176,19 @@ export const Small: Story = {
       </Toggle>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Toggle } from "@obel-arg/malbec-ui";
+
+<Toggle aria-label="Bold" size="sm" variant="default">
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>`,
+      },
+    },
+  },
 };
 
 export const Large: Story = {
@@ -173,6 +212,19 @@ export const Large: Story = {
       </Toggle>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Toggle } from "@obel-arg/malbec-ui";
+
+<Toggle aria-label="Bold" size="lg" variant="default">
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>`,
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
@@ -195,6 +247,19 @@ export const Disabled: Story = {
       </Toggle>
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Toggle } from "@obel-arg/malbec-ui";
+
+<Toggle aria-label="Bold" size="md" variant="outline" disabled>
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>`,
+      },
+    },
+  },
 };
 
 export const Playground: Story = {

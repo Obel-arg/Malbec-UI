@@ -488,6 +488,40 @@ function WeekViewWithNavigation() {
 export const WeekView: Story = {
   name: "Week (calendarWeek)",
   render: () => <WeekViewWithNavigation />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { es } from "date-fns/locale";
+import { CalendarWeek, type CalendarTimeGridEvent } from "@obel-arg/malbec-ui";
+
+function WeekCalendar() {
+  const [week, setWeek] = useState(() => new Date(2026, 3, 28));
+
+  const events: CalendarTimeGridEvent[] = [
+    // Timed events sit in their hour rows.
+    { id: "kickoff", title: "Kickoff Q2", start: new Date(2026, 3, 27, 9, 0), end: new Date(2026, 3, 27, 10, 0), color: "blue" },
+    { id: "standup", title: "Standup equipo", start: new Date(2026, 3, 29, 8, 0), end: new Date(2026, 3, 29, 8, 30), color: "emerald" },
+    // Multi-day and all-day events render in the top strip.
+    { id: "workshop", title: "Ocupado — workshop", start: new Date(2026, 3, 27, 0, 0), end: new Date(2026, 3, 29, 23, 59), color: "yellow" },
+    { id: "feriado", title: "Feriado nacional", start: new Date(2026, 4, 1, 0, 0), end: new Date(2026, 4, 1, 23, 59), allDay: true, color: "red" },
+  ];
+
+  return (
+    <CalendarWeek
+      week={week}
+      onWeekChange={setWeek}
+      locale={es}
+      today={new Date()}
+      now={new Date()}
+      events={events}
+      onSelectDay={({ day, time, date }) => console.log("click", { day, time, date })}
+    />
+  );
+}`,
+      },
+    },
+  },
 };
 
 function DayViewWithNavigation() {
@@ -512,11 +546,76 @@ function DayViewWithNavigation() {
 export const DayView: Story = {
   name: "Day (calendarDay)",
   render: () => <DayViewWithNavigation />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { startOfDay } from "date-fns";
+import { es } from "date-fns/locale";
+import { CalendarDay, type CalendarTimeGridEvent } from "@obel-arg/malbec-ui";
+
+function DayCalendar() {
+  const [day, setDay] = useState(() => startOfDay(new Date(2026, 3, 29)));
+
+  const events: CalendarTimeGridEvent[] = [
+    { id: "standup", title: "Standup equipo", start: new Date(2026, 3, 29, 8, 0), end: new Date(2026, 3, 29, 8, 30), color: "emerald" },
+    { id: "workshop", title: "Workshop accesibilidad", start: new Date(2026, 3, 29, 10, 0), end: new Date(2026, 3, 29, 11, 30), color: "violet" },
+    // Overlapping events split the column side by side.
+    { id: "duki-a", title: "Duki A", start: new Date(2026, 3, 29, 18, 30), end: new Date(2026, 3, 29, 19, 15), color: "emerald" },
+    { id: "duki-b", title: "Duki B", start: new Date(2026, 3, 29, 18, 45), end: new Date(2026, 3, 29, 19, 30), color: "orange" },
+  ];
+
+  return (
+    <CalendarDay
+      day={day}
+      onDayChange={setDay}
+      locale={es}
+      today={new Date()}
+      now={new Date()}
+      events={events}
+      onSelectDay={({ day, time, date }) => console.log("click", { day, time, date })}
+    />
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const MonthGrid: Story = {
   name: "Month (calendarMonth)",
   render: () => <MonthWithSwitcher />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { startOfMonth } from "date-fns";
+import { es } from "date-fns/locale";
+import { CalendarMonth, type CalendarMonthEvent } from "@obel-arg/malbec-ui";
+
+function MonthCalendar() {
+  const [month, setMonth] = useState(() => startOfMonth(new Date()));
+
+  const events: CalendarMonthEvent[] = [
+    { id: "1", date: new Date(2026, 5, 3), time: "20:30", title: "Ana Otero", color: "emerald" },
+    { id: "2", date: new Date(2026, 5, 5), time: "21:00", title: "Isla", color: "violet" },
+    { id: "3", date: new Date(2026, 5, 7), time: "22:00", title: "Hijos del Sur", color: "red" },
+    { id: "4", date: new Date(2026, 5, 11), time: "19:30", title: "La Niebla", color: "blue" },
+  ];
+
+  // Omit \`today\` to let the calendar use the real current date.
+  return (
+    <CalendarMonth
+      month={month}
+      events={events}
+      locale={es}
+      onMonthChange={setMonth}
+    />
+  );
+}`,
+      },
+    },
+  },
 };
 
 function MonthMultiDayShowcase() {
@@ -536,11 +635,106 @@ function MonthMultiDayShowcase() {
 export const MonthMultiDay: Story = {
   name: "Month — multi-día / all-day",
   render: () => <MonthMultiDayShowcase />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { startOfMonth } from "date-fns";
+import { es } from "date-fns/locale";
+import { CalendarMonth, type CalendarMonthEvent } from "@obel-arg/malbec-ui";
+
+function MonthMultiDayCalendar() {
+  const [month, setMonth] = useState(() => startOfMonth(new Date(2026, 3, 28)));
+
+  // In the month grid a multi-day event uses \`endDate\` (rendered as a span
+  // bar); an all-day event sets \`allDay: true\`; a plain timed event uses \`time\`.
+  const events: CalendarMonthEvent[] = [
+    { id: "workshop", title: "Ocupado — workshop", date: new Date(2026, 3, 27), endDate: new Date(2026, 3, 29), color: "yellow" },
+    { id: "vacaciones", title: "Vacaciones", date: new Date(2026, 3, 30), endDate: new Date(2026, 4, 4), color: "emerald" },
+    { id: "feriado", title: "Feriado nacional", date: new Date(2026, 4, 1), allDay: true, color: "red" },
+    { id: "kickoff", title: "Kickoff Q2", date: new Date(2026, 3, 22), time: "09:00", color: "blue" },
+  ];
+
+  return (
+    <CalendarMonth
+      month={month}
+      events={events}
+      locale={es}
+      onMonthChange={setMonth}
+    />
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const FormatsWithTabs: Story = {
   name: "Mes / semana / día (tabs)",
   render: () => <CalendarFormatsTabs />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { startOfDay, startOfMonth } from "date-fns";
+import { es } from "date-fns/locale";
+import {
+  CalendarDay,
+  CalendarMonth,
+  CalendarWeek,
+  Tabs,
+  type CalendarTimeGridEvent,
+} from "@obel-arg/malbec-ui";
+
+function CalendarFormats({ events }: { events: CalendarTimeGridEvent[] }) {
+  // A single \`focus\` date is shared across the three views, so switching tabs
+  // keeps the user on the same moment. Month view consumes CalendarMonthEvent —
+  // map your time-grid events to \`{ date, endDate?, allDay?, time? }\`.
+  const [focus, setFocus] = useState(() => startOfDay(new Date()));
+  const [tab, setTab] = useState("month");
+
+  return (
+    <Tabs value={tab} onValueChange={setTab}>
+      <Tabs.List>
+        <Tabs.Trigger value="month">Mes</Tabs.Trigger>
+        <Tabs.Trigger value="week">Semana</Tabs.Trigger>
+        <Tabs.Trigger value="day">Día</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="month">
+        <CalendarMonth
+          month={startOfMonth(focus)}
+          events={toMonthEvents(events)}
+          locale={es}
+          onMonthChange={setFocus}
+        />
+      </Tabs.Content>
+      <Tabs.Content value="week">
+        <CalendarWeek
+          week={focus}
+          weekStartsOn={1}
+          locale={es}
+          today={new Date()}
+          now={new Date()}
+          events={events}
+          onWeekChange={setFocus}
+        />
+      </Tabs.Content>
+      <Tabs.Content value="day">
+        <CalendarDay
+          day={startOfDay(focus)}
+          onDayChange={setFocus}
+          locale={es}
+          today={new Date()}
+          now={new Date()}
+          events={events}
+        />
+      </Tabs.Content>
+    </Tabs>
+  );
+}`,
+      },
+    },
+  },
 };
 
 // —— Tour + shows across views ——
@@ -644,6 +838,55 @@ function TourAcrossViewsShowcase() {
 export const TourAcrossViews: Story = {
   name: "Tour + shows across views (parentId)",
   render: () => <TourAcrossViewsShowcase />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { startOfMonth } from "date-fns";
+import { es } from "date-fns/locale";
+import {
+  CalendarDay,
+  CalendarMonth,
+  CalendarWeek,
+  Tabs,
+  type CalendarTimeGridEvent,
+} from "@obel-arg/malbec-ui";
+
+// A tour is a multi-day span; each show is a timed event linked via \`parentId\`,
+// so it inherits the tour's color and carries the accent rail. The same data
+// feeds all three views (map it to CalendarMonthEvent for the month grid).
+const events: CalendarTimeGridEvent[] = [
+  { id: "gira-qa-globo", title: "Gira QA Globo 2026", start: new Date(2026, 3, 27, 0, 0), end: new Date(2026, 4, 2, 23, 59), color: "sage" },
+  { id: "show-0", parentId: "gira-qa-globo", title: "QA Globo Rosario", start: new Date(2026, 3, 27, 21, 0), end: new Date(2026, 3, 27, 23, 0), color: "yellow", confirmed: true },
+  { id: "show-4", parentId: "gira-qa-globo", title: "QA Globo Bariloche", start: new Date(2026, 4, 1, 21, 0), end: new Date(2026, 4, 1, 23, 0), color: "yellow", confirmed: false },
+];
+
+function TourAcrossViews() {
+  const [focus, setFocus] = useState(() => new Date(2026, 3, 28));
+  const [tab, setTab] = useState("week");
+
+  return (
+    <Tabs value={tab} onValueChange={setTab}>
+      <Tabs.List>
+        <Tabs.Trigger value="month">Mes</Tabs.Trigger>
+        <Tabs.Trigger value="week">Semana</Tabs.Trigger>
+        <Tabs.Trigger value="day">Día</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="month">
+        <CalendarMonth month={startOfMonth(focus)} events={toMonthEvents(events)} locale={es} onMonthChange={setFocus} />
+      </Tabs.Content>
+      <Tabs.Content value="week">
+        <CalendarWeek week={focus} weekStartsOn={1} locale={es} startHour={18} endHour={23} events={events} onWeekChange={setFocus} />
+      </Tabs.Content>
+      <Tabs.Content value="day">
+        <CalendarDay day={focus} onDayChange={setFocus} locale={es} startHour={18} endHour={23} events={events} />
+      </Tabs.Content>
+    </Tabs>
+  );
+}`,
+      },
+    },
+  },
 };
 
 // —— Tour + shows with padding days across views ——
@@ -757,4 +1000,54 @@ function TourPaddingAcrossViewsShowcase() {
 export const TourPaddingAcrossViews: Story = {
   name: "Tour + show padding days across views",
   render: () => <TourPaddingAcrossViewsShowcase />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { startOfMonth } from "date-fns";
+import { es } from "date-fns/locale";
+import {
+  CalendarDay,
+  CalendarMonth,
+  CalendarWeek,
+  Tabs,
+  type CalendarTimeGridEvent,
+} from "@obel-arg/malbec-ui";
+
+// Shows reserve support days around their date via \`daysBefore\` / \`daysAfter\`.
+// In the month grid the padding is a base line butted against the show chip; in
+// the day/week grid it renders in the padding day's column at the show's time.
+const events: CalendarTimeGridEvent[] = [
+  { id: "gira-andes", title: "Gira Andes 2026", start: new Date(2026, 3, 27, 0, 0), end: new Date(2026, 4, 3, 23, 59), color: "violet" },
+  { id: "andes-santiago", parentId: "gira-andes", title: "Santiago", start: new Date(2026, 3, 28, 21, 0), end: new Date(2026, 3, 28, 23, 0), color: "yellow", daysBefore: 1 },
+  { id: "andes-mendoza", parentId: "gira-andes", title: "Mendoza", start: new Date(2026, 3, 30, 21, 0), end: new Date(2026, 3, 30, 23, 0), color: "yellow", daysBefore: 1, daysAfter: 1 },
+  { id: "andes-cordoba", parentId: "gira-andes", title: "Córdoba", start: new Date(2026, 4, 2, 21, 0), end: new Date(2026, 4, 2, 23, 0), color: "yellow", daysAfter: 1 },
+];
+
+function TourPaddingAcrossViews() {
+  const [focus, setFocus] = useState(() => new Date(2026, 3, 28));
+  const [tab, setTab] = useState("week");
+
+  return (
+    <Tabs value={tab} onValueChange={setTab}>
+      <Tabs.List>
+        <Tabs.Trigger value="month">Mes</Tabs.Trigger>
+        <Tabs.Trigger value="week">Semana</Tabs.Trigger>
+        <Tabs.Trigger value="day">Día</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="month">
+        <CalendarMonth month={startOfMonth(focus)} events={toMonthEvents(events)} locale={es} onMonthChange={setFocus} />
+      </Tabs.Content>
+      <Tabs.Content value="week">
+        <CalendarWeek week={focus} weekStartsOn={1} locale={es} startHour={18} endHour={23} events={events} onWeekChange={setFocus} />
+      </Tabs.Content>
+      <Tabs.Content value="day">
+        <CalendarDay day={focus} onDayChange={setFocus} locale={es} startHour={18} endHour={23} events={events} />
+      </Tabs.Content>
+    </Tabs>
+  );
+}`,
+      },
+    },
+  },
 };

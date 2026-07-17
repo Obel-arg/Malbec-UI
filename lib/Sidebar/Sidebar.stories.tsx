@@ -468,10 +468,116 @@ function SidebarDemo({ side }: { side: "left" | "right" }) {
   );
 }
 
+function sidebarSource(side: "left" | "right") {
+  const menuSide = side === "left" ? "right" : "left";
+  return `import { Avatar, DropdownMenu, Sidebar } from "@obel-arg/malbec-ui";
+
+// Compound layout: Sidebar.Provider → Sidebar.Gap → Sidebar + Sidebar.Inset.
+// On a collapsed desktop rail, pass \`tooltip\` on MenuButton / WorkspaceButton
+// so each row shows its name on hover.
+function AppSidebar() {
+  return (
+    <Sidebar.Provider defaultSide="${side}" className="min-h-svh">
+      <Sidebar.Gap side="${side}">
+        <Sidebar side="${side}">
+          <Sidebar.Header>
+            <DropdownMenu>
+              <DropdownMenu.Trigger asChild>
+                <Sidebar.WorkspaceButton type="button" tooltip="Acme Inc · Enterprise">
+                  <Sidebar.WorkspaceIcon><GalleryIcon /></Sidebar.WorkspaceIcon>
+                  <Sidebar.RowTextStack>
+                    <Sidebar.RowTitle>Acme Inc</Sidebar.RowTitle>
+                    <Sidebar.RowSubtitle>Enterprise</Sidebar.RowSubtitle>
+                  </Sidebar.RowTextStack>
+                  <Sidebar.Icon className="ml-auto"><ChevronsUpDownIcon /></Sidebar.Icon>
+                </Sidebar.WorkspaceButton>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content side="${menuSide}" align="start">
+                  {/* team switcher items */}
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu>
+          </Sidebar.Header>
+
+          <Sidebar.Content>
+            <Sidebar.Group>
+              <Sidebar.GroupLabel>Platform</Sidebar.GroupLabel>
+              <Sidebar.GroupContent>
+                <Sidebar.Menu>
+                  <Sidebar.MenuItem>
+                    <Sidebar.MenuButton type="button" tooltip="Project Hub">
+                      <Sidebar.Icon><BookIcon /></Sidebar.Icon>
+                      <span>Project Hub</span>
+                    </Sidebar.MenuButton>
+                  </Sidebar.MenuItem>
+                  {/* A collapsible group with sub-items */}
+                  <Sidebar.MenuItem>
+                    <Sidebar.Collapsible defaultOpen>
+                      <Sidebar.CollapsibleTrigger asChild>
+                        <Sidebar.MenuButton type="button" tooltip="Business">
+                          <Sidebar.Icon><TerminalIcon /></Sidebar.Icon>
+                          <span>Business</span>
+                          <Sidebar.MenuChevron className="ml-auto" />
+                        </Sidebar.MenuButton>
+                      </Sidebar.CollapsibleTrigger>
+                      <Sidebar.CollapsibleContent>
+                        <Sidebar.MenuSub>
+                          <Sidebar.MenuSubItem>
+                            <Sidebar.MenuSubButton type="button">P&L</Sidebar.MenuSubButton>
+                          </Sidebar.MenuSubItem>
+                        </Sidebar.MenuSub>
+                      </Sidebar.CollapsibleContent>
+                    </Sidebar.Collapsible>
+                  </Sidebar.MenuItem>
+                </Sidebar.Menu>
+              </Sidebar.GroupContent>
+            </Sidebar.Group>
+          </Sidebar.Content>
+
+          <Sidebar.Footer>
+            <DropdownMenu>
+              <DropdownMenu.Trigger asChild>
+                <Sidebar.WorkspaceButton type="button" tooltip="shadcn">
+                  <Avatar className="size-8 rounded-lg" size="sm">
+                    <Avatar.Image alt="" src="/avatar.png" />
+                    <Avatar.Fallback>CN</Avatar.Fallback>
+                  </Avatar>
+                  <Sidebar.RowTextStack>
+                    <Sidebar.RowTitle>shadcn</Sidebar.RowTitle>
+                    <Sidebar.RowSubtitle>m@example.com</Sidebar.RowSubtitle>
+                  </Sidebar.RowTextStack>
+                  <Sidebar.Icon className="ml-auto"><ChevronsUpDownIcon /></Sidebar.Icon>
+                </Sidebar.WorkspaceButton>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content side="${menuSide}" align="end">
+                  {/* account menu items */}
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu>
+          </Sidebar.Footer>
+        </Sidebar>
+
+        <Sidebar.Inset>
+          <header className="flex h-14 items-center border-b px-4">
+            <Sidebar.Trigger className="mr-2" />
+            <span>Main</span>
+          </header>
+          <div className="flex flex-1 items-center justify-center p-8">Content area</div>
+        </Sidebar.Inset>
+      </Sidebar.Gap>
+    </Sidebar.Provider>
+  );
+}`;
+}
+
 export const Left: Story = {
   render: () => <SidebarDemo side="left" />,
+  parameters: { docs: { source: { code: sidebarSource("left") } } },
 };
 
 export const Right: Story = {
   render: () => <SidebarDemo side="right" />,
+  parameters: { docs: { source: { code: sidebarSource("right") } } },
 };

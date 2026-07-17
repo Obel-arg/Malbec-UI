@@ -72,6 +72,34 @@ export const MalbecDefault: Story = {
       </AlertDialog.Content>
     </AlertDialog>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { AlertDialog, Button } from "@obel-arg/malbec-ui";
+
+<AlertDialog>
+  <AlertDialog.Trigger asChild>
+    <Button variant="outline" size="md">
+      <Button.Text>Show dialog</Button.Text>
+    </Button>
+  </AlertDialog.Trigger>
+  <AlertDialog.Content>
+    <AlertDialog.Header>
+      <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+      <AlertDialog.Description>
+        This action cannot be undone. This will permanently delete your
+        account and remove your data from our servers.
+      </AlertDialog.Description>
+    </AlertDialog.Header>
+    <AlertDialog.Footer>
+      <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+      <AlertDialog.Action>Continue</AlertDialog.Action>
+    </AlertDialog.Footer>
+  </AlertDialog.Content>
+</AlertDialog>`,
+      },
+    },
+  },
 };
 
 /**
@@ -101,6 +129,33 @@ export const SizeSmall: Story = {
       </AlertDialog.Content>
     </AlertDialog>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { AlertDialog, Button } from "@obel-arg/malbec-ui";
+
+<AlertDialog>
+  <AlertDialog.Trigger asChild>
+    <Button variant="outline" size="md">
+      <Button.Text>Small</Button.Text>
+    </Button>
+  </AlertDialog.Trigger>
+  <AlertDialog.Content size="sm">
+    <AlertDialog.Header>
+      <AlertDialog.Title>Are you sure?</AlertDialog.Title>
+      <AlertDialog.Description>
+        This action cannot be undone.
+      </AlertDialog.Description>
+    </AlertDialog.Header>
+    <AlertDialog.Footer>
+      <AlertDialog.Action>Continue</AlertDialog.Action>
+      <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+    </AlertDialog.Footer>
+  </AlertDialog.Content>
+</AlertDialog>`,
+      },
+    },
+  },
 };
 
 export const WithMedia: Story = {
@@ -129,6 +184,38 @@ export const WithMedia: Story = {
       </AlertDialog.Content>
     </AlertDialog>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { AlertDialog, Button } from "@obel-arg/malbec-ui";
+
+<AlertDialog>
+  <AlertDialog.Trigger asChild>
+    <Button variant="outline" size="md">
+      <Button.Text>With icon</Button.Text>
+    </Button>
+  </AlertDialog.Trigger>
+  <AlertDialog.Content>
+    <AlertDialog.Header>
+      <AlertDialog.Media>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-10 text-text-default" aria-hidden>
+          <path d="M6.5 6.5l11 11L12 22V2L5.5 8.5" />
+        </svg>
+      </AlertDialog.Media>
+      <AlertDialog.Title>Connect device</AlertDialog.Title>
+      <AlertDialog.Description>
+        Pair a Bluetooth accessory to use it with this application.
+      </AlertDialog.Description>
+    </AlertDialog.Header>
+    <AlertDialog.Footer>
+      <AlertDialog.Cancel>Not now</AlertDialog.Cancel>
+      <AlertDialog.Action>Connect</AlertDialog.Action>
+    </AlertDialog.Footer>
+  </AlertDialog.Content>
+</AlertDialog>`,
+      },
+    },
+  },
 };
 
 export const Destructive: Story = {
@@ -154,4 +241,32 @@ export const Destructive: Story = {
       </AlertDialog.Content>
     </AlertDialog>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { AlertDialog, Button } from "@obel-arg/malbec-ui";
+
+<AlertDialog>
+  <AlertDialog.Trigger asChild>
+    <Button variant="outline" size="md">
+      <Button.Text>Delete</Button.Text>
+    </Button>
+  </AlertDialog.Trigger>
+  <AlertDialog.Content>
+    <AlertDialog.Header>
+      <AlertDialog.Title>Delete chat</AlertDialog.Title>
+      <AlertDialog.Description>
+        This will permanently remove the chat from your account. This action
+        cannot be undone.
+      </AlertDialog.Description>
+    </AlertDialog.Header>
+    <AlertDialog.Footer>
+      <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+      <AlertDialog.Action variant="destructive">Delete</AlertDialog.Action>
+    </AlertDialog.Footer>
+  </AlertDialog.Content>
+</AlertDialog>`,
+      },
+    },
+  },
 };

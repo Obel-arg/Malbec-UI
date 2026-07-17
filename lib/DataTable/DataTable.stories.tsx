@@ -185,6 +185,37 @@ function DataTableWithColumns(
   );
 }
 
+const DATA_TABLE_COLUMNS_SNIPPET = `import type { ColumnDef } from "@tanstack/react-table";
+import { DataTable, SortableColumnHeader } from "@obel-arg/malbec-ui";
+
+// Build a TanStack ColumnDef[]. Wrap header content in SortableColumnHeader to
+// get click-to-sort; set \`enableSorting: false\` to opt a column out.
+const columns: ColumnDef<EventRow>[] = [
+  {
+    id: "artist",
+    accessorKey: "artist",
+    header: ({ column }) => <SortableColumnHeader column={column}>Artista</SortableColumnHeader>,
+    cell: ({ row }) => <ArtistCell name={row.original.artist} imageUrl={row.original.imageUrl} />,
+  },
+  {
+    accessorKey: "venue",
+    header: ({ column }) => <SortableColumnHeader column={column}>Venue</SortableColumnHeader>,
+    cell: (ctx) => <span className="uppercase">{String(ctx.getValue())}</span>,
+  },
+  {
+    id: "status",
+    accessorKey: "status",
+    header: ({ column }) => <SortableColumnHeader column={column}>Status</SortableColumnHeader>,
+    cell: (ctx) => <StatusLabel status={ctx.row.original.status} />,
+  },
+  {
+    id: "actions",
+    header: () => <span>Acciones</span>,
+    cell: () => <MoreActionButton />,
+    enableSorting: false,
+  },
+];`;
+
 export const Events: Story = {
   render: () => (
     <DataTableWithColumns
@@ -192,6 +223,25 @@ export const Events: Story = {
       tableChildrenStart={colgroup}
     />
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `${DATA_TABLE_COLUMNS_SNIPPET}
+
+function EventsTable({ data }: { data: EventRow[] }) {
+  return (
+    <DataTable
+      tableAppearance="default"
+      getRowId={(r) => r.id}
+      columns={columns}
+      data={data}
+      tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
+    />
+  );
+}`,
+      },
+    },
+  },
 };
 
 const ASSIGNABLE_PEOPLE = [
@@ -343,7 +393,79 @@ function MultiSelectWithFloatingBar() {
 
 export const MultiSelectWithBar: Story = {
   name: "With FloatingBar on multi-select",
-  parameters: { layout: "padded" },
+  parameters: {
+    layout: "padded",
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Command, DataTable, FloatingBar, Popover } from "@obel-arg/malbec-ui";
+
+function MultiSelectTable({
+  columns,
+  data,
+}: {
+  columns: ColumnDef<EventRow>[]; // include a checkbox column to enable selection
+  data: EventRow[];
+}) {
+  // The DataTable owns its selection state, so bump a \`key\` to remount and
+  // clear the selection when the user dismisses the bar.
+  const [resetKey, setResetKey] = useState(0);
+  const [selectedCount, setSelectedCount] = useState(0);
+
+  return (
+    <>
+      <DataTable
+        key={resetKey}
+        tableAppearance="default"
+        getRowId={(r) => r.id}
+        columns={columns}
+        data={data}
+        onRowSelectionChange={(rows) => setSelectedCount(rows.length)}
+      />
+      <div className="fixed left-1/2 bottom-12 -translate-x-1/2 z-50">
+        <FloatingBar open={selectedCount > 0}>
+          <FloatingBar.Count>
+            <strong>{selectedCount}&nbsp;</strong> Selected
+          </FloatingBar.Count>
+          <FloatingBar.Actions>
+            <Popover>
+              <Popover.Trigger asChild>
+                <FloatingBar.Trigger emphasis="strong">
+                  <FloatingBar.Trigger.Text>Asignar personas</FloatingBar.Trigger.Text>
+                </FloatingBar.Trigger>
+              </Popover.Trigger>
+              <Popover.Content side="top" align="start">
+                <Command>
+                  <Command.Input placeholder="Buscar persona…" />
+                  <Command.List>
+                    <Command.Empty>Sin resultados.</Command.Empty>
+                    <Command.Group>
+                      <Command.Item value="ana">Ana</Command.Item>
+                    </Command.Group>
+                  </Command.List>
+                </Command>
+              </Popover.Content>
+            </Popover>
+            <FloatingBar.Trigger>
+              <FloatingBar.Trigger.Text>Borrar</FloatingBar.Trigger.Text>
+            </FloatingBar.Trigger>
+          </FloatingBar.Actions>
+          <FloatingBar.Close
+            aria-label="Clear selection"
+            onClick={() => {
+              setSelectedCount(0);
+              setResetKey((k) => k + 1);
+            }}
+          />
+        </FloatingBar>
+      </div>
+    </>
+  );
+}`,
+      },
+    },
+  },
   render: () => <MultiSelectWithFloatingBar />,
 };
 
@@ -356,6 +478,27 @@ export const NoRowSelection: Story = {
       tableChildrenStart={colgroupNoSelect}
     />
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `${DATA_TABLE_COLUMNS_SNIPPET}
+
+// Pass \`rowSelection={false}\` to hide the checkbox column entirely.
+function EventsTable({ data }: { data: EventRow[] }) {
+  return (
+    <DataTable
+      tableAppearance="default"
+      getRowId={(r) => r.id}
+      rowSelection={false}
+      columns={columns}
+      data={data}
+      tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
+    />
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const Empty: Story = {
@@ -366,4 +509,25 @@ export const Empty: Story = {
       tableChildrenStart={colgroup}
     />
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `${DATA_TABLE_COLUMNS_SNIPPET}
+
+// With no data, \`emptyLabel\` is shown in place of the rows.
+function EventsTable() {
+  return (
+    <DataTable
+      tableAppearance="default"
+      getRowId={(r) => r.id}
+      columns={columns}
+      data={[]}
+      emptyLabel="No rows."
+      tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
+    />
+  );
+}`,
+      },
+    },
+  },
 };

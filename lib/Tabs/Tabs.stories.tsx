@@ -50,6 +50,28 @@ export const Playground: Story = {
 
 export const ThreeTabs: Story = {
   name: "Composition · Three triggers",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Tabs } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <Tabs defaultValue="account">
+      <Tabs.List>
+        <Tabs.Trigger value="account">Account</Tabs.Trigger>
+        <Tabs.Trigger value="password">Password</Tabs.Trigger>
+        <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="account">Account panel.</Tabs.Content>
+      <Tabs.Content value="password">Password panel.</Tabs.Content>
+      <Tabs.Content value="settings">Settings panel.</Tabs.Content>
+    </Tabs>
+  );
+}`,
+      },
+    },
+  },
   render: () => (
     <Tabs defaultValue="account">
       <Tabs.List>
@@ -66,6 +88,28 @@ export const ThreeTabs: Story = {
 
 export const Disabled: Story = {
   name: "State · Disabled trigger",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Tabs } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <Tabs defaultValue="account">
+      <Tabs.List>
+        <Tabs.Trigger value="account">Account</Tabs.Trigger>
+        <Tabs.Trigger value="password" disabled>
+          Password
+        </Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="account">Account panel.</Tabs.Content>
+      <Tabs.Content value="password">Password panel.</Tabs.Content>
+    </Tabs>
+  );
+}`,
+      },
+    },
+  },
   render: () => (
     <Tabs defaultValue="account">
       <Tabs.List>
@@ -82,6 +126,28 @@ export const Disabled: Story = {
 
 export const UnderlineNavigation: Story = {
   name: "Variant · Underline navigation",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Tabs } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <Tabs defaultValue="overview" variant="underline" className="w-[520px]">
+      <Tabs.List>
+        <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+        <Tabs.Trigger value="activity">Activity</Tabs.Trigger>
+        <Tabs.Trigger value="integrations">Integrations</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="overview">Overview content.</Tabs.Content>
+      <Tabs.Content value="activity">Activity content.</Tabs.Content>
+      <Tabs.Content value="integrations">Integrations content.</Tabs.Content>
+    </Tabs>
+  );
+}`,
+      },
+    },
+  },
   render: () => (
     <Tabs defaultValue="overview" variant="underline" className="ui:w-[520px]">
       <Tabs.List>
@@ -98,6 +164,30 @@ export const UnderlineNavigation: Story = {
 
 export const UnderlineDisabled: Story = {
   name: "Variant · Underline disabled",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Tabs } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <Tabs defaultValue="projects" variant="underline" className="w-[520px]">
+      <Tabs.List>
+        <Tabs.Trigger value="projects">Projects</Tabs.Trigger>
+        <Tabs.Trigger value="members" disabled>
+          Members
+        </Tabs.Trigger>
+        <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="projects">Projects content.</Tabs.Content>
+      <Tabs.Content value="members">Members content.</Tabs.Content>
+      <Tabs.Content value="settings">Settings content.</Tabs.Content>
+    </Tabs>
+  );
+}`,
+      },
+    },
+  },
   render: () => (
     <Tabs defaultValue="projects" variant="underline" className="ui:w-[520px]">
       <Tabs.List>

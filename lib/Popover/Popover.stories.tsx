@@ -38,4 +38,24 @@ export const Default: Story = {
       </Popover.Content>
     </Popover>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Popover, Button } from "@obel-arg/malbec-ui";
+
+<Popover>
+  <Popover.Trigger asChild>
+    <Button variant="outline" size="md">
+      <Button.Text>Open</Button.Text>
+    </Button>
+  </Popover.Trigger>
+  <Popover.Content align="start">
+    <p className="text-sm text-text-default">
+      Popover panel content. Font and chrome match design tokens.
+    </p>
+  </Popover.Content>
+</Popover>`,
+      },
+    },
+  },
 };

@@ -195,7 +195,27 @@ const VARIANTS: ButtonVariant[] = [
 
 export const AllVariants: Story = {
   name: "Matrix · Variants",
-  parameters: { controls: { hideNoControlsWarning: true } },
+  parameters: {
+    controls: { hideNoControlsWarning: true },
+    docs: {
+      source: {
+        code: `import { Button } from "@obel-arg/malbec-ui";
+
+// Same composition, swap the \`variant\` prop:
+<Button variant="primary">
+  <Button.Text>Button</Button.Text>
+</Button>
+
+<Button variant="secondary">
+  <Button.Text>Button</Button.Text>
+</Button>
+
+<Button variant="destructive">
+  <Button.Text>Button</Button.Text>
+</Button>`,
+      },
+    },
+  },
   render: () => (
     <div className="malbec-font-sans ui:grid ui:grid-cols-[auto_1fr] ui:gap-x-6 ui:gap-y-4 ui:items-center">
       {VARIANTS.map((variant) => (
@@ -228,7 +248,40 @@ const SIZES: ButtonSize[] = ["sm", "md", "lg"];
 
 export const AllSizes: Story = {
   name: "Matrix · Sizes",
-  parameters: { controls: { hideNoControlsWarning: true } },
+  parameters: {
+    controls: { hideNoControlsWarning: true },
+    docs: {
+      source: {
+        code: `import { Button } from "@obel-arg/malbec-ui";
+
+<Button size="sm">
+  <Button.Text>Size sm</Button.Text>
+</Button>
+
+<Button size="md">
+  <Button.Text>Size md</Button.Text>
+</Button>
+
+<Button size="lg">
+  <Button.Text>Size lg</Button.Text>
+</Button>
+
+<Button size="icon" aria-label="Next">
+  <Button.Icon decorative={false}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden
+    >
+      <path d="m9 18 6-6-6-6" />
+    </svg>
+  </Button.Icon>
+</Button>`,
+      },
+    },
+  },
   render: () => (
     <div className="malbec-font-sans ui:flex ui:flex-col ui:gap-5">
       <div className="ui:flex ui:items-end ui:gap-3">

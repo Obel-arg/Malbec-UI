@@ -73,6 +73,31 @@ export const NoLayoutShift: Story = {
     };
     return <Demo />;
   },
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Field, Input } from "@obel-arg/malbec-ui";
+import { useState } from "react";
+
+function EmailField() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex flex-col gap-6 w-80">
+      <button type="button" onClick={() => setInvalid((v) => !v)}>
+        Toggle error ({invalid ? "on" : "off"})
+      </button>
+      <Field invalid={invalid}>
+        <Field.Label>Email</Field.Label>
+        <Input type="email" placeholder="you@example.com" />
+        <Field.Error>Please enter a valid email address.</Field.Error>
+      </Field>
+    </div>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const Group: Story = {
@@ -95,7 +120,32 @@ export const Group: Story = {
       </Field>
     </Field.Group>
   ),
-  parameters: { docs: { source: { type: "code" } } },
+  parameters: {
+    docs: {
+      source: {
+        type: "code",
+        code: `import { Field, Input } from "@obel-arg/malbec-ui";
+
+<Field.Group>
+  <Field>
+    <Field.Label required>First name</Field.Label>
+    <Input placeholder="Jane" />
+    <Field.Error />
+  </Field>
+  <Field>
+    <Field.Label required>Last name</Field.Label>
+    <Input placeholder="Doe" />
+    <Field.Error />
+  </Field>
+  <Field invalid>
+    <Field.Label>Email</Field.Label>
+    <Input type="email" placeholder="you@example.com" />
+    <Field.Error>Email is required.</Field.Error>
+  </Field>
+</Field.Group>`,
+      },
+    },
+  },
 };
 
 export const FieldsetWithLegend: Story = {
@@ -115,4 +165,25 @@ export const FieldsetWithLegend: Story = {
       </Field>
     </Field.Set>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Field, Input } from "@obel-arg/malbec-ui";
+
+<Field.Set className="w-80">
+  <Field.Legend>Shipping address</Field.Legend>
+  <Field>
+    <Field.Label required>Street</Field.Label>
+    <Input placeholder="221B Baker Street" />
+    <Field.Error />
+  </Field>
+  <Field>
+    <Field.Label required>City</Field.Label>
+    <Input placeholder="London" />
+    <Field.Error />
+  </Field>
+</Field.Set>`,
+      },
+    },
+  },
 };

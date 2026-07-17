@@ -108,4 +108,69 @@ export const EditProfile: Story = {
       </Dialog.Content>
     </Dialog>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Dialog, Button, Combobox, Steps } from "@obel-arg/malbec-ui";
+
+const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
+
+<Dialog>
+  <Dialog.Trigger asChild>
+    <Button variant="outline" size="md">
+      <Button.Text>Edit profile</Button.Text>
+    </Button>
+  </Dialog.Trigger>
+
+  <Dialog.Content>
+    <Steps total={3} value={1} />
+    <Dialog.Header>
+      <Dialog.Title>Edit profile</Dialog.Title>
+      <Dialog.Description>
+        Make changes to your profile here. Click save when you're done.
+      </Dialog.Description>
+    </Dialog.Header>
+
+    <Dialog.Body>
+      <Dialog.InlineField>
+        <Dialog.InlineLabel htmlFor="name">Name</Dialog.InlineLabel>
+        <Dialog.InlineInput id="name" defaultValue="@peduarte" />
+      </Dialog.InlineField>
+
+      <Dialog.InlineField>
+        <Dialog.InlineLabel htmlFor="username">Username</Dialog.InlineLabel>
+        <Dialog.InlineInput id="username" defaultValue="@peduarte" />
+      </Dialog.InlineField>
+
+      <Dialog.InlineField>
+        <Dialog.InlineLabel htmlFor="framework">Framework</Dialog.InlineLabel>
+        <div className="flex-1 min-w-0">
+          <Combobox items={frameworks} className="w-full">
+            <Combobox.Input id="framework" placeholder="Select a framework" />
+            <Combobox.Content>
+              <Combobox.Empty>No items found.</Combobox.Empty>
+              <Combobox.List>
+                {(item) => (
+                  <Combobox.Item key={String(item)} value={item}>
+                    {String(item)}
+                  </Combobox.Item>
+                )}
+              </Combobox.List>
+            </Combobox.Content>
+          </Combobox>
+        </div>
+      </Dialog.InlineField>
+    </Dialog.Body>
+
+    <Dialog.Footer className="flex justify-between">
+      <Button variant="outline" size="lg">
+        <Button.Text className="text-sm">Cancel</Button.Text>
+      </Button>
+      <Dialog.Action>Save changes</Dialog.Action>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog>`,
+      },
+    },
+  },
 };

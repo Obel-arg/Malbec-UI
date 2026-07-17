@@ -48,6 +48,15 @@ export const Default: Story = {
       <Textarea placeholder="Tell us a bit about you…" />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Textarea } from "@obel-arg/malbec-ui";
+
+<Textarea placeholder="Tell us a bit about you…" />`,
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
@@ -57,6 +66,15 @@ export const Disabled: Story = {
       <Textarea disabled placeholder="Tell us a bit about you…" />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Textarea } from "@obel-arg/malbec-ui";
+
+<Textarea disabled placeholder="Tell us a bit about you…" />`,
+      },
+    },
+  },
 };
 
 export const Invalid: Story = {
@@ -66,6 +84,15 @@ export const Invalid: Story = {
       <Textarea aria-invalid placeholder="Tell us a bit about you…" />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Textarea } from "@obel-arg/malbec-ui";
+
+<Textarea aria-invalid placeholder="Tell us a bit about you…" />`,
+      },
+    },
+  },
 };
 
 export const WithLabel: Story = {
@@ -82,4 +109,18 @@ export const WithLabel: Story = {
       />
     </div>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Label, Textarea } from "@obel-arg/malbec-ui";
+
+<div className="flex flex-col gap-1.5">
+  <Label htmlFor="bio" weight="regular">
+    Bio
+  </Label>
+  <Textarea id="bio" name="bio" placeholder="Tell us a bit about you…" />
+</div>`,
+      },
+    },
+  },
 };

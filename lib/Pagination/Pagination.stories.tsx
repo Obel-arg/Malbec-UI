@@ -35,6 +35,68 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { Pagination } from "@obel-arg/malbec-ui";
+
+function Example() {
+  const [page, setPage] = useState(2);
+  const isFirst = page === 1;
+  const isLast = page === 3;
+
+  return (
+    <Pagination>
+      <Pagination.Content>
+        <Pagination.Item>
+          <Pagination.Previous
+            href="#"
+            aria-disabled={isFirst}
+            tabIndex={isFirst ? -1 : undefined}
+            className={isFirst ? "pointer-events-none opacity-40" : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              if (!isFirst) setPage((p) => p - 1);
+            }}
+          />
+        </Pagination.Item>
+        {[1, 2, 3].map((n) => (
+          <Pagination.Item key={n}>
+            <Pagination.Link
+              href="#"
+              isActive={page === n}
+              onClick={(e) => {
+                e.preventDefault();
+                setPage(n);
+              }}
+            >
+              {n}
+            </Pagination.Link>
+          </Pagination.Item>
+        ))}
+        <Pagination.Item>
+          <Pagination.Ellipsis />
+        </Pagination.Item>
+        <Pagination.Item>
+          <Pagination.Next
+            href="#"
+            aria-disabled={isLast}
+            tabIndex={isLast ? -1 : undefined}
+            className={isLast ? "pointer-events-none opacity-40" : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              if (!isLast) setPage((p) => p + 1);
+            }}
+          />
+        </Pagination.Item>
+      </Pagination.Content>
+    </Pagination>
+  );
+}`,
+      },
+    },
+  },
   render: function DefaultRender() {
     const [page, setPage] = React.useState(2);
     const isFirst = page === 1;
@@ -117,6 +179,39 @@ export const Default: Story = {
 };
 
 export const Simple: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { Pagination } from "@obel-arg/malbec-ui";
+
+function Example() {
+  const [page, setPage] = useState(2);
+
+  return (
+    <Pagination>
+      <Pagination.Content>
+        {[1, 2, 3, 4, 5].map((n) => (
+          <Pagination.Item key={n}>
+            <Pagination.Link
+              href="#"
+              isActive={page === n}
+              onClick={(e) => {
+                e.preventDefault();
+                setPage(n);
+              }}
+            >
+              {n}
+            </Pagination.Link>
+          </Pagination.Item>
+        ))}
+      </Pagination.Content>
+    </Pagination>
+  );
+}`,
+      },
+    },
+  },
   render: function SimpleRender() {
     const [page, setPage] = React.useState(2);
     const pages = [1, 2, 3, 4, 5] as const;

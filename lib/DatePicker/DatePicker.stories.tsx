@@ -82,6 +82,25 @@ export const Closed: Story = {
       </DatePicker.Content>
     </DatePicker>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DatePicker } from "@obel-arg/malbec-ui";
+import { es } from "date-fns/locale";
+
+function Example() {
+  return (
+    <DatePicker locale={es} state="closed">
+      <DatePicker.Trigger />
+      <DatePicker.Content>
+        <DatePicker.Calendar />
+      </DatePicker.Content>
+    </DatePicker>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const Invalid: Story = {
@@ -94,6 +113,25 @@ export const Invalid: Story = {
       </DatePicker.Content>
     </DatePicker>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DatePicker } from "@obel-arg/malbec-ui";
+import { es } from "date-fns/locale";
+
+function Example() {
+  return (
+    <DatePicker locale={es} state="closed">
+      <DatePicker.Trigger aria-invalid />
+      <DatePicker.Content>
+        <DatePicker.Calendar />
+      </DatePicker.Content>
+    </DatePicker>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const Open: Story = {
@@ -106,6 +144,25 @@ export const Open: Story = {
       </DatePicker.Content>
     </DatePicker>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DatePicker } from "@obel-arg/malbec-ui";
+import { es } from "date-fns/locale";
+
+function Example() {
+  return (
+    <DatePicker state="open" locale={es} defaultOpen>
+      <DatePicker.Trigger />
+      <DatePicker.Content>
+        <DatePicker.Calendar />
+      </DatePicker.Content>
+    </DatePicker>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const DateRange: Story = {
@@ -117,6 +174,25 @@ export const DateRange: Story = {
       </DatePicker.Content>
     </DatePicker>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DatePicker } from "@obel-arg/malbec-ui";
+import { es } from "date-fns/locale";
+
+function Example() {
+  return (
+    <DatePicker state="date-range" locale={es} defaultOpen>
+      <DatePicker.Trigger />
+      <DatePicker.Content>
+        <DatePicker.Calendar />
+      </DatePicker.Content>
+    </DatePicker>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const Preset: Story = {
@@ -128,6 +204,63 @@ export const Preset: Story = {
       </DatePicker.Content>
     </DatePicker>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import {
+  addMonths,
+  endOfMonth,
+  endOfWeek,
+  endOfYear,
+  startOfMonth,
+  startOfWeek,
+  startOfYear,
+} from "date-fns";
+import { es } from "date-fns/locale";
+import { DatePicker, type DatePickerPresetItem } from "@obel-arg/malbec-ui";
+
+function Example() {
+  const now = new Date();
+  const nextMonth = addMonths(now, 1);
+  const presets: DatePickerPresetItem[] = [
+    {
+      value: "this-week",
+      label: "This week",
+      range: {
+        from: startOfWeek(now, { locale: es }),
+        to: endOfWeek(now, { locale: es }),
+      },
+    },
+    {
+      value: "this-month",
+      label: "This month",
+      range: { from: startOfMonth(now), to: endOfMonth(now) },
+    },
+    {
+      value: "this-year",
+      label: "This year",
+      range: { from: startOfYear(now), to: endOfYear(now) },
+    },
+    {
+      value: "next-month",
+      label: "Next month",
+      range: { from: startOfMonth(nextMonth), to: endOfMonth(nextMonth) },
+    },
+  ];
+
+  return (
+    <DatePicker state="preset" defaultOpen presets={presets}>
+      <DatePicker.Trigger />
+      <DatePicker.Content className="flex flex-col gap-3">
+        <DatePicker.Preset />
+        <DatePicker.Calendar locale={es} />
+      </DatePicker.Content>
+    </DatePicker>
+  );
+}`,
+      },
+    },
+  },
 };
 
 export const Birth: Story = {
@@ -139,4 +272,22 @@ export const Birth: Story = {
       </DatePicker.Content>
     </DatePicker>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DatePicker } from "@obel-arg/malbec-ui";
+
+function Example() {
+  return (
+    <DatePicker state="birth" defaultOpen>
+      <DatePicker.Trigger />
+      <DatePicker.Content>
+        <DatePicker.Calendar />
+      </DatePicker.Content>
+    </DatePicker>
+  );
+}`,
+      },
+    },
+  },
 };
