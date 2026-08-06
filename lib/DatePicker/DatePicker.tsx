@@ -21,12 +21,6 @@ import {
 
 export type { DatePickerState } from "./date-picker-variants";
 
-const FIGMA_MONTH = new Date(2024, 8, 1);
-const TODAY = new Date();
-const FIGMA_RANGE_FROM = new Date(2022, 0, 20);
-const FIGMA_RANGE_TO = new Date(2022, 1, 9);
-const FIGMA_BIRTH_MAX_DATE = new Date(2024, 8, 17);
-
 type DatePickerMode = "single" | "range";
 
 function useControllableState<T>(
@@ -56,6 +50,19 @@ function resolveDefaultOpen(state: DatePickerState): boolean {
 
 function resolveDefaultMode(state: DatePickerState): DatePickerMode {
   return state === "date-range" ? "range" : "single";
+}
+
+/**
+ * Month the calendar opens on when the consumer gave no `defaultMonth`: the
+ * month of whatever is already selected, else the current month. Never a fixed
+ * date — one would silently rot.
+ */
+function resolveInitialMonth(
+  defaultMonth: Date | undefined,
+  date: Date | undefined,
+  range: DateRange | undefined,
+): Date {
+  return defaultMonth ?? date ?? range?.from ?? new Date();
 }
 
 function formatDateValue(date: Date, locale?: Locale): string {
@@ -212,19 +219,17 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
 
     const [range, setRange] = useControllableState<DateRange | undefined>(
       rangeProp,
-      defaultRange ??
-        (state === "date-range"
-          ? {
-              from: FIGMA_RANGE_FROM,
-              to: FIGMA_RANGE_TO,
-            }
-          : undefined),
+      defaultRange,
       onRangeChange,
     );
 
     const [month, setMonth] = useControllableState<Date>(
       monthProp,
-      defaultMonth ?? FIGMA_MONTH,
+      resolveInitialMonth(
+        defaultMonth,
+        dateProp ?? defaultDate,
+        rangeProp ?? defaultRange,
+      ),
       onMonthChange,
     );
 
@@ -235,10 +240,10 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
     );
 
     const showPreset = state === "preset";
+    /** `state="birth"` is a date of birth: nobody was born tomorrow. */
     const disabled = React.useMemo<Matcher | Matcher[] | undefined>(
       () =>
-        disabledProp ??
-        (state === "birth" ? { after: FIGMA_BIRTH_MAX_DATE } : undefined),
+        disabledProp ?? (state === "birth" ? { after: new Date() } : undefined),
       [disabledProp, state],
     );
 
@@ -542,7 +547,6 @@ const DatePickerCalendar = React.forwardRef<
           selected={ctx.date}
           onSelect={ctx.setDate}
           disabled={ctx.disabled}
-          today={TODAY}
           {...(rest as Omit<
             DayPickerProps,
             | "mode"

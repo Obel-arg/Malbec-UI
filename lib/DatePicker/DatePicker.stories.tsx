@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   addMonths,
+  addYears,
   endOfMonth,
   endOfWeek,
   endOfYear,
@@ -165,9 +166,14 @@ function Example() {
   },
 };
 
-export const DateRange: Story = {
+/**
+ * Far future dates are reachable: the calendar opens on the selected month and
+ * the year dropdown spans today +20 years. Widen it further with `endMonth`.
+ */
+export const FutureDate: Story = {
+  name: "Future date",
   render: () => (
-    <DatePicker state="date-range" locale={es} defaultOpen>
+    <DatePicker locale={es} defaultOpen date={addYears(new Date(), 1)}>
       <DatePicker.Trigger />
       <DatePicker.Content>
         <DatePicker.Calendar />
@@ -177,12 +183,65 @@ export const DateRange: Story = {
   parameters: {
     docs: {
       source: {
-        code: `import { DatePicker } from "@obel-arg/malbec-ui";
+        code: `import { useState } from "react";
+import { addYears } from "date-fns";
 import { es } from "date-fns/locale";
+import { DatePicker } from "@obel-arg/malbec-ui";
 
 function Example() {
+  const [date, setDate] = useState<Date | undefined>(addYears(new Date(), 1));
+
   return (
-    <DatePicker state="date-range" locale={es} defaultOpen>
+    <DatePicker locale={es} defaultOpen date={date} onDateChange={setDate}>
+      <DatePicker.Trigger />
+      <DatePicker.Content>
+        <DatePicker.Calendar />
+      </DatePicker.Content>
+    </DatePicker>
+  );
+}`,
+      },
+    },
+  },
+};
+
+export const DateRange: Story = {
+  render: () => (
+    <DatePicker
+      state="date-range"
+      locale={es}
+      defaultOpen
+      defaultRange={{ from: startOfMonth(new Date()), to: new Date() }}
+    >
+      <DatePicker.Trigger />
+      <DatePicker.Content>
+        <DatePicker.Calendar />
+      </DatePicker.Content>
+    </DatePicker>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useState } from "react";
+import { startOfMonth } from "date-fns";
+import { es } from "date-fns/locale";
+import type { DateRange } from "react-day-picker";
+import { DatePicker } from "@obel-arg/malbec-ui";
+
+function Example() {
+  const [range, setRange] = useState<DateRange | undefined>({
+    from: startOfMonth(new Date()),
+    to: new Date(),
+  });
+
+  return (
+    <DatePicker
+      state="date-range"
+      locale={es}
+      defaultOpen
+      range={range}
+      onRangeChange={setRange}
+    >
       <DatePicker.Trigger />
       <DatePicker.Content>
         <DatePicker.Calendar />
