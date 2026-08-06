@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { addYears, endOfYear, startOfYear, subYears } from "date-fns";
 import {
   DayButton as DayButtonPrimitive,
   DayPicker,
@@ -233,6 +234,18 @@ const defaultComponents = {
   DayButton: CalendarDayButton,
 };
 
+/**
+ * Years of navigable range on each side of today when the year dropdown is on
+ * and the consumer gave no explicit `startMonth` / `endMonth`.
+ *
+ * `react-day-picker` defaults these to `-100` / `0` years, which only makes
+ * sense for a date-of-birth picker: it makes every future year unreachable and
+ * clamps a controlled `month` that falls past December 31 of the current year.
+ * @see https://daypicker.dev/api/interfaces/PropsBase#startmonth
+ */
+const NAV_YEARS_PAST = 100;
+const NAV_YEARS_FUTURE = 20;
+
 export type CalendarProps = DayPickerProps & {
   className?: string;
   /**
@@ -246,22 +259,45 @@ export type CalendarProps = DayPickerProps & {
 /**
  * Malbec calendar — `react-day-picker` v9 with modifier styling on `DayButton`
  * (fixes range middle + rounded selection). Compose inside `Popover.Content`.
+ *
+ * Defaults `captionLayout` to `"dropdown"` and, while the year dropdown is on,
+ * bounds navigation to today ±(100 / 20) years. Both are plain `react-day-picker`
+ * props, so `captionLayout`, `startMonth` and `endMonth` override them.
  */
 function CalendarImpl({
   className,
   classNames,
   components,
   showTodayStyle = true,
+  captionLayout = "dropdown",
+  startMonth,
+  endMonth,
+  today,
   ...props
 }: CalendarProps) {
   const ui = React.useMemo(() => ({ showTodayStyle }), [showTodayStyle]);
+
+  const hasYearDropdown =
+    captionLayout === "dropdown" || captionLayout === "dropdown-years";
+
+  const [navStart, navEnd] = React.useMemo(() => {
+    if (!hasYearDropdown) return [startMonth, endMonth] as const;
+    const anchor = today ?? new Date();
+    return [
+      startMonth ?? startOfYear(subYears(anchor, NAV_YEARS_PAST)),
+      endMonth ?? endOfYear(addYears(anchor, NAV_YEARS_FUTURE)),
+    ] as const;
+  }, [endMonth, hasYearDropdown, startMonth, today]);
 
   return (
     <CalendarUiContext.Provider value={ui}>
       <DayPicker
         showOutsideDays
-        captionLayout="dropdown"
+        captionLayout={captionLayout}
         navLayout="after"
+        startMonth={navStart}
+        endMonth={navEnd}
+        today={today}
         className={cn("malbec-font-sans ui:w-full", className)}
         classNames={{ ...defaultClassNames, ...classNames }}
         components={{ ...defaultComponents, ...components }}
