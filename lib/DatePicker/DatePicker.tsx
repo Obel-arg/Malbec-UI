@@ -21,12 +21,6 @@ import {
 
 export type { DatePickerState } from "./date-picker-variants";
 
-const FIGMA_MONTH = new Date(2024, 8, 1);
-const TODAY = new Date();
-const FIGMA_RANGE_FROM = new Date(2022, 0, 20);
-const FIGMA_RANGE_TO = new Date(2022, 1, 9);
-const FIGMA_BIRTH_MAX_DATE = new Date(2024, 8, 17);
-
 type DatePickerMode = "single" | "range";
 
 function useControllableState<T>(
@@ -56,6 +50,19 @@ function resolveDefaultOpen(state: DatePickerState): boolean {
 
 function resolveDefaultMode(state: DatePickerState): DatePickerMode {
   return state === "date-range" ? "range" : "single";
+}
+
+/**
+ * Month the calendar opens on when the consumer gave no `defaultMonth`: the
+ * month of whatever is already selected, else the current month. Never a fixed
+ * date — one would silently rot.
+ */
+function resolveInitialMonth(
+  defaultMonth: Date | undefined,
+  date: Date | undefined,
+  range: DateRange | undefined,
+): Date {
+  return defaultMonth ?? date ?? range?.from ?? new Date();
 }
 
 function formatDateValue(date: Date, locale?: Locale): string {
@@ -119,6 +126,7 @@ type DatePickerContextValue = {
   setPreset: (next: string | undefined) => void;
   showPreset: boolean;
   locale: Locale | undefined;
+  closeOnSelect: boolean;
 };
 
 const DatePickerContext = React.createContext<DatePickerContextValue | null>(
@@ -157,6 +165,13 @@ export interface DatePickerProps {
   onPresetChange?: (preset: string | undefined) => void;
   /** date-fns locale applied to both the trigger label and the calendar. */
   locale?: Locale;
+  /**
+   * Close the popover once the selection is complete: on the day click in
+   * `single` mode, on the click that closes the range in `range` mode. Clearing
+   * a selection never closes it.
+   * @default true
+   */
+  closeOnSelect?: boolean;
   className?: string;
   children?: React.ReactNode;
 }
@@ -186,6 +201,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
       defaultPreset,
       onPresetChange,
       locale,
+      closeOnSelect = true,
       className,
       children,
     },
@@ -212,19 +228,17 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
 
     const [range, setRange] = useControllableState<DateRange | undefined>(
       rangeProp,
-      defaultRange ??
-        (state === "date-range"
-          ? {
-              from: FIGMA_RANGE_FROM,
-              to: FIGMA_RANGE_TO,
-            }
-          : undefined),
+      defaultRange,
       onRangeChange,
     );
 
     const [month, setMonth] = useControllableState<Date>(
       monthProp,
-      defaultMonth ?? FIGMA_MONTH,
+      resolveInitialMonth(
+        defaultMonth,
+        dateProp ?? defaultDate,
+        rangeProp ?? defaultRange,
+      ),
       onMonthChange,
     );
 
@@ -235,10 +249,10 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
     );
 
     const showPreset = state === "preset";
+    /** `state="birth"` is a date of birth: nobody was born tomorrow. */
     const disabled = React.useMemo<Matcher | Matcher[] | undefined>(
       () =>
-        disabledProp ??
-        (state === "birth" ? { after: FIGMA_BIRTH_MAX_DATE } : undefined),
+        disabledProp ?? (state === "birth" ? { after: new Date() } : undefined),
       [disabledProp, state],
     );
 
@@ -279,6 +293,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
         setPreset,
         showPreset,
         locale,
+        closeOnSelect,
       }),
       [
         state,
@@ -299,6 +314,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
         setPreset,
         showPreset,
         locale,
+        closeOnSelect,
       ],
     );
 
@@ -504,6 +520,32 @@ const DatePickerCalendar = React.forwardRef<
   DatePickerCalendarProps
 >(function DatePickerCalendar({ className, ...rest }, ref) {
   const ctx = useDatePickerContext("DatePicker.Calendar");
+  const { closeOnSelect, open, setDate, setOpen, setRange } = ctx;
+
+  /**
+   * Day clicks since the popover opened. With no `min`, `react-day-picker`
+   * already reports a complete `{ from: d, to: d }` on the first click and
+   * re-completes the range on every click after that, so the value alone never
+   * says whether the user is done — a range takes a start click and an end
+   * click, so count them.
+   */
+  const rangeClicks = React.useRef(0);
+  React.useEffect(() => {
+    if (open) rangeClicks.current = 0;
+  }, [open]);
+
+  const handleSelectDate = (next: Date | undefined) => {
+    setDate(next);
+    // Clicking the selected day clears it; stay open so another can be picked.
+    if (closeOnSelect && next) setOpen(false);
+  };
+
+  const handleSelectRange = (next: DateRange | undefined) => {
+    rangeClicks.current += 1;
+    setRange(next);
+    const complete = Boolean(next?.from && next?.to);
+    if (closeOnSelect && complete && rangeClicks.current >= 2) setOpen(false);
+  };
 
   return (
     <div ref={ref} data-slot="date-picker-calendar" className={cn(className)}>
@@ -518,7 +560,7 @@ const DatePickerCalendar = React.forwardRef<
           month={ctx.month}
           onMonthChange={ctx.setMonth}
           selected={ctx.range}
-          onSelect={ctx.setRange}
+          onSelect={handleSelectRange}
           disabled={ctx.disabled}
           {...(rest as Omit<
             DayPickerProps,
@@ -540,9 +582,8 @@ const DatePickerCalendar = React.forwardRef<
           month={ctx.month}
           onMonthChange={ctx.setMonth}
           selected={ctx.date}
-          onSelect={ctx.setDate}
+          onSelect={handleSelectDate}
           disabled={ctx.disabled}
-          today={TODAY}
           {...(rest as Omit<
             DayPickerProps,
             | "mode"
