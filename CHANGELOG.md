@@ -2,6 +2,13 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.11.2 — 2026-08-07
+
+- patch(date-picker): close the popover once a selection is complete
+- patch(date-picker): derive date defaults from today, not fixed dates
+- patch(calendar): bound year-dropdown navigation around today
+- docs(stories): show real usage in Storybook code panels
+
 ## v1.11.1 — 2026-07-16
 
 - patch(calendar): add show padding days (`daysBefore` / `daysAfter`) — reserved travel / rest days around a show, drawn as a thin accent base line butted against the show chip in the month view, and beside the show at its own time level in the day/week time grid
