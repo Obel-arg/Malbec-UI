@@ -8,8 +8,14 @@ Every project that installs `@obel-arg/malbec-ui` must have an `.npmrc` at the r
 
 ```
 @obel-arg:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=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
+//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
 ```
+
+The token is **never** committed: it is read from the `NPM_TOKEN` environment
+variable (a GitHub PAT with `read:packages` scope).
+
+- Local: `export NPM_TOKEN=<your-pat>` in your shell profile.
+- CI: inject it as the `NPM_TOKEN` secret.
 
 Add this alias dependency in your project's `package.json`:
 
