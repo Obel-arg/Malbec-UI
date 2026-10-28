@@ -10,6 +10,15 @@ export { Alert } from "./Alert/Alert";
 export { AlertDialog } from "./AlertDialog/AlertDialog";
 export { Avatar, AvatarGroup, AvatarGroupCount } from "./Avatar/Avatar";
 export { Badge } from "./Badge/Badge";
+export { StatusBadge } from "./Badge/StatusBadge";
+export {
+  statusTone,
+  statusVariant,
+  priorityVariant,
+  STATUS_TONES,
+  TONE_VARIANT,
+  PRIORITY_TONE,
+} from "./Badge/status-tone";
 export { Breadcrumb } from "./Breadcrumb/Breadcrumb";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { Combobox } from "./Combobox/Combobox";
@@ -87,6 +96,8 @@ export type {
   BadgeIconProps,
   BadgeTextProps,
 } from "./Badge/Badge";
+export type { StatusBadgeProps } from "./Badge/StatusBadge";
+export type { StatusTone, Priority } from "./Badge/status-tone";
 export type {
   BreadcrumbProps,
   BreadcrumbListProps,

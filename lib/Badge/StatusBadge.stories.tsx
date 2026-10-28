@@ -1,0 +1,115 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { StatusBadge, type StatusBadgeProps } from "./StatusBadge";
+import { priorityVariant } from "./status-tone";
+import { Badge } from "./Badge";
+
+/**
+ * `Badge` whose colour comes from the canonical status map — the single source
+ * of truth for the whole Malbec suite. Pass the product's status string; the
+ * colour is chosen for you (accent/case-insensitive). Unknown statuses fall
+ * back to `secondary` (gray), overridable per call via `fallback`.
+ *
+ * ```tsx
+ * <StatusBadge status="Aprobado" />
+ * ```
+ */
+const meta = {
+  title: "Components/StatusBadge",
+  component: StatusBadge,
+  parameters: { layout: "centered" },
+  tags: ["autodocs"],
+  argTypes: {
+    status: { control: "text" },
+    fallback: { control: "text" },
+  },
+} satisfies Meta<StatusBadgeProps>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+/** One representative status per tone. */
+const byTone: { tone: string; status: string }[] = [
+  { tone: "gray", status: "Borrador" },
+  { tone: "yellow", status: "En revisión" },
+  { tone: "blue", status: "En progreso" },
+  { tone: "orange", status: "Demorado" },
+  { tone: "green", status: "Aprobado" },
+  { tone: "red", status: "Cancelado" },
+];
+
+export const Playground: Story = {
+  args: { status: "Aprobado" },
+};
+
+export const ByTone: Story = {
+  name: "All tones",
+  render: () => (
+    <div className="ui:flex ui:flex-col ui:items-start ui:gap-2">
+      {byTone.map(({ status }) => (
+        <StatusBadge key={status} status={status} />
+      ))}
+    </div>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { StatusBadge } from "@obel-arg/malbec-ui";
+
+<StatusBadge status="Borrador" />     {/* gray   */}
+<StatusBadge status="En revisión" />  {/* yellow */}
+<StatusBadge status="En progreso" />  {/* blue   */}
+<StatusBadge status="Demorado" />     {/* orange */}
+<StatusBadge status="Aprobado" />     {/* green  */}
+<StatusBadge status="Cancelado" />    {/* red    */}`,
+      },
+    },
+  },
+};
+
+export const UnknownStatus: Story = {
+  name: "Unknown status (fallback)",
+  render: () => (
+    <div className="ui:flex ui:items-center ui:gap-3">
+      <StatusBadge status="Algo nuevo" />
+      <StatusBadge status="Algo nuevo" fallback="outline" />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { StatusBadge } from "@obel-arg/malbec-ui";
+
+// Not in the catalog → secondary (gray) by default
+<StatusBadge status="Algo nuevo" />
+// …or override per call site
+<StatusBadge status="Algo nuevo" fallback="outline" />`,
+      },
+    },
+  },
+};
+
+export const Priority: Story = {
+  name: "Priority",
+  render: () => (
+    <div className="ui:flex ui:items-center ui:gap-3">
+      {(["Alta", "Media", "Baja"] as const).map((p) => (
+        <Badge key={p} variant={priorityVariant(p)}>
+          <Badge.Text>{p}</Badge.Text>
+        </Badge>
+      ))}
+    </div>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge, priorityVariant } from "@obel-arg/malbec-ui";
+
+<Badge variant={priorityVariant("Alta")}>
+  <Badge.Text>Alta</Badge.Text>
+</Badge>
+// Media → orange, Baja → yellow`,
+      },
+    },
+  },
+};
