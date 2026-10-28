@@ -11,6 +11,8 @@ import { Badge } from "./Badge";
  *
  * ```tsx
  * <StatusBadge status="Aprobado" />
+ * // enum status + translated label: pass the tone, the colour no longer depends on the text
+ * <StatusBadge tone="green">{t("status.APPROVED")}</StatusBadge>
  * ```
  */
 const meta = {
@@ -22,6 +24,7 @@ const meta = {
   args: { status: "Aprobado" },
   argTypes: {
     status: { control: "text" },
+    tone: { control: "select", options: ["gray", "yellow", "blue", "orange", "green", "red"] },
     fallback: { control: "text" },
   },
 } satisfies Meta<StatusBadgeProps>;
@@ -64,6 +67,29 @@ export const ByTone: Story = {
 <StatusBadge status="Demorado" />     {/* orange */}
 <StatusBadge status="Aprobado" />     {/* green  */}
 <StatusBadge status="Cancelado" />    {/* red    */}`,
+      },
+    },
+  },
+};
+
+export const ExplicitTone: Story = {
+  name: "Explicit tone (translated label)",
+  render: () => (
+    <div className="ui:flex ui:items-center ui:gap-3">
+      <StatusBadge tone="green">Approved</StatusBadge>
+      <StatusBadge tone="green">Aprobado</StatusBadge>
+      <StatusBadge tone="orange">Delayed</StatusBadge>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { StatusBadge } from "@obel-arg/malbec-ui";
+
+// The product maps its enum to a tone once; the label comes from i18n.
+const TONE = { APPROVED: "green", DELAYED: "orange" } as const;
+
+<StatusBadge tone={TONE[status]}>{t(\`status.\${status}\`)}</StatusBadge>`,
       },
     },
   },
