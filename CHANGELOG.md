@@ -2,6 +2,12 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.12.0 — 2026-10-28
+
+- docs(badge): default status arg so StatusBadge stories type-check
+- docs(badge): add StatusBadge Storybook story
+- minor(badge): add canonical status→tone map and StatusBadge
+
 ## v1.11.2 — 2026-08-07
 
 - patch(date-picker): close the popover once a selection is complete
