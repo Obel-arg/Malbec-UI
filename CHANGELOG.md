@@ -2,6 +2,10 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.13.0 — 2026-10-28
+
+- minor(badge): StatusBadge accepts an explicit tone
+
 ## v1.12.0 — 2026-10-28
 
 - docs(badge): default status arg so StatusBadge stories type-check
