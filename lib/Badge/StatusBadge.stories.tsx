@@ -18,6 +18,8 @@ const meta = {
   component: StatusBadge,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
+  // Default for the required `status` prop, so render-only stories type-check.
+  args: { status: "Aprobado" },
   argTypes: {
     status: { control: "text" },
     fallback: { control: "text" },
