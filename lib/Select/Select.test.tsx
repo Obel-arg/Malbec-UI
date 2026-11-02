@@ -17,12 +17,20 @@ describe("Select.Value", () => {
     // Radix ignores className on Select.Value, so the trigger styles its value slot.
     const trigger = container.querySelector('[data-slot="select-trigger"]');
     expect(trigger?.querySelector(':scope > [data-slot="select-value"]')).not.toBeNull();
-    expect(trigger?.className.split(" ")).toEqual(
+    const classes = trigger?.className.split(" ") ?? [];
+    // Plain text: block + truncate, so the ellipsis renders (it can't on a flex
+    // container's anonymous text item). Wrapped in :where() so apps override it plainly.
+    expect(classes).toEqual(
       expect.arrayContaining([
-        "ui:[&>[data-slot=select-value]]:flex",
-        "ui:[&>[data-slot=select-value]]:min-w-0",
-        "ui:[&>[data-slot=select-value]]:truncate",
+        "ui:[&>:where([data-slot=select-value])]:block",
+        "ui:[&>:where([data-slot=select-value])]:min-w-0",
+        "ui:[&>:where([data-slot=select-value])]:truncate",
       ]),
     );
+    // Icon + text keeps the flex row it had.
+    expect(classes).toContain("ui:[&>[data-slot=select-value]:has(>*)]:flex");
+    // …and only then: no unconditional flex on the slot (matched by suffix so Tailwind's
+    // source scan doesn't emit that dead class from this test).
+    expect(classes.filter((c) => c.endsWith("=select-value]]:flex"))).toEqual([]);
   });
 });
