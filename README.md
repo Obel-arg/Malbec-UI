@@ -71,3 +71,13 @@ Then add this to your project's `globals.css`:
 }
 ```
 
+
+## Releasing
+
+Each PR that changes `lib/**` ships its own release; there is no separate release PR.
+
+1. In your PR, bump the version: `pnpm version <patch|minor|major> --no-git-tag-version`.
+2. Add a `## vX.Y.Z — YYYY-MM-DD` entry at the top of `CHANGELOG.md`.
+3. Merge. `publish.yml` sees an untagged version on `main`, publishes it to GitHub Packages and creates the tag + GitHub Release with that CHANGELOG entry.
+
+CI (`ci.yml`) fails a PR that touches `lib/**` without a bump or a CHANGELOG entry. If two PRs bump to the same version, the second one must rebase and bump again.
