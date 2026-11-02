@@ -218,6 +218,13 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
       ],
     );
 
+    const width = `var(${open ? "--sidebar-width" : "--sidebar-width-collapsed"})`;
+    const sidebarOffset = isMobile
+      ? "0px"
+      : defaultSide === "right"
+        ? `calc(-1 * ${width})`
+        : width;
+
     return (
       <SidebarContext.Provider value={value}>
         <Tooltip.Provider>
@@ -232,6 +239,9 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
                 "--sidebar-width": SIDEBAR_WIDTH,
                 "--sidebar-width-collapsed": SIDEBAR_WIDTH_COLLAPSED,
                 "--sidebar-width-mobile": SIDEBAR_WIDTH_MOBILE,
+                // Space the sidebar takes from the content area right now (0 on mobile, where it
+                // is a sheet). FloatingBar placement="bottom" centres itself on it.
+                "--sidebar-offset": sidebarOffset,
                 ...style,
               } as React.CSSProperties
             }

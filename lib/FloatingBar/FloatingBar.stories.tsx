@@ -307,3 +307,43 @@ function Example() {
     </FloatingBar>
   ),
 };
+
+export const PinnedToBottom: Story = {
+  name: "Placement · Bottom",
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      source: {
+        code: `import { FloatingBar } from "@obel-arg/malbec-ui";
+
+// Inside <Sidebar.Provider>, so it centres on the content area.
+<FloatingBar placement="bottom" open={selected.length > 0}>
+  <FloatingBar.Count>
+    <strong>{selected.length}</strong>&nbsp;seleccionados
+  </FloatingBar.Count>
+  <FloatingBar.Actions>
+    <FloatingBar.Trigger>
+      <FloatingBar.Trigger.Text>Aprobar</FloatingBar.Trigger.Text>
+    </FloatingBar.Trigger>
+  </FloatingBar.Actions>
+  <FloatingBar.Close onClick={clearSelection} aria-label="Limpiar selección" />
+</FloatingBar>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:h-[240px]">
+      <FloatingBar placement="bottom">
+        <FloatingBar.Count>
+          <strong>3</strong>&nbsp;seleccionados
+        </FloatingBar.Count>
+        <FloatingBar.Actions>
+          <FloatingBar.Trigger>
+            <FloatingBar.Trigger.Text>Aprobar</FloatingBar.Trigger.Text>
+          </FloatingBar.Trigger>
+        </FloatingBar.Actions>
+        <FloatingBar.Close aria-label="Limpiar selección" />
+      </FloatingBar>
+    </div>
+  ),
+};

@@ -1,6 +1,7 @@
 import { cva } from "class-variance-authority";
 
-export const floatingBarVariants = cva([
+export const floatingBarVariants = cva(
+  [
   "malbec-font-sans",
   "ui:inline-flex ui:items-center ui:gap-4",
   "ui:rounded-[10px] ui:border ui:border-background-300",
@@ -10,7 +11,25 @@ export const floatingBarVariants = cva([
   "ui:data-[state=open]:animate-malbec-floating-bar-in",
   "ui:data-[state=closed]:animate-malbec-floating-bar-out",
   "ui:data-[state=closed]:pointer-events-none",
-]);
+  ],
+  {
+    variants: {
+      /**
+       * `bottom` pins the bar 40px above the bottom edge, centred on the content area (it reads
+       * `--sidebar-offset` from `Sidebar.Provider`), one layer under modal overlays so a dialog
+       * covers it. Keep it inside the provider: it isn't portaled.
+       */
+      placement: {
+        inline: "",
+        bottom:
+          "ui:fixed ui:bottom-10 ui:left-[calc(50%+var(--sidebar-offset,0px)/2)] ui:-translate-x-1/2 ui:z-[calc(var(--ui-z-overlay)-1)]",
+      },
+    },
+    defaultVariants: { placement: "inline" },
+  },
+);
+
+export type FloatingBarPlacement = "inline" | "bottom";
 
 export const floatingBarCountVariants = cva([
   "ui:inline-flex ui:items-center ui:shrink-0",

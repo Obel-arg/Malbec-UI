@@ -11,8 +11,11 @@ import {
   floatingBarTriggerTextVariants,
   floatingBarTriggerVariants,
   floatingBarVariants,
+  type FloatingBarPlacement,
   type FloatingBarTriggerEmphasis,
 } from "./floating-bar-variants";
+
+export type { FloatingBarPlacement };
 
 export interface FloatingBarProps extends React.ComponentProps<"div"> {
   /**
@@ -23,11 +26,13 @@ export interface FloatingBarProps extends React.ComponentProps<"div"> {
    * play.
    */
   open?: boolean;
+  /** `bottom` pins the bar to the bottom of the content area. Defaults to `inline`. */
+  placement?: FloatingBarPlacement;
 }
 
 const FloatingBarRoot = React.forwardRef<HTMLDivElement, FloatingBarProps>(
   function FloatingBarRoot(
-    { className, role = "toolbar", open = true, ...rest },
+    { className, role = "toolbar", open = true, placement = "inline", ...rest },
     ref,
   ) {
     const state = open ? "open" : "closed";
@@ -38,8 +43,9 @@ const FloatingBarRoot = React.forwardRef<HTMLDivElement, FloatingBarProps>(
         role={role}
         data-slot="floating-bar"
         data-state={state}
+        data-placement={placement}
         aria-hidden={state === "closed" || undefined}
-        className={cn(floatingBarVariants(), className)}
+        className={cn(floatingBarVariants({ placement }), className)}
         {...rest}
       />
     );
