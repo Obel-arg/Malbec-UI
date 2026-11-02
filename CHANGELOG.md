@@ -10,6 +10,8 @@ All notable changes to Malbec UI are documented here.
   @import "malbec-ui/tokens.css";
   ```
   It gives `text-malbec-ink` (#1a1a1f), `text-malbec-icon` (#3f3f46), `text-malbec-muted-text` (#8c8c94), `text-malbec-table-header` (#6b6b7a) and the badge pairs `bg-malbec-badge-{green,yellow,orange,purple,blue,red,neutral}-bg` / `text-malbec-badge-…-text`.
+- **Embossed** utilities from the spec: `border-embossed` (white border + `#f1f0ee` outer ring, no shadow) to close a data surface, and `divider-embossed` (`#eae7e3` top edge + white inset light) between sections. They work with variants (`hover:`, `md:`…). **Live:** your own `.border-embossed` in `globals.css` (`#ddd8d1` border) is unlayered, so it keeps winning until you delete it. The spec version is the one that stays.
+- Badge `blue` and `red` match `<Badge variant="blue">` / `variant="red"`. **Artist:** your `blue` (#d4ddef / #2f4a8a) changes to #dce6ec / #2f628a. **Live:** your `red` (#efd4d4 / #8a2f2f) changes to the spec red #dfd0d0 / #602a2a.
 - Nothing changes on screen until you import it. Once you do, delete the matching `--color-malbec-*` lines from your own `@theme`; any value you keep in a later `@theme` block still wins. **Artist:** your current ink and muted-text values are off-spec (#18181b and #71717a) and will change to the spec values when you drop them.
 
 ## v1.13.3 — 2026-11-02
