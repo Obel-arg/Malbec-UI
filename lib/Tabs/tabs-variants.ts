@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-export type TabsVariant = "segmented" | "underline";
+export type TabsVariant = "segmented" | "underline" | "opacity";
 
 /** Supports segmented tabs and underline navigation tabs. */
 export const tabsListVariants = cva(
@@ -21,6 +21,8 @@ export const tabsListVariants = cva(
         segmented: "ui:h-10 ui:rounded-[8px] ui:bg-background-200 ui:p-1",
         underline:
           "ui:h-11 ui:gap-4 ui:rounded-none ui:border-b ui:border-background-300 ui:bg-transparent ui:p-0",
+        /** Screen-level tabs (malbec-ux-ui): no line, no track; the active one at 100%, the rest at 40%. */
+        opacity: "ui:h-auto ui:gap-6 ui:rounded-none ui:bg-transparent ui:p-0",
       },
     },
     defaultVariants: {
@@ -58,6 +60,8 @@ export const tabsTriggerVariants = cva(
           "ui:h-full ui:rounded-[6px] ui:px-2.5 ui:py-0 ui:font-normal ui:text-text-default ui:data-[state=active]:bg-background-100 ui:data-[state=active]:shadow-[0_1px_2px_0_rgba(0,0,0,0.04)]",
         underline:
           "ui:relative ui:-mb-px ui:rounded-none ui:px-1 ui:py-3 ui:text-sm ui:font-medium ui:text-text-default-muted ui:hover:text-text-default ui:after:pointer-events-none ui:after:absolute ui:after:left-0 ui:after:right-0 ui:after:-bottom-px ui:after:h-[3px] ui:after:bg-background-300 ui:after:opacity-0 ui:after:content-[''] ui:data-[state=active]:text-text-default ui:data-[state=active]:after:opacity-100",
+        opacity:
+          "ui:rounded-none ui:px-1 ui:py-3 ui:text-sm ui:font-medium ui:text-text-default ui:opacity-40 ui:transition-opacity ui:hover:opacity-70 ui:data-[state=active]:opacity-100",
       },
     },
     defaultVariants: {

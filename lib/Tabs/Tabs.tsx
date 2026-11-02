@@ -10,6 +10,8 @@ import {
   tabsTriggerVariants,
 } from "./tabs-variants";
 
+export type { TabsVariant };
+
 type TabsContextValue = {
   variant: TabsVariant;
 };
