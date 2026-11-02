@@ -43,6 +43,10 @@ export default defineConfig({
       entry: {
         'malbec-ui': resolve(root, 'lib/main.ts'),
         icons: resolve(root, 'lib/icons/index.ts'),
+        // Public subpaths must be entries: with preserveModules, a barrel that is only
+        // imported by another entry keeps its side-effect imports but loses its re-exports.
+        'theme/index': resolve(root, 'lib/theme/index.ts'),
+        'theme/presets': resolve(root, 'lib/theme/presets.ts'),
       },
       name: 'malbec-ui',
       formats: ['es', 'cjs'],

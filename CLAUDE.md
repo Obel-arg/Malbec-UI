@@ -44,7 +44,9 @@ bump o sin entrada de CHANGELOG falla.
 - **SSR primero.** Nada de leer `window` ni `matchMedia` en el initializer de `useState`: el estado
   inicial tiene que coincidir con el del server, y lo que depende del navegador se lee en el effect.
 - **Subpaths públicos** (`.`, `./icons`, `./style.css`, `./theme`, `./theme/presets`): un subpath
-  nuevo va en `exports` de `package.json`, con un test que verifique que su destino existe en `dist/`.
+  nuevo va en tres lugares: `exports` de `package.json`, como **entry** en `vite.config.ts` (con
+  `preserveModules`, un barrel que no es entry sale sin re-exports) y en
+  `scripts/smoke-exports.mjs` con los nombres que importan las apps, que CI corre por ESM y CJS.
 - **Nada de texto visible hardcodeado.** Toda etiqueta (Close, Previous, No results…) tiene que
   poder configurarse, porque las apps son ES + EN.
 - **Colores sólo desde tokens** de `styles.css`. Nada de hex en componentes ni de `color-mix()`
