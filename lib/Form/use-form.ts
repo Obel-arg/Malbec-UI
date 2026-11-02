@@ -1,3 +1,5 @@
+"use client";
+
 import { createFormHook } from "@tanstack/react-form";
 import { FieldLayout } from "./FieldLayout";
 import { fieldContext, formContext } from "./form-context";

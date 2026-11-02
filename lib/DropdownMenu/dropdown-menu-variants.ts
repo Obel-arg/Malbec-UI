@@ -5,10 +5,10 @@ import { popoverSurfaceMotionClasses } from "../Popover/popover-variants";
 export const dropdownMenuContentVariants = cva([
   "malbec-font-sans",
   /** Above modal overlays (`Dialog` / `Sheet` use `z-50`). */
-  "ui:z-100 ui:min-w-48 ui:overflow-hidden ui:rounded-md",
+  "ui:z-(--ui-z-floating) ui:min-w-48 ui:overflow-hidden ui:rounded-md",
   "ui:border ui:border-background-300 ui:bg-background-100 ui:p-1",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
-  "dark:ui:bg-background-200",
+  "ui:dark:bg-background-200",
   /** Radix Menu exposes this on the content node (Popper). */
   "ui:origin-(--radix-dropdown-menu-content-transform-origin)",
   ...popoverSurfaceMotionClasses,
@@ -17,10 +17,10 @@ export const dropdownMenuContentVariants = cva([
 export const dropdownMenuSubContentVariants = cva([
   "malbec-font-sans",
   /** Above root menu content (`z-100`) so the nested surface receives hover/focus. */
-  "ui:z-110 ui:min-w-32 ui:overflow-hidden ui:rounded-md",
+  "ui:z-(--ui-z-floating-nested) ui:min-w-32 ui:overflow-hidden ui:rounded-md",
   "ui:border ui:border-background-300 ui:bg-background-100 ui:p-1",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
-  "dark:ui:bg-background-200",
+  "ui:dark:bg-background-200",
   "ui:origin-(--radix-dropdown-menu-content-transform-origin)",
   ...popoverSurfaceMotionClasses,
 ]);
@@ -35,7 +35,7 @@ export const dropdownMenuItemVariants = cva([
   "ui:data-disabled:pointer-events-none ui:data-disabled:opacity-50",
 ]);
 
-/** Same as item; use with leading indicator + `justify-between` for shortcut. */
+/** Same as item; the trailing chevron sits right via `ml-auto`. */
 export const dropdownMenuSubTriggerVariants = cva([
   "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
   "ui:data-disabled:cursor-not-allowed",

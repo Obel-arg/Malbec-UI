@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 /** Backdrop: dim + frosted glass over the page (not in the Figma card spec). */
 export const alertDialogOverlayVariants = cva(
   [
-    "ui:fixed ui:inset-0 ui:z-50",
+    "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
     "ui:bg-background-200/60",
     "ui:backdrop-blur-[3.5px]",
     "ui:transition-opacity",
@@ -17,7 +17,7 @@ export const alertDialogOverlayVariants = cva(
 export const alertDialogContentVariants = cva(
   [
     "ui:malbec-font-sans",
-    "ui:fixed ui:top-1/2 ui:left-1/2 ui:z-50",
+    "ui:fixed ui:top-1/2 ui:left-1/2 ui:z-(--ui-z-overlay)",
     "ui:grid ui:w-full ui:translate-x-[-50%] ui:translate-y-[-50%]",
     "ui:gap-4",
     "ui:rounded-lg",

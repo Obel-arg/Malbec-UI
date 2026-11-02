@@ -250,11 +250,11 @@ export function DataTable<TData, TValue>({
                 tabIndex={isRowClickable ? 0 : undefined}
                 role={isRowClickable ? "button" : undefined}
                 onClick={(event) => {
-                  if (!onRowClick || shouldIgnoreRowInteraction(event.target)) return;
+                  if (!onRowClick || shouldIgnoreRowInteraction(event.target, event.currentTarget)) return;
                   onRowClick(row.id, row.original);
                 }}
                 onKeyDown={(event) => {
-                  if (!onRowClick || shouldIgnoreRowInteraction(event.target)) return;
+                  if (!onRowClick || shouldIgnoreRowInteraction(event.target, event.currentTarget)) return;
                   if (event.key !== "Enter" && event.key !== " ") return;
                   event.preventDefault();
                   onRowClick(row.id, row.original);
@@ -302,13 +302,14 @@ export function DataTable<TData, TValue>({
 
 type ColMeta = { thClassName?: string; tdClassName?: string };
 
-function shouldIgnoreRowInteraction(target: EventTarget | null): boolean {
+// The row itself has role="button", so a match on the row doesn't count: only an
+// interactive element inside it does.
+function shouldIgnoreRowInteraction(target: EventTarget | null, row: HTMLElement): boolean {
   if (!(target instanceof HTMLElement)) return false;
-  return Boolean(
-    target.closest(
-      'a, button, input, select, textarea, [role="button"], [data-row-click-ignore]',
-    ),
+  const interactive = target.closest(
+    'a, button, input, select, textarea, [role="button"], [data-row-click-ignore]',
   );
+  return interactive !== null && interactive !== row;
 }
 
 function headerThClassName(

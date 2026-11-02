@@ -4,27 +4,26 @@ Malbec UI — React component library, published to GitHub Packages.
 
 ## Install (consumers)
 
-Every project that installs `@obel-arg/malbec-ui` must have an `.npmrc` at the repository root so npm can resolve the `@obel-arg` scope from GitHub Packages. Add (or merge) these lines:
+The package lives in GitHub Packages, so installing it needs two things.
+
+**1. The registry mapping**, in your project's `.npmrc` (committed). It holds no credentials:
 
 ```
 @obel-arg:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=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
 ```
 
-Add this alias dependency in your project's `package.json`:
+**2. A token**, in your **user-level** `~/.npmrc` (never in a committed file). Create a GitHub token with the `read:packages` scope, export it as `NODE_AUTH_TOKEN`, and reference it by name:
 
-```json
-{
-  "dependencies": {
-    "malbec-ui": "npm:@obel-arg/malbec-ui@latest"
-  }
-}
+```
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
-Alternative (recommended): run this and npm will write the same alias for you:
+In CI, `actions/setup-node` with `registry-url: https://npm.pkg.github.com` writes that line for you; pass the token as `NODE_AUTH_TOKEN`. pnpm 11 ignores credentials found in a project `.npmrc`.
+
+Install with pnpm, pinning an exact version (consumers import it as `malbec-ui`):
 
 ```bash
-npm install malbec-ui@npm:@obel-arg/malbec-ui@latest
+pnpm add --save-exact malbec-ui@npm:@obel-arg/malbec-ui@1.13.1
 ```
 
 Then add this to your project's `globals.css`:

@@ -62,7 +62,7 @@ export const commandShortcutVariants = cva([
 ]);
 
 export const commandDialogOverlayVariants = cva([
-  "ui:fixed ui:inset-0 ui:z-50",
+  "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
   "ui:bg-background-200/60",
   "ui:backdrop-blur-[3.5px]",
   "ui:data-[state=open]:animate-malbec-overlay-in",
@@ -71,7 +71,7 @@ export const commandDialogOverlayVariants = cva([
 ]);
 
 export const commandDialogContentVariants = cva([
-  "ui:fixed ui:top-[50%] ui:left-[50%] ui:z-50 ui:w-full ui:max-w-[450px]",
+  "ui:fixed ui:top-[50%] ui:left-[50%] ui:z-(--ui-z-overlay) ui:w-full ui:max-w-[450px]",
   "ui:translate-x-[-50%] ui:translate-y-[-50%]",
   "ui:overflow-hidden ui:rounded-[10px] ui:border-0 ui:bg-transparent ui:p-0",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",

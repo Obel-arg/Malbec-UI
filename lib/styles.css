@@ -3,6 +3,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  /* Stacking layers shared across components; apps can override them. */
+  --ui-z-overlay: 50;
+  --ui-z-floating: 100;
+  --ui-z-floating-nested: 110;
+
   /** Popover / Combobox / Select surface motion — override in host app `:root` if needed. */
   --malbec-popover-enter-duration: 150ms;
   --malbec-popover-exit-duration: 120ms;

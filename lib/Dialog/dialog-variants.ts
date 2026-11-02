@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const dialogOverlayVariants = cva([
-  "ui:fixed ui:inset-0 ui:z-50",
+  "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
   "ui:bg-background-200/60",
   "ui:backdrop-blur-[3.5px]",
   "ui:data-[state=open]:animate-malbec-overlay-in",
@@ -11,7 +11,7 @@ export const dialogOverlayVariants = cva([
 
 export const dialogContentVariants = cva([
   "ui:malbec-font-sans",
-  "ui:fixed ui:top-1/2 ui:left-1/2 ui:right-auto ui:bottom-auto ui:z-50",
+  "ui:fixed ui:top-1/2 ui:left-1/2 ui:right-auto ui:bottom-auto ui:z-(--ui-z-overlay)",
   "ui:-translate-x-1/2 ui:-translate-y-1/2",
   "ui:flex ui:w-full ui:max-w-[425px] ui:flex-col",
   "ui:h-auto",

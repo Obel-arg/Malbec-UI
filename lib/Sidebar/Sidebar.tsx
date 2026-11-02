@@ -47,16 +47,15 @@ import {
 } from "./sidebar-variants";
 
 function useIsMobile(breakpoint = 768): boolean {
-  const [isMobile, setIsMobile] = React.useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia(`(max-width: ${breakpoint - 1}px)`).matches;
-  });
+  // Start as desktop to match the server render; the effect reads the real viewport.
+  const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
     const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
     const onChange = () => {
       setIsMobile(mql.matches);
     };
+    onChange();
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
   }, [breakpoint]);

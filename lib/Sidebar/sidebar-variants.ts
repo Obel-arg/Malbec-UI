@@ -275,7 +275,7 @@ export const sidebarInsetVariants = cva(
 /** Classes for `Sheet.Content` with `unstyled` — mobile drawer shell. */
 export const sidebarSheetContentVariants = cva(
   [
-    "ui:fixed ui:inset-y-0 ui:z-50",
+    "ui:fixed ui:inset-y-0 ui:z-(--ui-z-overlay)",
     "ui:flex ui:h-full ui:max-h-svh ui:w-(--sidebar-width-mobile) ui:max-w-(--sidebar-width-mobile) ui:flex-col ui:overflow-hidden ui:gap-0 ui:bg-background-200 ui:p-0 ui:outline-none",
     "ui:border-sidebar-border",
   ],
