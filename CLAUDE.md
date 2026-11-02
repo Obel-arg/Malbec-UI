@@ -92,6 +92,7 @@ primitivo.
   o en el del runner. pnpm 11 ignora credenciales de un `.npmrc` commiteado.
 - El README se publica dentro del paquete (npm siempre incluye el README): nada sensible ahí.
 - Si encontrás un secreto, frená, avisá y proponé rotarlo. No lo reproduzcas.
+- En cada PR a main, `pr-vuln-gate.yml` corre `pnpm audit` (runtime y desarrollo) y frena cualquier Critical/High, sin excepciones.
 - Findings aceptados de osv-scanner: `osv-scanner.toml`, cada uno con motivo y `ignoreUntil`. Cuando vencen, se reevalúan; no se renuevan sin revisar si ya hay fix.
 
 ### 6.1. Protocolo de seguridad de dependencias (supply chain)
