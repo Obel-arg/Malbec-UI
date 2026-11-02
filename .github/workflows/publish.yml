@@ -1,203 +1,25 @@
-name: Bump & Publish to GitHub Packages
+name: Publish to GitHub Packages
+
+# The version is bumped inside the change PR (see ci.yml `release-check`).
+# On every push to main: if package.json's version has no tag yet, build,
+# publish, and create the GitHub Release (which also creates the tag).
+# A push whose version is already tagged is a no-op.
+#
+# Manual recovery: run from the Actions tab; it publishes package.json's
+# version on main if it is still untagged.
 
 on:
   push:
     branches:
       - main
-  # Manual recovery: trigger from the Actions tab with a version (e.g. `v1.10.0`)
-  # to skip detection and run the publish job directly. Useful when a release
-  # commit landed on main but the auto-detect missed it (merge-vs-squash, etc.).
   workflow_dispatch:
-    inputs:
-      version:
-        description: "Version to publish (e.g. v1.10.0). Must already be in package.json on main."
-        required: true
-        type: string
 
-# Two-stage release flow so we never push directly to a protected `main`:
-#   1. `release-pr`: when a `minor()/major()/patch()` commit lands on main,
-#      open a release branch + PR with the version bump and CHANGELOG entry,
-#      and enable auto-merge (squash). The PR satisfies the repo rule that
-#      "changes must be made through a pull request".
-#   2. `publish`: when the squashed release commit itself lands on main
-#      (HEAD subject starts with `chore(release): v…`), tag, `pnpm publish`,
-#      and create the GitHub Release. Tags are pushed to `refs/tags/*`,
-#      which is not gated by the branch ruleset.
+concurrency:
+  group: publish
+  cancel-in-progress: false
 
 jobs:
-  detect:
-    runs-on: ubuntu-latest
-    outputs:
-      mode: ${{ steps.detect.outputs.mode }}
-      bump: ${{ steps.detect.outputs.bump }}
-      version: ${{ steps.detect.outputs.version }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Detect mode (release-pr | publish | none)
-        id: detect
-        run: |
-          set -e
-
-          # Manual dispatch always takes the publish path with the given version.
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            VERSION="${{ inputs.version }}"
-            echo "Manual dispatch; publishing ${VERSION}."
-            echo "mode=publish" >> "$GITHUB_OUTPUT"
-            echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -n "$PREV_TAG" ]; then
-            RANGE="${PREV_TAG}..HEAD"
-          else
-            RANGE="HEAD"
-          fi
-
-          # Stage 2: any `chore(release): vX.Y.Z` commit in the range without a
-          # matching tag → publish. Scans the full range (not just HEAD) so it
-          # handles both squash and standard merge commits.
-          RELEASE_SUBJECT=$(git log $RANGE --pretty=format:"%s" | grep -E '^chore\(release\): v[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)
-          if [ -n "$RELEASE_SUBJECT" ]; then
-            VERSION=$(printf '%s' "$RELEASE_SUBJECT" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1)
-            if git rev-parse -q --verify "refs/tags/${VERSION}" >/dev/null; then
-              echo "Release commit for ${VERSION} found but tag already exists; skipping."
-            else
-              echo "Pending release commit for ${VERSION}; will publish."
-              echo "mode=publish" >> "$GITHUB_OUTPUT"
-              echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-          fi
-
-          # Stage 1: releasable commits since last tag → open release PR.
-          SUBJECTS=$(git log $RANGE --no-merges --pretty=format:"%s")
-
-          BUMP=""
-          if printf '%s\n' "$SUBJECTS" | grep -Eq '^major\([^)]+\):'; then
-            BUMP="major"
-          elif printf '%s\n' "$SUBJECTS" | grep -Eq '^minor\([^)]+\):'; then
-            BUMP="minor"
-          elif printf '%s\n' "$SUBJECTS" | grep -Eq '^patch\([^)]+\):'; then
-            BUMP="patch"
-          fi
-
-          if [ -z "$BUMP" ]; then
-            echo "No releasable commits since ${PREV_TAG:-<root>}; skipping."
-            echo "mode=" >> "$GITHUB_OUTPUT"
-          else
-            echo "Releasable commits found; will open release PR (${BUMP})."
-            echo "mode=release-pr" >> "$GITHUB_OUTPUT"
-            echo "bump=${BUMP}" >> "$GITHUB_OUTPUT"
-          fi
-
-  release-pr:
-    needs: detect
-    if: needs.detect.outputs.mode == 'release-pr'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build (verify before opening release PR)
-        run: pnpm build
-
-      - name: Bump version
-        id: bump
-        run: |
-          NEW_VERSION=$(npm version ${{ needs.detect.outputs.bump }} --no-git-tag-version)
-          echo "new_version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
-
-      - name: Update CHANGELOG.md
-        id: changelog
-        run: |
-          set -e
-          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
-          DATE=$(date -u +%Y-%m-%d)
-          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-
-          if [ -n "$PREV_TAG" ]; then
-            NOTES=$(git log "${PREV_TAG}..HEAD" --no-merges \
-              --pretty=format:"- %s" \
-              --invert-grep \
-              --grep='^chore(release)' \
-              --grep='^Merge ')
-          else
-            NOTES=$(git log --no-merges \
-              --pretty=format:"- %s" \
-              --invert-grep \
-              --grep='^chore(release)' \
-              --grep='^Merge ')
-          fi
-
-          if [ -z "$NOTES" ]; then
-            NOTES="_No user-facing changes._"
-          fi
-
-          {
-            printf '# Changelog\n\nAll notable changes to Malbec UI are documented here.\n\n'
-            printf '## %s — %s\n\n%s\n\n' "$NEW_VERSION" "$DATE" "$NOTES"
-            if [ -f CHANGELOG.md ]; then
-              awk '/^## / {found=1} found' CHANGELOG.md
-            fi
-          } > CHANGELOG.md.new
-          mv CHANGELOG.md.new CHANGELOG.md
-
-          # Write notes to a file so `gh pr create --body-file` survives any
-          # backticks / quotes inside commit subjects.
-          {
-            printf '## Notes\n\n%s\n' "$NOTES"
-          } > /tmp/release-notes.md
-
-      - name: Open release PR with auto-merge
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
-          BRANCH="release/${NEW_VERSION}"
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git checkout -b "$BRANCH"
-          git add package.json CHANGELOG.md
-          git commit -m "chore(release): ${NEW_VERSION}"
-          git push origin "$BRANCH"
-
-          gh pr create \
-            --base main \
-            --head "$BRANCH" \
-            --title "chore(release): ${NEW_VERSION}" \
-            --body-file /tmp/release-notes.md
-
-          # Squash so the resulting commit subject keeps the `chore(release): vX.Y.Z`
-          # prefix that the Stage 2 detection step looks for.
-          gh pr merge "$BRANCH" --auto --squash --delete-branch
-
   publish:
-    needs: detect
-    if: needs.detect.outputs.mode == 'publish'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -206,12 +28,29 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Detect untagged version
+        id: version
+        run: |
+          VERSION="v$(node -p "require('./package.json').version")"
+          if git rev-parse -q --verify "refs/tags/${VERSION}" >/dev/null; then
+            echo "${VERSION} is already tagged; nothing to publish."
+            exit 0
+          fi
+          echo "Will publish ${VERSION}."
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          # Release body = this version's CHANGELOG section.
+          awk -v v="$VERSION" '
+            /^## / { inside = ($2 == v) ; next }
+            inside
+          ' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
 
       - name: Setup pnpm
+        if: steps.version.outputs.version
         uses: pnpm/action-setup@v4
 
       - name: Setup Node
+        if: steps.version.outputs.version
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -220,27 +59,25 @@ jobs:
           scope: '@obel-arg'
 
       - name: Install dependencies
+        if: steps.version.outputs.version
         run: pnpm install --frozen-lockfile
 
       - name: Build
+        if: steps.version.outputs.version
         run: pnpm build
 
-      - name: Tag and push
-        run: |
-          VERSION="${{ needs.detect.outputs.version }}"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag "${VERSION}"
-          git push origin "${VERSION}"
-
       - name: Publish to GitHub Packages
+        if: steps.version.outputs.version
         run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create GitHub Release
+      # Tag only after a successful publish, so a failed publish can be re-run.
+      - name: Create tag and GitHub Release
+        if: steps.version.outputs.version
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ needs.detect.outputs.version }}
-          name: ${{ needs.detect.outputs.version }}
-          generate_release_notes: true
+          tag_name: ${{ steps.version.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: ${{ steps.version.outputs.version }}
+          body_path: ${{ runner.temp }}/notes.md
