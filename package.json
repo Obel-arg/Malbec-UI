@@ -21,6 +21,16 @@
       "import": "./dist/icons.js",
       "require": "./dist/icons.cjs"
     },
+    "./theme": {
+      "types": "./dist/lib/theme/index.d.ts",
+      "import": "./dist/theme/index.js",
+      "require": "./dist/theme/index.cjs"
+    },
+    "./theme/presets": {
+      "types": "./dist/lib/theme/presets.d.ts",
+      "import": "./dist/theme/presets.js",
+      "require": "./dist/theme/presets.cjs"
+    },
     "./style.css": "./dist/malbec-ui.css"
   },
   "repository": {
