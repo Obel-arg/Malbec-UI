@@ -2,6 +2,16 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.14.0 — 2026-11-02
+
+### Added
+- **`malbec-ui/tokens.css`:** the Malbec system tokens, so apps stop redefining them. Import it after `style.css` in your `globals.css`:
+  ```css
+  @import "malbec-ui/tokens.css";
+  ```
+  It gives `text-malbec-ink` (#1a1a1f), `text-malbec-icon` (#3f3f46), `text-malbec-muted-text` (#8c8c94), `text-malbec-table-header` (#6b6b7a) and the badge pairs `bg-malbec-badge-{green,yellow,orange,purple,blue,red,neutral}-bg` / `text-malbec-badge-…-text`.
+- Nothing changes on screen until you import it. Once you do, delete the matching `--color-malbec-*` lines from your own `@theme`; any value you keep in a later `@theme` block still wins. **Artist:** your current ink and muted-text values are off-spec (#18181b and #71717a) and will change to the spec values when you drop them.
+
 ## v1.13.3 — 2026-11-02
 
 ### Fixes

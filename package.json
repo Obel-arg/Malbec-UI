@@ -1,6 +1,6 @@
 {
   "name": "@obel-arg/malbec-ui",
-  "version": "1.13.3",
+  "version": "1.14.0",
   "description": "Malbec UI component library",
   "type": "module",
   "packageManager": "pnpm@11.28.8",
