@@ -1,0 +1,9 @@
+# Cuarentena de supply chain: 10080 MINUTOS = 7 días (la unidad de pnpm son minutos).
+# pnpm rechaza versiones publicadas hace menos de esa ventana. Excepciones puntuales
+# van en `minimumReleaseAgeExclude`, con aprobación, nunca bajando este número.
+minimumReleaseAge: 10080
+
+# No correr scripts de instalación (ni de dependencias ni del propio repo). Efecto
+# colateral: `prepare` no corre solo; después de clonar, `pnpm run prepare` activa
+# los git hooks. Si una dependencia necesita build, va en `allowBuilds` (mapa).
+ignoreScripts: true

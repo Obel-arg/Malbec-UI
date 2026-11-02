@@ -53,7 +53,7 @@ jobs:
         if: steps.version.outputs.version
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
           registry-url: https://npm.pkg.github.com
           scope: '@obel-arg'
