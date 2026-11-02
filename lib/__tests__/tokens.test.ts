@@ -27,6 +27,22 @@ describe("tokens.css", () => {
     expect(css).toMatch(/\.bg-malbec-badge-red-bg\s*{/);
   });
 
+  it("matches the Badge component's blue and red", async () => {
+    const css = await build(["bg-malbec-badge-blue-bg", "text-malbec-badge-blue-text", "bg-malbec-badge-red-bg", "text-malbec-badge-red-text"]);
+    expect(css).toMatch(/--color-malbec-badge-blue-bg:\s*#dce6ec/);
+    expect(css).toMatch(/--color-malbec-badge-blue-text:\s*#2f628a/);
+    expect(css).toMatch(/--color-malbec-badge-red-bg:\s*#dfd0d0/);
+    expect(css).toMatch(/--color-malbec-badge-red-text:\s*#602a2a/);
+  });
+
+  it("ships the spec embossed border and divider as utilities", async () => {
+    const css = (await build(["border-embossed", "divider-embossed", "hover:border-embossed"])).replace(/\s+/g, " ");
+    expect(css).toContain(".border-embossed { border: 1px solid #ffffff; box-shadow: 0 0 0 1px #f1f0ee;");
+    expect(css).toContain(".divider-embossed { border-top: 1px solid #eae7e3; box-shadow: inset 0 1.5px 0 #ffffff;");
+    expect(css).toMatch(/\.divider-embossed\s*{[^}]*&:first-child|\.divider-embossed:first-child/);
+    expect(css).toContain("hover\\:border-embossed");
+  });
+
   it("defines a bg and a text color for every badge tone", async () => {
     const tones = ["green", "yellow", "orange", "purple", "blue", "red", "neutral"];
     const css = await build(tones.flatMap((t) => [`bg-malbec-badge-${t}-bg`, `text-malbec-badge-${t}-text`]));
