@@ -314,3 +314,84 @@ export const AllSizes: Story = {
     </div>
   ),
 };
+
+export const NeutralTone: Story = {
+  name: "Tone · Neutral (outline / ghost)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button } from "@obel-arg/malbec-ui";
+
+<Button variant="outline" tone="neutral">
+  <Button.Text>Cancelar</Button.Text>
+</Button>
+<Button variant="ghost" tone="neutral">
+  <Button.Text>Ver detalle</Button.Text>
+</Button>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:flex ui:items-center ui:gap-3">
+      <Button variant="outline" tone="neutral">
+        <Button.Text>Cancelar</Button.Text>
+      </Button>
+      <Button variant="ghost" tone="neutral">
+        <Button.Text>Ver detalle</Button.Text>
+      </Button>
+      <Button variant="primary">
+        <Button.Text>Guardar</Button.Text>
+      </Button>
+    </div>
+  ),
+};
+
+export const AsChildLink: Story = {
+  name: "Composition · Link (asChild)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import Link from "next/link";
+import { Button } from "@obel-arg/malbec-ui";
+
+<Button asChild variant="outline" tone="neutral" size="md">
+  <Link href="/gastos">Ver gastos</Link>
+</Button>`,
+      },
+    },
+  },
+  render: () => (
+    <Button asChild variant="outline" tone="neutral" size="md">
+      <a href="#gastos">Ver gastos</a>
+    </Button>
+  ),
+};
+
+export const Row: Story = {
+  name: "Variant · Row (list item)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button } from "@obel-arg/malbec-ui";
+
+<Button variant="row">
+  <Button.Icon><PlusIcon /></Button.Icon>
+  <Button.Text>Agregar crédito</Button.Text>
+</Button>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:flex ui:w-[240px] ui:flex-col ui:rounded-[8px] ui:bg-background-100 ui:p-1">
+      <Button variant="row">
+        <Button.Icon>
+          <MailIcon />
+        </Button.Icon>
+        <Button.Text>Agregar crédito</Button.Text>
+      </Button>
+      <Button variant="row">
+        <Button.Text>Elegir otro artista</Button.Text>
+      </Button>
+    </div>
+  ),
+};

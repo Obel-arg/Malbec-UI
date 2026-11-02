@@ -6,6 +6,8 @@ export * as themes from "./theme/presets";
 
 export { Spinner } from "./Spinner/Spinner";
 export { Button } from "./Button/Button";
+/** Button classes for elements that can't be a <Button> (e.g. a framework Link without asChild). */
+export { buttonVariants } from "./Button/button-variants";
 export { Alert } from "./Alert/Alert";
 export { AlertDialog } from "./AlertDialog/AlertDialog";
 export { Avatar, AvatarGroup, AvatarGroupCount } from "./Avatar/Avatar";
@@ -112,6 +114,9 @@ export type {
   ButtonIconProps,
   ButtonTextProps,
   ButtonSpinnerProps,
+  ButtonSize,
+  ButtonTone,
+  ButtonVariant,
 } from "./Button/Button";
 export type {
   CalendarProps,

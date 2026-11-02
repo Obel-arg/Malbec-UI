@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Slot } from "@radix-ui/react-slot";
 import { Spinner } from "../Spinner/Spinner";
 import { cn } from "../utils/cn";
 import {
@@ -9,9 +10,9 @@ import {
   buttonTextVariants,
   buttonVariants,
 } from "./button-variants";
-import type { ButtonSize, ButtonVariant } from "./button-variants";
+import type { ButtonSize, ButtonTone, ButtonVariant } from "./button-variants";
 
-export type { ButtonSize, ButtonVariant };
+export type { ButtonSize, ButtonTone, ButtonVariant };
 
 export interface ButtonProps extends Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -19,6 +20,13 @@ export interface ButtonProps extends Omit<
 > {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  /** `neutral` greys out `outline` / `ghost` instead of painting them in the brand colour. */
+  tone?: ButtonTone;
+  /**
+   * Render the single child (a `Link`, an `<a>`…) with the button styles instead of a `<button>`.
+   * `htmlType`, `loading` and `disabled` don't apply to the child.
+   */
+  asChild?: boolean;
   loading?: boolean;
   /** Forwarded to the native button; defaults to "button" to avoid accidental form submits. */
   htmlType?: "button" | "submit" | "reset";
@@ -47,6 +55,8 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
     {
       variant = "primary",
       size = "lg",
+      tone = "brand",
+      asChild = false,
       loading = false,
       htmlType = "button",
       disabled,
@@ -56,12 +66,29 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) {
-    const classes = cn(buttonVariants({ variant, size }), className);
+    const classes = cn(buttonVariants({ variant, size, tone }), className);
 
     const ctx = React.useMemo<ButtonInternalContext>(
       () => ({ loading, variant, size }),
       [loading, variant, size],
     );
+
+    if (asChild) {
+      return (
+        <ButtonContext.Provider value={ctx}>
+          <Slot
+            ref={ref}
+            className={classes}
+            data-variant={variant}
+            data-size={size}
+            data-tone={tone}
+            {...rest}
+          >
+            {children}
+          </Slot>
+        </ButtonContext.Provider>
+      );
+    }
 
     return (
       <ButtonContext.Provider value={ctx}>
@@ -71,6 +98,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className={classes}
           data-variant={variant}
           data-size={size}
+          data-tone={tone}
           data-loading={loading || undefined}
           {...rest}
           disabled={disabled || loading}

@@ -24,6 +24,8 @@
   --color-text-default: #3f3f46;
   --color-text-default-muted: color-mix(in srgb, #3f3f46 60%, transparent);
   --color-sidebar-border: #e7e3e1;
+  /* Neutral chrome: icons and the focus ring of neutral controls (malbec-ux-ui). */
+  --color-malbec-icon: #3f3f46;
 
   /**
    * Tooltip cursor band (Recharts uses opaque `#ccc` in getCursorRectangle — override below).
@@ -252,6 +254,7 @@
   --color-text-default: var(--color-text-default);
   --color-text-default-muted: var(--color-text-default-muted);
   --color-sidebar-border: var(--color-sidebar-border);
+  --color-malbec-icon: var(--color-malbec-icon);
 
   --leading-tight: calc(20 / 16 * 1rem);
 

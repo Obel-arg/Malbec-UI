@@ -34,6 +34,16 @@ export const buttonVariants = cva(
         destructive:
           "ui:bg-destructive ui:text-destructive-foreground ui:hover:opacity-90 ui:active:opacity-80",
         link: "ui:bg-transparent ui:text-primary ui:underline-offset-4 ui:hover:underline",
+        /** A full-width, left-aligned row inside a list or popover (pick an item, add a credit…). */
+        row: "ui:w-full ui:justify-start ui:bg-transparent ui:font-normal ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
+      },
+      /**
+       * `neutral` greys out the chrome of `outline` / `ghost` (malbec-ux-ui: brand colour is only
+       * for CTAs and state). Same recipe the apps used to apply by hand (`no-green-button-classes`).
+       */
+      tone: {
+        brand: "",
+        neutral: "ui:focus-visible:ring-malbec-icon",
       },
       size: {
         sm: "ui:h-8 ui:px-2 ui:py-[6px] ui:text-[10px] ui:leading-4 ui:tracking-[-0.3px]",
@@ -42,9 +52,25 @@ export const buttonVariants = cva(
         icon: "ui:h-9 ui:w-9 ui:p-0 ui:text-[12px]",
       },
     },
+    compoundVariants: [
+      {
+        variant: "outline",
+        tone: "neutral",
+        class:
+          "ui:border-background-300 ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
+      },
+      {
+        variant: "ghost",
+        tone: "neutral",
+        class: "ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
+      },
+      // Rows size to their content; this goes last so it beats the size geometry.
+      { variant: "row", class: "ui:h-auto ui:px-2 ui:py-1.5" },
+    ],
     defaultVariants: {
       variant: "primary",
       size: "md",
+      tone: "brand",
     },
   },
 );
@@ -89,3 +115,4 @@ export type ButtonVariant = NonNullable<
   VariantProps<typeof buttonVariants>["variant"]
 >;
 export type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
+export type ButtonTone = NonNullable<VariantProps<typeof buttonVariants>["tone"]>;
