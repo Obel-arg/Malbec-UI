@@ -179,6 +179,7 @@ export type { DataCardProps } from "./DataCard/DataCard";
 export type {
   DataTableProps,
   DataTableRenderFooterContext,
+  DataTableRowEvent,
 } from "./DataTable/DataTable";
 export type {
   DatePickerProps,

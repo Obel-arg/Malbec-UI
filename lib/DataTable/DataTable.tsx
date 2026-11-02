@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   type ColumnDef,
@@ -23,6 +23,10 @@ import {
 export type DataTableRenderFooterContext<TData> = {
   table: TanStackTable<TData>;
 };
+
+export type DataTableRowEvent =
+  | MouseEvent<HTMLTableRowElement>
+  | KeyboardEvent<HTMLTableRowElement>;
 
 type DataTableOnRowSelectionChange<TData> = (selectedRows: TData[]) => void;
 
@@ -66,10 +70,12 @@ interface DataTableBaseProps<TData, TValue> {
    * Receives the array of currently selected rows.
    */
   /**
-   * Called when a row is clicked (or activated with Enter/Space).
-   * Receives the resolved row id and original row data.
+   * Called when a row is clicked, middle-clicked, or activated with Enter/Space.
+   * Receives the resolved row id, the original row data, and the event, so the
+   * consumer can check modifiers (`metaKey`/`ctrlKey`) or `button === 1` to open
+   * the row somewhere else.
    */
-  onRowClick?: (rowId: string, rowData: TData) => void;
+  onRowClick?: (rowId: string, rowData: TData, event: DataTableRowEvent) => void;
 }
 
 type DataTableWithRowSelectionProps<TData, TValue> = DataTableBaseProps<
@@ -251,13 +257,18 @@ export function DataTable<TData, TValue>({
                 role={isRowClickable ? "button" : undefined}
                 onClick={(event) => {
                   if (!onRowClick || shouldIgnoreRowInteraction(event.target, event.currentTarget)) return;
-                  onRowClick(row.id, row.original);
+                  onRowClick(row.id, row.original, event);
+                }}
+                onAuxClick={(event) => {
+                  if (event.button !== 1) return;
+                  if (!onRowClick || shouldIgnoreRowInteraction(event.target, event.currentTarget)) return;
+                  onRowClick(row.id, row.original, event);
                 }}
                 onKeyDown={(event) => {
                   if (!onRowClick || shouldIgnoreRowInteraction(event.target, event.currentTarget)) return;
                   if (event.key !== "Enter" && event.key !== " ") return;
                   event.preventDefault();
-                  onRowClick(row.id, row.original);
+                  onRowClick(row.id, row.original, event);
                 }}
               >
                 {row.getVisibleCells().map((cell) => (
