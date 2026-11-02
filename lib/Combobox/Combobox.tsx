@@ -595,7 +595,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
             <button
               type="button"
               data-slot="combobox-clear"
-              className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors hover:ui:bg-background-200 focus-visible:ui:ring-2 focus-visible:ui:ring-primary"
+              className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:focus-visible:ring-2 ui:focus-visible:ring-primary"
               onMouseDown={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -625,7 +625,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
               aria-label={ctx.open ? "Close" : "Open"}
               aria-expanded={ctx.open}
               aria-controls={ctx.listId}
-              className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:opacity-50 ui:outline-none ui:transition-colors hover:ui:opacity-100 focus-visible:ui:ring-2 focus-visible:ui:ring-primary"
+              className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:opacity-50 ui:outline-none ui:transition-colors ui:hover:opacity-100 ui:focus-visible:ring-2 ui:focus-visible:ring-primary"
               onMouseDown={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -654,7 +654,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
               <button
                 type="button"
                 data-slot="combobox-clear"
-                className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors hover:ui:bg-background-200 focus-visible:ui:ring-2 focus-visible:ui:ring-primary"
+                className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:focus-visible:ring-2 ui:focus-visible:ring-primary"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={clear}
                 aria-label="Clear selection"
@@ -1078,7 +1078,7 @@ const ComboboxChip = React.forwardRef<HTMLSpanElement, ComboboxChipProps>(
           <button
             type="button"
             data-slot="combobox-chip-remove"
-            className="ui:inline-flex ui:size-5 ui:cursor-pointer ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none hover:ui:bg-background-100"
+            className="ui:inline-flex ui:size-5 ui:cursor-pointer ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:hover:bg-background-100"
             onMouseDown={(e) => e.preventDefault()}
             onClick={handleRemove}
             aria-label="Remove"

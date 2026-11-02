@@ -84,7 +84,7 @@ export const tableHeadVariants = cva("ui:text-left ui:align-middle", {
       default: [
         "ui:h-11 ui:px-4 ui:py-0",
         "ui:text-[12px] ui:font-medium ui:leading-5",
-        "ui:text-[#6b6b7a] dark:ui:text-text-default-muted",
+        "ui:text-[#6b6b7a] ui:dark:text-text-default-muted",
       ],
       dataGrid: [
         "ui:h-12 ui:px-4 ui:py-2.5",

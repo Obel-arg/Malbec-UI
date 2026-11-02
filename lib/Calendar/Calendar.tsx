@@ -113,20 +113,20 @@ export function CalendarDayButton({
         // Figma (light): label on primary fill uses background/100. `!` beats `color: inherit`
         // from `.rdp-day_button` when RDP CSS is present. Dark: use primary-foreground token.
         isRangeSingleDay &&
-          "ui:rounded-md ui:bg-primary ui:text-background-100! dark:ui:!text-primary-foreground",
+          "ui:rounded-md ui:bg-primary ui:text-background-100! ui:dark:!text-primary-foreground",
         !isRangeSingleDay &&
           modifiers.range_start &&
-          "ui:rounded-l-md ui:rounded-r-none ui:bg-primary ui:text-background-100! dark:ui:!text-primary-foreground",
+          "ui:rounded-l-md ui:rounded-r-none ui:bg-primary ui:text-background-100! ui:dark:!text-primary-foreground",
         !isRangeSingleDay &&
           modifiers.range_end &&
-          "ui:rounded-r-md ui:rounded-l-none ui:bg-primary ui:text-background-100! dark:ui:!text-primary-foreground",
+          "ui:rounded-r-md ui:rounded-l-none ui:bg-primary ui:text-background-100! ui:dark:!text-primary-foreground",
         isSelectedSingle &&
-          "ui:bg-primary ui:text-background-100! dark:ui:!text-primary-foreground",
+          "ui:bg-primary ui:text-background-100! ui:dark:!text-primary-foreground",
         showTodayStyle &&
           modifiers.today &&
           !isSelectedSingle &&
           !inRangeVisual &&
-          "ui:bg-primary ui:text-background-100! dark:ui:!text-primary-foreground",
+          "ui:bg-primary ui:text-background-100! ui:dark:!text-primary-foreground",
         className,
       )}
       {...props}
@@ -185,7 +185,7 @@ const defaultComponents = {
     return (
       <div
         className={cn(
-          "ui:relative ui:inline-flex ui:items-center ui:rounded-md ui:px-2 ui:py-0.5 ui:text-sm ui:font-medium ui:text-text-default ui:transition-colors hover:ui:bg-background-200",
+          "ui:relative ui:inline-flex ui:items-center ui:rounded-md ui:px-2 ui:py-0.5 ui:text-sm ui:font-medium ui:text-text-default ui:transition-colors ui:hover:bg-background-200",
           className,
         )}
       >

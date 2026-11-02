@@ -214,7 +214,7 @@ const DropdownMenuRadioItem = React.forwardRef<
           className={cn(dropdownMenuRadioItemIndicatorVariants())}
         >
           <span
-            className="ui:pointer-events-none ui:size-2 ui:rounded-full ui:bg-text-default ui:opacity-0 ui:transition-opacity ui:group-data-[state=checked]:ui:opacity-100"
+            className="ui:pointer-events-none ui:size-2 ui:rounded-full ui:bg-text-default ui:opacity-0 ui:transition-opacity ui:group-data-[state=checked]:opacity-100"
             aria-hidden
           />
         </DropdownMenuPrimitive.ItemIndicator>

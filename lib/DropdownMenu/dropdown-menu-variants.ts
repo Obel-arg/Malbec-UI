@@ -8,7 +8,7 @@ export const dropdownMenuContentVariants = cva([
   "ui:z-100 ui:min-w-48 ui:overflow-hidden ui:rounded-md",
   "ui:border ui:border-background-300 ui:bg-background-100 ui:p-1",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
-  "dark:ui:bg-background-200",
+  "ui:dark:bg-background-200",
   /** Radix Menu exposes this on the content node (Popper). */
   "ui:origin-(--radix-dropdown-menu-content-transform-origin)",
   ...popoverSurfaceMotionClasses,
@@ -20,7 +20,7 @@ export const dropdownMenuSubContentVariants = cva([
   "ui:z-110 ui:min-w-32 ui:overflow-hidden ui:rounded-md",
   "ui:border ui:border-background-300 ui:bg-background-100 ui:p-1",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
-  "dark:ui:bg-background-200",
+  "ui:dark:bg-background-200",
   "ui:origin-(--radix-dropdown-menu-content-transform-origin)",
   ...popoverSurfaceMotionClasses,
 ]);
