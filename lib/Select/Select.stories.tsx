@@ -96,3 +96,39 @@ export const Invalid: Story = {
     </div>
   ),
 };
+
+export const LongLabel: Story = {
+  name: "Long label · truncates with an ellipsis",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A text value longer than the trigger ends in “…” instead of pushing the chevron out. A value with element children (icon + text) keeps its flex row instead.",
+      },
+      source: {
+        code: `import { Select } from "@obel-arg/malbec-ui";
+
+<Select defaultValue="movistar">
+  <Select.Trigger className="w-48" aria-label="Show">
+    <Select.Value placeholder="Choose a show" />
+  </Select.Trigger>
+  <Select.Content>
+    <Select.Item value="movistar">13/11/2026 · Movistar Arena · Buenos Aires</Select.Item>
+    <Select.Item value="luna">15/11/2026 · Luna Park</Select.Item>
+  </Select.Content>
+</Select>`,
+      },
+    },
+  },
+  render: () => (
+    <Select defaultValue="movistar">
+      <Select.Trigger className="ui:w-48" aria-label="Show">
+        <Select.Value placeholder="Choose a show" />
+      </Select.Trigger>
+      <Select.Content>
+        <Select.Item value="movistar">13/11/2026 · Movistar Arena · Buenos Aires</Select.Item>
+        <Select.Item value="luna">15/11/2026 · Luna Park</Select.Item>
+      </Select.Content>
+    </Select>
+  ),
+};

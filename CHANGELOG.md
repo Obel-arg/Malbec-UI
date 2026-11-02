@@ -2,6 +2,12 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.13.3 — 2026-11-02
+
+### Fixes
+- **Select:** a long text value now ends in "…" instead of being cut off mid-word. The value slot is `block` + `truncate` when it holds plain text, and keeps its `flex` row when it holds elements (icon + text), so selects with icons look the same as before.
+- **Select:** the base value-slot layout now has low specificity, so a plain class such as `[&_[data-slot=select-value]]:flex` overrides it. You can drop `!` overrides you added for this.
+
 ## v1.13.2 — 2026-11-02
 
 ### Fixes
