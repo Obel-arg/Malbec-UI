@@ -1,6 +1,6 @@
 {
   "name": "@obel-arg/malbec-ui",
-  "version": "1.13.3",
+  "version": "1.14.0",
   "description": "Malbec UI component library",
   "type": "module",
   "packageManager": "pnpm@11.28.8",
@@ -31,7 +31,8 @@
       "import": "./dist/theme/presets.js",
       "require": "./dist/theme/presets.cjs"
     },
-    "./style.css": "./dist/malbec-ui.css"
+    "./style.css": "./dist/malbec-ui.css",
+    "./tokens.css": "./dist/tokens.css"
   },
   "repository": {
     "type": "git",
@@ -52,7 +53,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && cp lib/tokens.css dist/tokens.css",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
