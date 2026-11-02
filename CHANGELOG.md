@@ -2,6 +2,34 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.13.1 — 2026-11-02
+
+Bug fixes from the UI audit. No API changes. A few styles that were always meant to apply now do, so check the "Visible changes" list.
+
+### Fixes
+- **DataTable:** `onRowClick` fires again, both on click and on Enter/Space. Clicks on links, buttons and inputs inside a row are still ignored. Apps can drop row-click workarounds such as Artist's `row-click-table`.
+- **Form:** `form-context` and `use-form` are client modules now, so the barrel can be imported from a React Server Component without wrapping the provider.
+- **Sidebar:** no more hydration mismatch on mobile viewports. Live can delete `patches/@obel-arg__malbec-ui@1.11.2.patch`.
+- **Exports:** `@obel-arg/malbec-ui/theme` (the theme barrel, including `MalbecThemeProvider`) and `@obel-arg/malbec-ui/theme/presets` are public subpaths. This replaces Live's patch.
+- **`cn()`:** knows the custom type scale (`text-muted-medium`, `text-small`, `text-xxs`, …). A size class is no longer dropped when a color class follows it.
+- **z-index:** overlays, floating surfaces and nested submenus read `--ui-z-overlay` (50), `--ui-z-floating` (100) and `--ui-z-floating-nested` (110). The values are unchanged; override them in your `:root` instead of using `!z-[…]`.
+
+### Visible changes
+- **Tabs `segmented`:** the trigger text is 14px, as designed, instead of the inherited 16px. Remove local overrides that forced 14px.
+- **DropdownMenu.Item:** no longer applies `justify-between`. `DropdownMenu.Shortcut` stays right-aligned (it uses `ml-auto`). A second child without `ml-auto` now sits next to the label, so drop your `justify-start` overrides.
+- **Select:** a long selected value truncates with an ellipsis instead of pushing the chevron out. This is applied from `Select.Trigger`, because Radix ignores `className` on `Select.Value`.
+- **35 classes with a misplaced `ui:` prefix now apply:**
+  - `DropdownMenu.RadioItem` shows its checked dot.
+  - The `Combobox` clear, remove and chip buttons get a hover background and a focus ring.
+  - The `Calendar` caption gets a hover background.
+  - Charts lose the browser focus outline, axis labels use the muted text token, white strokes on dots and sectors become transparent, and legend and tooltip icons are 10–12px.
+  - In dark mode, Select, Popover, DropdownMenu, Table and Calendar use their dark surface tokens.
+
+### Tooling
+- Releases ship inside the change PR: bump `package.json`, add a CHANGELOG entry, and merge (see README → Releasing).
+- pnpm 11 with a 7-day release quarantine, Vitest, and CI on every PR (build, lint, tests, release check).
+- README: install docs use `${NODE_AUTH_TOKEN}` in `~/.npmrc` and a pinned pnpm install.
+
 ## v1.13.0 — 2026-10-28
 
 - minor(badge): StatusBadge accepts an explicit tone
