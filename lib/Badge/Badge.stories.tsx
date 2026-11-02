@@ -96,6 +96,7 @@ const categoricalDot: Partial<Record<BadgeVariant, string>> = {
   violet: "#352a60",
   emerald: "#2a602c",
   sage: "#025406",
+  neutral: "#6b6b7a",
   red: "#602a2a",
 };
 
@@ -112,6 +113,7 @@ const labels: Record<BadgeVariant, string> = {
   violet: "Violet",
   emerald: "Emerald",
   sage: "Sage",
+  neutral: "Neutral",
   red: "Red",
 };
 
@@ -326,6 +328,7 @@ export const StatusVariants: Story = {
       { variant: "emerald", label: "Aprobado" },
       { variant: "sage", label: "Pagado" },
       { variant: "red", label: "No aplica" },
+      { variant: "neutral", label: "Borrador" },
     ];
     return (
       <div className="ui:flex ui:w-[180px] ui:flex-col ui:gap-1">
@@ -351,7 +354,41 @@ export const StatusVariants: Story = {
 <Badge variant="red" className="w-full">
   <Badge.Text>No aplica</Badge.Text>
 </Badge>
+<Badge variant="neutral" className="w-full">
+  <Badge.Text>Borrador</Badge.Text>
+</Badge>
 // … other statuses: orange, blue, violet, sage`,
+      },
+    },
+  },
+};
+
+export const ExtraSmall: Story = {
+  name: "Extra small (dense tables)",
+  render: () => (
+    <div className="ui:flex ui:items-center ui:gap-2">
+      <Badge size="xs" variant="emerald">
+        <Badge.Text>Pagado</Badge.Text>
+      </Badge>
+      <Badge size="xs" variant="neutral">
+        <Badge.Text>Borrador</Badge.Text>
+      </Badge>
+      <Badge size="xs" variant="red">
+        <Badge.Text>Vencido</Badge.Text>
+      </Badge>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge } from "@obel-arg/malbec-ui";
+
+<Badge size="xs" variant="emerald">
+  <Badge.Text>Pagado</Badge.Text>
+</Badge>
+<Badge size="xs" variant="neutral">
+  <Badge.Text>Borrador</Badge.Text>
+</Badge>`,
       },
     },
   },

@@ -95,6 +95,8 @@ export type {
 } from "./Avatar/Avatar";
 export type {
   BadgeProps,
+  BadgeSize,
+  BadgeVariant,
   BadgeIconProps,
   BadgeTextProps,
 } from "./Badge/Badge";
