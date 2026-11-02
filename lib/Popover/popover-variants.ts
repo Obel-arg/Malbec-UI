@@ -59,7 +59,7 @@ export const popoverContentVariants = cva([
   "malbec-font-sans",
   /** Intrinsic width; match trigger via `ui:w-(--radix-popover-trigger-width)` when needed. */
   /** Above modal overlays (`Dialog` / `Sheet` use `z-50`) so popovers work inside them. */
-  "ui:z-100 ui:w-auto ui:max-w-(--radix-popover-content-available-width) ui:rounded-md ui:border ui:border-background-300 ui:bg-white ui:p-3",
+  "ui:z-(--ui-z-floating) ui:w-auto ui:max-w-(--radix-popover-content-available-width) ui:rounded-md ui:border ui:border-background-300 ui:bg-white ui:p-3",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
   "ui:dark:bg-background-200",
   "ui:origin-(--radix-popover-content-transform-origin)",

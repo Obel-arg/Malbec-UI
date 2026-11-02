@@ -5,7 +5,7 @@ import { popoverSurfaceMotionClasses } from "../Popover/popover-variants";
 export const dropdownMenuContentVariants = cva([
   "malbec-font-sans",
   /** Above modal overlays (`Dialog` / `Sheet` use `z-50`). */
-  "ui:z-100 ui:min-w-48 ui:overflow-hidden ui:rounded-md",
+  "ui:z-(--ui-z-floating) ui:min-w-48 ui:overflow-hidden ui:rounded-md",
   "ui:border ui:border-background-300 ui:bg-background-100 ui:p-1",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
   "ui:dark:bg-background-200",
@@ -17,7 +17,7 @@ export const dropdownMenuContentVariants = cva([
 export const dropdownMenuSubContentVariants = cva([
   "malbec-font-sans",
   /** Above root menu content (`z-100`) so the nested surface receives hover/focus. */
-  "ui:z-110 ui:min-w-32 ui:overflow-hidden ui:rounded-md",
+  "ui:z-(--ui-z-floating-nested) ui:min-w-32 ui:overflow-hidden ui:rounded-md",
   "ui:border ui:border-background-300 ui:bg-background-100 ui:p-1",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
   "ui:dark:bg-background-200",

@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const sheetOverlayVariants = cva([
-  "ui:fixed ui:inset-0 ui:z-50",
+  "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
   "ui:bg-background-200/60",
   "ui:backdrop-blur-[3.5px]",
   "ui:data-[state=open]:animate-malbec-overlay-in",
@@ -12,7 +12,7 @@ export const sheetOverlayVariants = cva([
 export const sheetContentVariants = cva(
   [
     "ui:malbec-font-sans",
-    "ui:fixed ui:z-50",
+    "ui:fixed ui:z-(--ui-z-overlay)",
     "ui:flex ui:flex-col ui:gap-4",
     "ui:rounded-none",
     "ui:bg-background-100",
