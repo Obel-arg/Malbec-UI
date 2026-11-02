@@ -20,6 +20,7 @@ import type {
 } from "./alert-dialog-variants";
 
 export type { AlertDialogSize, AlertDialogActionVariant } from "./alert-dialog-variants";
+import type { OverlayVeil } from "../Dialog/dialog-variants";
 
 const AlertDialogSizeContext = React.createContext<{
   size: AlertDialogSize;
@@ -76,13 +77,17 @@ const AlertDialogOverlay = React.forwardRef<
 export interface AlertDialogContentProps
   extends React.ComponentProps<typeof AlertDialogPrimitive.Content> {
   size?: AlertDialogSize;
+  /** `none` drops the veil and floats the dialog on a two-layer shadow. */
+  overlay?: OverlayVeil;
+  /** Merged after default overlay styles (the overlay is rendered inside Content). */
+  overlayClassName?: string;
 }
 
 const AlertDialogContent = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Content>,
   AlertDialogContentProps
 >(function AlertDialogContent(
-  { className, size = "default", children, ...rest },
+  { className, size = "default", overlay = "default", overlayClassName, children, ...rest },
   ref,
 ) {
   const ctx = React.useMemo(
@@ -93,12 +98,15 @@ const AlertDialogContent = React.forwardRef<
   return (
     <AlertDialogSizeContext.Provider value={ctx}>
       <AlertDialogPortal>
-        <AlertDialogOverlay />
+        <AlertDialogOverlay
+          className={cn(alertDialogOverlayVariants({ overlay }), overlayClassName)}
+        />
         <AlertDialogPrimitive.Content
           ref={ref}
           data-slot="alert-dialog-content"
           data-size={size}
-          className={cn(alertDialogContentVariants({ size }), className)}
+          data-overlay={overlay}
+          className={cn(alertDialogContentVariants({ size, overlay }), className)}
           {...rest}
         >
           {children}

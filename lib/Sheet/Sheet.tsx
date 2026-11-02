@@ -18,6 +18,10 @@ import {
   sheetOverlayVariants,
   sheetTitleVariants,
 } from "./sheet-variants";
+import type { SheetSize } from "./sheet-variants";
+import type { OverlayVeil } from "../Dialog/dialog-variants";
+
+export type { SheetSize };
 
 export type SheetProps = React.ComponentProps<typeof SheetPrimitive.Root>;
 
@@ -73,6 +77,10 @@ export interface SheetContentProps
   extends React.ComponentProps<typeof SheetPrimitive.Content> {
   side?: "top" | "right" | "bottom" | "left";
   showCloseButton?: boolean;
+  /** Width of a left/right sheet (`sm` 448 · `md` 576 · `lg` 672 · `xl` 768). Unset keeps 384px. */
+  size?: SheetSize;
+  /** `none` drops the veil and casts a soft shadow away from the sheet's edge. */
+  overlay?: OverlayVeil;
   /** Merged after default overlay styles. */
   overlayClassName?: string;
   /** When true, default sheet padding and shape classes are omitted; use `className` for the full surface. */
@@ -90,6 +98,8 @@ const SheetContent = React.forwardRef<
     children,
     side = "right",
     showCloseButton = true,
+    size,
+    overlay = "default",
     overlayClassName,
     unstyled,
     container,
@@ -99,12 +109,14 @@ const SheetContent = React.forwardRef<
 ) {
   return (
     <SheetPortal container={container}>
-      <SheetOverlay className={overlayClassName} />
+      <SheetOverlay className={cn(sheetOverlayVariants({ overlay }), overlayClassName)} />
       <SheetPrimitive.Content
         ref={ref}
         data-slot="sheet-content"
         data-side={side}
-        className={cn(!unstyled && sheetContentVariants({ side }), className)}
+        data-size={size}
+        data-overlay={overlay}
+        className={cn(!unstyled && sheetContentVariants({ side, size, overlay }), className)}
         {...rest}
       >
         {children}
@@ -218,17 +230,20 @@ const SheetClose = React.forwardRef<
   );
 });
 
-export type SheetBodyProps = React.HTMLAttributes<HTMLDivElement>;
+export type SheetBodyProps = React.HTMLAttributes<HTMLDivElement> & {
+  /** Fill the space between header and footer and scroll there, keeping both pinned. */
+  scroll?: boolean;
+};
 
 const SheetBody = React.forwardRef<HTMLDivElement, SheetBodyProps>(function SheetBody(
-  { className, ...rest },
+  { className, scroll = false, ...rest },
   ref,
 ) {
   return (
     <div
       ref={ref}
       data-slot="sheet-body"
-      className={cn(sheetBodyVariants(), className)}
+      className={cn(sheetBodyVariants({ scroll }), className)}
       {...rest}
     />
   );

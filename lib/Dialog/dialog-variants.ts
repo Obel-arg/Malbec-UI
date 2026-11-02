@@ -1,13 +1,29 @@
 import { cva } from "class-variance-authority";
 
-export const dialogOverlayVariants = cva([
-  "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
-  "ui:bg-background-200/60",
-  "ui:backdrop-blur-[3.5px]",
-  "ui:data-[state=open]:animate-malbec-overlay-in",
-  "ui:data-[state=closed]:animate-malbec-overlay-out",
-  "ui:motion-reduce:animate-none",
-]);
+/**
+ * `overlay="none"` (malbec-ux-ui: modals float without a veil) keeps the overlay element, so
+ * outside clicks still close the dialog, but makes it transparent. The surface then lifts off the
+ * page with this two-layer shadow, the one Artist and Publishing already use.
+ */
+export const FLOATING_SURFACE_SHADOW =
+  "ui:shadow-[0_24px_70px_rgba(0,0,0,0.22),0_8px_20px_rgba(0,0,0,0.1)]";
+
+export const overlayVeilVariants = {
+  default: "ui:bg-background-200/60 ui:backdrop-blur-[3.5px]",
+  none: "ui:bg-transparent ui:backdrop-blur-none",
+} as const;
+
+export type OverlayVeil = keyof typeof overlayVeilVariants;
+
+export const dialogOverlayVariants = cva(
+  [
+    "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
+    "ui:data-[state=open]:animate-malbec-overlay-in",
+    "ui:data-[state=closed]:animate-malbec-overlay-out",
+    "ui:motion-reduce:animate-none",
+  ],
+  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "default" } },
+);
 
 export const dialogContentVariants = cva([
   "ui:malbec-font-sans",
@@ -24,7 +40,20 @@ export const dialogContentVariants = cva([
   "ui:data-[state=open]:animate-malbec-dialog-in",
   "ui:data-[state=closed]:animate-malbec-dialog-out",
   "ui:motion-reduce:animate-none",
-]);
+], {
+  variants: {
+    /** Width, capped at the viewport minus 1rem per side. Unset keeps the 425px default. */
+    size: {
+      sm: "ui:w-[min(calc(100vw-2rem),448px)] ui:max-w-none",
+      md: "ui:w-[min(calc(100vw-2rem),560px)] ui:max-w-none",
+      lg: "ui:w-[min(calc(100vw-2rem),640px)] ui:max-w-none",
+      xl: "ui:w-[min(calc(100vw-2rem),880px)] ui:max-w-none",
+    },
+    overlay: { default: "", none: FLOATING_SURFACE_SHADOW },
+  },
+});
+
+export type DialogSize = "sm" | "md" | "lg" | "xl";
 
 export const dialogCloseVariants = cva([
   "ui:absolute ui:top-4 ui:right-4",
