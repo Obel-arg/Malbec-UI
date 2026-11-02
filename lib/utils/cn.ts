@@ -11,8 +11,36 @@ import { extendTailwindMerge } from "tailwind-merge";
  * **original** token (e.g. `p-0`), so the host’s unprefixed CSS applies, but it
  * wins the same conflict groups as `ui:p-*`.
  */
+/**
+ * The custom type scale (`--text-*` in styles.css, plus `xxs` that host apps
+ * declare). Without it twMerge reads `ui:text-muted-medium` as a color and drops
+ * it when a real color class follows, so the text falls back to the inherited size.
+ */
+export const TEXT_SIZES = [
+  "h1",
+  "h2",
+  "h3-medium",
+  "h3-semibold",
+  "h4",
+  "lead",
+  "large",
+  "p",
+  "blockquote",
+  "table-head",
+  "table-item",
+  "list",
+  "code",
+  "small",
+  "muted",
+  "muted-medium",
+  "label",
+  "label-semibold",
+  "xxs",
+];
+
 const twMerge = extendTailwindMerge({
   prefix: "ui",
+  extend: { theme: { text: TEXT_SIZES } },
   experimentalParseClassName: ({ className, parseClassName }) => {
     if (className.startsWith("ui:")) {
       return parseClassName(className);
