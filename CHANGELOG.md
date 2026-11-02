@@ -2,6 +2,38 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.15.0 — 2026-11-02
+
+Opt-in variants for seven primitives. Nothing changes on screen until you use a new prop. Each one replaces a recipe the apps were maintaining by hand.
+
+### Added
+- **Button**
+  - `tone="neutral"` turns `outline` and `ghost` grey: `text-default` text, a `background-300` border on outline, `background-200` hover, `background-300` active and a `malbec-icon` focus ring. It replaces `no-green-button-classes` (Artist, Publishing), `malbecOutlineButtonClass` / `malbecGhostButtonClass` (Live) and Publishing's `button-outline.css` / `button-ghost.css`.
+  - `asChild` renders a `Link` or an `<a>` with the button styles.
+  - `buttonVariants` is now exported, for elements that can't use `asChild`.
+  - `variant="row"` is a full-width, left-aligned row for lists and popovers.
+- **Badge**
+  - `variant="neutral"` is the system grey pair `#e4e2df` / `#6b6b7a`. It replaces `!bg-malbec-badge-neutral-*`.
+  - `size="xs"` gives a 20px chip with 11px text, for dense tables.
+  - Colour tones now paint through `--malbec-badge-bg` / `--malbec-badge-fg`, so you can retune a pair from CSS without `!important`. The values are the same as before.
+- **Dialog / Sheet / AlertDialog**
+  - `size` sets the width.
+    - Dialog: `sm` 448, `md` 560, `lg` 640, `xl` 880. The width is capped at the viewport minus 1rem per side, so you can drop the `w-[min(…)] max-w-none` and `max-w-[…]!` overrides.
+    - Sheet: `sm` 448, `md` 576, `lg` 672, `xl` 768.
+  - `overlay="none"` removes the veil and floats the surface on the two-layer shadow. The overlay element stays, so clicking outside still closes. It replaces `floating-dialog-classes` (Artist), `modal-classes` (Live) and `sheet-no-veil.css` (Publishing).
+  - AlertDialog also gets `overlayClassName`.
+  - `Sheet.Body scroll` makes the body scroll while the header and footer stay pinned.
+- **FloatingBar:** `placement="bottom"` pins the bar 40px above the bottom of the content area. It stays centred whether the sidebar is expanded, collapsed or on mobile, and sits under modal overlays. It replaces the `fixed bottom-10 left-[calc(50%+var(--sidebar-width…)/2)] z-120 -translate-x-1/2` chain. Keep the bar inside `Sidebar.Provider`.
+- **Tooltip:** `variant="dark"` ("la negra") is for icon-only actions: `malbec-ink` background, 13px medium text, no border. It replaces `TOOLTIP_DARK_CLASS` and the `bg-gray-900` copies. The light tooltip stays the default, for explaining a value.
+- **Input**
+  - `variant="search"` is the spec searchbar: `background-200` fill, with the native clear button hidden. Set the width yourself: `w-full sm:w-[348px]` in a list.
+  - `variant="bare"` drops the box for inline editing; you set the type size. The focus outline stays.
+- **Tabs:** `variant="opacity"` is for screen-level tabs: no line and no track, the active tab at 100% and the rest at 40%. It replaces the `opacity-tabs-classes` and `plain-tabs` constants.
+- **Sidebar:** `Sidebar.Provider` now exposes `--sidebar-offset`, the space the sidebar currently takes from the content area.
+
+### Not in this release
+The veil default, the segmented size (40/14 vs 36/13) and "all tooltips dark" are design decisions pending with Isa for 2.0. Nothing here changes a default.
+
 ## v1.14.0 — 2026-11-02
 
 ### Added
