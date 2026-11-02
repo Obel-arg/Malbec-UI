@@ -44,7 +44,9 @@ bump o sin entrada de CHANGELOG falla.
 - **SSR primero.** Nada de leer `window` ni `matchMedia` en el initializer de `useState`: el estado
   inicial tiene que coincidir con el del server, y lo que depende del navegador se lee en el effect.
 - **Subpaths públicos** (`.`, `./icons`, `./style.css`, `./theme`, `./theme/presets`): un subpath
-  nuevo va en `exports` de `package.json`, con un test que verifique que su destino existe en `dist/`.
+  nuevo va en tres lugares: `exports` de `package.json`, como **entry** en `vite.config.ts` (con
+  `preserveModules`, un barrel que no es entry sale sin re-exports) y en
+  `scripts/smoke-exports.mjs` con los nombres que importan las apps, que CI corre por ESM y CJS.
 - **Nada de texto visible hardcodeado.** Toda etiqueta (Close, Previous, No results…) tiene que
   poder configurarse, porque las apps son ES + EN.
 - **Colores sólo desde tokens** de `styles.css`. Nada de hex en componentes ni de `color-mix()`
@@ -92,6 +94,8 @@ primitivo.
   o en el del runner. pnpm 11 ignora credenciales de un `.npmrc` commiteado.
 - El README se publica dentro del paquete (npm siempre incluye el README): nada sensible ahí.
 - Si encontrás un secreto, frená, avisá y proponé rotarlo. No lo reproduzcas.
+- En cada PR a main, `pr-vuln-gate.yml` corre `pnpm audit` (runtime y desarrollo) y frena cualquier Critical/High, sin excepciones.
+- Findings aceptados de osv-scanner: `osv-scanner.toml`, cada uno con motivo y `ignoreUntil`. Cuando vencen, se reevalúan; no se renuevan sin revisar si ya hay fix.
 
 ### 6.1. Protocolo de seguridad de dependencias (supply chain)
 

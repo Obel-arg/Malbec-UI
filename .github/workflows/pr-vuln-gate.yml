@@ -1,0 +1,59 @@
+# Gate de vulnerabilidades en los PR a main (portado de Malbec-Live): si lo que quedaría en
+# main trae una vulnerabilidad Critical/High, en runtime o en desarrollo, el check falla y el
+# ruleset `Malbec-UI CI` no deja mergear. Criterio y motivo: .github/scripts/vuln-gate.mjs.
+#
+# Para que BLOQUEE, el ruleset tiene que exigir este check por su nombre de job
+# ("PR a main · vulnerabilidades Critical/High"). Si se renombra el job, hay que actualizar
+# el ruleset o el merge queda colgado esperando un check que no existe.
+#
+# Sin filtro de `paths`: un check requerido que no corre queda pendiente para siempre, y una
+# vulnerabilidad nueva se publica sin que el PR toque el lockfile.
+
+name: PR · vulnerabilidades
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-vuln-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  vuln-gate:
+    name: PR a ${{ github.base_ref }} · vulnerabilidades Critical/High
+    runs-on: ubuntu-latest
+    steps:
+      # El checkout de un pull_request es el merge commit con la base: se audita lo que
+      # quedaría en main, no sólo la rama del PR.
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - name: Install pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          check-latest: true
+
+      # Sin `pnpm install` ni credencial de GitHub Packages: `pnpm audit` resuelve desde el
+      # lockfile. `|| true` porque el audit sale != 0 con un solo `low`; quien decide es el gate.
+      - name: Auditar dependencias (runtime y desarrollo)
+        run: pnpm audit --json > pnpm-audit.json || true
+
+      - name: Gate Critical/High
+        run: node .github/scripts/vuln-gate.mjs pnpm-audit.json
+
+      - name: Guardar el reporte
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pr-vuln-gate-${{ github.event.pull_request.number }}-${{ github.run_id }}
+          path: pnpm-audit.json
+          if-no-files-found: ignore
+          retention-days: 90

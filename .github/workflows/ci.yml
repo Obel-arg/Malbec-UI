@@ -28,6 +28,9 @@ jobs:
       - name: Build (typecheck + bundle)
         run: pnpm build
 
+      - name: Smoke-test the published entry points
+        run: node scripts/smoke-exports.mjs
+
       - name: Lint
         run: pnpm lint
 

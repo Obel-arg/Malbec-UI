@@ -1,0 +1,12 @@
+# Accepted findings (UI-3, 2026-11-02). Each entry expires so it is re-evaluated.
+# Dev-only: the patterns and signals involved are the repo's own, never user input.
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2026-12-01
+reason = "minimatch 3/9/10 via eslint, typescript-eslint and vite-plugin-dts (@vue/language-core, @microsoft/api-extractor). Only fix is minimatch 11 (major, published 2026-10-27); eslint 9 requires minimatch 3. DoS needs attacker-controlled glob patterns."
+
+[[IgnoredVulns]]
+id = "GHSA-3g3m-2fjr-6pw4"
+ignoreUntil = 2026-12-01
+reason = "glob 13 via @joshwooding/vite-plugin-react-docgen-typescript (Storybook). Only fix is glob 14 (major, published 2026-10-27). Needs an AbortSignal-cancelled walk; Storybook docgen doesn't cancel."

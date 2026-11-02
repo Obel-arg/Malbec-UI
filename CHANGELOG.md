@@ -2,6 +2,18 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v1.13.2 — 2026-11-02
+
+### Fixes
+- **`@obel-arg/malbec-ui/theme` exports again.** In 1.13.1 the `./theme` barrel was published without its exports (ESM and CJS), so `import { MalbecThemeProvider } from "malbec-ui/theme"` failed to bundle with "the module has no exports at all". It now exports `MalbecThemeProvider`, `MalbecThemeContext`, `useTheme`, `TOKEN_NAMES`, `TOKEN_TO_CSS_VAR` and the presets. A post-build check now imports every public entry point before publishing.
+
+### Additions (non-breaking)
+- **`DataTable` `onRowClick` receives the event** as an optional third argument: the click, the Enter/Space keydown, or a **middle-click**, which now also triggers it. Use it to open the row elsewhere, for example `event.metaKey || event.ctrlKey || ("button" in event && event.button === 1)`. Two-argument handlers keep working. The event type is exported as `DataTableRowEvent`.
+
+### Tooling
+- Dev dependencies patched for 21 advisories (Storybook 10.6.4, Vite 8.3.5, zod 4.6.7, Babel 7.29.7). None were in the published dependencies.
+- PRs to `main` are gated on critical/high vulnerabilities (`pnpm audit`).
+
 ## v1.13.1 — 2026-11-02
 
 Bug fixes from the UI audit. No API changes. A few styles that were always meant to apply now do, so check the "Visible changes" list.
