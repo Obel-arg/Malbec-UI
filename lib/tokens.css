@@ -1,0 +1,34 @@
+/*
+ * Malbec system tokens (malbec-ux-ui spec). Import AFTER tailwindcss in the app's globals.css:
+ *
+ *   @import "tailwindcss";
+ *   @import "malbec-ui/style.css";
+ *   @import "malbec-ui/tokens.css";
+ *
+ * It is plain `@theme`, compiled by the app's own Tailwind (no `ui:` prefix), so it gives
+ * `text-malbec-ink`, `bg-malbec-badge-green-bg`, … An app that needs a different value redeclares
+ * the variable in a later `@theme` block.
+ */
+@theme {
+  /* Text and chrome. Never `text-foreground` (#09090b): we don't use black. */
+  --color-malbec-ink: #1a1a1f;
+  --color-malbec-icon: #3f3f46;
+  --color-malbec-muted-text: #8c8c94;
+  --color-malbec-table-header: #6b6b7a;
+
+  /* Badge tones: background + text pairs. */
+  --color-malbec-badge-green-bg: #d0dfd0;
+  --color-malbec-badge-green-text: #2a602c;
+  --color-malbec-badge-yellow-bg: #efeed4;
+  --color-malbec-badge-yellow-text: #8a862f;
+  --color-malbec-badge-orange-bg: #efe3d4;
+  --color-malbec-badge-orange-text: #8a642f;
+  --color-malbec-badge-purple-bg: #ddd4ef;
+  --color-malbec-badge-purple-text: #4a2f8a;
+  --color-malbec-badge-blue-bg: #d4ddef;
+  --color-malbec-badge-blue-text: #2f4a8a;
+  --color-malbec-badge-red-bg: #dfd0d0;
+  --color-malbec-badge-red-text: #602a2a;
+  --color-malbec-badge-neutral-bg: #e4e2df;
+  --color-malbec-badge-neutral-text: #6b6b7a;
+}

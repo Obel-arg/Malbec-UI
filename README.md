@@ -31,6 +31,8 @@ Then add this to your project's `globals.css`:
 ```css
 @import "tailwindcss";
 @import "malbec-ui/style.css";
+/* Optional: system tokens (text-malbec-ink, bg-malbec-badge-green-bg, …). */
+@import "malbec-ui/tokens.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 

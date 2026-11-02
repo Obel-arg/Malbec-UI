@@ -43,7 +43,7 @@ bump o sin entrada de CHANGELOG falla.
   desde un Server Component. `preserveDirectives` la conserva en `dist/`.
 - **SSR primero.** Nada de leer `window` ni `matchMedia` en el initializer de `useState`: el estado
   inicial tiene que coincidir con el del server, y lo que depende del navegador se lee en el effect.
-- **Subpaths públicos** (`.`, `./icons`, `./style.css`, `./theme`, `./theme/presets`): un subpath
+- **Subpaths públicos** (`.`, `./icons`, `./style.css`, `./tokens.css`, `./theme`, `./theme/presets`): un subpath
   nuevo va en tres lugares: `exports` de `package.json`, como **entry** en `vite.config.ts` (con
   `preserveModules`, un barrel que no es entry sale sin re-exports) y en
   `scripts/smoke-exports.mjs` con los nombres que importan las apps, que CI corre por ESM y CJS.
