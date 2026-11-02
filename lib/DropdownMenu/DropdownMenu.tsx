@@ -140,7 +140,7 @@ const DropdownMenuItem = React.forwardRef<
     <DropdownMenuPrimitive.Item
       ref={ref}
       data-slot="dropdown-menu-item"
-      className={cn(dropdownMenuItemVariants(), "ui:justify-between", className)}
+      className={cn(dropdownMenuItemVariants(), className)}
       {...rest}
     />
   );

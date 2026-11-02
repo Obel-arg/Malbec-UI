@@ -35,7 +35,7 @@ export const dropdownMenuItemVariants = cva([
   "ui:data-disabled:pointer-events-none ui:data-disabled:opacity-50",
 ]);
 
-/** Same as item; use with leading indicator + `justify-between` for shortcut. */
+/** Same as item; the trailing chevron sits right via `ml-auto`. */
 export const dropdownMenuSubTriggerVariants = cva([
   "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
   "ui:data-disabled:cursor-not-allowed",
