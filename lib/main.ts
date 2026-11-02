@@ -47,6 +47,7 @@ export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Field } from "./Field/Field";
 export { FileDropzone } from "./FileDropzone/FileDropzone";
 export { FloatingBar } from "./FloatingBar/FloatingBar";
+export type { FloatingBarProps, FloatingBarPlacement } from "./FloatingBar/FloatingBar";
 export { Form } from "./Form/Form";
 export { useForm, withForm, withFieldGroup } from "./Form/use-form";
 export { Pagination } from "./Pagination/Pagination";
@@ -199,6 +200,8 @@ export type {
   DialogProps,
   DialogOverlayProps,
   DialogContentProps,
+  DialogSize,
+  OverlayVeil,
   DialogHeaderProps,
   DialogFooterProps,
   DialogActionProps,
@@ -243,6 +246,7 @@ export type {
 } from "./Inbox/Inbox";
 export type {
   InputProps,
+  InputVariant,
   InputIconProps,
 } from "./Input/Input";
 export type { LabelProps } from "./Label/Label";
@@ -277,6 +281,7 @@ export type {
   SheetProps,
   SheetOverlayProps,
   SheetContentProps,
+  SheetSize,
   SheetHeaderProps,
   SheetFooterProps,
   SheetActionProps,
@@ -314,6 +319,7 @@ export type {
 } from "./Table/Table";
 export type {
   TabsProps,
+  TabsVariant,
   TabsListProps,
   TabsTriggerProps,
   TabsContentProps,
@@ -329,6 +335,7 @@ export type {
   TooltipProviderProps,
   TooltipTriggerProps,
   TooltipContentProps,
+  TooltipVariant,
 } from "./Tooltip/Tooltip";
 export type {
   DropdownMenuProps,
