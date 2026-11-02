@@ -63,4 +63,22 @@ export const inputVariants = cva(
     "ui:file:tracking-[-0.42px]",
     "ui:file:text-text-default",
   ],
+  {
+    variants: {
+      variant: {
+        default: "",
+        /** Searchbar (malbec-ux-ui): filled with background-200; the native clear button is hidden. */
+        search:
+          "ui:bg-background-200 ui:[&::-webkit-search-cancel-button]:appearance-none ui:[&_input::-webkit-search-cancel-button]:appearance-none",
+        /**
+         * Inline editing inside text (amounts, names in a row): no box, the consumer sets the
+         * type. The focus outline stays, pushed outside the text.
+         */
+        bare: "ui:h-auto ui:rounded-none ui:bg-transparent ui:p-0 ui:shadow-none ui:outline-offset-2",
+      },
+    },
+    defaultVariants: { variant: "default" },
+  },
 );
+
+export type InputVariant = "default" | "search" | "bare";
