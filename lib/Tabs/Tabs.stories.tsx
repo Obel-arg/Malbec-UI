@@ -203,3 +203,35 @@ function Example() {
     </Tabs>
   ),
 };
+
+export const Opacity: Story = {
+  name: "Opacity (screen tabs)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Tabs } from "@obel-arg/malbec-ui";
+
+<Tabs variant="opacity" defaultValue="resumen">
+  <Tabs.List>
+    <Tabs.Trigger value="resumen">Resumen</Tabs.Trigger>
+    <Tabs.Trigger value="gastos">Gastos</Tabs.Trigger>
+    <Tabs.Trigger value="ingresos">Ingresos</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="resumen">…</Tabs.Content>
+</Tabs>`,
+      },
+    },
+  },
+  render: () => (
+    <Tabs variant="opacity" defaultValue="resumen">
+      <Tabs.List>
+        <Tabs.Trigger value="resumen">Resumen</Tabs.Trigger>
+        <Tabs.Trigger value="gastos">Gastos</Tabs.Trigger>
+        <Tabs.Trigger value="ingresos">Ingresos</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="resumen">Resumen del show</Tabs.Content>
+      <Tabs.Content value="gastos">Gastos del show</Tabs.Content>
+      <Tabs.Content value="ingresos">Ingresos del show</Tabs.Content>
+    </Tabs>
+  ),
+};

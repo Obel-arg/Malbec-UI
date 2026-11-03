@@ -1,13 +1,15 @@
 import { cva } from "class-variance-authority";
+import { overlayVeilVariants } from "../Dialog/dialog-variants";
 
-export const sheetOverlayVariants = cva([
-  "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
-  "ui:bg-background-200/60",
-  "ui:backdrop-blur-[3.5px]",
-  "ui:data-[state=open]:animate-malbec-overlay-in",
-  "ui:data-[state=closed]:animate-malbec-overlay-out",
-  "ui:motion-reduce:animate-none",
-]);
+export const sheetOverlayVariants = cva(
+  [
+    "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
+    "ui:data-[state=open]:animate-malbec-overlay-in",
+    "ui:data-[state=closed]:animate-malbec-overlay-out",
+    "ui:motion-reduce:animate-none",
+  ],
+  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "default" } },
+);
 
 export const sheetContentVariants = cva(
   [
@@ -45,12 +47,35 @@ export const sheetContentVariants = cva(
           "ui:data-[state=closed]:animate-malbec-sheet-out-right",
         ],
       },
+      /** Width of a left/right sheet, capped at the viewport. Unset keeps 384px. */
+      size: {
+        sm: "",
+        md: "",
+        lg: "",
+        xl: "",
+      },
+      overlay: { default: "", none: "" },
     },
+    compoundVariants: [
+      ...(["left", "right"] as const).flatMap((side) => [
+        { side, size: "sm" as const, class: "ui:w-[min(100vw,448px)]" },
+        { side, size: "md" as const, class: "ui:w-[min(100vw,576px)]" },
+        { side, size: "lg" as const, class: "ui:w-[min(100vw,672px)]" },
+        { side, size: "xl" as const, class: "ui:w-[min(100vw,768px)]" },
+      ]),
+      // Without a veil the sheet lifts off the page with a shadow cast away from its edge.
+      { side: "right", overlay: "none", class: "ui:shadow-[-24px_0_70px_rgba(0,0,0,0.12),-8px_0_20px_rgba(0,0,0,0.06)]" },
+      { side: "left", overlay: "none", class: "ui:shadow-[24px_0_70px_rgba(0,0,0,0.12),8px_0_20px_rgba(0,0,0,0.06)]" },
+      { side: "top", overlay: "none", class: "ui:shadow-[0_24px_70px_rgba(0,0,0,0.12),0_8px_20px_rgba(0,0,0,0.06)]" },
+      { side: "bottom", overlay: "none", class: "ui:shadow-[0_-24px_70px_rgba(0,0,0,0.12),0_-8px_20px_rgba(0,0,0,0.06)]" },
+    ],
     defaultVariants: {
       side: "right",
     },
   },
 );
+
+export type SheetSize = "sm" | "md" | "lg" | "xl";
 
 export const sheetCloseVariants = cva([
   "ui:absolute ui:top-2 ui:right-2",
@@ -75,7 +100,12 @@ export const sheetDescriptionVariants = cva(
   "ui:pt-2 ui:text-sm ui:leading-5 ui:font-normal ui:text-text-default",
 );
 
-export const sheetBodyVariants = cva("ui:flex ui:flex-col ui:gap-4 ui:py-4");
+export const sheetBodyVariants = cva("ui:flex ui:flex-col ui:gap-4 ui:py-4", {
+  variants: {
+    /** Fill the space between header and footer and scroll there, so both stay pinned. */
+    scroll: { true: "ui:min-h-0 ui:flex-1 ui:overflow-y-auto", false: "" },
+  },
+});
 
 export const sheetFooterVariants = cva("ui:flex ui:items-center ui:justify-end ui:gap-2");
 

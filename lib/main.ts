@@ -6,6 +6,8 @@ export * as themes from "./theme/presets";
 
 export { Spinner } from "./Spinner/Spinner";
 export { Button } from "./Button/Button";
+/** Button classes for elements that can't be a <Button> (e.g. a framework Link without asChild). */
+export { buttonVariants } from "./Button/button-variants";
 export { Alert } from "./Alert/Alert";
 export { AlertDialog } from "./AlertDialog/AlertDialog";
 export { Avatar, AvatarGroup, AvatarGroupCount } from "./Avatar/Avatar";
@@ -45,6 +47,7 @@ export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Field } from "./Field/Field";
 export { FileDropzone } from "./FileDropzone/FileDropzone";
 export { FloatingBar } from "./FloatingBar/FloatingBar";
+export type { FloatingBarProps, FloatingBarPlacement } from "./FloatingBar/FloatingBar";
 export { Form } from "./Form/Form";
 export { useForm, withForm, withFieldGroup } from "./Form/use-form";
 export { Pagination } from "./Pagination/Pagination";
@@ -93,6 +96,8 @@ export type {
 } from "./Avatar/Avatar";
 export type {
   BadgeProps,
+  BadgeSize,
+  BadgeVariant,
   BadgeIconProps,
   BadgeTextProps,
 } from "./Badge/Badge";
@@ -112,6 +117,9 @@ export type {
   ButtonIconProps,
   ButtonTextProps,
   ButtonSpinnerProps,
+  ButtonSize,
+  ButtonTone,
+  ButtonVariant,
 } from "./Button/Button";
 export type {
   CalendarProps,
@@ -192,6 +200,8 @@ export type {
   DialogProps,
   DialogOverlayProps,
   DialogContentProps,
+  DialogSize,
+  OverlayVeil,
   DialogHeaderProps,
   DialogFooterProps,
   DialogActionProps,
@@ -236,6 +246,7 @@ export type {
 } from "./Inbox/Inbox";
 export type {
   InputProps,
+  InputVariant,
   InputIconProps,
 } from "./Input/Input";
 export type { LabelProps } from "./Label/Label";
@@ -270,6 +281,7 @@ export type {
   SheetProps,
   SheetOverlayProps,
   SheetContentProps,
+  SheetSize,
   SheetHeaderProps,
   SheetFooterProps,
   SheetActionProps,
@@ -307,6 +319,7 @@ export type {
 } from "./Table/Table";
 export type {
   TabsProps,
+  TabsVariant,
   TabsListProps,
   TabsTriggerProps,
   TabsContentProps,
@@ -322,6 +335,7 @@ export type {
   TooltipProviderProps,
   TooltipTriggerProps,
   TooltipContentProps,
+  TooltipVariant,
 } from "./Tooltip/Tooltip";
 export type {
   DropdownMenuProps,

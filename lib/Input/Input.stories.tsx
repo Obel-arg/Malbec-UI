@@ -408,3 +408,48 @@ export const WithButton: Story = {
     },
   },
 };
+
+export const Search: Story = {
+  name: "Variant · Search",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input } from "@obel-arg/malbec-ui";
+import { Search } from "@obel-arg/malbec-ui/icons";
+
+<Input variant="search" type="search" placeholder="Buscar obras" className="w-full sm:w-[348px]">
+  <Input.Icon><Search /></Input.Icon>
+</Input>`,
+      },
+    },
+  },
+  render: () => (
+    <Input variant="search" type="search" placeholder="Buscar obras" className="ui:w-[348px]">
+      <Input.Icon>⌕</Input.Icon>
+    </Input>
+  ),
+};
+
+export const Bare: Story = {
+  name: "Variant · Bare (inline editing)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Input } from "@obel-arg/malbec-ui";
+
+<Input variant="bare" inputMode="decimal" defaultValue="12.500" className="w-24 text-right text-sm font-semibold" />`,
+      },
+    },
+  },
+  render: () => (
+    <p className="ui:flex ui:items-center ui:gap-2 ui:text-sm ui:text-text-default">
+      Monto
+      <Input
+        variant="bare"
+        inputMode="decimal"
+        defaultValue="12.500"
+        className="ui:w-24 ui:text-right ui:text-sm ui:font-semibold"
+      />
+    </p>
+  ),
+};

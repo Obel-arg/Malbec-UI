@@ -4,7 +4,8 @@ import { cva, type VariantProps } from "class-variance-authority";
  * [Malbec — Badge Figma](https://www.figma.com/design/xpeITaQp7zbkU4htYHvHXo/Malbec-OS-Design-System?node-id=58-191):
  * 4px corner radius, `text-xs` / medium, `tracking-[-0.36px]`, `px-2.5` / `py-0.5`.
  * `destructive` matches `Button` (`destructive` / `destructive-foreground` tokens).
- * For a neutral Figma-style chip, override with e.g. `ui:bg-background-100 ui:text-text-default`.
+ * Colour tones paint through `--malbec-badge-bg` / `--malbec-badge-fg`, so an app can retune a
+ * pair from CSS without `!important`.
  */
 export const badgeVariants = cva(
   [
@@ -15,11 +16,7 @@ export const badgeVariants = cva(
     "ui:gap-1",
     "ui:rounded-[4px]",
     "ui:border",
-    "ui:px-2.5",
-    "ui:py-0.5",
-    "ui:text-xs",
     "ui:font-medium",
-    "ui:leading-5",
     "ui:tracking-[-0.36px]",
     "ui:whitespace-nowrap",
     "ui:shrink-0",
@@ -46,22 +43,30 @@ export const badgeVariants = cva(
           "ui:border-transparent ui:bg-transparent ui:text-primary ui:underline-offset-4 ui:hover:underline",
         /** Status chips (Product UI status popover, Figma 651:11230). */
         yellow:
-          "ui:border-transparent ui:bg-[#efeed4] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#8a862f] ui:[--malbec-badge-accent:#8a862f]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#efeed4] ui:[--malbec-badge-fg:#8a862f] ui:[--malbec-badge-accent:#8a862f]",
         orange:
-          "ui:border-transparent ui:bg-[#efe3d4] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#8a642f] ui:[--malbec-badge-accent:#8a642f]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#efe3d4] ui:[--malbec-badge-fg:#8a642f] ui:[--malbec-badge-accent:#8a642f]",
         blue:
-          "ui:border-transparent ui:bg-[#dce6ec] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#2f628a] ui:[--malbec-badge-accent:#2f628a]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#dce6ec] ui:[--malbec-badge-fg:#2f628a] ui:[--malbec-badge-accent:#2f628a]",
         violet:
-          "ui:border-transparent ui:bg-[#e5dcec] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#352a60] ui:[--malbec-badge-accent:#352a60]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#e5dcec] ui:[--malbec-badge-fg:#352a60] ui:[--malbec-badge-accent:#352a60]",
         emerald:
-          "ui:border-transparent ui:bg-[#d0dfd0] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#2a602c] ui:[--malbec-badge-accent:#2a602c]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#d0dfd0] ui:[--malbec-badge-fg:#2a602c] ui:[--malbec-badge-accent:#2a602c]",
         sage:
-          "ui:border-transparent ui:bg-[#b4c5b5] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#025406] ui:[--malbec-badge-accent:#025406]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#b4c5b5] ui:[--malbec-badge-fg:#025406] ui:[--malbec-badge-accent:#025406]",
+        /** System grey pair (draft, none, inactive). Same values as `malbec-badge-neutral-*`. */
+        neutral:
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#e4e2df] ui:[--malbec-badge-fg:#6b6b7a] ui:[--malbec-badge-accent:#6b6b7a]",
         red:
-          "ui:border-transparent ui:bg-[#dfd0d0] ui:text-(--malbec-badge-fg) ui:[--malbec-badge-fg:#602a2a] ui:[--malbec-badge-accent:#602a2a]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#dfd0d0] ui:[--malbec-badge-fg:#602a2a] ui:[--malbec-badge-accent:#602a2a]",
+      },
+      size: {
+        md: "ui:px-2.5 ui:py-0.5 ui:text-xs ui:leading-5",
+        /** Dense tables and counters inside a row. */
+        xs: "ui:h-5 ui:px-1.5 ui:py-0 ui:text-[11px] ui:leading-4",
       },
     },
-    defaultVariants: { variant: "default" },
+    defaultVariants: { variant: "default", size: "md" },
   },
 );
 
@@ -86,3 +91,4 @@ export const badgeTextVariants = cva(
 export type BadgeVariant = NonNullable<
   VariantProps<typeof badgeVariants>["variant"]
 >;
+export type BadgeSize = NonNullable<VariantProps<typeof badgeVariants>["size"]>;

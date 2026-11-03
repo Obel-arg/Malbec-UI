@@ -2,7 +2,9 @@
 
 import * as React from "react";
 import { cn } from "../utils/cn";
-import { inputVariants } from "./input-variants";
+import { inputVariants, type InputVariant } from "./input-variants";
+
+export type { InputVariant };
 
 export type InputIconProps = React.ComponentPropsWithoutRef<"span"> & {
   side?: "start" | "end";
@@ -31,6 +33,8 @@ InputIcon.displayName = "Input.Icon";
 
 export type InputProps = React.ComponentPropsWithoutRef<"input"> & {
   children?: React.ReactNode;
+  /** `search` for searchbars, `bare` for inline editing without a box. */
+  variant?: InputVariant;
 };
 
 type InputComponent = React.ForwardRefExoticComponent<
@@ -40,7 +44,7 @@ type InputComponent = React.ForwardRefExoticComponent<
 };
 
 const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, type = "text", children, ...rest },
+  { className, type = "text", variant = "default", children, ...rest },
   ref,
 ) {
   const icons = React.Children.toArray(children).filter(
@@ -55,7 +59,8 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
         ref={ref}
         type={type}
         data-slot="input"
-        className={cn(inputVariants(), className)}
+        data-variant={variant}
+        className={cn(inputVariants({ variant }), className)}
         {...rest}
       />
     );
@@ -67,8 +72,9 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <label
       data-slot="input-wrapper"
+      data-variant={variant}
       className={cn(
-        inputVariants(),
+        inputVariants({ variant }),
         "ui:gap-2 ui:cursor-text",
         className,
       )}

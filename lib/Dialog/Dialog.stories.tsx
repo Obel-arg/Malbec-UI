@@ -174,3 +174,57 @@ const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
     },
   },
 };
+
+export const FloatingNoVeil: Story = {
+  name: "Size + no veil",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, Dialog } from "@obel-arg/malbec-ui";
+
+<Dialog>
+  <Dialog.Trigger asChild>
+    <Button variant="outline" tone="neutral">Editar show</Button>
+  </Dialog.Trigger>
+  <Dialog.Content size="md" overlay="none">
+    <Dialog.Header>
+      <Dialog.Title>Editar show</Dialog.Title>
+      <Dialog.Description>Los cambios se guardan al confirmar.</Dialog.Description>
+    </Dialog.Header>
+    <Dialog.Footer>
+      <Dialog.Close asChild>
+        <Button variant="outline" tone="neutral">Cancelar</Button>
+      </Dialog.Close>
+      <Button>Guardar</Button>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog>`,
+      },
+    },
+  },
+  render: () => (
+    <Dialog>
+      <Dialog.Trigger asChild>
+        <Button variant="outline" tone="neutral">
+          <Button.Text>Editar show</Button.Text>
+        </Button>
+      </Dialog.Trigger>
+      <Dialog.Content size="md" overlay="none">
+        <Dialog.Header>
+          <Dialog.Title>Editar show</Dialog.Title>
+          <Dialog.Description>Los cambios se guardan al confirmar.</Dialog.Description>
+        </Dialog.Header>
+        <Dialog.Footer>
+          <Dialog.Close asChild>
+            <Button variant="outline" tone="neutral">
+              <Button.Text>Cancelar</Button.Text>
+            </Button>
+          </Dialog.Close>
+          <Button>
+            <Button.Text>Guardar</Button.Text>
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Content>
+    </Dialog>
+  ),
+};

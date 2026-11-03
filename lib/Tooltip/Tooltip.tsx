@@ -3,7 +3,9 @@
 import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { cn } from "../utils/cn";
-import { tooltipContentVariants } from "./tooltip-variants";
+import { tooltipContentVariants, type TooltipVariant } from "./tooltip-variants";
+
+export type { TooltipVariant };
 
 const TooltipRoot = TooltipPrimitive.Root;
 
@@ -46,7 +48,10 @@ TooltipTrigger.displayName = "Tooltip.Trigger";
 
 export type TooltipContentProps = React.ComponentPropsWithoutRef<
   typeof TooltipPrimitive.Content
->;
+> & {
+  /** `dark` names the action of an icon-only control; `light` (default) explains a value. */
+  variant?: TooltipVariant;
+};
 
 const TooltipContent = React.forwardRef<
   React.ComponentRef<typeof TooltipPrimitive.Content>,
@@ -54,6 +59,7 @@ const TooltipContent = React.forwardRef<
 >(function TooltipContent(
   {
     className,
+    variant = "light",
     side = "top",
     sideOffset = 4,
     collisionPadding = 8,
@@ -66,10 +72,11 @@ const TooltipContent = React.forwardRef<
       <TooltipPrimitive.Content
         ref={ref}
         data-slot="tooltip-content"
+        data-variant={variant}
         side={side}
         sideOffset={sideOffset}
         collisionPadding={collisionPadding}
-        className={cn(tooltipContentVariants(), className)}
+        className={cn(tooltipContentVariants({ variant }), className)}
         {...rest}
       />
     </TooltipPrimitive.Portal>

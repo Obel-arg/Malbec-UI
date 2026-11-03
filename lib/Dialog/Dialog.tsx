@@ -18,6 +18,9 @@ import {
   dialogOverlayVariants,
   dialogTitleVariants,
 } from "./dialog-variants";
+import type { DialogSize, OverlayVeil } from "./dialog-variants";
+
+export type { DialogSize, OverlayVeil };
 
 export type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root>;
 
@@ -75,6 +78,10 @@ export interface DialogContentProps extends React.ComponentProps<
   typeof DialogPrimitive.Content
 > {
   showCloseButton?: boolean;
+  /** Width preset (`sm` 448 · `md` 560 · `lg` 640 · `xl` 880). Unset keeps the 425px default. */
+  size?: DialogSize;
+  /** `none` drops the veil behind the dialog and floats it on a two-layer shadow. */
+  overlay?: OverlayVeil;
   /** Merged after default overlay styles. */
   overlayClassName?: string;
   /** When true, default dialog padding and shape classes are omitted; use `className` for the full surface. */
@@ -91,6 +98,8 @@ const DialogContent = React.forwardRef<
     className,
     children,
     showCloseButton = false,
+    size,
+    overlay = "default",
     overlayClassName,
     unstyled,
     container,
@@ -100,11 +109,13 @@ const DialogContent = React.forwardRef<
 ) {
   return (
     <DialogPortal container={container}>
-      <DialogOverlay className={overlayClassName} />
+      <DialogOverlay className={cn(dialogOverlayVariants({ overlay }), overlayClassName)} />
       <DialogPrimitive.Content
         ref={ref}
         data-slot="dialog-content"
-        className={cn(!unstyled && dialogContentVariants(), className)}
+        data-size={size}
+        data-overlay={overlay}
+        className={cn(!unstyled && dialogContentVariants({ size, overlay }), className)}
         {...rest}
       >
         {children}

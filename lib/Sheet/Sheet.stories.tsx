@@ -106,3 +106,55 @@ export const EditProfile: Story = {
     },
   },
 };
+
+export const FloatingScrollBody: Story = {
+  name: "Size + no veil + scrolling body",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, Sheet } from "@obel-arg/malbec-ui";
+
+<Sheet>
+  <Sheet.Trigger asChild>
+    <Button variant="outline" tone="neutral">Ver gasto</Button>
+  </Sheet.Trigger>
+  <Sheet.Content size="md" overlay="none">
+    <Sheet.Header>
+      <Sheet.Title>Gasto #1042</Sheet.Title>
+    </Sheet.Header>
+    <Sheet.Body scroll>{/* long content */}</Sheet.Body>
+    <Sheet.Footer>
+      <Button>Aprobar</Button>
+    </Sheet.Footer>
+  </Sheet.Content>
+</Sheet>`,
+      },
+    },
+  },
+  render: () => (
+    <Sheet>
+      <Sheet.Trigger asChild>
+        <Button variant="outline" tone="neutral">
+          <Button.Text>Ver gasto</Button.Text>
+        </Button>
+      </Sheet.Trigger>
+      <Sheet.Content size="md" overlay="none">
+        <Sheet.Header>
+          <Sheet.Title>Gasto #1042</Sheet.Title>
+        </Sheet.Header>
+        <Sheet.Body scroll>
+          {Array.from({ length: 30 }, (_, i) => (
+            <p key={i} className="ui:text-sm ui:text-text-default">
+              Línea {i + 1} del detalle
+            </p>
+          ))}
+        </Sheet.Body>
+        <Sheet.Footer>
+          <Button>
+            <Button.Text>Aprobar</Button.Text>
+          </Button>
+        </Sheet.Footer>
+      </Sheet.Content>
+    </Sheet>
+  ),
+};

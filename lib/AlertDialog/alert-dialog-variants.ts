@@ -1,13 +1,10 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import { FLOATING_SURFACE_SHADOW, overlayVeilVariants } from "../Dialog/dialog-variants";
 
 /** Backdrop: dim + frosted glass over the page (not in the Figma card spec). */
 export const alertDialogOverlayVariants = cva(
-  [
-    "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
-    "ui:bg-background-200/60",
-    "ui:backdrop-blur-[3.5px]",
-    "ui:transition-opacity",
-  ],
+  ["ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)", "ui:transition-opacity"],
+  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "default" } },
 );
 
 /**
@@ -34,6 +31,7 @@ export const alertDialogContentVariants = cva(
         // Compact dialog: Figma / mobile — more rounded panel, full-width footer stack, primary on top
         sm: "ui:max-w-sm ui:gap-4 ui:rounded-xl ui:p-6",
       },
+      overlay: { default: "", none: FLOATING_SURFACE_SHADOW },
     },
     defaultVariants: {
       size: "default",

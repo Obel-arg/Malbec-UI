@@ -11,13 +11,29 @@ export const tooltipSurfaceMotionClasses = [
   "ui:data-[state=closed]:animate-[malbec-popover-out_var(--malbec-popover-exit-duration,120ms)_ease-in]",
 ] as const;
 
-export const tooltipContentVariants = cva([
-  "malbec-font-sans",
-  /** Above modal overlays (`Dialog` / `Sheet` use `z-50`). */
-  "ui:z-(--ui-z-floating) ui:w-auto ui:max-w-(--radix-tooltip-content-available-width)",
-  "ui:rounded-md ui:border ui:border-background-300 ui:bg-background-100",
-  "ui:px-3 ui:py-1.5 ui:text-base ui:leading-6 ui:text-text-default",
-  "ui:shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] ui:outline-none",
-  "ui:origin-(--radix-tooltip-content-transform-origin)",
-  ...tooltipSurfaceMotionClasses,
-]);
+export const tooltipContentVariants = cva(
+  [
+    "malbec-font-sans",
+    /** Above modal overlays (`Dialog` / `Sheet` use `z-50`). */
+    "ui:z-(--ui-z-floating) ui:w-auto ui:max-w-(--radix-tooltip-content-available-width)",
+    "ui:rounded-md ui:outline-none",
+    "ui:origin-(--radix-tooltip-content-transform-origin)",
+    ...tooltipSurfaceMotionClasses,
+  ],
+  {
+    variants: {
+      /**
+       * malbec-ux-ui has two tooltips: `light` explains a value (long text), `dark` ("la negra")
+       * names the action of an icon-only control.
+       */
+      variant: {
+        light:
+          "ui:border ui:border-background-300 ui:bg-background-100 ui:px-3 ui:py-1.5 ui:text-base ui:leading-6 ui:text-text-default ui:shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)]",
+        dark: "ui:border-0 ui:bg-malbec-ink ui:px-2.5 ui:py-1.5 ui:text-[13px] ui:font-medium ui:leading-4 ui:text-background-100 ui:shadow-[0_2px_8px_rgba(0,0,0,0.16)]",
+      },
+    },
+    defaultVariants: { variant: "light" },
+  },
+);
+
+export type TooltipVariant = "light" | "dark";

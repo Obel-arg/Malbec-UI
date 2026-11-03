@@ -9,13 +9,14 @@ import {
   badgeVariants,
 } from "./badge-variants";
 import type { VariantProps } from "class-variance-authority";
-import type { BadgeVariant } from "./badge-variants";
+import type { BadgeSize, BadgeVariant } from "./badge-variants";
 
-export type { BadgeVariant };
+export type { BadgeSize, BadgeVariant };
 
 export interface BadgeProps extends React.ComponentProps<"div"> {
   asChild?: boolean;
   variant?: BadgeVariant;
+  size?: BadgeSize;
 }
 
 type BadgeInternalContext = {
@@ -39,6 +40,7 @@ const BadgeRoot = React.forwardRef<HTMLDivElement, BadgeProps>(
     {
       className,
       variant = "default",
+      size = "md",
       asChild = false,
       children,
       ...rest
@@ -57,7 +59,8 @@ const BadgeRoot = React.forwardRef<HTMLDivElement, BadgeProps>(
           ref={ref}
           data-slot="badge"
           data-variant={variant}
-          className={cn(badgeVariants({ variant }), className)}
+          data-size={size}
+          className={cn(badgeVariants({ variant, size }), className)}
           {...rest}
         >
           {children}
