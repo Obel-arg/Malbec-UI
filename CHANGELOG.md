@@ -16,6 +16,23 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - Live: `modal-classes`, and the ink-at-55% veil in `globals.css:312`, which Isa confirmed against the spec.
 - Command: to dim the page behind it, pass `overlayClassName`.
 
+### Breaking: segmented tabs are 40 / 14
+- The track is 40px with a 6px radius. The trigger is 14px medium, `px-3 py-1.5`, with a 4px radius; the active tab is `background-100` on a `0 1px 3px rgba(0,0,0,.05)` shadow. Isa confirmed the spec over the 36/13 the apps were using.
+- Every tab variant now has a neutral focus ring (`background-300`). The brand-colour ring no longer stays lit on the tab you just clicked.
+- **What to delete:**
+  - Artist: `segmented-tabs-classes.ts` (36px / 13px).
+  - Publishing: `segmented-tabs.ts`, including the `!`.
+  - Live: `SEGMENTED_TABS_TRIGGER_CLASS` (`ui:text-sm ui:font-medium`).
+  - Records: its `text-xs` trigger.
+  - Everywhere: `focus-visible:ring-background-300!` overrides.
+
+### Breaking: chips are 8px and destructive is two-tone
+- Every **Badge** goes from a 4px to an 8px radius, the same as `Button` (spec rule 7).
+- `variant="destructive"` drops solid red with white text for the spec pair `#dfd0d0` / `#602a2a`, the same as `red`.
+- **What to delete:**
+  - Publishing: `badge-destructive.css`.
+  - Any `rounded-[8px]` you add to a `Badge`.
+
 ## v1.15.0 — 2026-11-02
 
 Opt-in variants for seven primitives. Nothing changes on screen until you use a new prop. Each one replaces a recipe the apps were maintaining by hand.
