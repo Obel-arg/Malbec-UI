@@ -34,6 +34,20 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - Publishing: `badge-destructive.css`.
   - Any `rounded-[8px]` you add to a `Badge`.
 
+### Breaking: brand colour only on the primary CTA
+- **Button:** `tone` now defaults to `"neutral"`.
+  - `outline`, `ghost` and `secondary` are grey: `text-default` text, a `background-300` border on outline, `background-200` hover and a `malbec-icon` focus ring.
+  - `tone="brand"` brings back the 1.x brand text and border.
+  - `primary` and `destructive` don't change.
+  - The component now starts at `md`, the declared default, instead of `lg`. The height is the same.
+- **Checkbox, Switch, RadioGroup, Steps:** checked and active states are solid `malbec-icon` (#3f3f46) instead of brand colour (spec rule 2). Unchecked controls have a `background-300` border, and the focus ring is `malbec-icon`.
+- **What to delete:**
+  - `tone="neutral"` everywhere.
+  - Artist and Publishing: `no-green-button-classes` and `NEUTRAL_CHECKBOX_CLASS`.
+  - Publishing: `button-outline.css` and `button-ghost.css`.
+  - Live: `malbecOutlineButtonClass`, `malbecGhostButtonClass` and the `ui:h-9 ui:px-4 ui:text-[12px]` repeated on buttons (that is the default `md`).
+- **Check:** any outline or ghost that should stay in brand colour now needs `tone="brand"`.
+
 ## v1.15.0 — 2026-11-02
 
 Opt-in variants for seven primitives. Nothing changes on screen until you use a new prop. Each one replaces a recipe the apps were maintaining by hand.
