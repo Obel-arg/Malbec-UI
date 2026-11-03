@@ -9,7 +9,7 @@ export const stepsSegmentVariants = cva(
   {
     variants: {
       state: {
-        active: "ui:bg-primary",
+        active: "ui:bg-malbec-icon",
         inactive: "ui:bg-background-300",
       },
     },
