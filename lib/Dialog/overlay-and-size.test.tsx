@@ -151,3 +151,43 @@ describe("AlertDialog", () => {
     expect(slot("alert-dialog-content")).toContain(VEILED_SHADOW);
   });
 });
+
+// Apps target a variant from CSS without depending on DOM order (Live, MLIVE-274).
+describe("the overlay carries data-overlay", () => {
+  const overlayOf = (name: string) =>
+    document.querySelector<HTMLElement>(`[data-slot="${name}"]`)?.dataset.overlay;
+
+  it("Dialog", () => {
+    render(
+      <Dialog open>
+        <Dialog.Content overlay="veil" aria-describedby={undefined}>
+          <Dialog.Title>Editar</Dialog.Title>
+        </Dialog.Content>
+      </Dialog>,
+    );
+    expect(overlayOf("dialog-overlay")).toBe("veil");
+  });
+
+  it("Sheet", () => {
+    render(
+      <Sheet open>
+        <Sheet.Content aria-describedby={undefined}>
+          <Sheet.Title>Detalle</Sheet.Title>
+        </Sheet.Content>
+      </Sheet>,
+    );
+    expect(overlayOf("sheet-overlay")).toBe("none");
+  });
+
+  it("AlertDialog", () => {
+    render(
+      <AlertDialog open>
+        <AlertDialog.Content>
+          <AlertDialog.Title>¿Borrar?</AlertDialog.Title>
+          <AlertDialog.Description>No se puede deshacer.</AlertDialog.Description>
+        </AlertDialog.Content>
+      </AlertDialog>,
+    );
+    expect(overlayOf("alert-dialog-overlay")).toBe("none");
+  });
+});

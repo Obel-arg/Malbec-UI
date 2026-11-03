@@ -15,6 +15,7 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - Publishing: `sheet-no-veil.css`.
   - Live: `modal-classes`, and the ink-at-55% veil in `globals.css:312`, which Isa confirmed against the spec.
 - Command: to dim the page behind it, pass `overlayClassName`.
+- The overlay element of Dialog, Sheet and AlertDialog now carries `data-overlay="none|veil"`, the same as the content, so CSS can target a variant without `:has()`.
 
 ### Breaking: segmented tabs are 40 / 14
 - The track is 40px with a 6px radius. The trigger is 14px medium, `px-3 py-1.5`, with a 4px radius; the active tab is `background-100` on a `0 1px 3px rgba(0,0,0,.05)` shadow. Isa confirmed the spec over the 36/13 the apps were using.
