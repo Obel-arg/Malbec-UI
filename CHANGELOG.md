@@ -2,6 +2,20 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v2.0.0 — unreleased
+
+The library's defaults now match the malbec-ux-ui spec approved by Isa. This release changes what you see without any code change on your side. Each section below says what changes on screen, and which overrides you can delete.
+
+### Breaking: modals float without a veil
+- **Dialog, Sheet, AlertDialog and Command** render without a veil by default. The overlay element stays, so clicking outside still closes the modal; it is just transparent. The surface lifts off the page on the two-layer shadow `0 24px 70px rgba(0,0,0,.22), 0 8px 20px rgba(0,0,0,.1)`. Side sheets cast that shadow away from their edge.
+- `overlay="default"` is now `overlay="veil"`, the 1.x frosted veil (`background-200` at 60% + 3.5px blur, short shadow). Use it only where the design asks for it.
+- **What to delete:**
+  - `overlay="none"` everywhere. It is the default now.
+  - Artist: `floating-dialog-classes`.
+  - Publishing: `sheet-no-veil.css`.
+  - Live: `modal-classes`, and the ink-at-55% veil in `globals.css:312`, which Isa confirmed against the spec.
+- Command: to dim the page behind it, pass `overlayClassName`.
+
 ## v1.15.0 — 2026-11-02
 
 Opt-in variants for seven primitives. Nothing changes on screen until you use a new prop. Each one replaces a recipe the apps were maintaining by hand.
