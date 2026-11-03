@@ -80,7 +80,7 @@ export interface DialogContentProps extends React.ComponentProps<
   showCloseButton?: boolean;
   /** Width preset (`sm` 448 · `md` 560 · `lg` 640 · `xl` 880). Unset keeps the 425px default. */
   size?: DialogSize;
-  /** `none` drops the veil behind the dialog and floats it on a two-layer shadow. */
+  /** No veil by default (malbec-ux-ui rule 15); `veil` dims the page behind the dialog. */
   overlay?: OverlayVeil;
   /** Merged after default overlay styles. */
   overlayClassName?: string;
@@ -99,7 +99,7 @@ const DialogContent = React.forwardRef<
     children,
     showCloseButton = false,
     size,
-    overlay = "default",
+    overlay = "none",
     overlayClassName,
     unstyled,
     container,

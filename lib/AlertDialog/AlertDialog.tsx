@@ -77,7 +77,7 @@ const AlertDialogOverlay = React.forwardRef<
 export interface AlertDialogContentProps
   extends React.ComponentProps<typeof AlertDialogPrimitive.Content> {
   size?: AlertDialogSize;
-  /** `none` drops the veil and floats the dialog on a two-layer shadow. */
+  /** No veil by default (malbec-ux-ui rule 15); `veil` dims the page behind the dialog. */
   overlay?: OverlayVeil;
   /** Merged after default overlay styles (the overlay is rendered inside Content). */
   overlayClassName?: string;
@@ -87,7 +87,7 @@ const AlertDialogContent = React.forwardRef<
   React.ComponentRef<typeof AlertDialogPrimitive.Content>,
   AlertDialogContentProps
 >(function AlertDialogContent(
-  { className, size = "default", overlay = "default", overlayClassName, children, ...rest },
+  { className, size = "default", overlay = "none", overlayClassName, children, ...rest },
   ref,
 ) {
   const ctx = React.useMemo(

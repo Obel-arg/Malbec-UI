@@ -175,8 +175,8 @@ const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
   },
 };
 
-export const FloatingNoVeil: Story = {
-  name: "Size + no veil",
+export const SizeWithVeil: Story = {
+  name: "Size + veil (opt-in)",
   parameters: {
     docs: {
       source: {
@@ -186,7 +186,7 @@ export const FloatingNoVeil: Story = {
   <Dialog.Trigger asChild>
     <Button variant="outline" tone="neutral">Editar show</Button>
   </Dialog.Trigger>
-  <Dialog.Content size="md" overlay="none">
+  <Dialog.Content size="md" overlay="veil">
     <Dialog.Header>
       <Dialog.Title>Editar show</Dialog.Title>
       <Dialog.Description>Los cambios se guardan al confirmar.</Dialog.Description>
@@ -209,7 +209,7 @@ export const FloatingNoVeil: Story = {
           <Button.Text>Editar show</Button.Text>
         </Button>
       </Dialog.Trigger>
-      <Dialog.Content size="md" overlay="none">
+      <Dialog.Content size="md" overlay="veil">
         <Dialog.Header>
           <Dialog.Title>Editar show</Dialog.Title>
           <Dialog.Description>Los cambios se guardan al confirmar.</Dialog.Description>

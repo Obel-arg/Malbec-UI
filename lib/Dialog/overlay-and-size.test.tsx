@@ -11,9 +11,10 @@ const slot = (name: string) => {
 };
 
 const FLOATING_SHADOW = "ui:shadow-[0_24px_70px_rgba(0,0,0,0.22),0_8px_20px_rgba(0,0,0,0.1)]";
+const VEILED_SHADOW = "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]";
 
 describe("Dialog", () => {
-  it("keeps the veil and the 425px width by default", () => {
+  it("has no veil by default and floats the surface on the two-layer shadow, 425px wide", () => {
     render(
       <Dialog open>
         <Dialog.Content aria-describedby={undefined}>
@@ -21,23 +22,29 @@ describe("Dialog", () => {
         </Dialog.Content>
       </Dialog>,
     );
-    expect(slot("dialog-overlay")).toContain("ui:bg-background-200/60");
-    expect(slot("dialog-content")).toContain("ui:max-w-[425px]");
+    const overlay = slot("dialog-overlay");
+    expect(overlay).toContain("ui:bg-transparent");
+    expect(overlay).not.toContain("ui:bg-background-200/60");
+    const content = slot("dialog-content");
+    expect(content).toContain(FLOATING_SHADOW);
+    expect(content).not.toContain(VEILED_SHADOW);
+    expect(content).toContain("ui:max-w-[425px]");
   });
 
-  it('overlay="none" drops the veil and floats the surface on the two-layer shadow', () => {
+  it('overlay="veil" brings back the frosted veil and the short shadow', () => {
     render(
       <Dialog open>
-        <Dialog.Content overlay="none" aria-describedby={undefined}>
+        <Dialog.Content overlay="veil" aria-describedby={undefined}>
           <Dialog.Title>Editar</Dialog.Title>
         </Dialog.Content>
       </Dialog>,
     );
-    const overlay = slot("dialog-overlay");
-    expect(overlay).toContain("ui:bg-transparent");
-    expect(overlay).toContain("ui:backdrop-blur-none");
-    expect(overlay).not.toContain("ui:bg-background-200/60");
-    expect(slot("dialog-content")).toContain(FLOATING_SHADOW);
+    expect(slot("dialog-overlay")).toEqual(
+      expect.arrayContaining(["ui:bg-background-200/60", "ui:backdrop-blur-[3.5px]"]),
+    );
+    const content = slot("dialog-content");
+    expect(content).toContain(VEILED_SHADOW);
+    expect(content).not.toContain(FLOATING_SHADOW);
   });
 
   it.each([
@@ -61,10 +68,10 @@ describe("Dialog", () => {
 });
 
 describe("Sheet", () => {
-  it('overlay="none" drops the veil and casts the shadow away from the edge', () => {
+  it("has no veil by default and casts the shadow away from the edge", () => {
     render(
       <Sheet open>
-        <Sheet.Content overlay="none" side="right" aria-describedby={undefined}>
+        <Sheet.Content side="right" aria-describedby={undefined}>
           <Sheet.Title>Detalle</Sheet.Title>
         </Sheet.Content>
       </Sheet>,
@@ -73,6 +80,20 @@ describe("Sheet", () => {
     expect(slot("sheet-content")).toContain(
       "ui:shadow-[-24px_0_70px_rgba(0,0,0,0.12),-8px_0_20px_rgba(0,0,0,0.06)]",
     );
+  });
+
+  it('overlay="veil" brings back the veil and the short shadow', () => {
+    render(
+      <Sheet open>
+        <Sheet.Content overlay="veil" aria-describedby={undefined}>
+          <Sheet.Title>Detalle</Sheet.Title>
+        </Sheet.Content>
+      </Sheet>,
+    );
+    expect(slot("sheet-overlay")).toContain("ui:bg-background-200/60");
+    const content = slot("sheet-content");
+    expect(content).toContain(VEILED_SHADOW);
+    expect(content.some((c) => c.includes("70px"))).toBe(false);
   });
 
   it("size sets the width of a side sheet", () => {
@@ -104,10 +125,10 @@ describe("Sheet", () => {
 });
 
 describe("AlertDialog", () => {
-  it('overlay="none" reaches the overlay that lives inside Content', () => {
+  it("has no veil by default", () => {
     render(
       <AlertDialog open>
-        <AlertDialog.Content overlay="none">
+        <AlertDialog.Content>
           <AlertDialog.Title>¿Borrar?</AlertDialog.Title>
           <AlertDialog.Description>No se puede deshacer.</AlertDialog.Description>
         </AlertDialog.Content>
@@ -115,5 +136,18 @@ describe("AlertDialog", () => {
     );
     expect(slot("alert-dialog-overlay")).toContain("ui:bg-transparent");
     expect(slot("alert-dialog-content")).toContain(FLOATING_SHADOW);
+  });
+
+  it('overlay="veil" reaches the overlay that lives inside Content', () => {
+    render(
+      <AlertDialog open>
+        <AlertDialog.Content overlay="veil">
+          <AlertDialog.Title>¿Borrar?</AlertDialog.Title>
+          <AlertDialog.Description>No se puede deshacer.</AlertDialog.Description>
+        </AlertDialog.Content>
+      </AlertDialog>,
+    );
+    expect(slot("alert-dialog-overlay")).toContain("ui:bg-background-200/60");
+    expect(slot("alert-dialog-content")).toContain(VEILED_SHADOW);
   });
 });
