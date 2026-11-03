@@ -33,6 +33,22 @@ describe("FloatingBar placement", () => {
   });
 });
 
+describe("FloatingBar.Trigger tone", () => {
+  it('tone="destructive" paints the action red and keeps the default neutral', () => {
+    render(
+      <FloatingBar>
+        <FloatingBar.Trigger>Editar</FloatingBar.Trigger>
+        <FloatingBar.Trigger tone="destructive">Borrar</FloatingBar.Trigger>
+      </FloatingBar>,
+    );
+    const borrar = screen.getByRole("button", { name: "Borrar" });
+    expect(borrar.className.split(/\s+/)).toContain("ui:text-destructive");
+    expect(borrar.className.split(/\s+/)).not.toContain("ui:text-text-default");
+    expect(borrar.dataset.tone).toBe("destructive");
+    expect(screen.getByRole("button", { name: "Editar" }).className).not.toContain("ui:text-destructive");
+  });
+});
+
 describe("Sidebar --sidebar-offset", () => {
   const offsetOf = (open: boolean) => {
     desktop();
