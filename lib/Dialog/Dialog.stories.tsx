@@ -184,7 +184,7 @@ export const SizeWithVeil: Story = {
 
 <Dialog>
   <Dialog.Trigger asChild>
-    <Button variant="outline" tone="neutral">Editar show</Button>
+    <Button variant="outline">Editar show</Button>
   </Dialog.Trigger>
   <Dialog.Content size="md" overlay="veil">
     <Dialog.Header>
@@ -193,7 +193,7 @@ export const SizeWithVeil: Story = {
     </Dialog.Header>
     <Dialog.Footer>
       <Dialog.Close asChild>
-        <Button variant="outline" tone="neutral">Cancelar</Button>
+        <Button variant="outline">Cancelar</Button>
       </Dialog.Close>
       <Button>Guardar</Button>
     </Dialog.Footer>
@@ -205,7 +205,7 @@ export const SizeWithVeil: Story = {
   render: () => (
     <Dialog>
       <Dialog.Trigger asChild>
-        <Button variant="outline" tone="neutral">
+        <Button variant="outline">
           <Button.Text>Editar show</Button.Text>
         </Button>
       </Dialog.Trigger>
@@ -216,7 +216,7 @@ export const SizeWithVeil: Story = {
         </Dialog.Header>
         <Dialog.Footer>
           <Dialog.Close asChild>
-            <Button variant="outline" tone="neutral">
+            <Button variant="outline">
               <Button.Text>Cancelar</Button.Text>
             </Button>
           </Dialog.Close>
