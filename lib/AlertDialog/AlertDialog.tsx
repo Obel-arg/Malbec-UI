@@ -99,6 +99,7 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogSizeContext.Provider value={ctx}>
       <AlertDialogPortal>
         <AlertDialogOverlay
+          data-overlay={overlay}
           className={cn(alertDialogOverlayVariants({ overlay }), overlayClassName)}
         />
         <AlertDialogPrimitive.Content

@@ -109,7 +109,10 @@ const SheetContent = React.forwardRef<
 ) {
   return (
     <SheetPortal container={container}>
-      <SheetOverlay className={cn(sheetOverlayVariants({ overlay }), overlayClassName)} />
+      <SheetOverlay
+        data-overlay={overlay}
+        className={cn(sheetOverlayVariants({ overlay }), overlayClassName)}
+      />
       <SheetPrimitive.Content
         ref={ref}
         data-slot="sheet-content"
