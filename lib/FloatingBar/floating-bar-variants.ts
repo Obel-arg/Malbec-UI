@@ -69,14 +69,21 @@ export const floatingBarTriggerVariants = cva(
           "ui:hover:opacity-90",
         ],
       },
+      /** `destructive` paints delete / remove actions red, and they stay red on hover. */
+      tone: {
+        default: "",
+        destructive: "ui:text-destructive",
+      },
     },
     defaultVariants: {
       emphasis: "default",
+      tone: "default",
     },
   },
 );
 
 export type FloatingBarTriggerEmphasis = "default" | "strong";
+export type FloatingBarTriggerTone = "default" | "destructive";
 
 export const floatingBarTriggerIconVariants = cva([
   "ui:inline-flex ui:shrink-0 ui:items-center ui:justify-center",
