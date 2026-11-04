@@ -116,7 +116,7 @@ export const SizeScrollBody: Story = {
 
 <Sheet>
   <Sheet.Trigger asChild>
-    <Button variant="outline" tone="neutral">Ver gasto</Button>
+    <Button variant="outline">Ver gasto</Button>
   </Sheet.Trigger>
   <Sheet.Content size="md">
     <Sheet.Header>
@@ -134,7 +134,7 @@ export const SizeScrollBody: Story = {
   render: () => (
     <Sheet>
       <Sheet.Trigger asChild>
-        <Button variant="outline" tone="neutral">
+        <Button variant="outline">
           <Button.Text>Ver gasto</Button.Text>
         </Button>
       </Sheet.Trigger>

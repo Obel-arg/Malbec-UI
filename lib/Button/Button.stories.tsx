@@ -315,17 +315,17 @@ export const AllSizes: Story = {
   ),
 };
 
-export const NeutralTone: Story = {
-  name: "Tone · Neutral (outline / ghost)",
+export const BrandTone: Story = {
+  name: "Tone · Brand (opt-in)",
   parameters: {
     docs: {
       source: {
         code: `import { Button } from "@obel-arg/malbec-ui";
 
-<Button variant="outline" tone="neutral">
-  <Button.Text>Cancelar</Button.Text>
+<Button variant="outline" tone="brand">
+  <Button.Text>Ver contrato</Button.Text>
 </Button>
-<Button variant="ghost" tone="neutral">
+<Button variant="ghost" tone="brand">
   <Button.Text>Ver detalle</Button.Text>
 </Button>`,
       },
@@ -333,14 +333,11 @@ export const NeutralTone: Story = {
   },
   render: () => (
     <div className="ui:flex ui:items-center ui:gap-3">
-      <Button variant="outline" tone="neutral">
-        <Button.Text>Cancelar</Button.Text>
+      <Button variant="outline" tone="brand">
+        <Button.Text>Ver contrato</Button.Text>
       </Button>
-      <Button variant="ghost" tone="neutral">
+      <Button variant="ghost" tone="brand">
         <Button.Text>Ver detalle</Button.Text>
-      </Button>
-      <Button variant="primary">
-        <Button.Text>Guardar</Button.Text>
       </Button>
     </div>
   ),
@@ -354,14 +351,14 @@ export const AsChildLink: Story = {
         code: `import Link from "next/link";
 import { Button } from "@obel-arg/malbec-ui";
 
-<Button asChild variant="outline" tone="neutral" size="md">
+<Button asChild variant="outline" size="md">
   <Link href="/gastos">Ver gastos</Link>
 </Button>`,
       },
     },
   },
   render: () => (
-    <Button asChild variant="outline" tone="neutral" size="md">
+    <Button asChild variant="outline" size="md">
       <a href="#gastos">Ver gastos</a>
     </Button>
   ),

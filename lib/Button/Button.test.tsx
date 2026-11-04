@@ -6,19 +6,33 @@ import { Button } from "./Button";
 const classesOf = (el: HTMLElement) => el.className.split(/\s+/);
 
 describe("Button", () => {
-  it("keeps the brand colour by default", () => {
-    render(<Button variant="outline">Exportar</Button>);
+  it('tone="brand" keeps the 1.x brand colour', () => {
+    render(
+      <Button variant="outline" tone="brand">
+        Exportar
+      </Button>,
+    );
     const classes = classesOf(screen.getByRole("button"));
     expect(classes).toContain("ui:border-primary");
     expect(classes).toContain("ui:text-primary");
   });
 
-  it.each(["outline", "ghost"] as const)("tone=neutral turns %s grey", (variant) => {
-    render(
-      <Button variant={variant} tone="neutral">
-        Cancelar
-      </Button>,
-    );
+  it("is md by default", () => {
+    render(<Button>Guardar</Button>);
+    const button = screen.getByRole("button");
+    expect(button.dataset.size).toBe("md");
+    expect(classesOf(button)).toContain("ui:py-[6px]");
+  });
+
+  it("secondary is grey by default", () => {
+    render(<Button variant="secondary">Duplicar</Button>);
+    const classes = classesOf(screen.getByRole("button"));
+    expect(classes).toContain("ui:text-text-default");
+    expect(classes).not.toContain("ui:text-primary");
+  });
+
+  it.each(["outline", "ghost"] as const)("%s is grey by default", (variant) => {
+    render(<Button variant={variant}>Cancelar</Button>);
     const button = screen.getByRole("button");
     const classes = classesOf(button);
     expect(classes).toContain("ui:text-text-default");
@@ -35,7 +49,7 @@ describe("Button", () => {
 
   it("asChild renders the child element with the button styles", () => {
     render(
-      <Button asChild variant="outline" tone="neutral">
+      <Button asChild variant="outline">
         <a href="/gastos">Ver gastos</a>
       </Button>,
     );
