@@ -2,7 +2,7 @@
 
 All notable changes to Malbec UI are documented here.
 
-## v2.0.0 — unreleased
+## v2.0.0 — 2026-11-04
 
 The library's defaults now match the malbec-ux-ui spec approved by Isa. This release changes what you see without any code change on your side. Each section below says what changes on screen, and which overrides you can delete.
 
