@@ -9,8 +9,8 @@ export const radioGroupRootVariants = cva([
 ]);
 
 /**
- * 16×16px circular control: background-100 fill (Figma surface), 1px primary
- * border. Checked: radial-gradient (5px radius = 10px dot, then background-100
+ * 16×16px circular control: background-100 fill (Figma surface), 1px background-300
+ * border, malbec-icon dot (malbec-ux-ui rule 2). Checked: radial-gradient (5px radius = 10px dot, then background-100
  * to the inner edge) so the disk is geometrically centered, not a nested span.
  */
 export const radioGroupItemVariants = cva([
@@ -26,17 +26,18 @@ export const radioGroupItemVariants = cva([
   "ui:rounded-full",
   "ui:border",
   "ui:border-solid",
-  "ui:border-primary",
+  "ui:border-background-300",
   "ui:bg-background-100",
   "ui:p-0",
   "ui:m-0",
   "ui:appearance-none",
-  "ui:text-primary",
+  "ui:text-malbec-icon",
   "ui:outline-none",
-  "ui:data-[state=checked]:bg-[radial-gradient(circle_at_center,var(--color-primary)_0,var(--color-primary)_5px,var(--color-background-100)_5px)]",
+  "ui:data-[state=checked]:border-malbec-icon",
+  "ui:data-[state=checked]:bg-[radial-gradient(circle_at_center,var(--color-malbec-icon)_0,var(--color-malbec-icon)_5px,var(--color-background-100)_5px)]",
   "ui:transition-[color,background-color,border-color,opacity,box-shadow]",
   "ui:focus-visible:ring-2",
-  "ui:focus-visible:ring-primary",
+  "ui:focus-visible:ring-malbec-icon",
   "ui:focus-visible:ring-offset-2",
   "ui:focus-visible:ring-offset-background-100",
   "ui:disabled:cursor-not-allowed",
@@ -79,13 +80,13 @@ export const radioGroupCardVariants = cva(
     "ui:outline-none",
     "ui:transition-[border-color,opacity,box-shadow]",
     "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
+    "ui:focus-visible:ring-malbec-icon",
     "ui:focus-visible:ring-offset-2",
     "ui:focus-visible:ring-offset-background-100",
     "ui:disabled:cursor-not-allowed",
     "ui:disabled:pointer-events-none",
     "ui:disabled:opacity-50",
-    "ui:data-[state=checked]:border-primary",
+    "ui:data-[state=checked]:border-malbec-icon",
     "ui:aria-invalid:outline-2",
     "ui:aria-invalid:outline-solid",
     "ui:aria-invalid:outline-destructive",

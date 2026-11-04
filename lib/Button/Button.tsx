@@ -54,8 +54,8 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function ButtonRoot(
     {
       variant = "primary",
-      size = "lg",
-      tone = "brand",
+      size = "md",
+      tone = "neutral",
       asChild = false,
       loading = false,
       htmlType = "button",

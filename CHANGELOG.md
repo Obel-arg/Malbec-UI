@@ -2,6 +2,52 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v2.0.0 — unreleased
+
+The library's defaults now match the malbec-ux-ui spec approved by Isa. This release changes what you see without any code change on your side. Each section below says what changes on screen, and which overrides you can delete.
+
+### Breaking: modals float without a veil
+- **Dialog, Sheet, AlertDialog and Command** render without a veil by default. The overlay element stays, so clicking outside still closes the modal; it is just transparent. The surface lifts off the page on the two-layer shadow `0 24px 70px rgba(0,0,0,.22), 0 8px 20px rgba(0,0,0,.1)`. Side sheets cast that shadow away from their edge.
+- `overlay="default"` is now `overlay="veil"`, the 1.x frosted veil (`background-200` at 60% + 3.5px blur, short shadow). Use it only where the design asks for it.
+- **What to delete:**
+  - `overlay="none"` everywhere. It is the default now.
+  - Artist: `floating-dialog-classes`.
+  - Publishing: `sheet-no-veil.css`.
+  - Live: `modal-classes`, and the ink-at-55% veil in `globals.css:312`, which Isa confirmed against the spec.
+- Command: to dim the page behind it, pass `overlayClassName`.
+- The overlay element of Dialog, Sheet and AlertDialog now carries `data-overlay="none|veil"`, the same as the content, so CSS can target a variant without `:has()`.
+
+### Breaking: segmented tabs are 40 / 14
+- The track is 40px with a 6px radius. The trigger is 14px medium, `px-3 py-1.5`, with a 4px radius; the active tab is `background-100` on a `0 1px 3px rgba(0,0,0,.05)` shadow. Isa confirmed the spec over the 36/13 the apps were using.
+- Every tab variant now has a neutral focus ring (`background-300`). The brand-colour ring no longer stays lit on the tab you just clicked.
+- **What to delete:**
+  - Artist: `segmented-tabs-classes.ts` (36px / 13px).
+  - Publishing: `segmented-tabs.ts`, including the `!`.
+  - Live: `SEGMENTED_TABS_TRIGGER_CLASS` (`ui:text-sm ui:font-medium`).
+  - Records: its `text-xs` trigger.
+  - Everywhere: `focus-visible:ring-background-300!` overrides.
+
+### Breaking: chips are 8px and destructive is two-tone
+- Every **Badge** goes from a 4px to an 8px radius, the same as `Button` (spec rule 7).
+- `variant="destructive"` drops solid red with white text for the spec pair `#dfd0d0` / `#602a2a`, the same as `red`.
+- **What to delete:**
+  - Publishing: `badge-destructive.css`.
+  - Any `rounded-[8px]` you add to a `Badge`.
+
+### Breaking: brand colour only on the primary CTA
+- **Button:** `tone` now defaults to `"neutral"`.
+  - `outline`, `ghost` and `secondary` are grey: `text-default` text, a `background-300` border on outline, `background-200` hover and a `malbec-icon` focus ring.
+  - `tone="brand"` brings back the 1.x brand text and border.
+  - `primary` and `destructive` don't change.
+  - The component now starts at `md`, the declared default, instead of `lg`. The height is the same.
+- **Checkbox, Switch, RadioGroup, Steps:** checked and active states are solid `malbec-icon` (#3f3f46) instead of brand colour (spec rule 2). Unchecked controls have a `background-300` border, and the focus ring is `malbec-icon`.
+- **What to delete:**
+  - `tone="neutral"` everywhere.
+  - Artist and Publishing: `no-green-button-classes` and `NEUTRAL_CHECKBOX_CLASS`.
+  - Publishing: `button-outline.css` and `button-ghost.css`.
+  - Live: `malbecOutlineButtonClass`, `malbecGhostButtonClass` and the `ui:h-9 ui:px-4 ui:text-[12px]` repeated on buttons (that is the default `md`).
+- **Check:** any outline or ghost that should stay in brand colour now needs `tone="brand"`.
+
 ## v1.15.0 — 2026-11-02
 
 Opt-in variants for seven primitives. Nothing changes on screen until you use a new prop. Each one replaces a recipe the apps were maintaining by hand.

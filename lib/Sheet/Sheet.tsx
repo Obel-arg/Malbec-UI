@@ -79,7 +79,7 @@ export interface SheetContentProps
   showCloseButton?: boolean;
   /** Width of a left/right sheet (`sm` 448 · `md` 576 · `lg` 672 · `xl` 768). Unset keeps 384px. */
   size?: SheetSize;
-  /** `none` drops the veil and casts a soft shadow away from the sheet's edge. */
+  /** No veil by default (malbec-ux-ui rule 15); `veil` dims the page behind the sheet. */
   overlay?: OverlayVeil;
   /** Merged after default overlay styles. */
   overlayClassName?: string;
@@ -99,7 +99,7 @@ const SheetContent = React.forwardRef<
     side = "right",
     showCloseButton = true,
     size,
-    overlay = "default",
+    overlay = "none",
     overlayClassName,
     unstyled,
     container,
@@ -109,7 +109,10 @@ const SheetContent = React.forwardRef<
 ) {
   return (
     <SheetPortal container={container}>
-      <SheetOverlay className={cn(sheetOverlayVariants({ overlay }), overlayClassName)} />
+      <SheetOverlay
+        data-overlay={overlay}
+        className={cn(sheetOverlayVariants({ overlay }), overlayClassName)}
+      />
       <SheetPrimitive.Content
         ref={ref}
         data-slot="sheet-content"

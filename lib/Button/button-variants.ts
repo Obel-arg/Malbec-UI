@@ -38,8 +38,9 @@ export const buttonVariants = cva(
         row: "ui:w-full ui:justify-start ui:bg-transparent ui:font-normal ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
       },
       /**
-       * `neutral` greys out the chrome of `outline` / `ghost` (malbec-ux-ui: brand colour is only
-       * for CTAs and state). Same recipe the apps used to apply by hand (`no-green-button-classes`).
+       * `neutral` (the default) keeps `outline`, `ghost` and `secondary` grey: malbec-ux-ui keeps
+       * brand colour for the primary CTA and for state. `brand` paints their text and border in
+       * the brand colour, as in 1.x.
        */
       tone: {
         brand: "",
@@ -64,13 +65,14 @@ export const buttonVariants = cva(
         tone: "neutral",
         class: "ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
       },
+      { variant: "secondary", tone: "neutral", class: "ui:text-text-default" },
       // Rows size to their content; this goes last so it beats the size geometry.
       { variant: "row", class: "ui:h-auto ui:px-2 ui:py-1.5" },
     ],
     defaultVariants: {
       variant: "primary",
       size: "md",
-      tone: "brand",
+      tone: "neutral",
     },
   },
 );
