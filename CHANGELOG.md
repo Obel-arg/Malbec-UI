@@ -48,6 +48,13 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - Live: `malbecOutlineButtonClass`, `malbecGhostButtonClass` and the `ui:h-9 ui:px-4 ui:text-[12px]` repeated on buttons (that is the default `md`).
 - **Check:** any outline or ghost that should stay in brand colour now needs `tone="brand"`.
 
+### Breaking: no pure white, no card shadow
+- **Popover:** content sits on `background-100` instead of pure white (spec rule 5). Dark mode doesn't change.
+- **Card:** no shadow by default; the `background-300` border draws the edge. To bring a shadow back on one card, pass it in `className`.
+- **What to delete:**
+  - Popover: `bg-background-100` (with or without `!`) on `Popover.Content`. Live has it ~41 times and Artist 9.
+  - Card: `shadow-none` (with or without `!`). Publishing has it 13 times and Artist 8.
+
 ## v1.16.0 — 2026-11-03
 
 ### Added
