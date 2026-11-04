@@ -49,13 +49,13 @@ interface DataTableBaseProps<TData, TValue> {
     | ReactNode
     | ((ctx: DataTableRenderFooterContext<TData>) => ReactNode);
   /**
-   * Table shell look. The default is `dataGrid` (Malbec data-table spec: 6px corner,
-   * 48px header, 16px body padding). Use `default` for the “Events”-style 10px shell.
+   * Table shell look. The default is `default` (10px shell, `background-200` header,
+   * 58px rows). `dataGrid` is the denser 6px grid with a 48px header.
    */
   tableAppearance?: TableAppearance;
   /**
    * When true, prepends a selection column with checkboxes (header: select all,
-   * rows: per-row). Defaults to `true`.
+   * rows: per-row). Defaults to `false`.
    */
   rowSelection?: boolean;
   /**
@@ -82,7 +82,7 @@ type DataTableWithRowSelectionProps<TData, TValue> = DataTableBaseProps<
   TData,
   TValue
 > & {
-  rowSelection?: true;
+  rowSelection: true;
   onRowSelectionChange?: DataTableOnRowSelectionChange<TData>;
 };
 
@@ -90,7 +90,7 @@ type DataTableWithoutRowSelectionProps<TData, TValue> = DataTableBaseProps<
   TData,
   TValue
 > & {
-  rowSelection: false;
+  rowSelection?: false;
   onRowSelectionChange?: () => void;
 };
 
@@ -142,8 +142,8 @@ export function DataTable<TData, TValue>({
   tableChildrenStart,
   toolbar,
   footer,
-  tableAppearance = "dataGrid",
-  rowSelection: rowSelectionEnabled = true,
+  tableAppearance = "default",
+  rowSelection: rowSelectionEnabled = false,
   getRowId,
   enableSorting = true,
   onRowSelectionChange,
@@ -246,7 +246,7 @@ export function DataTable<TData, TValue>({
             </Table.Row>
           ))}
         </Table.Header>
-        <Table.Body className="ui:[&>tr]:bg-white ui:[&>tr:hover]:bg-background-100/50">
+        <Table.Body className="ui:[&>tr:hover]:bg-background-200/50">
           {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <Table.Row
@@ -274,11 +274,7 @@ export function DataTable<TData, TValue>({
                 {row.getVisibleCells().map((cell) => (
                   <Table.Cell
                     key={cell.id}
-                    className={dataCellClassName(
-                      cell.column.id,
-                      rowSelectionEnabled,
-                      tableAppearance,
-                    )}
+                    className={dataCellClassName(cell.column.id, tableAppearance)}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Table.Cell>
@@ -340,16 +336,12 @@ function headerThClassName(
 
 function dataCellClassName(
   columnId: string,
-  hasRowSelect: boolean,
   appearance: TableAppearance,
 ): string | undefined {
   if (columnId === "select") {
     return appearance === "dataGrid"
       ? "ui:w-8 ui:min-w-8 ui:px-2 ui:py-0 ui:text-center"
       : "ui:w-11 ui:min-w-[44px] ui:px-2 ui:text-center";
-  }
-  if (hasRowSelect && columnId === "artist" && appearance === "default") {
-    return "ui:!pl-[13px] ui:pr-4";
   }
   return undefined;
 }
