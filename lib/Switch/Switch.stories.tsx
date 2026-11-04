@@ -49,57 +49,39 @@ export const Playground: Story = {
   },
 };
 
-export const Off: Story = {
-  render: () => <Switch defaultChecked={false} />,
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_auto] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+export const States: Story = {
   parameters: {
+    controls: { hideNoControlsWarning: true },
     docs: {
       source: {
         code: `import { Switch } from "@obel-arg/malbec-ui";
 
-<Switch defaultChecked={false} />`,
-      },
-    },
-  },
-};
-
-export const On: Story = {
-  render: () => <Switch defaultChecked />,
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Switch } from "@obel-arg/malbec-ui";
-
-<Switch defaultChecked />`,
-      },
-    },
-  },
-};
-
-export const Disabled: Story = {
-  render: () => <Switch disabled />,
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Switch } from "@obel-arg/malbec-ui";
-
-<Switch disabled />`,
-      },
-    },
-  },
-};
-
-export const Invalid: Story = {
-  name: "State · invalid",
-  render: () => <Switch aria-invalid />,
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Switch } from "@obel-arg/malbec-ui";
-
+<Switch defaultChecked={false} />
+<Switch defaultChecked />
+<Switch disabled />
+<Switch disabled defaultChecked />
 <Switch aria-invalid />`,
       },
     },
   },
+  render: () => (
+    <div className={statesGrid}>
+      <span className={stateCaption}>Off</span>
+      <Switch aria-label="Off" defaultChecked={false} />
+      <span className={stateCaption}>On</span>
+      <Switch aria-label="On" defaultChecked />
+      <span className={stateCaption}>Disabled</span>
+      <Switch aria-label="Disabled" disabled />
+      <span className={stateCaption}>Disabled · on</span>
+      <Switch aria-label="Disabled on" disabled defaultChecked />
+      <span className={stateCaption}>Invalid</span>
+      <Switch aria-label="Invalid" aria-invalid />
+    </div>
+  ),
 };
 
 export const WithLabel: Story = {

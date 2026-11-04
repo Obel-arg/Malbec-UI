@@ -157,30 +157,62 @@ export const IconOnly: Story = {
   ),
 };
 
-export const Loading: Story = {
-  name: "State · Loading",
-  args: { loading: true },
-  render: (args) => (
-    <Button {...args}>
-      <Button.Spinner />
-      <Button.Icon>
-        <MailIcon />
-      </Button.Icon>
-      <Button.Text>Please wait</Button.Text>
-    </Button>
-  ),
-};
+export const States: Story = {
+  parameters: {
+    controls: { hideNoControlsWarning: true },
+    docs: {
+      source: {
+        code: `import { Button } from "@obel-arg/malbec-ui";
 
-export const Disabled: Story = {
-  name: "State · Disabled",
-  args: { disabled: true },
-  render: (args) => (
-    <Button {...args}>
-      <Button.Icon>
-        <MailIcon />
-      </Button.Icon>
-      <Button.Text>Disabled</Button.Text>
-    </Button>
+<Button>
+  <Button.Icon><MailIcon /></Button.Icon>
+  <Button.Text>Login with Email</Button.Text>
+</Button>
+
+<Button loading>
+  <Button.Spinner />
+  <Button.Icon><MailIcon /></Button.Icon>
+  <Button.Text>Please wait</Button.Text>
+</Button>
+
+<Button disabled>
+  <Button.Icon><MailIcon /></Button.Icon>
+  <Button.Text>Disabled</Button.Text>
+</Button>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="malbec-font-sans ui:grid ui:grid-cols-[auto_auto] ui:items-center ui:gap-x-6 ui:gap-y-4">
+      <span className="ui:text-muted-medium ui:text-text-default-muted">
+        Default
+      </span>
+      <Button>
+        <Button.Icon>
+          <MailIcon />
+        </Button.Icon>
+        <Button.Text>Login with Email</Button.Text>
+      </Button>
+      <span className="ui:text-muted-medium ui:text-text-default-muted">
+        Loading
+      </span>
+      <Button loading>
+        <Button.Spinner />
+        <Button.Icon>
+          <MailIcon />
+        </Button.Icon>
+        <Button.Text>Please wait</Button.Text>
+      </Button>
+      <span className="ui:text-muted-medium ui:text-text-default-muted">
+        Disabled
+      </span>
+      <Button disabled>
+        <Button.Icon>
+          <MailIcon />
+        </Button.Icon>
+        <Button.Text>Disabled</Button.Text>
+      </Button>
+    </div>
   ),
 };
 
