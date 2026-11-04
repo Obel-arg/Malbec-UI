@@ -66,6 +66,13 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - Artist: `[&_tbody_tr]:bg-white` (×7).
 - **Check:** tables that use selection now need `rowSelection`. TypeScript flags every `onRowSelectionChange` without it, but a table that selects rows without that callback has to be found by hand.
 
+### Breaking: light first, no black
+- **MalbecThemeProvider:** `defaultMode` is now `"light"` instead of `"system"`. A dark OS no longer turns the app dark on first load. Pass `defaultMode="system"` to follow the OS. A mode the user already saved still wins.
+- **Foreground:** the light `--color-foreground` is ink `#1a1a1f` instead of `#09090b`, in `styles.css` and in the five presets (spec rule: no black). Dark mode doesn't change.
+- **What to delete:**
+  - `defaultMode="light"` on the provider.
+  - Any override that sets `--color-foreground` to ink, and `text-malbec-ink` used only to avoid `text-foreground`.
+
 ## v1.16.0 — 2026-11-03
 
 ### Added
