@@ -73,6 +73,10 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - `defaultMode="light"` on the provider.
   - Any override that sets `--color-foreground` to ink, and `text-malbec-ink` used only to avoid `text-foreground`.
 
+### Breaking: unused exports removed
+- `statusTone`, `statusVariant`, `priorityVariant`, `STATUS_TONES`, `TONE_VARIANT` and `formatGmtOffsetLabel` are no longer exported. None of the four apps imported them.
+- Use `<StatusBadge status="…" />` or `<StatusBadge tone={…} />` for status colours. `PRIORITY_TONE` stays: `<StatusBadge tone={PRIORITY_TONE.Alta} status="Alta" />`.
+
 ## v1.16.0 — 2026-11-03
 
 ### Added

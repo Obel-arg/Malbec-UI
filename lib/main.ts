@@ -13,14 +13,7 @@ export { AlertDialog } from "./AlertDialog/AlertDialog";
 export { Avatar, AvatarGroup, AvatarGroupCount } from "./Avatar/Avatar";
 export { Badge } from "./Badge/Badge";
 export { StatusBadge } from "./Badge/StatusBadge";
-export {
-  statusTone,
-  statusVariant,
-  priorityVariant,
-  STATUS_TONES,
-  TONE_VARIANT,
-  PRIORITY_TONE,
-} from "./Badge/status-tone";
+export { PRIORITY_TONE } from "./Badge/status-tone";
 export { Breadcrumb } from "./Breadcrumb/Breadcrumb";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { Combobox } from "./Combobox/Combobox";
@@ -32,7 +25,6 @@ export { CalendarDay } from "./CalendarTimeGrid/CalendarDay";
 export type { CalendarTimeGridEvent } from "./CalendarTimeGrid/calendar-timegrid-types";
 export type { CalendarWeekProps } from "./CalendarTimeGrid/CalendarWeek";
 export type { CalendarDayProps } from "./CalendarTimeGrid/CalendarDay";
-export { formatGmtOffsetLabel } from "./CalendarTimeGrid/calendar-timegrid-utils";
 export { DatePicker } from "./DatePicker/DatePicker";
 export { Inbox } from "./Inbox/Inbox";
 export { Input } from "./Input/Input";
