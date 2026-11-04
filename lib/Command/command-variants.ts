@@ -1,3 +1,4 @@
+import { FLOATING_SURFACE_SHADOW } from "../Dialog/dialog-variants";
 import { cva } from "class-variance-authority";
 
 /** Product UI Command surface — Figma node 741:5122. */
@@ -63,8 +64,7 @@ export const commandShortcutVariants = cva([
 
 export const commandDialogOverlayVariants = cva([
   "ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)",
-  "ui:bg-background-200/60",
-  "ui:backdrop-blur-[3.5px]",
+  // No veil (malbec-ux-ui rule 15); pass overlayClassName to dim the page.
   "ui:data-[state=open]:animate-malbec-overlay-in",
   "ui:data-[state=closed]:animate-malbec-overlay-out",
   "ui:motion-reduce:animate-none",
@@ -74,7 +74,7 @@ export const commandDialogContentVariants = cva([
   "ui:fixed ui:top-[50%] ui:left-[50%] ui:z-(--ui-z-overlay) ui:w-full ui:max-w-[450px]",
   "ui:translate-x-[-50%] ui:translate-y-[-50%]",
   "ui:overflow-hidden ui:rounded-[10px] ui:border-0 ui:bg-transparent ui:p-0",
-  "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
+  FLOATING_SURFACE_SHADOW,
   "ui:data-[state=open]:animate-malbec-dialog-in",
   "ui:data-[state=closed]:animate-malbec-dialog-out",
   "ui:motion-reduce:animate-none",

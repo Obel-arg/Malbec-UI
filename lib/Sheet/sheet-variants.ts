@@ -1,5 +1,5 @@
 import { cva } from "class-variance-authority";
-import { overlayVeilVariants } from "../Dialog/dialog-variants";
+import { overlayVeilVariants, VEILED_SURFACE_SHADOW } from "../Dialog/dialog-variants";
 
 export const sheetOverlayVariants = cva(
   [
@@ -8,7 +8,7 @@ export const sheetOverlayVariants = cva(
     "ui:data-[state=closed]:animate-malbec-overlay-out",
     "ui:motion-reduce:animate-none",
   ],
-  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "default" } },
+  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "none" } },
 );
 
 export const sheetContentVariants = cva(
@@ -19,7 +19,6 @@ export const sheetContentVariants = cva(
     "ui:rounded-none",
     "ui:bg-background-100",
     "ui:p-6",
-    "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
     "ui:outline-none",
     "ui:motion-reduce:animate-none",
   ],
@@ -54,7 +53,7 @@ export const sheetContentVariants = cva(
         lg: "",
         xl: "",
       },
-      overlay: { default: "", none: "" },
+      overlay: { none: "", veil: VEILED_SURFACE_SHADOW },
     },
     compoundVariants: [
       ...(["left", "right"] as const).flatMap((side) => [
@@ -71,6 +70,7 @@ export const sheetContentVariants = cva(
     ],
     defaultVariants: {
       side: "right",
+      overlay: "none",
     },
   },
 );

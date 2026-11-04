@@ -86,41 +86,63 @@ function Example() {
   ),
 };
 
-export const Disabled: Story = {
-  name: "State · Disabled trigger",
+export const States: Story = {
   parameters: {
     docs: {
       source: {
         code: `import { Tabs } from "@obel-arg/malbec-ui";
 
-function Example() {
-  return (
-    <Tabs defaultValue="account">
-      <Tabs.List>
-        <Tabs.Trigger value="account">Account</Tabs.Trigger>
-        <Tabs.Trigger value="password" disabled>
-          Password
-        </Tabs.Trigger>
-      </Tabs.List>
-      <Tabs.Content value="account">Account panel.</Tabs.Content>
-      <Tabs.Content value="password">Password panel.</Tabs.Content>
-    </Tabs>
-  );
-}`,
+<Tabs defaultValue="account">
+  <Tabs.List>
+    <Tabs.Trigger value="account">Account</Tabs.Trigger>
+    <Tabs.Trigger value="password" disabled>
+      Password
+    </Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="account">Account panel.</Tabs.Content>
+  <Tabs.Content value="password">Password panel.</Tabs.Content>
+</Tabs>
+
+<Tabs defaultValue="projects" variant="underline" className="w-[520px]">
+  <Tabs.List>
+    <Tabs.Trigger value="projects">Projects</Tabs.Trigger>
+    <Tabs.Trigger value="members" disabled>
+      Members
+    </Tabs.Trigger>
+    <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="projects">Projects content.</Tabs.Content>
+  <Tabs.Content value="members">Members content.</Tabs.Content>
+  <Tabs.Content value="settings">Settings content.</Tabs.Content>
+</Tabs>`,
       },
     },
   },
   render: () => (
-    <Tabs defaultValue="account">
-      <Tabs.List>
-        <Tabs.Trigger value="account">Account</Tabs.Trigger>
-        <Tabs.Trigger value="password" disabled>
-          Password
-        </Tabs.Trigger>
-      </Tabs.List>
-      <Tabs.Content value="account">Account panel.</Tabs.Content>
-      <Tabs.Content value="password">Password panel.</Tabs.Content>
-    </Tabs>
+    <div className="ui:flex ui:flex-col ui:gap-8">
+      <Tabs defaultValue="account">
+        <Tabs.List>
+          <Tabs.Trigger value="account">Account</Tabs.Trigger>
+          <Tabs.Trigger value="password" disabled>
+            Password
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="account">Account panel.</Tabs.Content>
+        <Tabs.Content value="password">Password panel.</Tabs.Content>
+      </Tabs>
+      <Tabs defaultValue="projects" variant="underline" className="ui:w-[520px]">
+        <Tabs.List>
+          <Tabs.Trigger value="projects">Projects</Tabs.Trigger>
+          <Tabs.Trigger value="members" disabled>
+            Members
+          </Tabs.Trigger>
+          <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="projects">Projects content.</Tabs.Content>
+        <Tabs.Content value="members">Members content.</Tabs.Content>
+        <Tabs.Content value="settings">Settings content.</Tabs.Content>
+      </Tabs>
+    </div>
   ),
 };
 
@@ -158,48 +180,6 @@ function Example() {
       <Tabs.Content value="overview">Overview content.</Tabs.Content>
       <Tabs.Content value="activity">Activity content.</Tabs.Content>
       <Tabs.Content value="integrations">Integrations content.</Tabs.Content>
-    </Tabs>
-  ),
-};
-
-export const UnderlineDisabled: Story = {
-  name: "Variant · Underline disabled",
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Tabs } from "@obel-arg/malbec-ui";
-
-function Example() {
-  return (
-    <Tabs defaultValue="projects" variant="underline" className="w-[520px]">
-      <Tabs.List>
-        <Tabs.Trigger value="projects">Projects</Tabs.Trigger>
-        <Tabs.Trigger value="members" disabled>
-          Members
-        </Tabs.Trigger>
-        <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
-      </Tabs.List>
-      <Tabs.Content value="projects">Projects content.</Tabs.Content>
-      <Tabs.Content value="members">Members content.</Tabs.Content>
-      <Tabs.Content value="settings">Settings content.</Tabs.Content>
-    </Tabs>
-  );
-}`,
-      },
-    },
-  },
-  render: () => (
-    <Tabs defaultValue="projects" variant="underline" className="ui:w-[520px]">
-      <Tabs.List>
-        <Tabs.Trigger value="projects">Projects</Tabs.Trigger>
-        <Tabs.Trigger value="members" disabled>
-          Members
-        </Tabs.Trigger>
-        <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
-      </Tabs.List>
-      <Tabs.Content value="projects">Projects content.</Tabs.Content>
-      <Tabs.Content value="members">Members content.</Tabs.Content>
-      <Tabs.Content value="settings">Settings content.</Tabs.Content>
     </Tabs>
   ),
 };

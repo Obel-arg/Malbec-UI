@@ -29,7 +29,6 @@ import { SortableColumnHeader } from "./sortable-column-header";
  *
  * ```tsx
  * <DataTable
- *   tableAppearance="default"
  *   getRowId={(r) => r.id}
  *   columns={columns}
  *   data={rows}
@@ -166,17 +165,16 @@ function useEventColumns() {
 function DataTableWithColumns(
   props: Pick<
     DataTableProps<EventRow, unknown>,
-    "data" | "emptyLabel" | "rowSelection" | "tableChildrenStart"
-  >,
+    "data" | "emptyLabel" | "tableChildrenStart"
+  > & { rowSelection?: boolean },
 ) {
   const columns = useEventColumns();
   return (
     <div className="ui:mx-auto ui:max-w-[1085px]">
       <DataTable
         tableChildrenStart={props.tableChildrenStart}
-        tableAppearance="default"
         getRowId={(r) => r.id}
-        rowSelection={props.rowSelection}
+        {...(props.rowSelection ? { rowSelection: true as const } : {})}
         columns={columns}
         data={props.data}
         emptyLabel={props.emptyLabel}
@@ -220,7 +218,7 @@ export const Events: Story = {
   render: () => (
     <DataTableWithColumns
       data={eventRowsSample}
-      tableChildrenStart={colgroup}
+      tableChildrenStart={colgroupNoSelect}
     />
   ),
   parameters: {
@@ -231,7 +229,6 @@ export const Events: Story = {
 function EventsTable({ data }: { data: EventRow[] }) {
   return (
     <DataTable
-      tableAppearance="default"
       getRowId={(r) => r.id}
       columns={columns}
       data={data}
@@ -321,10 +318,10 @@ function MultiSelectWithFloatingBar() {
       <DataTable
         key={resetKey}
         tableChildrenStart={colgroup}
-        tableAppearance="default"
         getRowId={(r) => r.id}
         columns={columns}
         data={eventRowsSample}
+        rowSelection
         onRowSelectionChange={(rows) => setSelectedCount(rows.length)}
       />
       <div className="ui:fixed ui:left-1/2 ui:bottom-[48px] ui:-translate-x-1/2 ui:z-50">
@@ -417,10 +414,10 @@ function MultiSelectTable({
     <>
       <DataTable
         key={resetKey}
-        tableAppearance="default"
         getRowId={(r) => r.id}
         columns={columns}
         data={data}
+        rowSelection
         onRowSelectionChange={(rows) => setSelectedCount(rows.length)}
       />
       <div className="fixed left-1/2 bottom-12 -translate-x-1/2 z-50">
@@ -469,13 +466,13 @@ function MultiSelectTable({
   render: () => <MultiSelectWithFloatingBar />,
 };
 
-export const NoRowSelection: Story = {
-  name: "Without row checkboxes",
+export const RowSelection: Story = {
+  name: "With row checkboxes",
   render: () => (
     <DataTableWithColumns
       data={eventRowsSample}
-      rowSelection={false}
-      tableChildrenStart={colgroupNoSelect}
+      rowSelection
+      tableChildrenStart={colgroup}
     />
   ),
   parameters: {
@@ -483,13 +480,12 @@ export const NoRowSelection: Story = {
       source: {
         code: `${DATA_TABLE_COLUMNS_SNIPPET}
 
-// Pass \`rowSelection={false}\` to hide the checkbox column entirely.
+// Pass \`rowSelection\` to prepend the checkbox column (select all + per row).
 function EventsTable({ data }: { data: EventRow[] }) {
   return (
     <DataTable
-      tableAppearance="default"
       getRowId={(r) => r.id}
-      rowSelection={false}
+      rowSelection
       columns={columns}
       data={data}
       tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
@@ -506,7 +502,7 @@ export const Empty: Story = {
     <DataTableWithColumns
       data={[]}
       emptyLabel="No rows."
-      tableChildrenStart={colgroup}
+      tableChildrenStart={colgroupNoSelect}
     />
   ),
   parameters: {
@@ -518,7 +514,6 @@ export const Empty: Story = {
 function EventsTable() {
   return (
     <DataTable
-      tableAppearance="default"
       getRowId={(r) => r.id}
       columns={columns}
       data={[]}

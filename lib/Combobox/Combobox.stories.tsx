@@ -119,96 +119,83 @@ function Example() {
   },
 };
 
-export const Disabled: Story = {
-  args: { items: [...frameworks] },
-  render: () => (
-    <Combobox items={[...frameworks]} disabled className="ui:w-[200px]">
-      <Combobox.Input placeholder="Select a framework" />
-      <Combobox.Content>
-        <Combobox.Empty>No items found.</Combobox.Empty>
-        <Combobox.List>
-          {(item) => (
-            <Combobox.Item key={String(item)} value={item}>
-              {String(item)}
-            </Combobox.Item>
-          )}
-        </Combobox.List>
-      </Combobox.Content>
-    </Combobox>
-  ),
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_200px] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+function FrameworkOptions() {
+  return (
+    <Combobox.Content>
+      <Combobox.Empty>No items found.</Combobox.Empty>
+      <Combobox.List>
+        {(item) => (
+          <Combobox.Item key={String(item)} value={item}>
+            {String(item)}
+          </Combobox.Item>
+        )}
+      </Combobox.List>
+    </Combobox.Content>
+  );
+}
+
+export const States: Story = {
   parameters: {
+    controls: { hideNoControlsWarning: true },
     docs: {
       source: {
         code: `import { Combobox } from "@obel-arg/malbec-ui";
 
 const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
 
-function Example() {
-  return (
-    <Combobox items={frameworks} disabled className="w-[200px]">
-      <Combobox.Input placeholder="Select a framework" />
-      <Combobox.Content>
-        <Combobox.Empty>No items found.</Combobox.Empty>
-        <Combobox.List>
-          {(item) => (
-            <Combobox.Item key={String(item)} value={item}>
-              {String(item)}
-            </Combobox.Item>
-          )}
-        </Combobox.List>
-      </Combobox.Content>
-    </Combobox>
-  );
-}`,
+const options = (
+  <Combobox.Content>
+    <Combobox.Empty>No items found.</Combobox.Empty>
+    <Combobox.List>
+      {(item) => (
+        <Combobox.Item key={String(item)} value={item}>
+          {String(item)}
+        </Combobox.Item>
+      )}
+    </Combobox.List>
+  </Combobox.Content>
+);
+
+<Combobox items={frameworks} className="w-[200px]">
+  <Combobox.Input placeholder="Select a framework" />
+  {options}
+</Combobox>
+
+<Combobox items={frameworks} disabled className="w-[200px]">
+  <Combobox.Input placeholder="Select a framework" />
+  {options}
+</Combobox>
+
+<Combobox items={frameworks} className="w-[200px]">
+  <Combobox.Input placeholder="Select a framework" aria-invalid />
+  {options}
+</Combobox>`,
       },
     },
   },
-};
-
-export const Invalid: Story = {
-  args: { items: [...frameworks] },
   render: () => (
-    <Combobox items={[...frameworks]} className="ui:w-[200px]">
-      <Combobox.Input placeholder="Select a framework" aria-invalid />
-      <Combobox.Content>
-        <Combobox.Empty>No items found.</Combobox.Empty>
-        <Combobox.List>
-          {(item) => (
-            <Combobox.Item key={String(item)} value={item}>
-              {String(item)}
-            </Combobox.Item>
-          )}
-        </Combobox.List>
-      </Combobox.Content>
-    </Combobox>
+    <div className={statesGrid}>
+      <span className={stateCaption}>Default</span>
+      <Combobox items={[...frameworks]} className="ui:w-[200px]">
+        <Combobox.Input placeholder="Select a framework" />
+        <FrameworkOptions />
+      </Combobox>
+      <span className={stateCaption}>Disabled</span>
+      <Combobox items={[...frameworks]} disabled className="ui:w-[200px]">
+        <Combobox.Input placeholder="Select a framework" />
+        <FrameworkOptions />
+      </Combobox>
+      <span className={stateCaption}>Invalid</span>
+      <Combobox items={[...frameworks]} className="ui:w-[200px]">
+        <Combobox.Input placeholder="Select a framework" aria-invalid />
+        <FrameworkOptions />
+      </Combobox>
+    </div>
   ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Combobox } from "@obel-arg/malbec-ui";
-
-const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
-
-function Example() {
-  return (
-    <Combobox items={frameworks} className="w-[200px]">
-      <Combobox.Input placeholder="Select a framework" aria-invalid />
-      <Combobox.Content>
-        <Combobox.Empty>No items found.</Combobox.Empty>
-        <Combobox.List>
-          {(item) => (
-            <Combobox.Item key={String(item)} value={item}>
-              {String(item)}
-            </Combobox.Item>
-          )}
-        </Combobox.List>
-      </Combobox.Content>
-    </Combobox>
-  );
-}`,
-      },
-    },
-  },
 };
 
 export const AutoHighlight: Story = {

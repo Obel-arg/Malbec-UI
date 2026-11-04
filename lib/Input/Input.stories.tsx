@@ -42,69 +42,57 @@ export const Playground: Story = {
   ),
 };
 
-export const Default: Story = {
-  render: () => (
-    <div className="ui:w-[280px]">
-      <Input placeholder="Email" />
-    </div>
-  ),
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_280px] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+export const States: Story = {
   parameters: {
+    controls: { hideNoControlsWarning: true },
     docs: {
       source: {
         code: `import { Input } from "@obel-arg/malbec-ui";
 
-<Input placeholder="Email" />`,
+<Input placeholder="Email" />
+
+<Input disabled placeholder="Email" />
+
+<Input aria-invalid placeholder="Email" />
+
+<Input aria-invalid placeholder="Search">
+  <Input.Icon side="start">
+    <SearchIcon className="size-full" /> {/* your icon */}
+  </Input.Icon>
+</Input>
+
+<Input aria-invalid className="pr-0" type="file" name="picture" />`,
       },
     },
   },
-};
-
-export const Disabled: Story = {
-  name: "State · disabled",
   render: () => (
-    <div className="ui:w-[280px]">
-      <Input disabled placeholder="Email" />
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Input } from "@obel-arg/malbec-ui";
-
-<Input disabled placeholder="Email" />`,
-      },
-    },
-  },
-};
-
-export const Invalid: Story = {
-  name: "State · invalid",
-  render: () => (
-    <div className="ui:flex ui:w-[280px] ui:flex-col ui:gap-1.5">
-      <Input aria-invalid placeholder="Email" />
-      <Input aria-invalid placeholder="Search">
+    <div className={statesGrid}>
+      <span className={stateCaption}>Default</span>
+      <Input aria-label="Default" placeholder="Email" />
+      <span className={stateCaption}>Disabled</span>
+      <Input aria-label="Disabled" disabled placeholder="Email" />
+      <span className={stateCaption}>Invalid</span>
+      <Input aria-label="Invalid" aria-invalid placeholder="Email" />
+      <span className={stateCaption}>Invalid · icon</span>
+      <Input aria-label="Invalid with icon" aria-invalid placeholder="Search">
         <Input.Icon side="start">
           <SearchIcon className="ui:size-full" />
         </Input.Icon>
       </Input>
+      <span className={stateCaption}>Invalid · file</span>
+      <Input
+        aria-label="Invalid file"
+        aria-invalid
+        className="ui:pr-0"
+        type="file"
+        name="input-story-picture-invalid"
+      />
     </div>
   ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Input } from "@obel-arg/malbec-ui";
-
-<div className="flex flex-col gap-1.5">
-  <Input aria-invalid placeholder="Email" />
-  <Input aria-invalid placeholder="Search">
-    <Input.Icon side="start">
-      <SearchIcon className="size-full" /> {/* your icon */}
-    </Input.Icon>
-  </Input>
-</div>`,
-      },
-    },
-  },
 };
 
 export const File: Story = {
@@ -132,38 +120,6 @@ export const File: Story = {
     Picture
   </Label>
   <Input className="pr-0" id="picture" type="file" name="picture" />
-</div>`,
-      },
-    },
-  },
-};
-
-export const FileInvalid: Story = {
-  name: "Type · file · invalid",
-  render: () => (
-    <div className="malbec-font-sans ui:group ui:flex ui:w-[280px] ui:flex-col ui:items-start ui:gap-1.5">
-      <Label htmlFor="input-story-picture-invalid" weight="regular">
-        Picture
-      </Label>
-      <Input
-        aria-invalid
-        className="ui:pr-0"
-        id="input-story-picture-invalid"
-        type="file"
-        name="input-story-picture-invalid"
-      />
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Input, Label } from "@obel-arg/malbec-ui";
-
-<div className="flex flex-col items-start gap-1.5">
-  <Label htmlFor="picture" weight="regular">
-    Picture
-  </Label>
-  <Input aria-invalid className="pr-0" id="picture" type="file" name="picture" />
 </div>`,
       },
     },

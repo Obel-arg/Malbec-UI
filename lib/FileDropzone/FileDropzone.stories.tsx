@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Upload } from "../icons";
 import { FileDropzone } from "./FileDropzone";
 
@@ -120,88 +120,62 @@ function Example() {
   ),
 };
 
-export const Disabled: Story = {
-  name: "State · disabled",
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_472px] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+export const States: Story = {
   parameters: {
     docs: {
       source: {
         code: `import { FileDropzone } from "@obel-arg/malbec-ui";
 
-function Example() {
-  return (
-    <FileDropzone disabled accept=".xlsx,.csv,.tsv,.numbers">
-      <FileDropzone.Icon>
-        <UploadIcon /> {/* your icon */}
-      </FileDropzone.Icon>
-      <FileDropzone.Caption>
-        Add your .xslx, .csv, .tsv
-        <br />
-        or numbers file
-      </FileDropzone.Caption>
-      <FileDropzone.Action>Subir archivo</FileDropzone.Action>
-    </FileDropzone>
-  );
-}
-`,
+<FileDropzone accept=".xlsx,.csv,.tsv,.numbers">
+  <FileDropzone.Icon>
+    <UploadIcon /> {/* your icon */}
+  </FileDropzone.Icon>
+  <FileDropzone.Caption>
+    Add your .xslx, .csv, .tsv
+    <br />
+    or numbers file
+  </FileDropzone.Caption>
+  <FileDropzone.Action>Subir archivo</FileDropzone.Action>
+</FileDropzone>
+
+<FileDropzone disabled accept=".xlsx,.csv,.tsv,.numbers">
+  …
+</FileDropzone>
+
+<FileDropzone aria-invalid accept=".xlsx,.csv,.tsv,.numbers">
+  …
+</FileDropzone>`,
       },
     },
   },
   render: () => (
-    <div className="ui:w-[472px]">
-      <FileDropzone disabled accept=".xlsx,.csv,.tsv,.numbers">
-        <FileDropzone.Icon>
-          <Upload />
-        </FileDropzone.Icon>
-        <FileDropzone.Caption>
-          Add your .xslx, .csv, .tsv
-          <br />
-          or numbers file
-        </FileDropzone.Caption>
-        <FileDropzone.Action>Subir archivo</FileDropzone.Action>
-      </FileDropzone>
-    </div>
-  ),
-};
-
-export const Invalid: Story = {
-  name: "State · invalid",
-  parameters: {
-    docs: {
-      source: {
-        code: `import { FileDropzone } from "@obel-arg/malbec-ui";
-
-function Example() {
-  return (
-    <FileDropzone aria-invalid accept=".xlsx,.csv,.tsv,.numbers">
-      <FileDropzone.Icon>
-        <UploadIcon /> {/* your icon */}
-      </FileDropzone.Icon>
-      <FileDropzone.Caption>
-        Add your .xslx, .csv, .tsv
-        <br />
-        or numbers file
-      </FileDropzone.Caption>
-      <FileDropzone.Action>Subir archivo</FileDropzone.Action>
-    </FileDropzone>
-  );
-}
-`,
-      },
-    },
-  },
-  render: () => (
-    <div className="ui:w-[472px]">
-      <FileDropzone aria-invalid accept=".xlsx,.csv,.tsv,.numbers">
-        <FileDropzone.Icon>
-          <Upload />
-        </FileDropzone.Icon>
-        <FileDropzone.Caption>
-          Add your .xslx, .csv, .tsv
-          <br />
-          or numbers file
-        </FileDropzone.Caption>
-        <FileDropzone.Action>Subir archivo</FileDropzone.Action>
-      </FileDropzone>
+    <div className={statesGrid}>
+      {(
+        [
+          ["Default", {}],
+          ["Disabled", { disabled: true }],
+          ["Invalid", { "aria-invalid": true }],
+        ] as const
+      ).map(([label, stateProps]) => (
+        <Fragment key={label}>
+          <span className={stateCaption}>{label}</span>
+          <FileDropzone {...stateProps} accept=".xlsx,.csv,.tsv,.numbers">
+            <FileDropzone.Icon>
+              <Upload />
+            </FileDropzone.Icon>
+            <FileDropzone.Caption>
+              Add your .xslx, .csv, .tsv
+              <br />
+              or numbers file
+            </FileDropzone.Caption>
+            <FileDropzone.Action>Subir archivo</FileDropzone.Action>
+          </FileDropzone>
+        </Fragment>
+      ))}
     </div>
   ),
 };

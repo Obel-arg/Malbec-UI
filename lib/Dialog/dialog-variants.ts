@@ -1,17 +1,20 @@
 import { cva } from "class-variance-authority";
 
 /**
- * `overlay="none"` (malbec-ux-ui: modals float without a veil) keeps the overlay element, so
- * outside clicks still close the dialog, but makes it transparent. The surface then lifts off the
- * page with this two-layer shadow, the one Artist and Publishing already use.
+ * Modals float without a veil (malbec-ux-ui, rule 15). The overlay element stays, so outside
+ * clicks still close the dialog, but it is transparent; the surface lifts off the page with this
+ * two-layer shadow. `overlay="veil"` brings back the light frosted veil of 1.x.
  */
 export const FLOATING_SURFACE_SHADOW =
   "ui:shadow-[0_24px_70px_rgba(0,0,0,0.22),0_8px_20px_rgba(0,0,0,0.1)]";
 
 export const overlayVeilVariants = {
-  default: "ui:bg-background-200/60 ui:backdrop-blur-[3.5px]",
   none: "ui:bg-transparent ui:backdrop-blur-none",
+  veil: "ui:bg-background-200/60 ui:backdrop-blur-[3.5px]",
 } as const;
+
+/** The short shadow a surface keeps when it sits on the veil. */
+export const VEILED_SURFACE_SHADOW = "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]";
 
 export type OverlayVeil = keyof typeof overlayVeilVariants;
 
@@ -22,7 +25,7 @@ export const dialogOverlayVariants = cva(
     "ui:data-[state=closed]:animate-malbec-overlay-out",
     "ui:motion-reduce:animate-none",
   ],
-  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "default" } },
+  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "none" } },
 );
 
 export const dialogContentVariants = cva([
@@ -35,7 +38,6 @@ export const dialogContentVariants = cva([
   "ui:rounded-[8px]",
   "ui:bg-background-100",
   "ui:p-10",
-  "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
   "ui:data-[state=open]:animate-malbec-dialog-in",
   "ui:data-[state=closed]:animate-malbec-dialog-out",
@@ -49,8 +51,9 @@ export const dialogContentVariants = cva([
       lg: "ui:w-[min(calc(100vw-2rem),640px)] ui:max-w-none",
       xl: "ui:w-[min(calc(100vw-2rem),880px)] ui:max-w-none",
     },
-    overlay: { default: "", none: FLOATING_SURFACE_SHADOW },
+    overlay: { none: FLOATING_SURFACE_SHADOW, veil: VEILED_SURFACE_SHADOW },
   },
+  defaultVariants: { overlay: "none" },
 });
 
 export type DialogSize = "sm" | "md" | "lg" | "xl";
