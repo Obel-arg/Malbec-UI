@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - 'release/**'
 
 jobs:
   ci:
@@ -40,5 +41,8 @@ jobs:
       - name: Release check self-test
         run: scripts/release-check.test.sh
 
+      # Sub-PRs into a release/** branch ship together: the version is bumped
+      # once, in the PR from release/** to main.
       - name: Release check
+        if: github.base_ref == 'main'
         run: scripts/release-check.sh "origin/${{ github.base_ref }}"

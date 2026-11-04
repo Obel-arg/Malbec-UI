@@ -109,7 +109,7 @@ function Example() {
           </FloatingBar.Trigger.Icon>
           <FloatingBar.Trigger.Text>Editar</FloatingBar.Trigger.Text>
         </FloatingBar.Trigger>
-        <FloatingBar.Trigger>
+        <FloatingBar.Trigger tone="destructive">
           <FloatingBar.Trigger.Icon>
             <TrashIcon /> {/* your icon */}
           </FloatingBar.Trigger.Icon>
@@ -142,7 +142,7 @@ function Example() {
           </FloatingBar.Trigger.Icon>
           <FloatingBar.Trigger.Text>Editar</FloatingBar.Trigger.Text>
         </FloatingBar.Trigger>
-        <FloatingBar.Trigger>
+        <FloatingBar.Trigger tone="destructive">
           <FloatingBar.Trigger.Icon>
             <TrashIcon />
           </FloatingBar.Trigger.Icon>

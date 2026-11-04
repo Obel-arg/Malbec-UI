@@ -13,9 +13,10 @@ import {
   floatingBarVariants,
   type FloatingBarPlacement,
   type FloatingBarTriggerEmphasis,
+  type FloatingBarTriggerTone,
 } from "./floating-bar-variants";
 
-export type { FloatingBarPlacement };
+export type { FloatingBarPlacement, FloatingBarTriggerTone };
 
 export interface FloatingBarProps extends React.ComponentProps<"div"> {
   /**
@@ -93,6 +94,8 @@ export interface FloatingBarTriggerProps
    * shadow — use it for the primary action when one trigger should stand out.
    */
   emphasis?: FloatingBarTriggerEmphasis;
+  /** `"destructive"` is for delete / remove actions. */
+  tone?: FloatingBarTriggerTone;
 }
 
 const FloatingBarTriggerRoot = React.forwardRef<
@@ -103,6 +106,7 @@ const FloatingBarTriggerRoot = React.forwardRef<
     asChild = false,
     htmlType = "button",
     emphasis = "default",
+    tone = "default",
     className,
     children,
     ...rest
@@ -117,7 +121,8 @@ const FloatingBarTriggerRoot = React.forwardRef<
       ref={ref}
       data-slot="floating-bar-trigger"
       data-emphasis={emphasis}
-      className={cn(floatingBarTriggerVariants({ emphasis }), className)}
+      data-tone={tone}
+      className={cn(floatingBarTriggerVariants({ emphasis, tone }), className)}
       {...extra}
       {...rest}
     >

@@ -48,6 +48,11 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - Live: `malbecOutlineButtonClass`, `malbecGhostButtonClass` and the `ui:h-9 ui:px-4 ui:text-[12px]` repeated on buttons (that is the default `md`).
 - **Check:** any outline or ghost that should stay in brand colour now needs `tone="brand"`.
 
+## v1.16.0 — 2026-11-03
+
+### Added
+- **FloatingBar.Trigger:** `tone="destructive"` is for delete and remove actions. The text is `destructive` and stays red on hover. It replaces `className="text-destructive hover:text-destructive"` on the trigger (Artist, ~30 uses). Nothing changes until you use the prop.
+
 ## v1.15.0 — 2026-11-02
 
 Opt-in variants for seven primitives. Nothing changes on screen until you use a new prop. Each one replaces a recipe the apps were maintaining by hand.
