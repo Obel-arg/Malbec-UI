@@ -6,15 +6,28 @@ import { Button } from "./Button";
 const classesOf = (el: HTMLElement) => el.className.split(/\s+/);
 
 describe("Button", () => {
-  it('tone="brand" keeps the 1.x brand colour', () => {
+  it('there is no brand tone: outline and ghost are always grey (malbec-ux-ui)', () => {
     render(
+      // @ts-expect-error tone="brand" was removed in 2.0: brand colour is for the primary CTA only.
       <Button variant="outline" tone="brand">
         Exportar
       </Button>,
     );
     const classes = classesOf(screen.getByRole("button"));
-    expect(classes).toContain("ui:border-primary");
-    expect(classes).toContain("ui:text-primary");
+    expect(classes).not.toContain("ui:border-primary");
+    expect(classes).not.toContain("ui:text-primary");
+    expect(classes).toContain("ui:border-background-300");
+  });
+
+  it('still accepts tone="neutral" (deprecated, no effect) so 1.x call sites compile', () => {
+    render(
+      <Button variant="ghost" tone="neutral">
+        Cancelar
+      </Button>,
+    );
+    const button = screen.getByRole("button");
+    expect(classesOf(button)).toContain("ui:text-text-default");
+    expect(button.hasAttribute("data-tone")).toBe(false);
   });
 
   it("is md by default", () => {
@@ -40,7 +53,6 @@ describe("Button", () => {
     expect(classes).toContain("ui:focus-visible:ring-focus");
     expect(classes).not.toContain("ui:text-primary");
     expect(classes).not.toContain("ui:focus-visible:ring-primary");
-    expect(button.dataset.tone).toBe("neutral");
     if (variant === "outline") {
       expect(classes).toContain("ui:border-background-300");
       expect(classes).not.toContain("ui:border-primary");
@@ -69,7 +81,7 @@ describe("Button", () => {
   });
 
   it("exports buttonVariants for links and other elements", () => {
-    const classes = buttonVariants({ variant: "outline", tone: "neutral", size: "md" }).split(/\s+/);
+    const classes = buttonVariants({ variant: "outline", size: "md" }).split(/\s+/);
     expect(classes).toContain("ui:border-background-300");
     expect(classes).toContain("ui:h-9");
   });
