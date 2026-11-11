@@ -50,4 +50,18 @@ describe("Combobox defects reported by Live", () => {
     const content = document.querySelector<HTMLElement>('[data-slot="combobox-content"]')!;
     expect(content.style.width).toBe("var(--radix-popover-trigger-width)");
   });
+
+  it("a selected option looks selected, not only hovered", () => {
+    render(
+      <Combobox items={fruits} defaultOpen defaultValue="Pera">
+        <Combobox.Input aria-label="Fruta" />
+        <Combobox.Content>
+          <Combobox.List>{(item) => <Combobox.Item value={item} />}</Combobox.List>
+        </Combobox.Content>
+      </Combobox>,
+    );
+    const option = screen.getByRole("option", { name: "Pera" });
+    expect(option.getAttribute("aria-selected")).toBe("true");
+    expect(option.className).toContain("ui:aria-selected:bg-background-200");
+  });
 });

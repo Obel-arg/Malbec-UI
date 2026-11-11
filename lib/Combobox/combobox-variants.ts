@@ -163,6 +163,9 @@ export const comboboxItemVariants = cva(
     "ui:data-disabled:pointer-events-none",
     "ui:data-disabled:opacity-50",
     "ui:data-highlighted:bg-background-200",
+    // Same as Select.Item: the chosen option keeps the neutral surface, not only on hover.
+    "ui:aria-selected:bg-background-200",
+    "ui:aria-selected:font-medium",
   ],
   { variants: {}, defaultVariants: {} },
 );
