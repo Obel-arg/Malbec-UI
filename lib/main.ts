@@ -64,6 +64,14 @@ export { DataTable } from "./DataTable/DataTable";
 export { SortableColumnHeader } from "./DataTable/sortable-column-header";
 export { Steps } from "./Steps/Steps";
 export { Table } from "./Table/Table";
+// Round B: surfaces
+export { Notice } from "./Notice/Notice";
+export { EmptyState } from "./EmptyState/EmptyState";
+export { PageHeader } from "./PageHeader/PageHeader";
+export { SectionHeading } from "./SectionHeading/SectionHeading";
+export { Skeleton } from "./Skeleton/Skeleton";
+export { InfoPopover } from "./InfoPopover/InfoPopover";
+export { LockedField } from "./LockedField/LockedField";
 
 // Round B: charts
 // Chart primitives of malbec-ux-ui (charts.md): inks, scales, dot-field card, sheen, grid, crosshair.
@@ -373,3 +381,11 @@ export type { DataTableColumnsToggleProps } from "./DataTable/DataTableColumnsTo
 export type { SortableColumnHeaderProps } from "./DataTable/sortable-column-header";
 // Round B: combobox
 export type { ComboboxFilter } from "./Combobox/Combobox";
+// Round B: surfaces
+export type { NoticeProps, NoticeTone } from "./Notice/Notice";
+export type { EmptyStateProps } from "./EmptyState/EmptyState";
+export type { PageHeaderProps } from "./PageHeader/PageHeader";
+export type { SectionHeadingProps } from "./SectionHeading/SectionHeading";
+export type { SkeletonProps } from "./Skeleton/Skeleton";
+export type { InfoPopoverProps } from "./InfoPopover/InfoPopover";
+export type { LockedFieldProps } from "./LockedField/LockedField";

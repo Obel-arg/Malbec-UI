@@ -30,6 +30,14 @@
   --color-malbec-icon: #3f3f46;
   /* Darkest neutral: titles and the dark tooltip. We never use black. */
   --color-malbec-ink: #1a1a1f;
+  /* Warm edge of the embossed line (malbec-ux-ui embossed.md): edge on top, white light below. */
+  --color-embossed-edge: #eae7e3;
+  /* "Falta algo" (malbec-ux-ui): the one yellow of the suite, for pending states. */
+  --color-pending-surface: #f6f5e6;
+  --color-pending-edge: #fbfaf0;
+  --color-pending-ring: #e6e3c3;
+  --color-pending-tile: #ebe8c6;
+  --color-pending-ink: #7a7628;
 
   /**
    * Tooltip cursor band (Recharts uses opaque `#ccc` in getCursorRectangle — override below).
@@ -336,6 +344,12 @@
   --color-sidebar-border: var(--color-sidebar-border);
   --color-malbec-icon: var(--color-malbec-icon);
   --color-malbec-ink: var(--color-malbec-ink);
+  --color-embossed-edge: var(--color-embossed-edge);
+  --color-pending-surface: var(--color-pending-surface);
+  --color-pending-edge: var(--color-pending-edge);
+  --color-pending-ring: var(--color-pending-ring);
+  --color-pending-tile: var(--color-pending-tile);
+  --color-pending-ink: var(--color-pending-ink);
 
   --leading-tight: calc(20 / 16 * 1rem);
 

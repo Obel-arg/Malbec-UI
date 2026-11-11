@@ -51,4 +51,25 @@ describe("tokens.css", () => {
       expect(css).toMatch(new RegExp(`--color-malbec-badge-${t}-text:\\s*#[0-9a-f]{6}`));
     }
   });
+
+  it("ships the scroll utilities", async () => {
+    const css = (await build(["scroll-hidden", "scroll-thin"])).replace(/\s+/g, " ");
+    expect(css).toMatch(/\.scroll-hidden \{ scrollbar-width: none;/);
+    // Nested (`&::-webkit-scrollbar`) or flattened, depending on the app's CSS pipeline.
+    expect(css).toMatch(/\.scroll-hidden[^]*?::-webkit-scrollbar \{ display: none;/);
+    expect(css).toMatch(/\.scroll-thin \{ scrollbar-width: thin;/);
+    expect(css).not.toContain("color-mix(");
+  });
+
+  it("ships the suite easings and the wizard step animations with their keyframes", async () => {
+    const css = (
+      await build(["ease-out-strong", "ease-out-soft", "ease-in-out-layout", "animate-wizard-step-in", "animate-wizard-step-out"])
+    ).replace(/\s+/g, " ");
+    expect(css).toContain("--ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1)");
+    expect(css).toContain("--ease-out-soft: cubic-bezier(0.32, 0.72, 0, 1)");
+    expect(css).toContain("--ease-in-out-layout: cubic-bezier(0.4, 0, 0.2, 1)");
+    expect(css).toContain("@keyframes wizard-step-enter");
+    expect(css).toContain("@keyframes wizard-step-leave");
+    expect(css).toMatch(/\.animate-wizard-step-in \{ animation: var\(--animate-wizard-step-in\)/);
+  });
 });
