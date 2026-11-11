@@ -65,6 +65,8 @@ interface DataTableBaseProps<TData, TValue> {
    * 58px rows). `dataGrid` is the denser 6px grid with a 48px header.
    */
   tableAppearance?: TableAppearance;
+  /** Below 640px each row becomes a card (see `Table`'s `stackOnMobile`). */
+  stackOnMobile?: boolean;
   /**
    * When true, prepends a selection column with checkboxes (header: select all,
    * rows: per-row). Defaults to `false`.
@@ -175,6 +177,7 @@ export function DataTable<TData, TValue>({
   toolbar,
   footer,
   tableAppearance = "default",
+  stackOnMobile,
   rowSelection: rowSelectionEnabled = false,
   getRowId,
   enableSorting = true,
@@ -280,7 +283,7 @@ export function DataTable<TData, TValue>({
           {toolbarNode}
         </div>
       ) : null}
-      <Table appearance={tableAppearance}>
+      <Table appearance={tableAppearance} stackOnMobile={stackOnMobile}>
         {tableChildrenStart}
         <Table.Header>
           {table.getHeaderGroups().map((headerGroup) => (

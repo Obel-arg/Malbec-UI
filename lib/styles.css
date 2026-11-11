@@ -78,6 +78,80 @@
   stroke: none !important;
 }
 
+/*
+ * `Table stackOnMobile`: below 640px each row is a card. No header and no horizontal scroll; the
+ * first cell goes on top at full width and the rest in two columns (three with 6+ values), each
+ * value with its column name UNDER it (`data-label`, set by the component). The !important beat
+ * the min-widths and paddings each table brings for desktop. Ported from Malbec Records.
+ */
+@media (max-width: 639px) {
+  [data-stack-on-mobile] {
+    overflow: visible;
+  }
+  [data-stack-on-mobile] table {
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: auto !important;
+  }
+  /* A `table-fixed` colgroup would box the card into its first column's width. */
+  [data-stack-on-mobile] table > thead,
+  [data-stack-on-mobile] table > colgroup {
+    display: none;
+  }
+  [data-stack-on-mobile] table > tbody,
+  [data-stack-on-mobile] table > tfoot {
+    display: block;
+  }
+  [data-stack-on-mobile] table > tbody > tr,
+  [data-stack-on-mobile] table > tfoot > tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+    height: auto !important;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--color-background-300);
+  }
+  [data-stack-on-mobile] table > tbody > tr:has(> :nth-child(7)),
+  [data-stack-on-mobile] table > tfoot > tr:has(> :nth-child(7)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px 10px;
+  }
+  [data-stack-on-mobile] table > tbody > tr > *,
+  [data-stack-on-mobile] table > tfoot > tr > * {
+    position: static !important;
+    display: flex;
+    flex-direction: column;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    text-align: left !important;
+    white-space: normal !important;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+  [data-stack-on-mobile] table > tbody > tr > *:first-child,
+  [data-stack-on-mobile] table > tbody > tr > [colspan],
+  [data-stack-on-mobile] table > tfoot > tr > *:first-child {
+    grid-column: 1 / -1;
+    font-weight: 500;
+  }
+  [data-stack-on-mobile] table > tbody > tr > *[data-label]:not(:first-child)::after,
+  [data-stack-on-mobile] table > tfoot > tr > *[data-label]:not(:first-child)::after {
+    content: attr(data-label);
+    margin-top: 1px;
+    font-size: 10.5px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--color-text-default-muted);
+  }
+  [data-stack-on-mobile] table > tbody > tr > *:empty {
+    display: none;
+  }
+}
+
 @layer base {
   @keyframes malbec-popover-in {
     from {

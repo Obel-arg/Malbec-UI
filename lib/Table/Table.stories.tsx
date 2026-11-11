@@ -335,3 +335,68 @@ function SortableTable({ rows }: { rows: Row[] }) {
     },
   },
 };
+
+const SHOW_ROWS = [
+  { id: "1", show: "Rosario · Metropolitano", date: "12/11", tickets: "8.402", net: "US$ 8.802" },
+  { id: "2", show: "Córdoba · Quality", date: "19/11", tickets: "6.115", net: "US$ 6.140" },
+  { id: "3", show: "Mendoza · Arena", date: "03/12", tickets: "4.730", net: "US$ 4.975" },
+];
+
+/** Resize the window below 640px: each row turns into a card with its column names under the values. */
+export const StackOnMobile: Story = {
+  name: "Stack on mobile",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Table } from "@obel-arg/malbec-ui";
+
+// Below 640px each row is a card: first cell on top, the rest in a grid with
+// their column name underneath. Desktop is unchanged.
+<Table stackOnMobile>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head>Show</Table.Head>
+      <Table.Head>Fecha</Table.Head>
+      <Table.Head className="ui:text-right">Entradas</Table.Head>
+      <Table.Head className="ui:text-right">Neto</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    {rows.map((row) => (
+      <Table.Row key={row.id}>
+        <Table.Cell>{row.show}</Table.Cell>
+        <Table.Cell>{row.date}</Table.Cell>
+        <Table.Cell className="ui:text-right ui:tabular-nums">{row.tickets}</Table.Cell>
+        <Table.Cell className="ui:text-right ui:tabular-nums">{row.net}</Table.Cell>
+      </Table.Row>
+    ))}
+  </Table.Body>
+</Table>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-full ui:max-w-[720px]">
+      <Table stackOnMobile>
+        <Table.Header>
+          <Table.Row>
+            <Table.Head>Show</Table.Head>
+            <Table.Head>Fecha</Table.Head>
+            <Table.Head className="ui:text-right">Entradas</Table.Head>
+            <Table.Head className="ui:text-right">Neto</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {SHOW_ROWS.map((row) => (
+            <Table.Row key={row.id}>
+              <Table.Cell>{row.show}</Table.Cell>
+              <Table.Cell>{row.date}</Table.Cell>
+              <Table.Cell className="ui:text-right ui:tabular-nums">{row.tickets}</Table.Cell>
+              <Table.Cell className="ui:text-right ui:tabular-nums">{row.net}</Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+    </div>
+  ),
+};

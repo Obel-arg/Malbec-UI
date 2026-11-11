@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "../utils/cn";
+import { useCellLabels } from "./use-cell-labels";
 import {
   type TableAppearance,
   tableBodyGroupVariants,
@@ -29,17 +30,27 @@ export type TableRootProps = React.ComponentProps<"table"> & {
    * `dataGrid` — Data table spec (6px shell, 48px header, 16px body cells).
    */
   appearance?: TableAppearance;
+  /**
+   * Below 640px each row becomes a card: no header and no horizontal scroll, the first cell on
+   * top at full width and the rest in a grid, each value with its column name underneath.
+   * Desktop is unchanged.
+   */
+  stackOnMobile?: boolean;
 };
 
 const TableRoot = React.forwardRef<HTMLTableElement, TableRootProps>(function TableRoot(
-  { className, appearance = "default", ...rest },
+  { className, appearance = "default", stackOnMobile = false, ...rest },
   ref,
 ) {
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  useCellLabels(containerRef, stackOnMobile);
   return (
     <TableAppearanceContext.Provider value={appearance}>
       <div
+        ref={containerRef}
         className={tableContainerVariants({ appearance })}
         data-appearance={appearance}
+        data-stack-on-mobile={stackOnMobile ? "" : undefined}
       >
         <table
           ref={ref}
