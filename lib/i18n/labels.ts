@@ -27,7 +27,8 @@ export interface MalbecLabels {
   selectRow: string;
   /** Combobox trigger with nothing selected. */
   selectPlaceholder: string;
-  clear: string;
+  /** Combobox trigger with several values selected. */
+  selectedCount: (count: number) => string;
   clearSelection: string;
   remove: string;
   datePlaceholder: string;
@@ -67,7 +68,7 @@ export const labelsEn: MalbecLabels = {
   selectAllRows: "Select all",
   selectRow: "Select row",
   selectPlaceholder: "Select…",
-  clear: "Clear",
+  selectedCount: (count) => `${count} selected`,
   clearSelection: "Clear selection",
   remove: "Remove",
   datePlaceholder: "Pick a date",
@@ -104,7 +105,7 @@ export const labelsEs: MalbecLabels = {
   selectAllRows: "Seleccionar todas",
   selectRow: "Seleccionar fila",
   selectPlaceholder: "Seleccionar…",
-  clear: "Borrar",
+  selectedCount: (count) => `${count} seleccionados`,
   clearSelection: "Borrar selección",
   remove: "Quitar",
   datePlaceholder: "Elegí una fecha",

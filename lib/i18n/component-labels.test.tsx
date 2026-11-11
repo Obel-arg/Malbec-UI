@@ -2,6 +2,9 @@ import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Breadcrumb } from "../Breadcrumb/Breadcrumb";
+import { CalendarWeek } from "../CalendarTimeGrid/CalendarWeek";
+import { Combobox } from "../Combobox/Combobox";
+import { DatePicker } from "../DatePicker/DatePicker";
 import { Dialog } from "../Dialog/Dialog";
 import { FloatingBar } from "../FloatingBar/FloatingBar";
 import { Sheet } from "../Sheet/Sheet";
@@ -93,5 +96,39 @@ describe("overlay close buttons read their labels from MalbecLabelsProvider", ()
       </FloatingBar>,
     );
     expect(screen.getByRole("button", { name: "Cerrar" })).toBeTruthy();
+  });
+});
+
+describe("pickers read their labels from MalbecLabelsProvider", () => {
+  it("Combobox.Trigger placeholder", () => {
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      },
+    );
+    es(
+      <Combobox items={["Rosario", "Córdoba"]}>
+        <Combobox.Trigger />
+      </Combobox>,
+    );
+    expect(screen.getByText("Seleccionar…")).toBeTruthy();
+  });
+
+  it("DatePicker.Trigger placeholder", () => {
+    es(
+      <DatePicker state="closed">
+        <DatePicker.Trigger />
+      </DatePicker>,
+    );
+    expect(screen.getByText("Elegí una fecha")).toBeTruthy();
+  });
+
+  it("CalendarWeek navigation", () => {
+    es(<CalendarWeek week={new Date(2026, 10, 9)} onWeekChange={() => {}} />);
+    expect(screen.getByRole("button", { name: "Semana anterior" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Semana siguiente" })).toBeTruthy();
   });
 });

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Popover, type PopoverContentProps } from "../Popover/Popover";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import {
   comboboxChipVariants,
   comboboxContentVariants,
@@ -414,6 +415,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
     ref,
   ) {
     const ctx = useComboboxContext("Combobox.Input");
+    const labels = useMalbecLabels();
     const {
       mode: comboboxMode,
       multiple,
@@ -601,9 +603,8 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
                 e.stopPropagation();
               }}
               onClick={clear}
-              aria-label="Clear selection"
+              aria-label={labels.clearSelection}
             >
-              <span className="ui:sr-only">Clear</span>
               <svg
                 viewBox="0 0 24 24"
                 className="ui:size-3.5"
@@ -657,9 +658,8 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
                 className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:focus-visible:ring-2 ui:focus-visible:ring-primary"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={clear}
-                aria-label="Clear selection"
+                aria-label={labels.clearSelection}
               >
-                <span className="ui:sr-only">Clear</span>
                 <svg
                   viewBox="0 0 24 24"
                   className="ui:size-3.5"
@@ -699,17 +699,18 @@ const ComboboxTrigger = React.forwardRef<
   ref,
 ) {
   const ctx = useComboboxContext("Combobox.Trigger");
+  const labels = useMalbecLabels();
 
   const label = React.useMemo(() => {
     if (children) return children;
     if (ctx.multiple && Array.isArray(ctx.value) && ctx.value.length > 0) {
-      return `${ctx.value.length} selected`;
+      return labels.selectedCount(ctx.value.length);
     }
     if (!ctx.multiple && ctx.value != null && !Array.isArray(ctx.value)) {
       return ctx.itemToStringLabel(ctx.value);
     }
-    return placeholder ?? "Select…";
-  }, [children, ctx, placeholder]);
+    return placeholder ?? labels.selectPlaceholder;
+  }, [children, ctx, labels, placeholder]);
 
   return (
     <Popover.Trigger asChild>
@@ -1055,6 +1056,7 @@ const ComboboxChip = React.forwardRef<HTMLSpanElement, ComboboxChipProps>(
     ref,
   ) {
     const ctx = useComboboxContext("Combobox.Chip");
+    const labels = useMalbecLabels();
 
     const handleRemove = React.useCallback(() => {
       if (onRemove) {
@@ -1081,7 +1083,7 @@ const ComboboxChip = React.forwardRef<HTMLSpanElement, ComboboxChipProps>(
             className="ui:inline-flex ui:size-5 ui:cursor-pointer ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:hover:bg-background-100"
             onMouseDown={(e) => e.preventDefault()}
             onClick={handleRemove}
-            aria-label="Remove"
+            aria-label={labels.remove}
           >
             <svg
               viewBox="0 0 24 24"
