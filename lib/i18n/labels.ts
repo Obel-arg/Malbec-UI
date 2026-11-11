@@ -29,6 +29,10 @@ export interface MalbecLabels {
   more: string;
   sidebarNavigation: string;
   toggleSidebar: string;
+  /** Sidebar trigger with `collapsible="dock"`, floating panel. */
+  pinSidebar: string;
+  /** Sidebar trigger with `collapsible="dock"`, pinned panel. */
+  unpinSidebar: string;
   selectAllRows: string;
   selectRow: string;
   /** Combobox trigger with nothing selected. */
@@ -63,7 +67,17 @@ export interface MalbecLabels {
   sortDescending: string;
   /** SortableColumnHeader, column sorted descending. */
   clearSort: string;
+  /** NotificationBell aria-label; the dot shows no number, so the count travels here. */
+  notifications: (unreadCount: number) => string;
+  /** ConfirmDialog buttons and reason field. */
+  confirm: string;
+  cancel: string;
+  confirming: string;
+  reason: string;
+  reasonRequired: string;
 }
+
+const unreadSuffix = (count: number) => (count > 0 ? ` (${count > 99 ? "99+" : count})` : "");
 
 export type MalbecLocale = "en" | "es";
 
@@ -84,6 +98,8 @@ export const labelsEn: MalbecLabels = {
   more: "More",
   sidebarNavigation: "Navigation menu",
   toggleSidebar: "Toggle sidebar",
+  pinSidebar: "Pin sidebar",
+  unpinSidebar: "Unpin sidebar",
   selectAllRows: "Select all",
   selectRow: "Select row",
   selectPlaceholder: "Select…",
@@ -110,6 +126,12 @@ export const labelsEn: MalbecLabels = {
   sortAscending: "Sort ascending",
   sortDescending: "Sort descending",
   clearSort: "Clear sort",
+  notifications: (count) => `Notifications${unreadSuffix(count)}`,
+  confirm: "Confirm",
+  cancel: "Cancel",
+  confirming: "Confirming…",
+  reason: "Reason",
+  reasonRequired: "Write the reason to continue.",
 };
 
 export const labelsEs: MalbecLabels = {
@@ -129,6 +151,8 @@ export const labelsEs: MalbecLabels = {
   more: "Más",
   sidebarNavigation: "Menú de navegación",
   toggleSidebar: "Mostrar u ocultar la barra lateral",
+  pinSidebar: "Fijar el menú",
+  unpinSidebar: "Soltar el menú",
   selectAllRows: "Seleccionar todas",
   selectRow: "Seleccionar fila",
   selectPlaceholder: "Seleccionar…",
@@ -155,6 +179,12 @@ export const labelsEs: MalbecLabels = {
   sortAscending: "Ordenar ascendente",
   sortDescending: "Ordenar descendente",
   clearSort: "Quitar orden",
+  notifications: (count) => `Notificaciones${unreadSuffix(count)}`,
+  confirm: "Confirmar",
+  cancel: "Cancelar",
+  confirming: "Confirmando…",
+  reason: "Motivo",
+  reasonRequired: "Escribí el motivo para continuar.",
 };
 
 export const LABELS_BY_LOCALE: Record<MalbecLocale, MalbecLabels> = {

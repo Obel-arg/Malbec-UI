@@ -81,6 +81,10 @@ export type { DonutDatum, DonutProps } from "./charts/Donut";
 export { PctBlocks, pctBlocksFilled } from "./charts/PctBlocks";
 export type { PctBlocksProps } from "./charts/PctBlocks";
 
+// Round B: shell
+export { NotificationBell } from "./NotificationBell/NotificationBell";
+export { ConfirmDialog } from "./ConfirmDialog/ConfirmDialog";
+
 export type { MalbecThemeProviderProps } from "./theme";
 export type {
   AlertProps,
@@ -389,3 +393,7 @@ export type { SectionHeadingProps } from "./SectionHeading/SectionHeading";
 export type { SkeletonProps } from "./Skeleton/Skeleton";
 export type { InfoPopoverProps } from "./InfoPopover/InfoPopover";
 export type { LockedFieldProps } from "./LockedField/LockedField";
+// Round B: shell
+export type { SidebarCollapsible } from "./Sidebar/Sidebar";
+export type { NotificationBellProps } from "./NotificationBell/NotificationBell";
+export type { ConfirmDialogProps } from "./ConfirmDialog/ConfirmDialog";

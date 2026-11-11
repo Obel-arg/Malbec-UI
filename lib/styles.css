@@ -38,6 +38,11 @@
   --color-pending-ring: #e6e3c3;
   --color-pending-tile: #ebe8c6;
   --color-pending-ink: #7a7628;
+  /*
+   * The unread dot of the notification bell, shared by the suite (Isa, 09/09/2026): a signal, not
+   * brand identity. The badge red at 50% saturation, so it doesn't read as an error.
+   */
+  --color-malbec-unread: #ac3d39;
 
   /**
    * Tooltip cursor band (Recharts uses opaque `#ccc` in getCursorRectangle — override below).
@@ -159,6 +164,226 @@
   }
   [data-stack-on-mobile] table > tbody > tr > *:empty {
     display: none;
+/**
+ * `Sidebar.Provider collapsible="dock"` (Malbec Artist / Live): the dock takes the layout slot and
+ * the panel floats over the content, so the usable width never changes by looking at the menu.
+ * Pinned, the dock measures the panel and the content starts to its right. Unlayered so it wins over
+ * the panel's own width transition utilities.
+ */
+[data-slot="sidebar-dock"] {
+  /* Unfolding is light and eager; folding was already asked for, so it is quicker. */
+  --sidebar-dock-duration-open: 260ms;
+  --sidebar-dock-duration-close: 200ms;
+  --sidebar-dock-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  /* Pinning pushes the whole page, so it is slower and eases in and out. */
+  --sidebar-dock-duration-pin: 320ms;
+  --sidebar-dock-ease-pin: cubic-bezier(0.4, 0, 0.2, 1);
+  display: contents;
+}
+
+@media (min-width: 48rem) {
+  [data-slot="sidebar-dock"] {
+    position: relative;
+    z-index: 10;
+    display: block;
+    flex: none;
+    align-self: stretch;
+    width: var(--sidebar-width);
+    transition: width var(--sidebar-dock-duration-pin) var(--sidebar-dock-ease-pin);
+  }
+
+  [data-slot="sidebar-dock"] > div {
+    height: 100%;
+  }
+
+  /* Without it the panel shrinks with the dock while pinning and bounces back open behind the content. */
+  [data-slot="sidebar-dock"] [data-slot="sidebar"] {
+    flex: none;
+  }
+
+  /* Floating: the gap is always the rail, unfolded or not. */
+  [data-slot="sidebar-dock"][data-overlay] {
+    width: var(--sidebar-width-collapsed);
+  }
+
+  [data-slot="sidebar-dock"][data-overlay] > div {
+    position: absolute;
+    inset-block: 0;
+  }
+
+  [data-slot="sidebar-dock"][data-overlay][data-side="left"] > div {
+    left: 0;
+  }
+
+  [data-slot="sidebar-dock"][data-overlay][data-side="right"] > div {
+    right: 0;
+  }
+
+  [data-slot="sidebar-dock"][data-overlay] [data-slot="sidebar"] {
+    transition:
+      width var(--sidebar-dock-duration-open) var(--sidebar-dock-ease),
+      box-shadow var(--sidebar-dock-duration-open) var(--sidebar-dock-ease);
+  }
+
+  [data-slot="sidebar-dock"][data-overlay]:not([data-open]) [data-slot="sidebar"] {
+    transition:
+      width var(--sidebar-dock-duration-close) var(--sidebar-dock-ease),
+      box-shadow var(--sidebar-dock-duration-close) var(--sidebar-dock-ease);
+  }
+
+  /* Wide and diffuse, in ink, only while the panel covers something: it reads as floating. */
+  [data-slot="sidebar-dock"][data-overlay][data-open][data-side="left"] [data-slot="sidebar"] {
+    box-shadow:
+      16px 0 40px -16px rgba(26, 26, 31, 0.16),
+      2px 0 8px -4px rgba(26, 26, 31, 0.07);
+  }
+
+  [data-slot="sidebar-dock"][data-overlay][data-open][data-side="right"] [data-slot="sidebar"] {
+    box-shadow:
+      -16px 0 40px -16px rgba(26, 26, 31, 0.16),
+      -2px 0 8px -4px rgba(26, 26, 31, 0.07);
+  }
+
+  /* While the panel slides, labels that don't fit yet are clipped, not wrapped onto two lines. */
+  [data-slot="sidebar-dock"] [data-slot="sidebar-content"] {
+    white-space: nowrap;
+  }
+
+  [data-slot="sidebar-dock"] [data-slot="sidebar-menu-button"] > span:not([data-slot]) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="sidebar-dock"],
+  [data-slot="sidebar-dock"] [data-slot="sidebar"] {
+    transition: none;
+  }
+}
+
+/**
+ * NotificationBell (malbec-ux-ui campanita-inbox.md). The arrival is ONE event: filling the glyph,
+ * the sound waves, the colour, the dot and the shake share one duration and curve.
+ */
+[data-slot="notification-bell"] {
+  --notification-bell-duration: 0.7s;
+  --notification-bell-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[data-slot="notification-bell-glyph"] {
+  transition: color var(--notification-bell-duration) var(--notification-bell-ease);
+}
+
+/* Fill and outline are the SAME path: only its fill-opacity animates, so the outline never doubles. */
+[data-slot="notification-bell-body"] {
+  fill-opacity: 0;
+  transition: fill-opacity var(--notification-bell-duration) var(--notification-bell-ease);
+}
+
+[data-slot="notification-bell"][data-unread] [data-slot="notification-bell-body"] {
+  fill-opacity: 1;
+}
+
+/* view-box is required: without it the 12px origin is measured against each wave's own box. */
+[data-slot="notification-bell-wave"] {
+  opacity: 0;
+  transform: scale(0.45);
+  transform-origin: 12px 12px;
+  transform-box: view-box;
+  transition:
+    opacity var(--notification-bell-duration) var(--notification-bell-ease),
+    transform var(--notification-bell-duration) cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+[data-slot="notification-bell"][data-unread] [data-slot="notification-bell-wave"] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* The shake goes on the container, so the dot turns stuck to the bell (it hangs from the nail). */
+[data-slot="notification-bell-ring"][data-shaking] {
+  animation: malbec-bell-shake var(--notification-bell-duration) ease;
+  transform-origin: 50% 15%;
+}
+
+/* Entrance of the dot on each arrival (remounted by key); the halo lives on ::after so the two
+   animations never fight over `transform`, and nothing touches the ring's box-shadow. */
+[data-slot="notification-bell-dot"] {
+  animation: malbec-bell-dot-in var(--notification-bell-duration) cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+
+[data-slot="notification-bell-dot"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--color-malbec-unread);
+  animation: malbec-bell-halo 2.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* With the inbox open (Popover.Trigger sets data-state) the halo has nothing left to point at. */
+[data-slot="notification-bell"][data-state="open"] [data-slot="notification-bell-dot"]::after {
+  display: none;
+}
+
+@keyframes malbec-bell-shake {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  15% {
+    transform: rotate(-11deg);
+  }
+  30% {
+    transform: rotate(9deg);
+  }
+  45% {
+    transform: rotate(-6deg);
+  }
+  60% {
+    transform: rotate(4deg);
+  }
+  75% {
+    transform: rotate(-2deg);
+  }
+}
+
+@keyframes malbec-bell-dot-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes malbec-bell-halo {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  75%,
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+/* Less motion: the glyph still changes state, it just jumps. The signal stays, the motion goes. */
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="notification-bell-ring"][data-shaking],
+  [data-slot="notification-bell-dot"],
+  [data-slot="notification-bell-dot"]::after {
+    animation: none;
+  }
+
+  [data-slot="notification-bell-glyph"],
+  [data-slot="notification-bell-body"],
+  [data-slot="notification-bell-wave"] {
+    transition: none;
   }
 }
 
@@ -350,6 +575,7 @@
   --color-pending-ring: var(--color-pending-ring);
   --color-pending-tile: var(--color-pending-tile);
   --color-pending-ink: var(--color-pending-ink);
+  --color-malbec-unread: var(--color-malbec-unread);
 
   --leading-tight: calc(20 / 16 * 1rem);
 

@@ -15,6 +15,11 @@ import {
   SIDEBAR_WIDTH_MOBILE,
 } from "./sidebar-constants";
 import {
+  createSidebarHoverIntent,
+  isSidebarHeld,
+  shouldCloseOnFocusLeave,
+} from "./sidebar-dock";
+import {
   sidebarCollapsibleChevronVariants,
   sidebarCollapsibleWrapperVariants,
   sidebarContentVariants,
@@ -73,8 +78,108 @@ type SidebarContextValue = {
   setOpenMobile: (open: boolean) => void;
   isMobile: boolean;
   toggleSidebar: () => void;
+  /** What the panel shows right now. With `collapsible="dock"` it is also expanded while it floats. */
   state: "expanded" | "collapsed";
+  collapsible: SidebarCollapsible;
+  /** `collapsible="dock"`: the panel takes its place in the layout (same as `open`). */
+  pinned: boolean;
+  /** `collapsible="dock"`: folds the floating panel at once (e.g. before opening a sheet over it). */
+  closeOverlay: () => void;
+  /** @internal wiring between the provider and the dock wrapper `Sidebar` renders. */
+  dock: SidebarDockWiring | null;
 };
+
+/**
+ * `icon`: folding leaves the icon rail and the content follows the panel width.
+ * `dock`: folding leaves the rail; the panel unfolds OVER the content while the pointer (or focus)
+ * is on it, so the content never moves. `open` / `defaultOpen` / the trigger pin it in place.
+ */
+export type SidebarCollapsible = "icon" | "dock";
+
+type SidebarDockWiring = {
+  attach: (node: HTMLDivElement | null) => void;
+  overlay: boolean;
+  open: boolean;
+  handlers: Pick<
+    React.ComponentProps<"div">,
+    | "onPointerEnter"
+    | "onPointerLeave"
+    | "onPointerDownCapture"
+    | "onPointerUpCapture"
+    | "onFocusCapture"
+    | "onBlurCapture"
+  >;
+};
+
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+
+/** Hover/focus unfolding of the floating dock panel. `enabled` is false while pinned or on mobile. */
+function useSidebarDockHover(enabled: boolean) {
+  // The dock element, kept in state (callback ref) so effects and the intent can read it.
+  const [zone, setZone] = React.useState<HTMLDivElement | null>(null);
+  const [open, setOpen] = React.useState(false);
+
+  const intent = React.useMemo(
+    () => createSidebarHoverIntent({ onOpenChange: setOpen, isHeld: () => isSidebarHeld(zone) }),
+    [zone],
+  );
+  React.useEffect(() => intent.dispose, [intent]);
+
+  // Layout effect: unpinning with the pointer still on the trigger must not paint the panel folded
+  // for a frame and bounce back open.
+  useIsomorphicLayoutEffect(() => {
+    if (!enabled) {
+      intent.closeNow();
+      return;
+    }
+    if (zone?.matches(":hover")) intent.openNow();
+  }, [enabled, intent, zone]);
+
+  React.useEffect(() => {
+    if (!enabled || !open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      // With a dropdown open, Escape belongs to the dropdown.
+      if (event.key !== "Escape" || isSidebarHeld(zone)) return;
+      intent.closeNow();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [enabled, open, intent, zone]);
+
+  const handlers = React.useMemo<SidebarDockWiring["handlers"]>(() => {
+    // React events bubble through the component tree: a sheet portalled from the menu would count
+    // as inside. Only what is inside the dock in the DOM counts (`currentTarget` is the dock).
+    const inside = (e: React.SyntheticEvent<HTMLDivElement>) =>
+      e.target instanceof Node && e.currentTarget.contains(e.target);
+    return {
+      // Touch has no hover: a tap would leave the panel open with no way to fold it.
+      onPointerEnter: (e) => {
+        if (enabled && e.pointerType === "mouse" && inside(e)) intent.pointerEnter();
+      },
+      onPointerLeave: (e) => {
+        if (enabled && e.pointerType === "mouse") intent.pointerLeave();
+      },
+      onPointerDownCapture: (e) => {
+        if (enabled && e.pointerType === "mouse" && e.button === 0 && inside(e)) intent.press();
+      },
+      // Released after the click, so the icon's navigation runs before the panel unfolds.
+      onPointerUpCapture: () => {
+        if (enabled && intent.isPressed()) window.setTimeout(() => intent.release(), 0);
+      },
+      onFocusCapture: (e) => {
+        if (enabled && inside(e)) intent.openNow();
+      },
+      onBlurCapture: (e) => {
+        if (enabled && shouldCloseOnFocusLeave(e.currentTarget, e.relatedTarget as Node | null)) {
+          intent.closeNow();
+        }
+      },
+    };
+  }, [enabled, intent]);
+
+  return { attach: setZone, open: enabled && open, handlers, closeNow: intent.closeNow };
+}
 
 const SidebarContext = React.createContext<SidebarContextValue | null>(null);
 
@@ -144,6 +249,8 @@ export interface SidebarProviderProps extends React.ComponentProps<"div"> {
   defaultOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** How the desktop panel folds. With `dock`, `open` means pinned. @default "icon" */
+  collapsible?: SidebarCollapsible;
 }
 
 const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
@@ -153,6 +260,7 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
       defaultOpen = true,
       open: openProp,
       onOpenChange,
+      collapsible = "icon",
       className,
       style,
       children,
@@ -166,6 +274,10 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
     const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
 
     const open = openProp ?? uncontrolledOpen;
+    const isDock = collapsible === "dock" && !isMobile;
+    const dockHover = useSidebarDockHover(isDock && !open);
+    const { closeNow } = dockHover;
+    const expanded = open || dockHover.open;
 
     const setOpen = React.useCallback(
       (next: boolean) => {
@@ -181,9 +293,11 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
       if (isMobile) {
         setOpenMobile((o) => !o);
       } else {
+        // Dock: toggling pins or unpins; while the panel floats unfolded, it pins it.
+        closeNow();
         setOpen(!open);
       }
-    }, [isMobile, open, setOpen]);
+    }, [isMobile, open, setOpen, closeNow]);
 
     React.useEffect(() => {
       const onKey = (e: KeyboardEvent) => {
@@ -206,7 +320,13 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
         setOpenMobile,
         isMobile,
         toggleSidebar,
-        state: open ? "expanded" : "collapsed",
+        state: expanded ? "expanded" : "collapsed",
+        collapsible,
+        pinned: open,
+        closeOverlay: closeNow,
+        dock: isDock
+          ? { attach: dockHover.attach, overlay: !open, open: expanded, handlers: dockHover.handlers }
+          : null,
       }),
       [
         defaultSide,
@@ -216,6 +336,12 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
         openMobile,
         isMobile,
         toggleSidebar,
+        expanded,
+        collapsible,
+        closeNow,
+        isDock,
+        dockHover.attach,
+        dockHover.handlers,
       ],
     );
 
@@ -260,9 +386,33 @@ export interface SidebarProps extends React.ComponentProps<"div"> {
   side?: SidebarSide;
 }
 
+/** Takes the layout slot: the rail while floating, the panel while pinned (styles.css). */
+function SidebarDock({
+  side,
+  wiring: { attach, overlay, open, handlers },
+  children,
+}: {
+  side: SidebarSide;
+  wiring: SidebarDockWiring;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      ref={attach}
+      data-slot="sidebar-dock"
+      data-side={side}
+      data-overlay={overlay || undefined}
+      data-open={open || undefined}
+      {...handlers}
+    >
+      {children}
+    </div>
+  );
+}
+
 const SidebarRoot = React.forwardRef<HTMLDivElement, SidebarProps>(
   function SidebarRoot({ side: sideProp, className, children, ...rest }, ref) {
-    const { defaultSide, isMobile, openMobile, setOpenMobile, sidebarId, state } =
+    const { defaultSide, isMobile, openMobile, setOpenMobile, sidebarId, state, dock } =
       useSidebar();
     const labels = useMalbecLabels();
     const side = sideProp ?? defaultSide;
@@ -301,9 +451,17 @@ const SidebarRoot = React.forwardRef<HTMLDivElement, SidebarProps>(
       );
     }
 
+    const desktop = <div className={cn(sidebarDesktopVariants({ side }))}>{panel}</div>;
+
     return (
       <SidebarInstanceContext.Provider value={{ side }}>
-        <div className={cn(sidebarDesktopVariants({ side }))}>{panel}</div>
+        {dock ? (
+          <SidebarDock side={side} wiring={dock}>
+            {desktop}
+          </SidebarDock>
+        ) : (
+          desktop
+        )}
       </SidebarInstanceContext.Provider>
     );
   },
@@ -335,10 +493,12 @@ export type SidebarTriggerProps = Omit<
 
 const SidebarTrigger = React.forwardRef<HTMLButtonElement, SidebarTriggerProps>(
   function SidebarTrigger({ className, children, onClick, ...rest }, ref) {
-    const { toggleSidebar, sidebarId, isMobile, openMobile, open } =
+    const { toggleSidebar, sidebarId, isMobile, openMobile, open, dock } =
       useSidebar();
     const labels = useMalbecLabels();
     const expanded = isMobile ? openMobile : open;
+    // Dock: the pointer unfolds the panel; the trigger pins or unpins it, and says so.
+    const pin = dock !== null;
 
     return (
       <Button
@@ -348,15 +508,16 @@ const SidebarTrigger = React.forwardRef<HTMLButtonElement, SidebarTriggerProps>(
         className={cn("ui:shrink-0", className)}
         htmlType="button"
         aria-controls={sidebarId}
-        aria-expanded={expanded}
-        aria-label={labels.toggleSidebar}
+        aria-expanded={pin ? undefined : expanded}
+        aria-pressed={pin ? open : undefined}
+        aria-label={pin ? (open ? labels.unpinSidebar : labels.pinSidebar) : labels.toggleSidebar}
         onClick={(e) => {
           onClick?.(e);
           toggleSidebar();
         }}
         {...rest}
       >
-        {children ?? <SidebarPanelIcon />}
+        {children ?? (pin ? <SidebarDockIcon pinned={open} /> : <SidebarPanelIcon />)}
       </Button>
     );
   },
@@ -380,6 +541,29 @@ function SidebarPanelIcon({
     >
       <rect x="3" y="3" width="18" height="18" rx="2" />
       <path d="M9 3v18" />
+    </svg>
+  );
+}
+
+/**
+ * Chrome's vertical-tabs glyph: three lines (the middle one shorter) and a chevron toward where the
+ * panel will move. Pinned offers to unpin (points in), floating offers to pin (points out).
+ */
+function SidebarDockIcon({ pinned }: { pinned: boolean }) {
+  const { defaultSide } = useSidebar();
+  const flip = pinned === (defaultSide === "right");
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn("ui:size-4", flip && "ui:-scale-x-100")}
+      aria-hidden
+    >
+      <path d="M2.5 5h14M2.5 12h11M2.5 19h14M21.5 8 17.5 12l4 4" />
     </svg>
   );
 }
