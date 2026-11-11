@@ -51,7 +51,11 @@ export interface MalbecLabels {
   filterInbox: string;
   moreActions: string;
   unread: string;
+  /** NotificationBell aria-label; the dot shows no number, so the count travels here. */
+  notifications: (unreadCount: number) => string;
 }
+
+const unreadSuffix = (count: number) => (count > 0 ? ` (${count > 99 ? "99+" : count})` : "");
 
 export type MalbecLocale = "en" | "es";
 
@@ -92,6 +96,7 @@ export const labelsEn: MalbecLabels = {
   filterInbox: "Filter inbox",
   moreActions: "More actions",
   unread: "Unread",
+  notifications: (count) => `Notifications${unreadSuffix(count)}`,
 };
 
 export const labelsEs: MalbecLabels = {
@@ -131,6 +136,7 @@ export const labelsEs: MalbecLabels = {
   filterInbox: "Filtrar notificaciones",
   moreActions: "Más acciones",
   unread: "Sin leer",
+  notifications: (count) => `Notificaciones${unreadSuffix(count)}`,
 };
 
 export const LABELS_BY_LOCALE: Record<MalbecLocale, MalbecLabels> = {

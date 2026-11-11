@@ -65,6 +65,9 @@ export { SortableColumnHeader } from "./DataTable/sortable-column-header";
 export { Steps } from "./Steps/Steps";
 export { Table } from "./Table/Table";
 
+// Round B: shell
+export { NotificationBell } from "./NotificationBell/NotificationBell";
+
 export type { MalbecThemeProviderProps } from "./theme";
 export type {
   AlertProps,
@@ -361,3 +364,4 @@ export type {
 
 // Round B: shell
 export type { SidebarCollapsible } from "./Sidebar/Sidebar";
+export type { NotificationBellProps } from "./NotificationBell/NotificationBell";
