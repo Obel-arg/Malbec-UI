@@ -195,6 +195,8 @@ export type {
   CommandItemProps,
   CommandSeparatorProps,
   CommandShortcutProps,
+  CommandContextProps,
+  CommandFooterProps,
   CommandLoadingProps,
   CommandDialogProps,
 } from "./Command/Command";
