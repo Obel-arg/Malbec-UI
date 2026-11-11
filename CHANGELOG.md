@@ -105,7 +105,7 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 ### Added: components the apps already had
 All additive. Each one is the version already approved on screen in an app, adjusted to the spec; you can delete your local copy when you migrate.
 - **Charts:** chart primitives from `charts.md`: `CHART_INK` / `SERIES_INK`, the area and territory scales, the dotted `ChartCard`, the sheen (`ChartMarkDefs`, render it once per screen), `CrosshairCursor` and `TOOLTIP_CARD_CLASS`. Plus **`Donut`** (thin ring, total in the centre, long tail folded into "Other") and **`PctBlocks`**. Replaces the local `chart-style` modules (103 consumers).
-- **`Notice`** (`tone="info" | "pending"`, the suite's one yellow), **`EmptyState`** (icon box, text and the action that leaves the empty state), **`PageHeader`** and **`SectionHeading`**, **`Skeleton`**, **`InfoPopover`** and **`LockedField`**.
+- **`Notice`** (`tone="info" | "pending"`, the suite's one yellow), **`EmptyState`** (icon box, text and the action that leaves the empty state), **`Skeleton`**, **`InfoPopover`** and **`LockedField`**.
 - **`ConfirmDialog`**: async confirm with a pending state, an error message, destructive tone and `requireReason`. `confirmPhrase` (type-to-confirm) is not included: no app has it approved on screen.
 - **`NotificationBell`**: the suite's bell (two states, one arrival animation, the unread dot in `--color-malbec-unread`, reduced motion). The floating toast stays in the apps.
 - **Sidebar `collapsible="dock"`** on `Sidebar.Provider`: a rail with a panel that floats on hover and pins.
