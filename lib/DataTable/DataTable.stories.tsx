@@ -590,3 +590,39 @@ const { rows, total } = useEvents(pagination);
     },
   },
 };
+
+function EventsTableWithColumnsToggle() {
+  const columns = useEventColumns();
+  return (
+    <div className="ui:mx-auto ui:max-w-[1085px]">
+      <DataTable
+        getRowId={(r) => r.id}
+        columns={columns}
+        data={eventRowsSample}
+        emptyLabel="Sin eventos"
+        toolbar={({ table }) => <DataTable.ColumnsToggle table={table} />}
+      />
+    </div>
+  );
+}
+
+export const ColumnsToggle: Story = {
+  name: "With columns toggle",
+  render: () => <EventsTableWithColumnsToggle />,
+  parameters: {
+    docs: {
+      source: {
+        code: `${DATA_TABLE_COLUMNS_SNIPPET}
+
+// Lists every column that can hide (\`enableHiding: false\` opts one out). The menu
+// shows \`meta.label\`, else a string \`header\`, else the column id.
+<DataTable
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin eventos"
+  toolbar={({ table }) => <DataTable.ColumnsToggle table={table} />}
+/>`,
+      },
+    },
+  },
+};

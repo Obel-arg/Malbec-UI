@@ -47,6 +47,8 @@ export interface MalbecLabels {
   filterInbox: string;
   moreActions: string;
   unread: string;
+  /** DataTable.ColumnsToggle trigger. */
+  columns: string;
 }
 
 export type MalbecLocale = "en" | "es";
@@ -86,6 +88,7 @@ export const labelsEn: MalbecLabels = {
   filterInbox: "Filter inbox",
   moreActions: "More actions",
   unread: "Unread",
+  columns: "Columns",
 };
 
 export const labelsEs: MalbecLabels = {
@@ -123,6 +126,7 @@ export const labelsEs: MalbecLabels = {
   filterInbox: "Filtrar notificaciones",
   moreActions: "Más acciones",
   unread: "Sin leer",
+  columns: "Columnas",
 };
 
 export const LABELS_BY_LOCALE: Record<MalbecLocale, MalbecLabels> = {

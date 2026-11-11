@@ -20,6 +20,7 @@ import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import type { MalbecLabels } from "../i18n/labels";
 import { Table, type TableAppearance } from "../Table/Table";
 import { cn } from "../utils/cn";
+import { DataTableColumnsToggle } from "./DataTableColumnsToggle";
 import { DataTablePagination } from "./DataTablePagination";
 import {
   dataTableRootVariants,
@@ -397,3 +398,5 @@ function dataCellClassName(
 
 /** Page links for a paginated table: `footer={({ table }) => <DataTable.Pagination table={table} />}`. */
 DataTable.Pagination = DataTablePagination;
+/** Show/hide columns menu: `toolbar={({ table }) => <DataTable.ColumnsToggle table={table} />}`. */
+DataTable.ColumnsToggle = DataTableColumnsToggle;
