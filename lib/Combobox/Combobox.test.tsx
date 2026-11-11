@@ -31,6 +31,13 @@ describe("Combobox defects reported by Live", () => {
     expect(chipsBox().hasAttribute("data-disabled")).toBe(true);
   });
 
+  it("the chips box packs chips at the start instead of spreading them", () => {
+    render(<Chips />);
+    const classes = chipsBox().className.split(/\s+/);
+    expect(classes).toContain("ui:justify-start");
+    expect(classes).not.toContain("ui:justify-between");
+  });
+
   it("the list takes the anchor's width, not the combobox root's", () => {
     render(
       <Combobox items={fruits} defaultOpen>
