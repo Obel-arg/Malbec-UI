@@ -16,4 +16,8 @@ describe("public API (2.0)", () => {
   it("exports the spec DataCard (v2), not v1's brand band", () => {
     expect(api).toHaveProperty("DataCard");
   });
+
+  it("has no PageHeader: a page header is a composition of primitives (see Patterns/Page header)", () => {
+    expect(api).not.toHaveProperty("PageHeader");
+  });
 });
