@@ -20,6 +20,7 @@ import {
 import type { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { cn } from "../utils/cn";
+import { withAlpha } from "../utils/with-alpha";
 import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { Badge } from "../Badge/Badge";
 import type { BadgeVariant } from "../Badge/badge-variants";
@@ -62,7 +63,7 @@ export type CalendarMonthEventColor =
  * lighter than any show chip so the child chips stay legible on top of it.
  */
 function groupContainerBg(color: CalendarMonthEventColor): string {
-  return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 8%, transparent)`;
+  return withAlpha(EVENT_PILL_DOT_COLOR[color], 0.08);
 }
 /** Container border matches the tour header chip's fill (the `Badge` tint). */
 function groupContainerBorder(color: CalendarMonthEventColor): string {
@@ -78,7 +79,7 @@ function unconfirmedChipStyle(
 ): React.CSSProperties {
   return {
     backgroundColor: "transparent",
-    borderColor: `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 60%, transparent)`,
+    borderColor: withAlpha(EVENT_PILL_DOT_COLOR[color], 0.6),
     borderStyle: "dashed",
     borderWidth: 1.5,
   };
