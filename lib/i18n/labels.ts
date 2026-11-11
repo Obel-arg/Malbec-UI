@@ -23,6 +23,8 @@ export interface MalbecLabels {
   previousPage: string;
   nextPage: string;
   morePages: string;
+  /** The "i" next to a field label (`Field.Label info`). */
+  moreInfo: string;
   /** Breadcrumb `<nav>` label. */
   breadcrumb: string;
   /** Collapsed breadcrumb items. */
@@ -94,6 +96,7 @@ export const labelsEn: MalbecLabels = {
   previousPage: "Go to previous page",
   nextPage: "Go to next page",
   morePages: "More pages",
+  moreInfo: "More information",
   breadcrumb: "Breadcrumb",
   more: "More",
   sidebarNavigation: "Navigation menu",
@@ -147,6 +150,7 @@ export const labelsEs: MalbecLabels = {
   previousPage: "Ir a la página anterior",
   nextPage: "Ir a la página siguiente",
   morePages: "Más páginas",
+  moreInfo: "Más información",
   breadcrumb: "Ruta de navegación",
   more: "Más",
   sidebarNavigation: "Menú de navegación",

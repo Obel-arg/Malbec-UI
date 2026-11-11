@@ -1,23 +1,51 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { InfoPopover } from "./InfoPopover";
+import { MalbecLabelsProvider } from "../i18n/MalbecLabelsProvider";
+import { Input } from "../Input/Input";
+import { Field } from "./Field";
 
-function renderInfo(props: { openOnHover?: boolean } = {}) {
+function renderInfo(props: { infoOnHover?: boolean } = {}) {
   return render(
-    <InfoPopover
-      {...props}
-      label="Cómo se calcula"
-      content={
-        <ul>
-          <li>Primer criterio.</li>
-          <li>Segundo criterio.</li>
-        </ul>
-      }
-    />,
+    <Field>
+      <Field.Label
+        htmlFor="fee"
+        {...props}
+        infoLabel="Cómo se calcula"
+        info={
+          <ul>
+            <li>Primer criterio.</li>
+            <li>Segundo criterio.</li>
+          </ul>
+        }
+      >
+        Comisión
+      </Field.Label>
+      <Input id="fee" defaultValue="12%" />
+    </Field>,
   );
 }
 
-describe("InfoPopover", () => {
+describe("Field.Label info", () => {
+  it("keeps the input's name to the label text: the i is a sibling, not inside the <label>", () => {
+    renderInfo();
+    expect(screen.getByRole("textbox", { name: "Comisión" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Cómo se calcula" }).closest("label")).toBeNull();
+  });
+
+  it("names the button from MalbecLabelsProvider when infoLabel is not given", () => {
+    render(
+      <MalbecLabelsProvider locale="es">
+        <Field>
+          <Field.Label htmlFor="fee" info="Se aplica sobre el neto.">
+            Comisión
+          </Field.Label>
+          <Input id="fee" />
+        </Field>
+      </MalbecLabelsProvider>,
+    );
+    expect(screen.getByRole("button", { name: "Más información" })).toBeTruthy();
+  });
+
   it("keeps the text out of the DOM until the i is clicked", () => {
     renderInfo();
     expect(screen.queryByText("Primer criterio.")).toBeNull();
@@ -39,10 +67,10 @@ describe("InfoPopover", () => {
     expect(trigger.getAttribute("aria-expanded")).toBe("false");
   });
 
-  it("with openOnHover opens on mouse enter, closes on leave, and a click pins it", () => {
+  it("with infoOnHover opens on mouse enter, closes on leave, and a click pins it", () => {
     vi.useFakeTimers();
     try {
-      renderInfo({ openOnHover: true });
+      renderInfo({ infoOnHover: true });
       const trigger = screen.getByRole("button", { name: "Cómo se calcula" });
       fireEvent.pointerEnter(trigger, { pointerType: "mouse" });
       act(() => vi.advanceTimersByTime(200));
