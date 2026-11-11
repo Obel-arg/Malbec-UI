@@ -32,6 +32,7 @@ const EXPECTED = {
     "publishing",
     "booking",
   ],
+  "/form": ["Form", "useForm", "withForm", "withFieldGroup"],
   "/theme/presets": ["live", "malbecRecords", "artist", "publishing", "booking"],
 };
 
