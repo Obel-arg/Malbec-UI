@@ -35,14 +35,15 @@
   --malbec-chart-tooltip-cursor-fill-opacity: 0.08;
 
   /**
-   * Chart series: primary for emphasis; lighter steps mix with the surface (`--color-background-100`),
-   * not `transparent`, so fills stay opaque and grid lines don’t show through bars/areas.
+   * Chart series (malbec-ux-ui charts.md): the warm SERIES_INK grey (72 67 61), deepest first, at
+   * alphas .92/.70/.52/.36/.24, pre-composited over background-100 so fills stay opaque and grid
+   * lines don't show through. Brand colour is never data.
    */
-  --chart-1: var(--color-primary);
-  --chart-2: color-mix(in srgb, var(--color-primary) 34%, var(--color-background-100));
-  --chart-3: color-mix(in srgb, var(--color-primary) 55%, var(--color-background-100));
-  --chart-4: color-mix(in srgb, var(--color-primary) 45%, var(--color-accent) 55%);
-  --chart-5: color-mix(in srgb, var(--color-accent) 72%, var(--color-primary) 28%);
+  --chart-1: #56514c;
+  --chart-2: #7d7975;
+  --chart-3: #9c9a97;
+  --chart-4: #b9b7b5;
+  --chart-5: #cecdcb;
 }
 
 .dark {
@@ -59,11 +60,12 @@
 
   --malbec-chart-tooltip-cursor-fill-opacity: 0.11;
 
-  --chart-1: var(--color-primary);
-  --chart-2: color-mix(in srgb, var(--color-primary) 40%, var(--color-background-100));
-  --chart-3: color-mix(in srgb, var(--color-primary) 62%, var(--color-background-100));
-  --chart-4: color-mix(in srgb, var(--color-primary) 50%, var(--color-accent) 50%);
-  --chart-5: color-mix(in srgb, var(--color-accent) 70%, var(--color-primary) 30%);
+  /* Same steps in a light warm grey (228 226 223) over the dark background-100. */
+  --chart-1: #d3d1ce;
+  --chart-2: #a3a19f;
+  --chart-3: #7c7a79;
+  --chart-4: #5a5857;
+  --chart-5: #403e3e;
 }
 
 /**
