@@ -20,7 +20,7 @@ export const switchRootVariants = cva(
     "ui:outline-none",
     "ui:transition-[color,background-color,border-color,opacity,box-shadow]",
     "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-malbec-icon",
+    "ui:focus-visible:ring-focus",
     "ui:focus-visible:ring-offset-2",
     "ui:focus-visible:ring-offset-background-100",
     "ui:disabled:cursor-not-allowed",

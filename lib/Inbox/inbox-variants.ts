@@ -29,7 +29,7 @@ export const inboxFilterTriggerVariants = cva([
   "ui:inline-flex ui:items-center ui:gap-[2px] ui:cursor-pointer",
   "ui:outline-none ui:bg-transparent ui:p-0 ui:m-0 ui:border-0",
   "ui:rounded-[4px]",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);
 
 /** Icon button used for the top-right more-actions trigger. */
@@ -37,7 +37,7 @@ export const inboxIconButtonVariants = cva([
   "ui:inline-flex ui:items-center ui:justify-center ui:cursor-pointer",
   "ui:size-5 ui:p-[3px] ui:rounded-[4px] ui:bg-transparent ui:border-0",
   "ui:text-text-default-muted ui:hover:text-text-default ui:hover:bg-background-200",
-  "ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   "ui:transition-colors",
 ]);
 
@@ -55,7 +55,7 @@ export const inboxTabTriggerVariants = cva(
     "ui:bg-transparent ui:border-0 ui:p-0 ui:m-0",
     "ui:text-[14px] ui:font-medium ui:leading-5 ui:tracking-[-0.084px]",
     "ui:outline-none",
-    "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+    "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
     "ui:rounded-[2px]",
     // Underline sits exactly on the row's bottom border (row has `py-2` so the
     // trigger bottom edge is 12px above the row bottom; -bottom-[12px] places
@@ -106,7 +106,7 @@ export const inboxItemVariants = cva(
         false: "",
       },
       interactive: {
-        true: "ui:cursor-pointer ui:hover:bg-background-200/60 ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-inset",
+        true: "ui:cursor-pointer ui:hover:bg-background-200/60 ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-inset",
         false: "",
       },
     },
@@ -184,7 +184,7 @@ export const inboxItemHoverActionVariants = cva(
     "ui:inline-flex ui:items-center ui:justify-center ui:cursor-pointer",
     "ui:size-5 ui:p-[5px] ui:rounded-[4px] ui:border-0 ui:bg-transparent",
     "ui:text-text-default-muted ui:hover:text-text-default ui:hover:bg-background-200",
-    "ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-inset",
+    "ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-inset",
     "ui:transition-colors",
   ],
   {

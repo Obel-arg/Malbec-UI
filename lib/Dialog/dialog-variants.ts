@@ -66,7 +66,7 @@ export const dialogCloseVariants = cva([
   "ui:opacity-70",
   "ui:transition-opacity",
   "ui:outline-none",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);
 
 export const dialogCloseIconVariants = cva("ui:size-4");
@@ -97,7 +97,7 @@ export const dialogActionVariants = cva([
   "ui:whitespace-nowrap",
   "ui:outline-none ui:transition-[opacity,background-color]",
   "ui:hover:opacity-90 ui:active:opacity-80",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);
 
 export const dialogInlineFieldVariants = cva("ui:flex ui:w-full ui:items-center ui:gap-4");
@@ -114,5 +114,5 @@ export const dialogInlineInputVariants = cva([
   "ui:text-sm ui:leading-5 ui:font-normal ui:text-text-default",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);

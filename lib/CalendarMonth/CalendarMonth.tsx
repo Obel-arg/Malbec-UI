@@ -405,7 +405,7 @@ const calendarMonthToolbarSelectTriggerClassName = [
   "ui:h-8 ui:min-h-8 ui:gap-2 ui:rounded-[8px] ui:border-[1.5px] ui:border-primary ui:bg-transparent",
   "ui:px-3 ui:py-[6px] ui:text-xs ui:font-medium ui:leading-4 ui:tracking-[-0.3px] ui:text-primary ui:shadow-none",
   "ui:hover:bg-primary/10 ui:active:bg-primary/15",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   "[&>span:last-child]:text-primary [&>span:last-child]:opacity-100",
 ].join(" ");
 
@@ -1249,7 +1249,7 @@ const CalendarMonthDay = React.forwardRef<
       className={cn(
         calendarMonthDayCellVariants({ isLast: isLastInRow }),
         selectable &&
-          "ui:cursor-pointer ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-1 ui:focus-visible:ring-offset-background-100",
+          "ui:cursor-pointer ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-1 ui:focus-visible:ring-offset-background-100",
         className,
       )}
       onClick={(e) => {

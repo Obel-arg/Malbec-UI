@@ -103,7 +103,7 @@ export const alertDialogCancelVariants = cva(
     "ui:text-sm ui:font-medium ui:leading-5 ui:tracking-[-0.3px] ui:text-text-default",
     "ui:whitespace-nowrap",
     "ui:outline-none ui:transition-[opacity,background-color,border-color]",
-    "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+    "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   ],
   {
     variants: {
@@ -129,7 +129,7 @@ export const alertDialogActionVariants = cva(
     "ui:whitespace-nowrap",
     "ui:outline-none ui:transition-[opacity,background-color]",
     "ui:hover:opacity-90 ui:active:opacity-80",
-    "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+    "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   ],
   {
     variants: {

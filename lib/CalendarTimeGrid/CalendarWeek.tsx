@@ -316,7 +316,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
                 className={cn(
                   calendarTimeGridColumnVariants({ isLast: i === 6 }),
                   selectable &&
-                    "ui:cursor-pointer ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-inset ui:focus-visible:ring-primary",
+                    "ui:cursor-pointer ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-inset ui:focus-visible:ring-focus",
                 )}
                 style={{ minHeight: gridH }}
                 tabIndex={selectable ? 0 : undefined}

@@ -86,7 +86,7 @@ export function InfoPopover({
               pinned.current = true;
             }
           }}
-          className="ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:border-0 ui:bg-transparent ui:p-0 ui:text-malbec-icon ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:hover:text-malbec-ink ui:focus-visible:ring-2 ui:focus-visible:ring-malbec-icon"
+          className="ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:border-0 ui:bg-transparent ui:p-0 ui:text-malbec-icon ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:hover:text-malbec-ink ui:focus-visible:ring-2 ui:focus-visible:ring-focus"
         >
           <Info aria-hidden className="ui:size-4" />
         </button>

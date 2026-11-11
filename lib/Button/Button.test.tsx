@@ -37,7 +37,7 @@ describe("Button", () => {
     const classes = classesOf(button);
     expect(classes).toContain("ui:text-text-default");
     expect(classes).toContain("ui:hover:bg-background-200");
-    expect(classes).toContain("ui:focus-visible:ring-malbec-icon");
+    expect(classes).toContain("ui:focus-visible:ring-focus");
     expect(classes).not.toContain("ui:text-primary");
     expect(classes).not.toContain("ui:focus-visible:ring-primary");
     expect(button.dataset.tone).toBe("neutral");

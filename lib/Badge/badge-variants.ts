@@ -25,7 +25,7 @@ export const badgeVariants = cva(
     "ui:transition-[color,background-color,border-color,opacity,box-shadow]",
     "ui:outline-none",
     "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
+    "ui:focus-visible:ring-focus",
     "ui:focus-visible:ring-offset-2",
     "ui:focus-visible:ring-offset-background-100",
   ],
