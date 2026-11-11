@@ -101,6 +101,25 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 - `statusTone`, `statusVariant`, `priorityVariant`, `STATUS_TONES`, `TONE_VARIANT` and `formatGmtOffsetLabel` are no longer exported. None of the four apps imported them.
 - Use `<StatusBadge status="…" />` or `<StatusBadge tone={…} />` for status colours. `PRIORITY_TONE` stays: `<StatusBadge tone={PRIORITY_TONE.Alta} status="Alta" />`.
 
+
+### Added: components the apps already had
+All additive. Each one is the version already approved on screen in an app, adjusted to the spec; you can delete your local copy when you migrate.
+- **Charts:** chart primitives from `charts.md`: `CHART_INK` / `SERIES_INK`, the area and territory scales, the dotted `ChartCard`, the sheen (`ChartMarkDefs`, render it once per screen), `CrosshairCursor` and `TOOLTIP_CARD_CLASS`. Plus **`Donut`** (thin ring, total in the centre, long tail folded into "Other") and **`PctBlocks`**. Replaces the local `chart-style` modules (103 consumers).
+- **`Notice`** (`tone="info" | "pending"`, the suite's one yellow), **`EmptyState`** (icon box, text and the action that leaves the empty state), **`PageHeader`** and **`SectionHeading`**, **`Skeleton`**, **`InfoPopover`** and **`LockedField`**.
+- **`ConfirmDialog`**: async confirm with a pending state, an error message, destructive tone and `requireReason`. `confirmPhrase` (type-to-confirm) is not included: no app has it approved on screen.
+- **`NotificationBell`**: the suite's bell (two states, one arrival animation, the unread dot in `--color-malbec-unread`, reduced motion). The floating toast stays in the apps.
+- **Sidebar `collapsible="dock"`** on `Sidebar.Provider`: a rail with a panel that floats on hover and pins.
+- **DataTable:** `DataTable.Pagination` (client `pageSize`, controlled `pagination`, server `rowCount`), `DataTable.ColumnsToggle`, controlled `sorting` + `manualSorting`, and `toolbar` as a function of the table. `SortableColumnHeader` takes `icon` and `align`.
+- **Table:** `stackOnMobile` (each row becomes a card under 640px; desktop unchanged) and `stickyHeader`.
+- **Combobox:** `keywords` per item, `filter={null}` + `onInputValueChange` for remote search, `loading`, `onCreate` ("Create “…”" when nothing matches) and `Combobox.List onLoadMore`.
+- **CSS (`tokens.css`):** `scroll-hidden` / `scroll-thin`, the suite easings and the `wizard-step` keyframes.
+
+### Fixes: Combobox
+- The list takes the width of its anchor, not of the root.
+- Chips look disabled with `disabled`, and sit at the start instead of `justify-between`.
+- The selected option is marked (`background-200`, medium weight), as in `Select`.
+- The wheel scrolls the list inside a modal Dialog or Sheet.
+- The open/close chevron reads its label from `MalbecLabelsProvider`.
 ## v1.16.0 — 2026-11-03
 
 ### Added
