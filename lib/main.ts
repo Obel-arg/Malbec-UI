@@ -371,3 +371,5 @@ export type {
 export type { DataTablePaginationProps } from "./DataTable/DataTablePagination";
 export type { DataTableColumnsToggleProps } from "./DataTable/DataTableColumnsToggle";
 export type { SortableColumnHeaderProps } from "./DataTable/sortable-column-header";
+// Round B: combobox
+export type { ComboboxFilter } from "./Combobox/Combobox";

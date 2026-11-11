@@ -14,6 +14,7 @@ import {
   comboboxItemVariants,
   comboboxListVariants,
   comboboxSeparatorVariants,
+  comboboxStatusVariants,
   comboboxTriggerRowVariants,
 } from "./combobox-variants";
 import type { ComboboxTriggerRowVariant } from "./combobox-variants";
@@ -47,8 +48,10 @@ type ComboboxContextValue = {
   filteredItems: unknown[];
   preventContentAutofocus: boolean;
   comboboxRootRef: React.RefObject<HTMLDivElement | null>;
-  /** Border-box width of the combobox root; drives popover/list width. */
-  anchorWidthPx: number | null;
+  loading: boolean;
+  /** The typed query, offered as a new option, when `onCreate` is set and nothing matches. */
+  createQuery: string | null;
+  create: () => void;
 };
 
 const ComboboxContext = React.createContext<ComboboxContextValue | null>(null);
@@ -87,16 +90,26 @@ function isNodeInsideRoot(
   return Boolean(root && node instanceof Node && root.contains(node));
 }
 
+/** Whether `item` matches `query` (already trimmed and lower-cased). */
+export type ComboboxFilter = (item: unknown, query: string) => boolean;
+
+/** `item.keywords` when the item is an object that has a string array there. */
+function itemKeywords(item: unknown): string[] {
+  if (!item || typeof item !== "object" || !("keywords" in item)) return [];
+  const keywords = (item as { keywords?: unknown }).keywords;
+  return Array.isArray(keywords)
+    ? keywords.filter((k): k is string => typeof k === "string")
+    : [];
+}
+
 function filterComboboxItems(
   source: readonly unknown[],
   inputValue: string,
-  itemToStringValue: (item: unknown) => string,
+  matches: ComboboxFilter | null,
 ): unknown[] {
   const q = inputValue.trim().toLowerCase();
-  if (!q) return [...source];
-  return source.filter((item) =>
-    itemToStringValue(item).toLowerCase().includes(q),
-  );
+  if (!q || !matches) return [...source];
+  return source.filter((item) => matches(item, q));
 }
 
 export type ComboboxProps = {
@@ -118,6 +131,24 @@ export type ComboboxProps = {
    * `trigger` — use `<Combobox.Trigger>` plus a filter field inside `<Combobox.Content>`.
    */
   mode?: ComboboxMode;
+  /**
+   * How items match the typed query. By default an item matches on `itemToStringValue` or on
+   * any of its `keywords` (when items are objects with a `keywords: string[]`). Pass `null` when
+   * the server already filters (remote search): every item in `items` is shown.
+   */
+  filter?: ComboboxFilter | null;
+  /** Fires with the typed query; use it to fetch remote results (debounce on your side). */
+  onInputValueChange?: (inputValue: string) => void;
+  /**
+   * Results are being fetched (first page or the next one): the list shows a loading row and
+   * `Combobox.Empty` stays hidden.
+   */
+  loading?: boolean;
+  /**
+   * When set and nothing matches the typed text, the list offers "Create “text”" (also on
+   * Enter). Called with the trimmed text; add the new item to `items` and select it yourself.
+   */
+  onCreate?: (inputValue: string) => void;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -161,6 +192,10 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
       disabled = false,
       autoHighlight = false,
       mode = "inline",
+      filter: filterProp,
+      onInputValueChange,
+      loading = false,
+      onCreate,
       className,
       style: rootStyle,
       children,
@@ -220,33 +255,28 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
       [setValueInternal],
     );
 
-    const [inputValue, setInputValue] = React.useState("");
+    const [inputValue, setInputValueState] = React.useState("");
+    const setInputValue = React.useCallback(
+      (next: string) => {
+        setInputValueState(next);
+        onInputValueChange?.(next);
+      },
+      [onInputValueChange],
+    );
+
+    const matches = React.useMemo<ComboboxFilter | null>(() => {
+      if (filterProp !== undefined) return filterProp;
+      return (item, q) =>
+        itemToStringValue(item).toLowerCase().includes(q) ||
+        itemKeywords(item).some((k) => k.toLowerCase().includes(q));
+    }, [filterProp, itemToStringValue]);
     const [highlightedIndex, setHighlightedIndex] = React.useState(-1);
     const [anchorMode, setAnchorMode] =
       React.useState<ComboboxAnchorMode>("none");
 
-    const [anchorWidthPx, setAnchorWidthPx] = React.useState<number | null>(
-      null,
-    );
-
-    React.useLayoutEffect(() => {
-      const el = comboboxRootRef.current;
-      if (!el) return;
-      const measure = () => {
-        const w = el.getBoundingClientRect().width;
-        setAnchorWidthPx(w > 0 ? Math.round(w) : null);
-      };
-      measure();
-      const ro = new ResizeObserver(() => {
-        measure();
-      });
-      ro.observe(el);
-      return () => ro.disconnect();
-    }, []);
-
     const filteredItems = React.useMemo(
-      () => filterComboboxItems(items, inputValue, itemToStringValue),
-      [items, inputValue, itemToStringValue],
+      () => filterComboboxItems(items, inputValue, matches),
+      [items, inputValue, matches],
     );
 
     const setOpen = React.useCallback(
@@ -257,16 +287,24 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
           return;
         }
         if (autoHighlight) {
-          const filtered = filterComboboxItems(
-            items,
-            inputValue,
-            itemToStringValue,
-          );
+          const filtered = filterComboboxItems(items, inputValue, matches);
           setHighlightedIndex(filtered.length > 0 ? 0 : -1);
         }
       },
-      [autoHighlight, inputValue, itemToStringValue, items, setOpenState],
+      [autoHighlight, inputValue, matches, items, setOpenState],
     );
+
+    const trimmedInput = inputValue.trim();
+    const createQuery =
+      onCreate && !loading && trimmedInput && filteredItems.length === 0
+        ? trimmedInput
+        : null;
+    const create = React.useCallback(() => {
+      if (!createQuery) return;
+      onCreate?.(createQuery);
+      setInputValue("");
+      if (!multiple) setOpen(false);
+    }, [createQuery, multiple, onCreate, setInputValue, setOpen]);
 
     const preventContentAutofocus = mode === "inline";
 
@@ -295,7 +333,9 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
         filteredItems,
         preventContentAutofocus,
         comboboxRootRef,
-        anchorWidthPx,
+        loading,
+        createQuery,
+        create,
       }),
       [
         mode,
@@ -321,7 +361,9 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
         filteredItems,
         preventContentAutofocus,
         comboboxRootRef,
-        anchorWidthPx,
+        loading,
+        createQuery,
+        create,
       ],
     );
 
@@ -344,14 +386,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
               "ui:relative ui:box-border ui:block ui:w-full ui:min-w-[200px] ui:max-w-full",
               className,
             )}
-            style={{
-              ...rootStyle,
-              ...(anchorWidthPx != null
-                ? ({
-                    ["--combobox-anchor-width" as string]: `${anchorWidthPx}px`,
-                  } as React.CSSProperties)
-                : null),
-            }}
+            style={rootStyle}
           >
             {children}
           </div>
@@ -479,7 +514,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
           ctx.setHighlightedIndex((i) => {
             const next = Math.min(
               (i < 0 ? -1 : i) + 1,
-              ctx.filteredItems.length - 1,
+              ctx.filteredItems.length - (ctx.createQuery ? 0 : 1),
             );
             return next;
           });
@@ -493,7 +528,13 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
             ctx.highlightedIndex >= 0
               ? ctx.filteredItems[ctx.highlightedIndex]
               : ctx.filteredItems[0];
-          if (item === undefined) return;
+          if (item === undefined) {
+            if (ctx.createQuery) {
+              e.preventDefault();
+              ctx.create();
+            }
+            return;
+          }
           e.preventDefault();
           if (ctx.multiple) {
             const cur = Array.isArray(ctx.value) ? [...ctx.value] : [];
@@ -623,7 +664,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
               data-slot="combobox-trigger-toggle"
               tabIndex={-1}
               disabled={disabled}
-              aria-label={ctx.open ? "Close" : "Open"}
+              aria-label={ctx.open ? labels.close : labels.open}
               aria-expanded={ctx.open}
               aria-controls={ctx.listId}
               className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:opacity-50 ui:outline-none ui:transition-colors ui:hover:opacity-100 ui:focus-visible:ring-2 ui:focus-visible:ring-primary"
@@ -764,18 +805,16 @@ const ComboboxContent = React.forwardRef<
 ) {
   const ctx = useComboboxContext("Combobox.Content");
 
-  const measuredWidthStyle =
-    ctx.anchorWidthPx != null
-      ? { width: ctx.anchorWidthPx, minWidth: ctx.anchorWidthPx }
-      : undefined;
-
   return (
     <Popover.Content
       ref={ref}
       surface="plain"
       data-slot="combobox-content"
       style={{
-        ...measuredWidthStyle,
+        // The anchor's width (input row, chips box or trigger), which Radix measures. The
+        // combobox root can be wider than the field.
+        width: "var(--radix-popover-trigger-width)",
+        minWidth: "var(--radix-popover-trigger-width)",
         ...styleProp,
       }}
       side={side}
@@ -815,20 +854,66 @@ export type ComboboxListProps = Omit<
   "children"
 > & {
   children: (item: unknown) => React.ReactNode;
+  /**
+   * Called when the list is scrolled near its end, to fetch the next page. It fires once per
+   * page: again only after `items` changes, and never while the combobox is `loading`.
+   */
+  onLoadMore?: () => void;
 };
 
 const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
-  function ComboboxList({ className, children, ...rest }, ref) {
+  function ComboboxList(
+    { className, children, onLoadMore, onScroll, ...rest },
+    ref,
+  ) {
     const ctx = useComboboxContext("Combobox.List");
+    const labels = useMalbecLabels();
+
+    /**
+     * The list is portaled to <body>. Inside a modal Dialog/Sheet, the modal's scroll lock
+     * cancels wheel events outside it, so the list wouldn't scroll with the wheel. Scroll it by
+     * hand with a non-passive listener (React's onWheel is passive and can't preventDefault).
+     */
+    const innerRef = React.useRef<HTMLUListElement | null>(null);
+    /** The `items` for which onLoadMore already fired: one request per page. */
+    const loadedForRef = React.useRef<readonly unknown[] | null>(null);
+    const listRef = React.useCallback(
+      (node: HTMLUListElement | null) => {
+        innerRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
+      },
+      [ref],
+    );
+    React.useEffect(() => {
+      const node = innerRef.current;
+      if (!node) return;
+      const onWheel = (event: WheelEvent) => {
+        if (node.scrollHeight <= node.clientHeight) return;
+        event.preventDefault();
+        node.scrollTop += event.deltaY;
+      };
+      node.addEventListener("wheel", onWheel, { passive: false });
+      return () => node.removeEventListener("wheel", onWheel);
+    }, []);
 
     return (
       <ul
-        ref={ref}
+        ref={listRef}
         id={ctx.listId}
         role="listbox"
         aria-labelledby={ctx.labelId}
         data-slot="combobox-list"
         className={cn(comboboxListVariants(), className)}
+        onScroll={(e) => {
+          onScroll?.(e);
+          const el = e.currentTarget;
+          const nearEnd = el.scrollHeight - el.scrollTop - el.clientHeight < 72;
+          if (!onLoadMore || ctx.loading || !nearEnd) return;
+          if (loadedForRef.current === ctx.items) return;
+          loadedForRef.current = ctx.items;
+          onLoadMore();
+        }}
         {...rest}
       >
         {ctx.filteredItems.map((item, index) => (
@@ -836,6 +921,32 @@ const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
             {children(item)}
           </React.Fragment>
         ))}
+        {ctx.createQuery ? (
+          <li
+            role="option"
+            aria-selected={false}
+            data-slot="combobox-create"
+            data-highlighted={
+              ctx.highlightedIndex === ctx.filteredItems.length || undefined
+            }
+            className={cn(comboboxItemVariants(), "ui:justify-start")}
+            onMouseEnter={() =>
+              ctx.setHighlightedIndex(ctx.filteredItems.length)
+            }
+            onClick={ctx.create}
+          >
+            {labels.createOption(ctx.createQuery)}
+          </li>
+        ) : null}
+        {ctx.loading ? (
+          <li
+            role="status"
+            data-slot="combobox-loading"
+            className={cn(comboboxStatusVariants())}
+          >
+            {labels.loading}
+          </li>
+        ) : null}
       </ul>
     );
   },
@@ -923,7 +1034,9 @@ export type ComboboxEmptyProps = React.ComponentPropsWithoutRef<"div">;
 const ComboboxEmpty = React.forwardRef<HTMLDivElement, ComboboxEmptyProps>(
   function ComboboxEmpty({ className, ...rest }, ref) {
     const ctx = useComboboxContext("Combobox.Empty");
-    if (ctx.filteredItems.length > 0) return null;
+    if (ctx.filteredItems.length > 0 || ctx.loading || ctx.createQuery) {
+      return null;
+    }
     return (
       <div
         ref={ref}
@@ -1011,9 +1124,10 @@ const ComboboxChips = React.forwardRef<HTMLDivElement, ComboboxChipsProps>(
           <div
             ref={ref}
             data-slot="combobox-chips"
+            data-disabled={ctx.disabled || undefined}
             className={cn(
               comboboxTriggerRowVariants({ variant: "default" }),
-              "ui:h-auto ui:min-h-10 ui:flex-wrap ui:items-center ui:gap-1 ui:py-1.5",
+              "ui:h-auto ui:min-h-10 ui:flex-wrap ui:items-center ui:justify-start ui:gap-1 ui:py-1.5",
               className,
             )}
             {...rest}
