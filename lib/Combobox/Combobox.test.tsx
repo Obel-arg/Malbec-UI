@@ -26,6 +26,11 @@ function Chips({ disabled = false }: { disabled?: boolean }) {
 const chipsBox = () => document.querySelector<HTMLElement>('[data-slot="combobox-chips"]')!;
 
 describe("Combobox defects reported by Live", () => {
+  it("the chips box dims when the combobox is disabled", () => {
+    render(<Chips disabled />);
+    expect(chipsBox().hasAttribute("data-disabled")).toBe(true);
+  });
+
   it("the list takes the anchor's width, not the combobox root's", () => {
     render(
       <Combobox items={fruits} defaultOpen>
