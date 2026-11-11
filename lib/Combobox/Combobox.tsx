@@ -789,9 +789,35 @@ const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
   function ComboboxList({ className, children, ...rest }, ref) {
     const ctx = useComboboxContext("Combobox.List");
 
+    /**
+     * The list is portaled to <body>. Inside a modal Dialog/Sheet, the modal's scroll lock
+     * cancels wheel events outside it, so the list wouldn't scroll with the wheel. Scroll it by
+     * hand with a non-passive listener (React's onWheel is passive and can't preventDefault).
+     */
+    const innerRef = React.useRef<HTMLUListElement | null>(null);
+    const listRef = React.useCallback(
+      (node: HTMLUListElement | null) => {
+        innerRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
+      },
+      [ref],
+    );
+    React.useEffect(() => {
+      const node = innerRef.current;
+      if (!node) return;
+      const onWheel = (event: WheelEvent) => {
+        if (node.scrollHeight <= node.clientHeight) return;
+        event.preventDefault();
+        node.scrollTop += event.deltaY;
+      };
+      node.addEventListener("wheel", onWheel, { passive: false });
+      return () => node.removeEventListener("wheel", onWheel);
+    }, []);
+
     return (
       <ul
-        ref={ref}
+        ref={listRef}
         id={ctx.listId}
         role="listbox"
         aria-labelledby={ctx.labelId}

@@ -64,4 +64,22 @@ describe("Combobox defects reported by Live", () => {
     expect(option.getAttribute("aria-selected")).toBe("true");
     expect(option.className).toContain("ui:aria-selected:bg-background-200");
   });
+
+  it("the list scrolls with the wheel even when a modal blocks page scroll", () => {
+    render(
+      <Combobox items={fruits} defaultOpen>
+        <Combobox.Input aria-label="Fruta" />
+        <Combobox.Content>
+          <Combobox.List>{(item) => <Combobox.Item value={item} />}</Combobox.List>
+        </Combobox.Content>
+      </Combobox>,
+    );
+    const list = screen.getByRole("listbox");
+    Object.defineProperty(list, "scrollHeight", { value: 600 });
+    Object.defineProperty(list, "clientHeight", { value: 280 });
+    const wheel = new WheelEvent("wheel", { deltaY: 120, bubbles: true, cancelable: true });
+    fireEvent(list, wheel);
+    expect(list.scrollTop).toBe(120);
+    expect(wheel.defaultPrevented).toBe(true);
+  });
 });
