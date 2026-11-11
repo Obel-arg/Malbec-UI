@@ -64,6 +64,23 @@ export { DataTable } from "./DataTable/DataTable";
 export { SortableColumnHeader } from "./DataTable/sortable-column-header";
 export { Steps } from "./Steps/Steps";
 export { Table } from "./Table/Table";
+// Round B: surfaces
+export { Notice } from "./Notice/Notice";
+export { EmptyState } from "./EmptyState/EmptyState";
+export { Skeleton } from "./Skeleton/Skeleton";
+export { InfoPopover } from "./InfoPopover/InfoPopover";
+
+// Round B: charts
+// Chart primitives of malbec-ux-ui (charts.md): inks, scales, dot-field card, sheen, grid, crosshair.
+export * from "./charts/chart-style";
+export { Donut, foldDonutData } from "./charts/Donut";
+export type { DonutDatum, DonutProps } from "./charts/Donut";
+export { PctBlocks, pctBlocksFilled } from "./charts/PctBlocks";
+export type { PctBlocksProps } from "./charts/PctBlocks";
+
+// Round B: shell
+export { NotificationBell } from "./NotificationBell/NotificationBell";
+export { ConfirmDialog } from "./ConfirmDialog/ConfirmDialog";
 
 export type { MalbecThemeProviderProps } from "./theme";
 export type {
@@ -358,3 +375,19 @@ export type {
   InputOtpGroupProps,
   InputOtpSeparatorProps,
 } from "./InputOtp/InputOtp";
+
+// Round B: tables (types)
+export type { DataTablePaginationProps } from "./DataTable/DataTablePagination";
+export type { DataTableColumnsToggleProps } from "./DataTable/DataTableColumnsToggle";
+export type { SortableColumnHeaderProps } from "./DataTable/sortable-column-header";
+// Round B: combobox
+export type { ComboboxFilter } from "./Combobox/Combobox";
+// Round B: surfaces
+export type { NoticeProps, NoticeTone } from "./Notice/Notice";
+export type { EmptyStateProps, EmptyStateVariant } from "./EmptyState/EmptyState";
+export type { SkeletonProps } from "./Skeleton/Skeleton";
+export type { InfoPopoverProps } from "./InfoPopover/InfoPopover";
+// Round B: shell
+export type { SidebarCollapsible } from "./Sidebar/Sidebar";
+export type { NotificationBellProps } from "./NotificationBell/NotificationBell";
+export type { ConfirmDialogProps } from "./ConfirmDialog/ConfirmDialog";

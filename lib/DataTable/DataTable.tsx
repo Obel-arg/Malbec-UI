@@ -4,11 +4,14 @@ import type { KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   type ColumnDef,
+  type OnChangeFn,
+  type PaginationState,
   type RowSelectionState,
   type SortingState,
   type Table as TanStackTable,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -17,6 +20,8 @@ import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import type { MalbecLabels } from "../i18n/labels";
 import { Table, type TableAppearance } from "../Table/Table";
 import { cn } from "../utils/cn";
+import { DataTableColumnsToggle } from "./DataTableColumnsToggle";
+import { DataTablePagination } from "./DataTablePagination";
 import {
   dataTableRootVariants,
   dataTableToolbarVariants,
@@ -41,8 +46,13 @@ interface DataTableBaseProps<TData, TValue> {
   className?: string;
   /** Renders after `<table>` starts (e.g. `<colgroup>`) before the header. */
   tableChildrenStart?: ReactNode;
-  /** Toolbar area above the table (e.g. filter + column controls). */
-  toolbar?: ReactNode;
+  /**
+   * Toolbar area above the table (e.g. filter + column controls). Use a function to read
+   * TanStack `table` (e.g. `<DataTable.ColumnsToggle table={table} />`).
+   */
+  toolbar?:
+    | ReactNode
+    | ((ctx: DataTableRenderFooterContext<TData>) => ReactNode);
   /**
    * Renders below the table. Use a function to read TanStack `table` (e.g. selection
    * counts, pagination state).
@@ -55,6 +65,15 @@ interface DataTableBaseProps<TData, TValue> {
    * 58px rows). `dataGrid` is the denser 6px grid with a 48px header.
    */
   tableAppearance?: TableAppearance;
+  /** Below 640px each row becomes a card (see `Table`'s `stackOnMobile`). */
+  stackOnMobile?: boolean;
+  /**
+   * Pins the header while the rows scroll inside the table shell; give the shell a height with
+   * `tableContainerClassName` (e.g. `ui:max-h-[480px]`).
+   */
+  stickyHeader?: boolean;
+  /** Classes for the bordered, scrolling table shell. */
+  tableContainerClassName?: string;
   /**
    * When true, prepends a selection column with checkboxes (header: select all,
    * rows: per-row). Defaults to `false`.
@@ -67,6 +86,24 @@ interface DataTableBaseProps<TData, TValue> {
   getRowId?: (row: TData) => string;
   /** When false, sorting is disabled. Defaults to `true`. */
   enableSorting?: boolean;
+  /** Controlled sorting. Pair with `onSortingChange`. */
+  sorting?: SortingState;
+  onSortingChange?: (sorting: SortingState) => void;
+  /** Server-side sorting: `data` already comes sorted, the table doesn't reorder it. */
+  manualSorting?: boolean;
+  /**
+   * Rows per page. Turns on client-side pagination; render the page links with
+   * `footer={({ table }) => <DataTable.Pagination table={table} />}`.
+   */
+  pageSize?: number;
+  /** Controlled pagination (`pageIndex` is 0-based). Pair with `onPaginationChange`. */
+  pagination?: PaginationState;
+  onPaginationChange?: (pagination: PaginationState) => void;
+  /**
+   * Server-side pagination: total rows on the server. `data` is then the current page only and
+   * the table doesn't slice it.
+   */
+  rowCount?: number;
   /**
    * Called whenever the row selection changes.
    * Receives the array of currently selected rows.
@@ -147,14 +184,42 @@ export function DataTable<TData, TValue>({
   toolbar,
   footer,
   tableAppearance = "default",
+  stackOnMobile,
+  stickyHeader,
+  tableContainerClassName,
   rowSelection: rowSelectionEnabled = false,
   getRowId,
   enableSorting = true,
+  sorting: sortingProp,
+  onSortingChange,
+  manualSorting = false,
+  pageSize,
+  pagination: paginationProp,
+  onPaginationChange,
+  rowCount,
   onRowSelectionChange,
   onRowClick,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [innerSorting, setInnerSorting] = useState<SortingState>([]);
+  const sorting = sortingProp ?? innerSorting;
+  const handleSortingChange: OnChangeFn<SortingState> = (updater) => {
+    const next = typeof updater === "function" ? updater(sorting) : updater;
+    if (!sortingProp) setInnerSorting(next);
+    onSortingChange?.(next);
+  };
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+
+  const paginated = paginationProp != null || pageSize != null || rowCount != null;
+  const [innerPagination, setInnerPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: pageSize ?? 10,
+  });
+  const pagination = paginationProp ?? innerPagination;
+  const handlePaginationChange: OnChangeFn<PaginationState> = (updater) => {
+    const next = typeof updater === "function" ? updater(pagination) : updater;
+    if (!paginationProp) setInnerPagination(next);
+    onPaginationChange?.(next);
+  };
 
   const { selectAllRows, selectRow } = useMalbecLabels();
   const mergedColumns = useMemo<ColumnDef<TData, TValue>[]>(
@@ -173,12 +238,18 @@ export function DataTable<TData, TValue>({
     columns: mergedColumns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    ...(paginated && rowCount == null ? { getPaginationRowModel: getPaginationRowModel() } : {}),
+    manualPagination: rowCount != null,
+    rowCount,
     getRowId,
-    onSortingChange: setSorting,
+    onSortingChange: handleSortingChange,
+    manualSorting,
     onRowSelectionChange: rowSelectionEnabled ? setRowSelection : undefined,
+    onPaginationChange: paginated ? handlePaginationChange : undefined,
     state: {
       sorting,
       ...(rowSelectionEnabled ? { rowSelection } : {}),
+      ...(paginated ? { pagination } : {}),
     },
     enableRowSelection: rowSelectionEnabled,
     enableSorting,
@@ -204,6 +275,7 @@ export function DataTable<TData, TValue>({
   const columnCount = table.getVisibleFlatColumns().length;
 
   const footerNode = typeof footer === "function" ? footer({ table }) : footer;
+  const toolbarNode = typeof toolbar === "function" ? toolbar({ table }) : toolbar;
   const isRowClickable = Boolean(onRowClick);
 
   return (
@@ -212,15 +284,20 @@ export function DataTable<TData, TValue>({
       data-slot="data-table"
       data-row-selection={rowSelectionEnabled || undefined}
     >
-      {toolbar ? (
+      {toolbarNode ? (
         <div
           className={dataTableToolbarVariants()}
           data-slot="data-table-toolbar"
         >
-          {toolbar}
+          {toolbarNode}
         </div>
       ) : null}
-      <Table appearance={tableAppearance}>
+      <Table
+        appearance={tableAppearance}
+        stackOnMobile={stackOnMobile}
+        stickyHeader={stickyHeader}
+        containerClassName={tableContainerClassName}
+      >
         {tableChildrenStart}
         <Table.Header>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -287,11 +364,13 @@ export function DataTable<TData, TValue>({
               </Table.Row>
             ))
           ) : (
-            <Table.Row className="ui:h-24!">
+            <Table.Row className="ui:h-[52px]! ui:hover:bg-transparent">
               <Table.Cell
                 colSpan={Math.max(1, columnCount)}
                 className={cn(
-                  "ui:h-24 ui:text-center ui:font-medium ui:text-text-default-muted",
+                  // A plain label reads as EmptyState variant="row": one quiet, left-aligned line.
+                  // A ghost EmptyState fills the cell edge to edge.
+                  "ui:h-[52px] ui:text-left ui:font-normal ui:text-text-default-muted ui:has-[[data-variant=ghost]]:p-0",
                   tableAppearance === "dataGrid"
                     ? "ui:text-sm"
                     : "ui:text-[13px]",
@@ -350,3 +429,8 @@ function dataCellClassName(
   }
   return undefined;
 }
+
+/** Page links for a paginated table: `footer={({ table }) => <DataTable.Pagination table={table} />}`. */
+DataTable.Pagination = DataTablePagination;
+/** Show/hide columns menu: `toolbar={({ table }) => <DataTable.ColumnsToggle table={table} />}`. */
+DataTable.ColumnsToggle = DataTableColumnsToggle;
