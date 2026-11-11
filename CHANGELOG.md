@@ -100,6 +100,19 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 ### Breaking: the green preset is `artist`
 - The theme preset `management` is renamed **`artist`** (Malbec Artist's palette). The provider's default theme is still Records.
 
+### Breaking: a new Command palette
+- **Command** follows version C of the Command workshop: Linear's structure with Resend's keys and footer.
+  - The surface is light (`background-100`), 600px wide with a 12px radius and a `background-300` edge. `Command.Dialog` adds the floating shadow.
+  - The input has no box and no search glyph: 16px ink text with a rule below.
+  - Group headings are 12px muted instead of bold.
+  - Rows are 36px with an 8px radius, a muted 16px icon, and the selected row on `background-200`.
+- New parts:
+  - `Command.Context`: a chip above the input with what the commands act on ("Show · Rosario").
+  - `Command.Shortcut keys={["G", "S"]} sequence`: boxed keys with "then" between them.
+  - `Command.Footer`: ↑↓ navigate, ↵ open, esc close.
+- `Command.Empty` without children says what was searched. All texts come from `MalbecLabelsProvider`.
+- **What to do:** drop the `mr-2` wrappers around item icons (the row spaces them) and pass shortcut keys as `keys`.
+
 ### Breaking: unused exports removed
 - `statusTone`, `statusVariant`, `priorityVariant`, `STATUS_TONES`, `TONE_VARIANT` and `formatGmtOffsetLabel` are no longer exported. None of the four apps imported them.
 - Use `<StatusBadge status="…" />` or `<StatusBadge tone={…} />` for status colours. `PRIORITY_TONE` stays: `<StatusBadge tone={PRIORITY_TONE.Alta} status="Alta" />`.
