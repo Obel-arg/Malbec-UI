@@ -47,6 +47,8 @@ export interface MalbecLabels {
   filterInbox: string;
   moreActions: string;
   unread: string;
+  /** Donut slice that folds the long tail beyond the palette. */
+  chartOther: string;
 }
 
 export type MalbecLocale = "en" | "es";
@@ -86,6 +88,7 @@ export const labelsEn: MalbecLabels = {
   filterInbox: "Filter inbox",
   moreActions: "More actions",
   unread: "Unread",
+  chartOther: "Other",
 };
 
 export const labelsEs: MalbecLabels = {
@@ -123,6 +126,7 @@ export const labelsEs: MalbecLabels = {
   filterInbox: "Filtrar notificaciones",
   moreActions: "Más acciones",
   unread: "Sin leer",
+  chartOther: "Otros",
 };
 
 export const LABELS_BY_LOCALE: Record<MalbecLocale, MalbecLabels> = {

@@ -12,6 +12,8 @@ import {
   makeStackedBarShape,
   seriesPaint,
 } from "./chart-style";
+import { Donut } from "./Donut";
+import { PctBlocks } from "./PctBlocks";
 
 /**
  * Chart primitives of malbec-ux-ui (`references/charts.md`): two greys (warm for data, cold for
@@ -132,5 +134,79 @@ const SERIES = ["Venta general", "Preventa", "Invitaciones"];
         </div>
       </ChartCard>
     </>
+  ),
+};
+
+const vendors = [
+  { label: "Producción", value: 4200 },
+  { label: "Sonido", value: 2100 },
+  { label: "Seguridad", value: 1300 },
+  { label: "Catering", value: 700 },
+  { label: "Transporte", value: 500 },
+];
+
+export const DonutChart: Story = {
+  name: "Donut",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { ChartCard, ChartMarkDefs, Donut, legendSwatchStyle } from "@obel-arg/malbec-ui";
+
+<>
+  <ChartMarkDefs />
+  <ChartCard className="flex items-center gap-6">
+    <Donut data={vendors} total="US$ 8.800" caption="Gastos" />
+    <ul>
+      {vendors.map((v, i) => (
+        <li key={v.label}>
+          <span style={legendSwatchStyle(i)} /> {v.label}
+        </li>
+      ))}
+    </ul>
+  </ChartCard>
+</>`,
+      },
+    },
+  },
+  render: () => (
+    <>
+      <ChartMarkDefs />
+      <ChartCard className="ui:flex ui:items-center ui:gap-6">
+        <Donut data={vendors} total="US$ 8.800" caption="Gastos" />
+        <ul className="ui:space-y-2">
+          {vendors.map((vendor, i) => (
+            <li key={vendor.label} className="ui:flex ui:items-center ui:gap-2 ui:text-[12px] ui:text-malbec-icon">
+              <span className="ui:size-2.5 ui:rounded-[3px]" style={legendSwatchStyle(i)} />
+              {vendor.label}
+            </li>
+          ))}
+        </ul>
+      </ChartCard>
+    </>
+  ),
+};
+
+export const PercentBlocks: Story = {
+  name: "PctBlocks",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { PctBlocks } from "@obel-arg/malbec-ui";
+
+<PctBlocks value={44} />
+<PctBlocks value={100} />
+<PctBlocks value={130} /> // over budget: all 10 blocks in red (state)`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:flex ui:flex-col ui:gap-3 ui:text-[12px] ui:text-malbec-icon">
+      {[0, 44, 100, 130].map((value) => (
+        <div key={value} className="ui:flex ui:items-center ui:gap-3">
+          <PctBlocks value={value} />
+          <span className="ui:tabular-nums">{value}%</span>
+        </div>
+      ))}
+    </div>
   ),
 };
