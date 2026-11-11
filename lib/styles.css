@@ -164,6 +164,9 @@
   }
   [data-stack-on-mobile] table > tbody > tr > *:empty {
     display: none;
+  }
+}
+
 /**
  * `Sidebar.Provider collapsible="dock"` (Malbec Artist / Live): the dock takes the layout slot and
  * the panel floats over the content, so the usable width never changes by looking at the menu.
