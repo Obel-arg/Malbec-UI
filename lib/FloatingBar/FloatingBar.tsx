@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import {
   floatingBarActionsVariants,
   floatingBarCloseVariants,
@@ -199,19 +200,20 @@ const FloatingBarClose = React.forwardRef<HTMLButtonElement, FloatingBarClosePro
       htmlType = "button",
       className,
       children,
-      "aria-label": ariaLabel = "Close",
+      "aria-label": ariaLabel,
       ...rest
     },
     ref,
   ) {
     const Comp: React.ElementType = asChild ? Slot : "button";
     const extra = asChild ? {} : { type: htmlType };
+    const labels = useMalbecLabels();
 
     return (
       <Comp
         ref={ref}
         data-slot="floating-bar-close"
-        aria-label={ariaLabel}
+        aria-label={ariaLabel ?? labels.close}
         className={cn(floatingBarCloseVariants(), className)}
         {...extra}
         {...rest}

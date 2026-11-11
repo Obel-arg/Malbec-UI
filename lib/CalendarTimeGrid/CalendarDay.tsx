@@ -6,6 +6,7 @@ import type { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Button } from "../Button/Button";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
 import { CalendarTimeGridAllDayStrip } from "./CalendarTimeGridAllDayStrip";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
@@ -87,6 +88,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
     },
     ref,
   ) {
+    const labels = useMalbecLabels();
     const day = startOfDay(
       dayProp instanceof Date ? dayProp : new Date(dayProp as string | number),
     );
@@ -179,7 +181,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
                 <Button
                   variant="outline"
                   size="icon-sm"
-                  aria-label="Previous day"
+                  aria-label={labels.previousDay}
                   onClick={() => onDayChange(startOfDay(addDays(day, -1)))}
                 >
                   <Button.Icon>
@@ -192,7 +194,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
                 <Button
                   variant="outline"
                   size="icon-sm"
-                  aria-label="Next day"
+                  aria-label={labels.nextDay}
                   onClick={() => onDayChange(startOfDay(addDays(day, 1)))}
                 >
                   <Button.Icon>

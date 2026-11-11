@@ -13,6 +13,7 @@ import type { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Button } from "../Button/Button";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
 import { CalendarTimeGridAllDayStrip } from "./CalendarTimeGridAllDayStrip";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
@@ -110,6 +111,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
     },
     ref,
   ) {
+    const labels = useMalbecLabels();
     const weekAnchor = React.useMemo(
       () =>
         startOfWeek(
@@ -211,7 +213,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
             <Button
               variant="outline"
               size="icon-sm"
-              aria-label="Previous week"
+              aria-label={labels.previousWeek}
               disabled={!onWeekChange}
               onClick={() => onWeekChange?.(addWeeks(weekAnchor, -1))}
             >
@@ -225,7 +227,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
             <Button
               variant="outline"
               size="icon-sm"
-              aria-label="Next week"
+              aria-label={labels.nextWeek}
               disabled={!onWeekChange}
               onClick={() => onWeekChange?.(addWeeks(weekAnchor, 1))}
             >

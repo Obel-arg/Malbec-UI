@@ -32,6 +32,7 @@ import { SortableColumnHeader } from "./sortable-column-header";
  *   getRowId={(r) => r.id}
  *   columns={columns}
  *   data={rows}
+ *   emptyLabel="Sin eventos"
  *   tableChildrenStart={colgroup}
  * />
  * ```
@@ -218,6 +219,7 @@ export const Events: Story = {
   render: () => (
     <DataTableWithColumns
       data={eventRowsSample}
+      emptyLabel="Sin eventos"
       tableChildrenStart={colgroupNoSelect}
     />
   ),
@@ -232,6 +234,7 @@ function EventsTable({ data }: { data: EventRow[] }) {
       getRowId={(r) => r.id}
       columns={columns}
       data={data}
+      emptyLabel="Sin eventos"
       tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
     />
   );
@@ -321,6 +324,7 @@ function MultiSelectWithFloatingBar() {
         getRowId={(r) => r.id}
         columns={columns}
         data={eventRowsSample}
+        emptyLabel="Sin eventos"
         rowSelection
         onRowSelectionChange={(rows) => setSelectedCount(rows.length)}
       />
@@ -417,6 +421,7 @@ function MultiSelectTable({
         getRowId={(r) => r.id}
         columns={columns}
         data={data}
+        emptyLabel="Sin eventos"
         rowSelection
         onRowSelectionChange={(rows) => setSelectedCount(rows.length)}
       />
@@ -471,6 +476,7 @@ export const RowSelection: Story = {
   render: () => (
     <DataTableWithColumns
       data={eventRowsSample}
+      emptyLabel="Sin eventos"
       rowSelection
       tableChildrenStart={colgroup}
     />
@@ -488,6 +494,7 @@ function EventsTable({ data }: { data: EventRow[] }) {
       rowSelection
       columns={columns}
       data={data}
+      emptyLabel="Sin eventos"
       tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
     />
   );
@@ -501,7 +508,7 @@ export const Empty: Story = {
   render: () => (
     <DataTableWithColumns
       data={[]}
-      emptyLabel="No rows."
+      emptyLabel="Sin eventos"
       tableChildrenStart={colgroupNoSelect}
     />
   ),
@@ -517,7 +524,7 @@ function EventsTable() {
       getRowId={(r) => r.id}
       columns={columns}
       data={[]}
-      emptyLabel="No rows."
+      emptyLabel="Sin eventos"
       tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
     />
   );

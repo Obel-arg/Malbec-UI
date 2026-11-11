@@ -20,6 +20,7 @@ import {
 import type { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { Badge } from "../Badge/Badge";
 import type { BadgeVariant } from "../Badge/badge-variants";
 import { Popover } from "../Popover/Popover";
@@ -412,6 +413,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
 >(function CalendarMonthToolbarImpl({ className, ...rest }, ref) {
+  const labels = useMalbecLabels();
   const { month, locale, onMonthChange, yearSelectFrom, yearSelectTo } =
     useCalendarMonthContext("CalendarMonth.Toolbar");
 
@@ -450,7 +452,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
       <Button
         variant="outline"
         size="icon-sm"
-        aria-label="Previous month"
+        aria-label={labels.previousMonth}
         className="ui:shrink-0 ui:justify-self-start"
         onClick={() => onMonthChange(startOfMonth(addMonths(monthAnchor, -1)))}
       >
@@ -467,7 +469,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
           }}
         >
           <Select.Trigger
-            aria-label="Month"
+            aria-label={labels.month}
             className={cn(
               calendarMonthToolbarSelectTriggerClassName,
               "ui:m-0 ui:min-w-37.5 ui:flex-1 ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default ui:border-none ui:capitalize",
@@ -495,7 +497,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
           }}
         >
           <Select.Trigger
-            aria-label="Year"
+            aria-label={labels.year}
             className={cn(
               calendarMonthToolbarSelectTriggerClassName,
               "ui:m-0 ui:min-w-18.75 ui:flex-1 ui:text-center ui:text-base ui:font-semibold ui:leading-6 ui:text-text-default ui:border-none ui:tabular-nums",
@@ -515,7 +517,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
       <Button
         variant="outline"
         size="icon-sm"
-        aria-label="Next month"
+        aria-label={labels.nextMonth}
         className="ui:shrink-0 ui:justify-self-end"
         onClick={() => onMonthChange(startOfMonth(addMonths(monthAnchor, 1)))}
       >
@@ -841,6 +843,7 @@ export type CalendarMonthWeekProps = React.ComponentProps<"div"> & {
  * of the container surface — one column per day, with a `+N` overflow chip.
  */
 function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
+  const labels = useMalbecLabels();
   const { onSelectEvent } = useCalendarMonthContext("CalendarMonth.Week");
   const ev = group.event;
   const tourUnconfirmed = ev.confirmed === false;
@@ -1061,7 +1064,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                       variant="ghost"
                       size="md"
                       className="ui:h-[22px] ui:w-full ui:justify-start ui:p-0 ui:px-1.5 ui:text-[10px]"
-                      aria-label={`${overflowList.length} more shows`}
+                      aria-label={labels.moreEvents(overflowList.length)}
                       onClick={(e) => e.stopPropagation()}
                       onPointerDown={(e) => e.stopPropagation()}
                     >
@@ -1181,6 +1184,7 @@ const CalendarMonthDay = React.forwardRef<
   },
   ref,
 ) {
+  const labels = useMalbecLabels();
   const {
     month,
     today,
@@ -1319,7 +1323,7 @@ const CalendarMonthDay = React.forwardRef<
                   variant="ghost"
                   size="md"
                   className="ui:w-full ui:p-0 ui:text-left ui:justify-start ui:h-5.5"
-                  aria-label={`${overflowDayEvents.length} more events`}
+                  aria-label={labels.moreEvents(overflowDayEvents.length)}
                   onClick={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
                   onKeyDown={(e) => e.stopPropagation()}

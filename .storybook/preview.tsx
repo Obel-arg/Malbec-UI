@@ -1,6 +1,8 @@
 import type { Preview } from "@storybook/react-vite";
 import { themes } from "storybook/theming";
 import "@fontsource-variable/inter";
+import { MalbecLabelsProvider } from "../lib/i18n/MalbecLabelsProvider";
+import type { MalbecLocale } from "../lib/i18n/labels";
 import { MalbecThemeProvider } from "../lib/theme/MalbecThemeProvider";
 import {
   booking,
@@ -52,6 +54,19 @@ const preview: Preview = {
         ],
       },
     },
+    malbecLocale: {
+      description: "Language of the texts components render on their own (MalbecLabelsProvider)",
+      defaultValue: "es",
+      toolbar: {
+        title: "Language",
+        icon: "globe",
+        dynamicTitle: true,
+        items: [
+          { value: "es", title: "Español" },
+          { value: "en", title: "English" },
+        ],
+      },
+    },
   },
   parameters: {
     controls: {
@@ -83,7 +98,9 @@ const preview: Preview = {
         (context.globals.malbecMode as ThemeMode | undefined) ??
         (context.parameters.malbecMode as ThemeMode | undefined) ??
         "light";
+      const locale = (context.globals.malbecLocale as MalbecLocale | undefined) ?? "es";
       return (
+        <MalbecLabelsProvider locale={locale}>
         <MalbecThemeProvider
           key={`${themeKey}-${mode}`}
           theme={theme}
@@ -93,6 +110,7 @@ const preview: Preview = {
             <Story />
           </div>
         </MalbecThemeProvider>
+        </MalbecLabelsProvider>
       );
     },
   ],

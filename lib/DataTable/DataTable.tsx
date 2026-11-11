@@ -13,6 +13,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Checkbox } from "../Checkbox/Checkbox";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
+import type { MalbecLabels } from "../i18n/labels";
 import { Table, type TableAppearance } from "../Table/Table";
 import { cn } from "../utils/cn";
 import {
@@ -33,8 +35,8 @@ type DataTableOnRowSelectionChange<TData> = (selectedRows: TData[]) => void;
 interface DataTableBaseProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  /** Shown when there are no rows. */
-  emptyLabel?: string;
+  /** Shown when there are no rows. Required: apps are ES + EN, so there is no built-in text. */
+  emptyLabel: ReactNode;
   /** Class on the outer wrapper (not the bordered `Table` shell). */
   className?: string;
   /** Renders after `<table>` starts (e.g. `<colgroup>`) before the header. */
@@ -98,7 +100,9 @@ export type DataTableProps<TData, TValue> =
   | DataTableWithRowSelectionProps<TData, TValue>
   | DataTableWithoutRowSelectionProps<TData, TValue>;
 
-function selectColumnDef<TData>(): ColumnDef<TData, unknown> {
+function selectColumnDef<TData>(
+  labels: Pick<MalbecLabels, "selectAllRows" | "selectRow">,
+): ColumnDef<TData, unknown> {
   return {
     id: "select",
     header: ({ table }) => (
@@ -112,7 +116,7 @@ function selectColumnDef<TData>(): ColumnDef<TData, unknown> {
                 : false
           }
           onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
-          aria-label="Select all"
+          aria-label={labels.selectAllRows}
         />
       </div>
     ),
@@ -121,7 +125,7 @@ function selectColumnDef<TData>(): ColumnDef<TData, unknown> {
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(v) => row.toggleSelected(!!v)}
-          aria-label="Select row"
+          aria-label={labels.selectRow}
         />
       </div>
     ),
@@ -137,7 +141,7 @@ function selectColumnDef<TData>(): ColumnDef<TData, unknown> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  emptyLabel = "No results.",
+  emptyLabel,
   className,
   tableChildrenStart,
   toolbar,
@@ -152,14 +156,15 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
+  const { selectAllRows, selectRow } = useMalbecLabels();
   const mergedColumns = useMemo<ColumnDef<TData, TValue>[]>(
     () =>
       rowSelectionEnabled
-        ? ([selectColumnDef<TData>()] as ColumnDef<TData, TValue>[]).concat(
-            columns,
-          )
+        ? (
+            [selectColumnDef<TData>({ selectAllRows, selectRow })] as ColumnDef<TData, TValue>[]
+          ).concat(columns)
         : columns,
-    [columns, rowSelectionEnabled],
+    [columns, rowSelectionEnabled, selectAllRows, selectRow],
   );
 
   // eslint-disable-next-line react-hooks/incompatible-library
