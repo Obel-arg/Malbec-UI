@@ -7,6 +7,7 @@ import { Button } from "../Button/Button";
 import { Sheet } from "../Sheet/Sheet";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import {
   SIDEBAR_KEYBOARD_SHORTCUT,
   SIDEBAR_WIDTH,
@@ -263,6 +264,7 @@ const SidebarRoot = React.forwardRef<HTMLDivElement, SidebarProps>(
   function SidebarRoot({ side: sideProp, className, children, ...rest }, ref) {
     const { defaultSide, isMobile, openMobile, setOpenMobile, sidebarId, state } =
       useSidebar();
+    const labels = useMalbecLabels();
     const side = sideProp ?? defaultSide;
     const panelState = isMobile ? "expanded" : state;
 
@@ -291,7 +293,7 @@ const SidebarRoot = React.forwardRef<HTMLDivElement, SidebarProps>(
               className={cn(sidebarSheetContentVariants({ side }))}
               aria-describedby={undefined}
             >
-              <Sheet.Title className="ui:sr-only">Navigation menu</Sheet.Title>
+              <Sheet.Title className="ui:sr-only">{labels.sidebarNavigation}</Sheet.Title>
               {panel}
             </Sheet.Content>
           </Sheet>
@@ -335,6 +337,7 @@ const SidebarTrigger = React.forwardRef<HTMLButtonElement, SidebarTriggerProps>(
   function SidebarTrigger({ className, children, onClick, ...rest }, ref) {
     const { toggleSidebar, sidebarId, isMobile, openMobile, open } =
       useSidebar();
+    const labels = useMalbecLabels();
     const expanded = isMobile ? openMobile : open;
 
     return (
@@ -346,7 +349,7 @@ const SidebarTrigger = React.forwardRef<HTMLButtonElement, SidebarTriggerProps>(
         htmlType="button"
         aria-controls={sidebarId}
         aria-expanded={expanded}
-        aria-label="Toggle sidebar"
+        aria-label={labels.toggleSidebar}
         onClick={(e) => {
           onClick?.(e);
           toggleSidebar();
