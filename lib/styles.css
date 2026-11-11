@@ -30,6 +30,8 @@
   --color-malbec-icon: #3f3f46;
   /* Darkest neutral: titles and the dark tooltip. We never use black. */
   --color-malbec-ink: #1a1a1f;
+  /* Focus ring of every control: neutral, never brand (malbec-ux-ui). */
+  --color-focus: #3f3f46;
   /* Warm edge of the embossed divider (malbec-ux-ui embossed.md): edge on top, white light below. */
   --color-embossed-edge: #eae7e3;
   /* "Falta algo" (malbec-ux-ui): the one yellow of the suite, for pending states. */
@@ -62,6 +64,8 @@
 }
 
 .dark {
+  /* Light enough to keep 3:1 against the dark surfaces. */
+  --color-focus: #a8a29e;
   --color-background-100: #0c0a0b;
   --color-background-200: #1a1118;
   --color-background-300: #261a21;
@@ -572,6 +576,7 @@
   --color-sidebar-border: var(--color-sidebar-border);
   --color-malbec-icon: var(--color-malbec-icon);
   --color-malbec-ink: var(--color-malbec-ink);
+  --color-focus: var(--color-focus);
   --color-embossed-edge: var(--color-embossed-edge);
   --color-pending-surface: var(--color-pending-surface);
   --color-pending-edge: var(--color-pending-edge);

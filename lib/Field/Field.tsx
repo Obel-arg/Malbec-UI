@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { Label } from "../Label/Label";
 import type { LabelProps } from "../Label/Label";
 import { cn } from "../utils/cn";
+import { FieldInfo } from "./FieldInfo";
 import {
   fieldDescriptionVariants,
   fieldErrorVariants,
@@ -112,12 +114,26 @@ const FieldRoot = React.forwardRef<HTMLDivElement, FieldProps>(function FieldRoo
 export interface FieldLabelProps extends LabelProps {
   /** Append a destructive-colored asterisk after the label text. */
   required?: boolean;
+  /**
+   * Explanation of the field behind an "i" next to the label. Opens on click, tap or keyboard
+   * (a hover tooltip never opens on a tablet). The button sits beside the `<label>`, so it doesn't
+   * join the input's name.
+   */
+  info?: React.ReactNode;
+  /** Accessible name of the "i" ("Cómo se calcula"). Defaults to the `moreInfo` label. */
+  infoLabel?: string;
+  /** Also open the explanation on mouse hover; a click pins it. */
+  infoOnHover?: boolean;
 }
 
 const FieldLabel = React.forwardRef<HTMLLabelElement, FieldLabelProps>(
-  function FieldLabel({ required = false, children, htmlFor, ...rest }, ref) {
+  function FieldLabel(
+    { required = false, info, infoLabel, infoOnHover = false, children, htmlFor, ...rest },
+    ref,
+  ) {
     const ctx = useOptionalFieldContext();
-    return (
+    const labels = useMalbecLabels();
+    const label = (
       <Label
         ref={ref}
         htmlFor={htmlFor ?? ctx?.id}
@@ -134,6 +150,13 @@ const FieldLabel = React.forwardRef<HTMLLabelElement, FieldLabelProps>(
           </span>
         ) : null}
       </Label>
+    );
+    if (info == null) return label;
+    return (
+      <span data-slot="field-label-row" className="ui:inline-flex ui:items-center ui:gap-1">
+        {label}
+        <FieldInfo label={infoLabel ?? labels.moreInfo} content={info} openOnHover={infoOnHover} />
+      </span>
     );
   },
 );

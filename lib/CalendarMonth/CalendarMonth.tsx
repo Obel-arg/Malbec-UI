@@ -20,6 +20,7 @@ import {
 import type { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { cn } from "../utils/cn";
+import { withAlpha } from "../utils/with-alpha";
 import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { Badge } from "../Badge/Badge";
 import type { BadgeVariant } from "../Badge/badge-variants";
@@ -62,7 +63,7 @@ export type CalendarMonthEventColor =
  * lighter than any show chip so the child chips stay legible on top of it.
  */
 function groupContainerBg(color: CalendarMonthEventColor): string {
-  return `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 8%, transparent)`;
+  return withAlpha(EVENT_PILL_DOT_COLOR[color], 0.08);
 }
 /** Container border matches the tour header chip's fill (the `Badge` tint). */
 function groupContainerBorder(color: CalendarMonthEventColor): string {
@@ -78,7 +79,7 @@ function unconfirmedChipStyle(
 ): React.CSSProperties {
   return {
     backgroundColor: "transparent",
-    borderColor: `color-mix(in srgb, ${EVENT_PILL_DOT_COLOR[color]} 60%, transparent)`,
+    borderColor: withAlpha(EVENT_PILL_DOT_COLOR[color], 0.6),
     borderStyle: "dashed",
     borderWidth: 1.5,
   };
@@ -405,7 +406,7 @@ const calendarMonthToolbarSelectTriggerClassName = [
   "ui:h-8 ui:min-h-8 ui:gap-2 ui:rounded-[8px] ui:border-[1.5px] ui:border-primary ui:bg-transparent",
   "ui:px-3 ui:py-[6px] ui:text-xs ui:font-medium ui:leading-4 ui:tracking-[-0.3px] ui:text-primary ui:shadow-none",
   "ui:hover:bg-primary/10 ui:active:bg-primary/15",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   "[&>span:last-child]:text-primary [&>span:last-child]:opacity-100",
 ].join(" ");
 
@@ -1249,7 +1250,7 @@ const CalendarMonthDay = React.forwardRef<
       className={cn(
         calendarMonthDayCellVariants({ isLast: isLastInRow }),
         selectable &&
-          "ui:cursor-pointer ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-1 ui:focus-visible:ring-offset-background-100",
+          "ui:cursor-pointer ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-1 ui:focus-visible:ring-offset-background-100",
         className,
       )}
       onClick={(e) => {

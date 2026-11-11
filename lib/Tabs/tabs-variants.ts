@@ -78,7 +78,7 @@ export const tabsContentVariants = cva([
   "ui:text-text-default",
   "ui:outline-none",
   "ui:focus-visible:ring-2",
-  "ui:focus-visible:ring-primary",
+  "ui:focus-visible:ring-focus",
   "ui:focus-visible:ring-offset-2",
   "ui:focus-visible:ring-offset-background-100",
 ]);

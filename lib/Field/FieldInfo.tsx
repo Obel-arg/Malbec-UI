@@ -5,7 +5,7 @@ import { Info } from "lucide-react";
 import { Popover } from "../Popover/Popover";
 import { cn } from "../utils/cn";
 
-export interface InfoPopoverProps {
+export interface FieldInfoProps {
   /** Short accessible name of the button ("Cómo se calcula"), not the explanation itself. */
   label: string;
   /** The explanation: a paragraph or a short block (paragraphs, a list). */
@@ -26,19 +26,19 @@ const HOVER_OPEN_MS = 150;
 const HOVER_CLOSE_MS = 200;
 
 /**
- * The "i" with the explanation of a value or a section. It opens on click, tap or keyboard: a
+ * The "i" next to a field label (`Field.Label info`) with the explanation of the field. It opens on click, tap or keyboard: a
  * hover tooltip never opens on a tablet, and screen readers heard whole paragraphs as the
  * button's name. The button is 24px (WCAG 2.5.8) with a short `label`; Escape closes it.
- * Base: Records info-popover.
+ * Base: Records info-popover. Internal: consumers use `Field.Label info`.
  */
-export function InfoPopover({
+export function FieldInfo({
   label,
   content,
   side = "bottom",
   align = "start",
   openOnHover = false,
   className,
-}: InfoPopoverProps) {
+}: FieldInfoProps) {
   const [open, setOpen] = React.useState(false);
   // Opened by hover (closes on leave) or pinned by a click (doesn't).
   const pinned = React.useRef(false);
@@ -86,7 +86,7 @@ export function InfoPopover({
               pinned.current = true;
             }
           }}
-          className="ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:border-0 ui:bg-transparent ui:p-0 ui:text-malbec-icon ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:hover:text-malbec-ink ui:focus-visible:ring-2 ui:focus-visible:ring-malbec-icon"
+          className="ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:border-0 ui:bg-transparent ui:p-0 ui:text-malbec-icon ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:hover:text-malbec-ink ui:focus-visible:ring-2 ui:focus-visible:ring-focus"
         >
           <Info aria-hidden className="ui:size-4" />
         </button>

@@ -85,7 +85,7 @@ export const sheetCloseVariants = cva([
   "ui:opacity-70",
   "ui:transition-opacity",
   "ui:outline-none",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);
 
 export const sheetCloseIconVariants = cva("ui:size-4");
@@ -119,7 +119,7 @@ export const sheetActionVariants = cva([
   "ui:whitespace-nowrap",
   "ui:outline-none ui:transition-[opacity,background-color]",
   "ui:hover:opacity-90 ui:active:opacity-80",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);
 
 export const sheetInlineFieldVariants = cva("ui:flex ui:w-full ui:items-center ui:gap-4");
@@ -136,5 +136,5 @@ export const sheetInlineInputVariants = cva([
   "ui:text-sm ui:leading-5 ui:font-normal ui:text-text-default",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);

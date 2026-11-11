@@ -67,8 +67,8 @@ export { Table } from "./Table/Table";
 // Round B: surfaces
 export { Notice } from "./Notice/Notice";
 export { EmptyState } from "./EmptyState/EmptyState";
+export { PageHeader } from "./PageHeader/PageHeader";
 export { Skeleton } from "./Skeleton/Skeleton";
-export { InfoPopover } from "./InfoPopover/InfoPopover";
 
 // Round B: charts
 // Chart primitives of malbec-ux-ui (charts.md): inks, scales, dot-field card, sheen, grid, crosshair.
@@ -385,8 +385,8 @@ export type { ComboboxFilter } from "./Combobox/Combobox";
 // Round B: surfaces
 export type { NoticeProps, NoticeTone } from "./Notice/Notice";
 export type { EmptyStateProps, EmptyStateVariant } from "./EmptyState/EmptyState";
+export type { PageHeaderProps } from "./PageHeader/PageHeader";
 export type { SkeletonProps } from "./Skeleton/Skeleton";
-export type { InfoPopoverProps } from "./InfoPopover/InfoPopover";
 // Round B: shell
 export type { SidebarCollapsible } from "./Sidebar/Sidebar";
 export type { NotificationBellProps } from "./NotificationBell/NotificationBell";
