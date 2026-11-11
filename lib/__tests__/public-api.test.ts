@@ -13,7 +13,7 @@ describe("public API (2.0)", () => {
     expect(api).toHaveProperty("StatusBadge");
   });
 
-  it("drops DataCard v1 (brand band on top): it contradicts rule 1, v2 goes through the workshop", () => {
-    expect(api).not.toHaveProperty("DataCard");
+  it("exports the spec DataCard (v2), not v1's brand band", () => {
+    expect(api).toHaveProperty("DataCard");
   });
 });

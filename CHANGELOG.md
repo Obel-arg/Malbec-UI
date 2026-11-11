@@ -113,10 +113,15 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 - `Command.Empty` without children says what was searched. All texts come from `MalbecLabelsProvider`.
 - **What to do:** drop the `mr-2` wrappers around item icons (the row spaces them) and pass shortcut keys as `keys`.
 
-### Breaking: DataCard v1 is removed
-- `DataCard` (the brand-coloured band on one side, `accentSide`, title inside the panel) is no longer exported. A brand band as decoration of a figure contradicts spec rule 1: brand colour is for the CTA and for state.
-- Its replacement, DataCard v2 with the spec anatomy (`references/data-card.md`: embossed frame, block with a bevel, title outside), goes through the workshop with Isa first and is not in this release.
-- **What to do:** 18 files import it today (Records 10, Artist 6, Live 1, Publishing 1). Until v2 ships, build the card locally from `data-card.md`; Records' `data-card-style.ts` is the reference implementation. Don't copy v1.
+### Breaking: DataCard is rebuilt to the spec
+- **`DataCard`** follows `references/data-card.md`, with three layers:
+  - an embossed `background-200` frame (radius 14, 4px band);
+  - a `background-100` block with a bevel and the figure (17px semibold, tabular), with an optional `sub` line;
+  - the `label` with its icon on the frame below.
+- New API: `<DataCard value="US$ 8.802" sub="6 costos" label="Gasto total" icon={<Wallet />} />`.
+- `variant="count"` is for short counts: a 28px icon and figure side by side, centred.
+- v1's brand band, `accentSide` and the title inside the panel are gone (spec rule 1: brand colour is for the CTA and for state).
+- **What to do:** 18 files use v1 (Records 10, Artist 6, Live 1, Publishing 1). Move them to the new props: the old title becomes `label`, the figure becomes `value`. Delete local data-card modules (`data-card-style.ts`, `DATA_CARD_*`, `rail-data-card`). In a strip, use a grid with `items-stretch`: one card per figure, never N figures in one card.
 
 ### Breaking: unused exports removed
 - `statusTone`, `statusVariant`, `priorityVariant`, `STATUS_TONES`, `TONE_VARIANT` and `formatGmtOffsetLabel` are no longer exported. None of the four apps imported them.
