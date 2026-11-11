@@ -854,10 +854,18 @@ export type ComboboxListProps = Omit<
   "children"
 > & {
   children: (item: unknown) => React.ReactNode;
+  /**
+   * Called when the list is scrolled near its end, to fetch the next page. It fires once per
+   * page: again only after `items` changes, and never while the combobox is `loading`.
+   */
+  onLoadMore?: () => void;
 };
 
 const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
-  function ComboboxList({ className, children, ...rest }, ref) {
+  function ComboboxList(
+    { className, children, onLoadMore, onScroll, ...rest },
+    ref,
+  ) {
     const ctx = useComboboxContext("Combobox.List");
     const labels = useMalbecLabels();
 
@@ -867,6 +875,8 @@ const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
      * hand with a non-passive listener (React's onWheel is passive and can't preventDefault).
      */
     const innerRef = React.useRef<HTMLUListElement | null>(null);
+    /** The `items` for which onLoadMore already fired: one request per page. */
+    const loadedForRef = React.useRef<readonly unknown[] | null>(null);
     const listRef = React.useCallback(
       (node: HTMLUListElement | null) => {
         innerRef.current = node;
@@ -895,6 +905,15 @@ const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
         aria-labelledby={ctx.labelId}
         data-slot="combobox-list"
         className={cn(comboboxListVariants(), className)}
+        onScroll={(e) => {
+          onScroll?.(e);
+          const el = e.currentTarget;
+          const nearEnd = el.scrollHeight - el.scrollTop - el.clientHeight < 72;
+          if (!onLoadMore || ctx.loading || !nearEnd) return;
+          if (loadedForRef.current === ctx.items) return;
+          loadedForRef.current = ctx.items;
+          onLoadMore();
+        }}
         {...rest}
       >
         {ctx.filteredItems.map((item, index) => (

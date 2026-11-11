@@ -17,13 +17,14 @@ const venues: Venue[] = [
   { value: "metro", label: "Metropolitano", keywords: ["Rosario"] },
 ];
 
-function Venues(rest: Partial<ComboboxProps>) {
+function Venues(props: Partial<ComboboxProps> & { onLoadMore?: () => void }) {
+  const { onLoadMore, ...rest } = props;
   return (
     <MalbecLabelsProvider locale="es">
       <Combobox items={venues} {...rest}>
         <Combobox.Input aria-label="Venue" />
         <Combobox.Content>
-          <Combobox.List>
+          <Combobox.List onLoadMore={onLoadMore}>
             {(item) => <Combobox.Item value={item} />}
           </Combobox.List>
           <Combobox.Empty>Sin resultados</Combobox.Empty>
@@ -82,5 +83,22 @@ describe("Combobox onCreate", () => {
     type("Luna Park");
     expect(screen.queryByRole("option")).toBeNull();
     expect(screen.getByText("Sin resultados")).toBeTruthy();
+  });
+});
+
+describe("Combobox.List onLoadMore", () => {
+  it("fires once when the list is scrolled near its end", () => {
+    const onLoadMore = vi.fn();
+    render(<Venues defaultOpen onLoadMore={onLoadMore} />);
+    const list = screen.getByRole("listbox");
+    Object.defineProperty(list, "scrollHeight", { value: 600 });
+    Object.defineProperty(list, "clientHeight", { value: 280 });
+    list.scrollTop = 100;
+    fireEvent.scroll(list);
+    expect(onLoadMore).not.toHaveBeenCalled();
+    list.scrollTop = 300;
+    fireEvent.scroll(list);
+    fireEvent.scroll(list);
+    expect(onLoadMore).toHaveBeenCalledTimes(1);
   });
 });
