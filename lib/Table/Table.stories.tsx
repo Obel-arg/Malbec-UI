@@ -400,3 +400,50 @@ export const StackOnMobile: Story = {
     </div>
   ),
 };
+
+/** The rows scroll inside the shell and the header stays on top. */
+export const StickyHeader: Story = {
+  name: "Sticky header",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Table } from "@obel-arg/malbec-ui";
+
+// The shell becomes the scroller: give it a height with containerClassName.
+<Table stickyHeader containerClassName="ui:max-h-[240px]">
+  <Table.Header>…</Table.Header>
+  <Table.Body>…</Table.Body>
+</Table>
+
+// Same on DataTable:
+<DataTable stickyHeader tableContainerClassName="ui:max-h-[480px]" … />`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-full ui:max-w-[720px]">
+      <Table stickyHeader containerClassName="ui:max-h-[240px]">
+        <Table.Header>
+          <Table.Row>
+            <Table.Head>Show</Table.Head>
+            <Table.Head>Fecha</Table.Head>
+            <Table.Head className="ui:text-right">Entradas</Table.Head>
+            <Table.Head className="ui:text-right">Neto</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {[0, 1, 2, 3].flatMap((round) =>
+            SHOW_ROWS.map((row) => (
+              <Table.Row key={`${row.id}-${round}`}>
+                <Table.Cell>{row.show}</Table.Cell>
+                <Table.Cell>{row.date}</Table.Cell>
+                <Table.Cell className="ui:text-right ui:tabular-nums">{row.tickets}</Table.Cell>
+                <Table.Cell className="ui:text-right ui:tabular-nums">{row.net}</Table.Cell>
+              </Table.Row>
+            )),
+          )}
+        </Table.Body>
+      </Table>
+    </div>
+  ),
+};

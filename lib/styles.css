@@ -7,6 +7,8 @@
   --ui-z-overlay: 50;
   --ui-z-floating: 100;
   --ui-z-floating-nested: 110;
+  /* Sticky table headers, above their own rows only. */
+  --ui-z-sticky: 1;
 
   /** Popover / Combobox / Select surface motion — override in host app `:root` if needed. */
   --malbec-popover-enter-duration: 150ms;

@@ -14,11 +14,13 @@ import {
   tableHeaderGroupVariants,
   tableHeadVariants,
   tableRowVariants,
+  tableStickyHeaderVariants,
 } from "./table-variants";
 
 export type { TableAppearance } from "./table-variants";
 
 const TableAppearanceContext = React.createContext<TableAppearance>("default");
+const TableStickyHeaderContext = React.createContext(false);
 
 function useTableAppearance(): TableAppearance {
   return React.useContext(TableAppearanceContext);
@@ -36,29 +38,49 @@ export type TableRootProps = React.ComponentProps<"table"> & {
    * Desktop is unchanged.
    */
   stackOnMobile?: boolean;
+  /**
+   * Pins the header while the rows scroll. The container becomes the scroller, so give it a
+   * height with `containerClassName` (e.g. `ui:max-h-[480px]`).
+   */
+  stickyHeader?: boolean;
+  /** Classes for the bordered container that scrolls (not the `<table>`). */
+  containerClassName?: string;
 };
 
 const TableRoot = React.forwardRef<HTMLTableElement, TableRootProps>(function TableRoot(
-  { className, appearance = "default", stackOnMobile = false, ...rest },
+  {
+    className,
+    appearance = "default",
+    stackOnMobile = false,
+    stickyHeader = false,
+    containerClassName,
+    ...rest
+  },
   ref,
 ) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   useCellLabels(containerRef, stackOnMobile);
   return (
     <TableAppearanceContext.Provider value={appearance}>
-      <div
-        ref={containerRef}
-        className={tableContainerVariants({ appearance })}
-        data-appearance={appearance}
-        data-stack-on-mobile={stackOnMobile ? "" : undefined}
-      >
-        <table
-          ref={ref}
-          data-slot="table"
-          className={cn(tableElementVariants({ appearance }), className)}
-          {...rest}
-        />
-      </div>
+      <TableStickyHeaderContext.Provider value={stickyHeader}>
+        <div
+          ref={containerRef}
+          className={cn(
+            tableContainerVariants({ appearance }),
+            stickyHeader && "ui:overflow-y-auto",
+            containerClassName,
+          )}
+          data-appearance={appearance}
+          data-stack-on-mobile={stackOnMobile ? "" : undefined}
+        >
+          <table
+            ref={ref}
+            data-slot="table"
+            className={cn(tableElementVariants({ appearance }), className)}
+            {...rest}
+          />
+        </div>
+      </TableStickyHeaderContext.Provider>
     </TableAppearanceContext.Provider>
   );
 });
@@ -68,11 +90,16 @@ export type TableHeaderProps = React.ComponentProps<"thead">;
 const TableHeader = React.forwardRef<HTMLTableSectionElement, TableHeaderProps>(
   function TableHeader({ className, ...rest }, ref) {
     const appearance = useTableAppearance();
+    const sticky = React.useContext(TableStickyHeaderContext);
     return (
       <thead
         ref={ref}
         data-slot="table-header"
-        className={cn(tableHeaderGroupVariants({ appearance }), className)}
+        className={cn(
+          tableHeaderGroupVariants({ appearance }),
+          sticky && tableStickyHeaderVariants({ appearance }),
+          className,
+        )}
         {...rest}
       />
     );

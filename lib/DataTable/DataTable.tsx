@@ -68,6 +68,13 @@ interface DataTableBaseProps<TData, TValue> {
   /** Below 640px each row becomes a card (see `Table`'s `stackOnMobile`). */
   stackOnMobile?: boolean;
   /**
+   * Pins the header while the rows scroll inside the table shell; give the shell a height with
+   * `tableContainerClassName` (e.g. `ui:max-h-[480px]`).
+   */
+  stickyHeader?: boolean;
+  /** Classes for the bordered, scrolling table shell. */
+  tableContainerClassName?: string;
+  /**
    * When true, prepends a selection column with checkboxes (header: select all,
    * rows: per-row). Defaults to `false`.
    */
@@ -178,6 +185,8 @@ export function DataTable<TData, TValue>({
   footer,
   tableAppearance = "default",
   stackOnMobile,
+  stickyHeader,
+  tableContainerClassName,
   rowSelection: rowSelectionEnabled = false,
   getRowId,
   enableSorting = true,
@@ -283,7 +292,12 @@ export function DataTable<TData, TValue>({
           {toolbarNode}
         </div>
       ) : null}
-      <Table appearance={tableAppearance} stackOnMobile={stackOnMobile}>
+      <Table
+        appearance={tableAppearance}
+        stackOnMobile={stackOnMobile}
+        stickyHeader={stickyHeader}
+        containerClassName={tableContainerClassName}
+      >
         {tableChildrenStart}
         <Table.Header>
           {table.getHeaderGroups().map((headerGroup) => (

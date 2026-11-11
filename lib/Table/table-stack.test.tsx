@@ -3,9 +3,13 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Table } from "./Table";
 
-function Shows({ stackOnMobile = false }) {
+function Shows({ stackOnMobile = false, stickyHeader = false }) {
   return (
-    <Table stackOnMobile={stackOnMobile}>
+    <Table
+      stackOnMobile={stackOnMobile}
+      stickyHeader={stickyHeader}
+      containerClassName="ui:max-h-[320px]"
+    >
       <Table.Header>
         <Table.Row>
           <Table.Head>Show</Table.Head>
@@ -47,4 +51,12 @@ describe("Table stackOnMobile", () => {
     expect(css).toMatch(/@media \(max-width: 639px\) \{\s*\[data-stack-on-mobile\]/);
   });
 });
-
+describe("Table stickyHeader", () => {
+  it("makes the container scroll and pins the header cells", () => {
+    const { container } = render(<Shows stickyHeader />);
+    const shell = container.firstElementChild as HTMLElement;
+    expect(shell.className).toContain("ui:overflow-y-auto");
+    expect(shell.className).toContain("ui:max-h-[320px]");
+    expect(container.querySelector("thead")!.className).toContain("ui:[&_th]:sticky");
+  });
+});
