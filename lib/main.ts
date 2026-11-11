@@ -59,13 +59,13 @@ export { Textarea } from "./Textarea/Textarea";
 export { Tooltip } from "./Tooltip/Tooltip";
 export { Card } from "./Card/Card";
 export { Chart } from "./Chart/Chart";
-export { DataCard } from "./DataCard/DataCard";
 export { DataTable } from "./DataTable/DataTable";
 export { SortableColumnHeader } from "./DataTable/sortable-column-header";
 export { Steps } from "./Steps/Steps";
 export { Table } from "./Table/Table";
 // Round B: surfaces
 export { Notice } from "./Notice/Notice";
+export { DataCard } from "./DataCard/DataCard";
 export { EmptyState } from "./EmptyState/EmptyState";
 export { PageHeader } from "./PageHeader/PageHeader";
 export { Skeleton } from "./Skeleton/Skeleton";
@@ -195,10 +195,11 @@ export type {
   CommandItemProps,
   CommandSeparatorProps,
   CommandShortcutProps,
+  CommandContextProps,
+  CommandFooterProps,
   CommandLoadingProps,
   CommandDialogProps,
 } from "./Command/Command";
-export type { DataCardProps } from "./DataCard/DataCard";
 export type {
   DataTableProps,
   DataTableRenderFooterContext,
@@ -384,6 +385,7 @@ export type { SortableColumnHeaderProps } from "./DataTable/sortable-column-head
 export type { ComboboxFilter } from "./Combobox/Combobox";
 // Round B: surfaces
 export type { NoticeProps, NoticeTone } from "./Notice/Notice";
+export type { DataCardProps } from "./DataCard/DataCard";
 export type { EmptyStateProps, EmptyStateVariant } from "./EmptyState/EmptyState";
 export type { PageHeaderProps } from "./PageHeader/PageHeader";
 export type { SkeletonProps } from "./Skeleton/Skeleton";

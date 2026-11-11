@@ -97,3 +97,22 @@ describe("Combobox labels", () => {
     expect(screen.getByRole("button", { name: "Abrir" })).toBeTruthy();
   });
 });
+
+describe("Combobox chips box padding", () => {
+  it("has the same padding on every side (6px), not the 16px of the trigger row", () => {
+    render(<Chips />);
+    const classes = chipsBox().className.split(/\s+/);
+    expect(classes).toEqual(expect.arrayContaining(["ui:px-1.5", "ui:py-1.5"]));
+    expect(classes).not.toContain("ui:px-4");
+  });
+});
+
+describe("Combobox chips input", () => {
+  it("has a real minimum width, so the chips box wraps it to a new line instead of overflowing", () => {
+    render(<Chips />);
+    const wrapper = screen.getByRole("combobox", { name: "Frutas" }).parentElement!;
+    const classes = wrapper.className.split(/\s+/);
+    expect(classes).toContain("ui:min-w-32");
+    expect(classes).not.toContain("ui:min-w-0");
+  });
+});

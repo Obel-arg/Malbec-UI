@@ -53,6 +53,14 @@ export interface MalbecLabels {
   nextWeek: string;
   previousDay: string;
   nextDay: string;
+  /** Command.Empty default text, with what was searched. */
+  commandNoResults: (search: string) => string;
+  /** Between the keys of a shortcut sequence ("G then S"). */
+  keysThen: string;
+  /** Command.Footer hints. */
+  commandNavigate: string;
+  commandOpen: string;
+  commandClose: string;
   /** Overflow button of a calendar day ("+3"). */
   moreEvents: (count: number) => string;
   inbox: string;
@@ -119,6 +127,11 @@ export const labelsEn: MalbecLabels = {
   nextWeek: "Next week",
   previousDay: "Previous day",
   nextDay: "Next day",
+  commandNoResults: (search) => (search ? `No commands match “${search}”.` : "No commands."),
+  keysThen: "then",
+  commandNavigate: "navigate",
+  commandOpen: "open",
+  commandClose: "close",
   moreEvents: (count) => `${count} more events`,
   inbox: "Inbox",
   filterInbox: "Filter inbox",
@@ -173,6 +186,11 @@ export const labelsEs: MalbecLabels = {
   nextWeek: "Semana siguiente",
   previousDay: "Día anterior",
   nextDay: "Día siguiente",
+  commandNoResults: (search) => (search ? `No hay comandos para «${search}».` : "No hay comandos."),
+  keysThen: "luego",
+  commandNavigate: "navegar",
+  commandOpen: "abrir",
+  commandClose: "cerrar",
   moreEvents: (count) => `${count} eventos más`,
   inbox: "Notificaciones",
   filterInbox: "Filtrar notificaciones",

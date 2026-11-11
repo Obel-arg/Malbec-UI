@@ -362,34 +362,6 @@ export const AllSizes: Story = {
   ),
 };
 
-export const BrandTone: Story = {
-  name: "Tone · Brand (opt-in)",
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Button } from "@obel-arg/malbec-ui";
-
-<Button variant="outline" tone="brand">
-  <Button.Text>Ver contrato</Button.Text>
-</Button>
-<Button variant="ghost" tone="brand">
-  <Button.Text>Ver detalle</Button.Text>
-</Button>`,
-      },
-    },
-  },
-  render: () => (
-    <div className="ui:flex ui:items-center ui:gap-3">
-      <Button variant="outline" tone="brand">
-        <Button.Text>Ver contrato</Button.Text>
-      </Button>
-      <Button variant="ghost" tone="brand">
-        <Button.Text>Ver detalle</Button.Text>
-      </Button>
-    </div>
-  ),
-};
-
 export const AsChildLink: Story = {
   name: "Composition · Link (asChild)",
   parameters: {

@@ -35,18 +35,17 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - Any `rounded-[8px]` you add to a `Badge`.
 
 ### Breaking: brand colour only on the primary CTA
-- **Button:** `tone` now defaults to `"neutral"`.
-  - `outline`, `ghost` and `secondary` are grey: `text-default` text, a `background-300` border on outline, `background-200` hover and a `malbec-icon` focus ring.
-  - `tone="brand"` brings back the 1.x brand text and border.
+- **Button:** `outline`, `ghost` and `secondary` are always grey: `text-default` text, a `background-300` border on outline, `background-200` hover and a neutral focus ring.
+  - There is no brand tone: the 1.x brand text and border on these variants is gone. `tone="neutral"` still compiles but is deprecated and does nothing.
   - `primary` and `destructive` don't change.
   - The component now starts at `md`, the declared default, instead of `lg`. The height is the same.
 - **Checkbox, Switch, RadioGroup, Steps:** checked and active states are solid `malbec-icon` (#3f3f46) instead of brand colour (spec rule 2). Unchecked controls have a `background-300` border, and the focus ring is `malbec-icon`.
 - **What to delete:**
-  - `tone="neutral"` everywhere.
+  - `tone="neutral"` everywhere (Live 2 files, Publishing 7).
   - Artist and Publishing: `no-green-button-classes` and `NEUTRAL_CHECKBOX_CLASS`.
   - Publishing: `button-outline.css` and `button-ghost.css`.
   - Live: `malbecOutlineButtonClass`, `malbecGhostButtonClass` and the `ui:h-9 ui:px-4 ui:text-[12px]` repeated on buttons (that is the default `md`).
-- **Check:** any outline or ghost that should stay in brand colour now needs `tone="brand"`.
+- **Check:** an outline or ghost that really needs the brand colour should be the `primary` button instead.
 
 ### Breaking: no pure white, no card shadow
 - **Popover:** content sits on `background-100` instead of pure white (spec rule 5). Dark mode doesn't change.
@@ -100,6 +99,29 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 
 ### Breaking: the green preset is `artist`
 - The theme preset `management` is renamed **`artist`** (Malbec Artist's palette). The provider's default theme is still Records.
+
+### Breaking: a new Command palette
+- **Command** follows version C of the Command workshop: Linear's structure with Resend's keys and footer.
+  - The surface is light (`background-100`), 600px wide with a 12px radius and a `background-300` edge. `Command.Dialog` adds the floating shadow.
+  - The input has no box and no search glyph: 16px ink text with a rule below.
+  - Group headings are 12px muted instead of bold.
+  - Rows are 36px with an 8px radius, a muted 16px icon, and the selected row on `background-200`.
+- New parts:
+  - `Command.Context`: a chip above the input with what the commands act on ("Show · Rosario").
+  - `Command.Shortcut keys={["G", "S"]} sequence`: boxed keys with "then" between them.
+  - `Command.Footer`: ↑↓ navigate, ↵ open, esc close.
+- `Command.Empty` without children says what was searched. All texts come from `MalbecLabelsProvider`.
+- **What to do:** drop the `mr-2` wrappers around item icons (the row spaces them) and pass shortcut keys as `keys`.
+
+### Breaking: DataCard is rebuilt to the spec
+- **`DataCard`** follows `references/data-card.md`, with three layers:
+  - an embossed `background-200` frame (radius 14, 4px band);
+  - a `background-100` block with a bevel and the figure (17px semibold, tabular), with an optional `sub` line;
+  - the `label` with its icon on the frame below.
+- New API: `<DataCard value="US$ 8.802" sub="6 costos" label="Gasto total" icon={<Wallet />} />`.
+- `variant="count"` is for short counts: a 28px icon and figure side by side, centred.
+- v1's brand band, `accentSide` and the title inside the panel are gone (spec rule 1: brand colour is for the CTA and for state).
+- **What to do:** 18 files use v1 (Records 10, Artist 6, Live 1, Publishing 1). Move them to the new props: the old title becomes `label`, the figure becomes `value`. Delete local data-card modules (`data-card-style.ts`, `DATA_CARD_*`, `rail-data-card`). In a strip, use a grid with `items-stretch`: one card per figure, never N figures in one card.
 
 ### Breaking: unused exports removed
 - `statusTone`, `statusVariant`, `priorityVariant`, `STATUS_TONES`, `TONE_VARIANT` and `formatGmtOffsetLabel` are no longer exported. None of the four apps imported them.

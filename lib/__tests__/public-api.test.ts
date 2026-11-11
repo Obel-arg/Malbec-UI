@@ -12,4 +12,8 @@ describe("public API (2.0)", () => {
     expect(api).toHaveProperty("PRIORITY_TONE");
     expect(api).toHaveProperty("StatusBadge");
   });
+
+  it("exports the spec DataCard (v2), not v1's brand band", () => {
+    expect(api).toHaveProperty("DataCard");
+  });
 });

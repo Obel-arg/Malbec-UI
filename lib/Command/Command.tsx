@@ -10,17 +10,21 @@ import {
   CommandList as CmdkCommandList,
   CommandLoading as CmdkCommandLoading,
   CommandSeparator as CmdkCommandSeparator,
+  useCommandState,
 } from "cmdk";
 import type { DialogProps } from "../Dialog/Dialog";
 import { DialogPrimitive } from "../Dialog/Dialog";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { cn } from "../utils/cn";
 import {
   commandDialogContentVariants,
   commandDialogOverlayVariants,
+  commandContextVariants,
   commandEmptyVariants,
+  commandFooterVariants,
   commandGroupVariants,
-  commandInputInnerRowVariants,
   commandInputShellVariants,
+  commandKbdVariants,
   commandInputVariants,
   commandItemVariants,
   commandListVariants,
@@ -29,24 +33,6 @@ import {
   commandSeparatorVariants,
   commandShortcutVariants,
 } from "./command-variants";
-
-function SearchGlyph(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-      {...props}
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-  );
-}
 
 export type CommandProps = React.ComponentPropsWithoutRef<typeof CmdkCommand>;
 
@@ -73,21 +59,13 @@ const CommandInput = React.forwardRef<
   CommandInputProps
 >(function CommandInput({ className, ...rest }, ref) {
   return (
-    <div
-      data-slot="command-input-shell"
-      className={commandInputShellVariants()}
-    >
-      <span className="ui:pointer-events-none ui:absolute ui:left-2 ui:top-1/2 ui:size-4 ui:-translate-y-1/2 ui:text-text-default ui:opacity-50">
-        <SearchGlyph className="ui:size-full" />
-      </span>
-      <div className={commandInputInnerRowVariants()}>
-        <CmdkCommandInput
-          ref={ref}
-          data-slot="command-input"
-          className={cn(commandInputVariants(), className)}
-          {...rest}
-        />
-      </div>
+    <div data-slot="command-input-shell" className={commandInputShellVariants()}>
+      <CmdkCommandInput
+        ref={ref}
+        data-slot="command-input"
+        className={cn(commandInputVariants(), className)}
+        {...rest}
+      />
     </div>
   );
 });
@@ -117,14 +95,18 @@ export type CommandEmptyProps = React.ComponentPropsWithoutRef<
 const CommandEmpty = React.forwardRef<
   React.ComponentRef<typeof CmdkCommandEmpty>,
   CommandEmptyProps
->(function CommandEmpty({ className, ...rest }, ref) {
+>(function CommandEmpty({ className, children, ...rest }, ref) {
+  const labels = useMalbecLabels();
+  const search = useCommandState((state) => state.search);
   return (
     <CmdkCommandEmpty
       ref={ref}
       data-slot="command-empty"
       className={cn(commandEmptyVariants(), className)}
       {...rest}
-    />
+    >
+      {children ?? labels.commandNoResults(search)}
+    </CmdkCommandEmpty>
   );
 });
 
@@ -182,17 +164,83 @@ const CommandSeparator = React.forwardRef<
   );
 });
 
-export type CommandShortcutProps = React.ComponentProps<"span">;
+export type CommandShortcutProps = React.ComponentProps<"span"> & {
+  /** Keys drawn as boxed caps, e.g. `["⇧", "C"]`. Without `keys`, renders its children as text. */
+  keys?: string[];
+  /** The keys are pressed one after the other ("G then S"), not together. */
+  sequence?: boolean;
+};
 
 const CommandShortcut = React.forwardRef<HTMLSpanElement, CommandShortcutProps>(
-  function CommandShortcut({ className, ...rest }, ref) {
+  function CommandShortcut({ className, keys, sequence = false, children, ...rest }, ref) {
+    const labels = useMalbecLabels();
     return (
       <span
         ref={ref}
         data-slot="command-shortcut"
         className={cn(commandShortcutVariants(), className)}
         {...rest}
+      >
+        {keys
+          ? keys.map((key, i) => (
+              <React.Fragment key={`${key}-${i}`}>
+                {sequence && i > 0 ? <span>{labels.keysThen}</span> : null}
+                <kbd className={commandKbdVariants()}>{key}</kbd>
+              </React.Fragment>
+            ))
+          : children}
+      </span>
+    );
+  },
+);
+
+export type CommandContextProps = React.ComponentProps<"div">;
+
+/** What the commands act on, as a chip above the input ("Show · Rosario · Metropolitano"). */
+const CommandContext = React.forwardRef<HTMLDivElement, CommandContextProps>(
+  function CommandContext({ className, ...rest }, ref) {
+    return (
+      <div
+        ref={ref}
+        data-slot="command-context"
+        className={cn(commandContextVariants(), className)}
+        {...rest}
       />
+    );
+  },
+);
+
+export type CommandFooterProps = React.ComponentProps<"div">;
+
+/** Keyboard hints under the list (↑↓ navigate, ↵ open, esc close). Pass children to replace them. */
+const CommandFooter = React.forwardRef<HTMLDivElement, CommandFooterProps>(
+  function CommandFooter({ className, children, ...rest }, ref) {
+    const labels = useMalbecLabels();
+    const hint = (keys: string[], text: string) => (
+      <span className="ui:inline-flex ui:items-center ui:gap-1.5">
+        {keys.map((k) => (
+          <kbd key={k} className={commandKbdVariants()}>
+            {k}
+          </kbd>
+        ))}
+        {text}
+      </span>
+    );
+    return (
+      <div
+        ref={ref}
+        data-slot="command-footer"
+        className={cn(commandFooterVariants(), className)}
+        {...rest}
+      >
+        {children ?? (
+          <>
+            {hint(["↑", "↓"], labels.commandNavigate)}
+            {hint(["↵"], labels.commandOpen)}
+            {hint(["esc"], labels.commandClose)}
+          </>
+        )}
+      </div>
     );
   },
 );
@@ -304,6 +352,8 @@ type CommandNamespace = typeof CommandRoot & {
   Item: typeof CommandItem;
   Separator: typeof CommandSeparator;
   Shortcut: typeof CommandShortcut;
+  Context: typeof CommandContext;
+  Footer: typeof CommandFooter;
   Loading: typeof CommandLoading;
   Dialog: typeof CommandDialog;
 };
@@ -316,6 +366,8 @@ const Command = Object.assign(CommandRoot, {
   Item: CommandItem,
   Separator: CommandSeparator,
   Shortcut: CommandShortcut,
+  Context: CommandContext,
+  Footer: CommandFooter,
   Loading: CommandLoading,
   Dialog: CommandDialog,
 }) as CommandNamespace;
@@ -328,6 +380,8 @@ CommandGroup.displayName = "Command.Group";
 CommandItem.displayName = "Command.Item";
 CommandSeparator.displayName = "Command.Separator";
 CommandShortcut.displayName = "Command.Shortcut";
+CommandContext.displayName = "Command.Context";
+CommandFooter.displayName = "Command.Footer";
 CommandLoading.displayName = "Command.Loading";
 CommandDialog.displayName = "Command.Dialog";
 

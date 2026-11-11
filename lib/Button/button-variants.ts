@@ -25,26 +25,18 @@ export const buttonVariants = cva(
       variant: {
         primary:
           "ui:bg-primary ui:text-primary-foreground ui:font-semibold ui:hover:opacity-90 ui:active:opacity-80",
+        /** `secondary`, `ghost` and `outline` are grey: malbec-ux-ui keeps brand colour for the primary CTA. */
         secondary:
-          "ui:bg-background-300 ui:text-primary ui:hover:opacity-90 ui:active:opacity-80",
+          "ui:bg-background-300 ui:text-text-default ui:hover:opacity-90 ui:active:opacity-80",
         ghost:
-          "ui:bg-transparent ui:text-primary ui:hover:bg-background-300/60 ui:active:bg-background-300",
+          "ui:bg-transparent ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
         outline:
-          "ui:border-[1.5px] ui:border-primary ui:bg-transparent ui:text-primary ui:hover:bg-primary/10 ui:active:bg-primary/15",
+          "ui:border-[1.5px] ui:border-background-300 ui:bg-transparent ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
         destructive:
           "ui:bg-destructive ui:text-destructive-foreground ui:hover:opacity-90 ui:active:opacity-80",
         link: "ui:bg-transparent ui:text-primary ui:underline-offset-4 ui:hover:underline",
         /** A full-width, left-aligned row inside a list or popover (pick an item, add a credit…). */
         row: "ui:w-full ui:justify-start ui:bg-transparent ui:font-normal ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
-      },
-      /**
-       * `neutral` (the default) keeps `outline`, `ghost` and `secondary` grey: malbec-ux-ui keeps
-       * brand colour for the primary CTA and for state. `brand` paints their text and border in
-       * the brand colour, as in 1.x.
-       */
-      tone: {
-        brand: "",
-        neutral: "",
       },
       size: {
         /**
@@ -60,25 +52,12 @@ export const buttonVariants = cva(
       },
     },
     compoundVariants: [
-      {
-        variant: "outline",
-        tone: "neutral",
-        class:
-          "ui:border-background-300 ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
-      },
-      {
-        variant: "ghost",
-        tone: "neutral",
-        class: "ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
-      },
-      { variant: "secondary", tone: "neutral", class: "ui:text-text-default" },
       // Rows size to their content; this goes last so it beats the size geometry.
       { variant: "row", class: "ui:h-auto ui:px-2 ui:py-1.5" },
     ],
     defaultVariants: {
       variant: "primary",
       size: "md",
-      tone: "neutral",
     },
   },
 );
@@ -125,4 +104,5 @@ export type ButtonVariant = NonNullable<
   VariantProps<typeof buttonVariants>["variant"]
 >;
 export type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
-export type ButtonTone = NonNullable<VariantProps<typeof buttonVariants>["tone"]>;
+/** @deprecated 2.0 removed the brand tone; `neutral` is the only look and has no effect. */
+export type ButtonTone = "neutral";

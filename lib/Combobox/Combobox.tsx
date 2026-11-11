@@ -689,7 +689,9 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
 
     if (insideChips) {
       return (
-        <div className="ui:flex ui:min-w-0 ui:flex-1 ui:items-center ui:gap-1 ui:px-1">
+        // A real minimum width: with min-w-0 the chips box never wrapped it and the placeholder
+        // ran past the border. Now it moves to its own line when the chips leave no room.
+        <div className="ui:flex ui:min-w-32 ui:flex-1 ui:items-center ui:gap-1 ui:px-1">
           {inputEl}
           <div className="ui:flex ui:shrink-0 ui:items-center ui:gap-1">
             {hasClear ? (
@@ -1127,7 +1129,7 @@ const ComboboxChips = React.forwardRef<HTMLDivElement, ComboboxChipsProps>(
             data-disabled={ctx.disabled || undefined}
             className={cn(
               comboboxTriggerRowVariants({ variant: "default" }),
-              "ui:h-auto ui:min-h-10 ui:flex-wrap ui:items-center ui:justify-start ui:gap-1 ui:py-1.5",
+              "ui:h-auto ui:min-h-10 ui:flex-wrap ui:items-center ui:justify-start ui:gap-1 ui:px-1.5 ui:py-1.5",
               className,
             )}
             {...rest}
@@ -1233,7 +1235,7 @@ const ComboboxChipsInput = React.forwardRef<
       showTrigger={false}
       showClear={showClear}
       className={cn(
-        "ui:min-w-24 ui:flex-1 ui:border-0 ui:bg-transparent",
+        "ui:min-w-0 ui:flex-1 ui:border-0 ui:bg-transparent ui:truncate",
         className,
       )}
       {...rest}
