@@ -85,16 +85,26 @@ function isNodeInsideRoot(
   return Boolean(root && node instanceof Node && root.contains(node));
 }
 
+/** Whether `item` matches `query` (already trimmed and lower-cased). */
+export type ComboboxFilter = (item: unknown, query: string) => boolean;
+
+/** `item.keywords` when the item is an object that has a string array there. */
+function itemKeywords(item: unknown): string[] {
+  if (!item || typeof item !== "object" || !("keywords" in item)) return [];
+  const keywords = (item as { keywords?: unknown }).keywords;
+  return Array.isArray(keywords)
+    ? keywords.filter((k): k is string => typeof k === "string")
+    : [];
+}
+
 function filterComboboxItems(
   source: readonly unknown[],
   inputValue: string,
-  itemToStringValue: (item: unknown) => string,
+  matches: ComboboxFilter | null,
 ): unknown[] {
   const q = inputValue.trim().toLowerCase();
-  if (!q) return [...source];
-  return source.filter((item) =>
-    itemToStringValue(item).toLowerCase().includes(q),
-  );
+  if (!q || !matches) return [...source];
+  return source.filter((item) => matches(item, q));
 }
 
 export type ComboboxProps = {
@@ -116,6 +126,14 @@ export type ComboboxProps = {
    * `trigger` — use `<Combobox.Trigger>` plus a filter field inside `<Combobox.Content>`.
    */
   mode?: ComboboxMode;
+  /**
+   * How items match the typed query. By default an item matches on `itemToStringValue` or on
+   * any of its `keywords` (when items are objects with a `keywords: string[]`). Pass `null` when
+   * the server already filters (remote search): every item in `items` is shown.
+   */
+  filter?: ComboboxFilter | null;
+  /** Fires with the typed query; use it to fetch remote results (debounce on your side). */
+  onInputValueChange?: (inputValue: string) => void;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -159,6 +177,8 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
       disabled = false,
       autoHighlight = false,
       mode = "inline",
+      filter: filterProp,
+      onInputValueChange,
       className,
       style: rootStyle,
       children,
@@ -218,14 +238,28 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
       [setValueInternal],
     );
 
-    const [inputValue, setInputValue] = React.useState("");
+    const [inputValue, setInputValueState] = React.useState("");
+    const setInputValue = React.useCallback(
+      (next: string) => {
+        setInputValueState(next);
+        onInputValueChange?.(next);
+      },
+      [onInputValueChange],
+    );
+
+    const matches = React.useMemo<ComboboxFilter | null>(() => {
+      if (filterProp !== undefined) return filterProp;
+      return (item, q) =>
+        itemToStringValue(item).toLowerCase().includes(q) ||
+        itemKeywords(item).some((k) => k.toLowerCase().includes(q));
+    }, [filterProp, itemToStringValue]);
     const [highlightedIndex, setHighlightedIndex] = React.useState(-1);
     const [anchorMode, setAnchorMode] =
       React.useState<ComboboxAnchorMode>("none");
 
     const filteredItems = React.useMemo(
-      () => filterComboboxItems(items, inputValue, itemToStringValue),
-      [items, inputValue, itemToStringValue],
+      () => filterComboboxItems(items, inputValue, matches),
+      [items, inputValue, matches],
     );
 
     const setOpen = React.useCallback(
@@ -236,15 +270,11 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
           return;
         }
         if (autoHighlight) {
-          const filtered = filterComboboxItems(
-            items,
-            inputValue,
-            itemToStringValue,
-          );
+          const filtered = filterComboboxItems(items, inputValue, matches);
           setHighlightedIndex(filtered.length > 0 ? 0 : -1);
         }
       },
-      [autoHighlight, inputValue, itemToStringValue, items, setOpenState],
+      [autoHighlight, inputValue, matches, items, setOpenState],
     );
 
     const preventContentAutofocus = mode === "inline";

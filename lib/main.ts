@@ -358,3 +358,6 @@ export type {
   InputOtpGroupProps,
   InputOtpSeparatorProps,
 } from "./InputOtp/InputOtp";
+
+// Round B: combobox
+export type { ComboboxFilter } from "./Combobox/Combobox";
