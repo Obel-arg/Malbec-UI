@@ -358,3 +358,6 @@ export type {
   InputOtpGroupProps,
   InputOtpSeparatorProps,
 } from "./InputOtp/InputOtp";
+
+// Round B: tables (types)
+export type { DataTablePaginationProps } from "./DataTable/DataTablePagination";

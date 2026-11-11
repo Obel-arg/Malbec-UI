@@ -533,3 +533,60 @@ function EventsTable() {
     },
   },
 };
+
+const manyEventRows: EventRow[] = Array.from({ length: 8 }, (_, page) =>
+  eventRowsSample.map((row) => ({ ...row, id: `${row.id}-${page}` })),
+).flat();
+
+function PaginatedEventsTable() {
+  const columns = useEventColumns();
+  return (
+    <div className="ui:mx-auto ui:max-w-[1085px]">
+      <DataTable
+        getRowId={(r) => r.id}
+        columns={columns}
+        data={manyEventRows}
+        emptyLabel="Sin eventos"
+        tableChildrenStart={colgroupNoSelect}
+        pageSize={5}
+        footer={({ table }) => <DataTable.Pagination table={table} />}
+      />
+    </div>
+  );
+}
+
+export const Paginated: Story = {
+  name: "With pagination",
+  render: () => <PaginatedEventsTable />,
+  parameters: {
+    docs: {
+      source: {
+        code: `${DATA_TABLE_COLUMNS_SNIPPET}
+
+// Client-side: \`pageSize\` slices \`data\`. DataTable.Pagination hides itself when
+// everything fits in one page.
+<DataTable
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin eventos"
+  pageSize={5}
+  footer={({ table }) => <DataTable.Pagination table={table} />}
+/>
+
+// Server-side: \`data\` is the current page, \`rowCount\` the total on the server.
+const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 25 });
+const { rows, total } = useEvents(pagination);
+
+<DataTable
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin eventos"
+  rowCount={total}
+  pagination={pagination}
+  onPaginationChange={setPagination}
+  footer={({ table }) => <DataTable.Pagination table={table} />}
+/>`,
+      },
+    },
+  },
+};
