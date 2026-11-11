@@ -71,6 +71,7 @@ export { PageHeader } from "./PageHeader/PageHeader";
 export { SectionHeading } from "./SectionHeading/SectionHeading";
 export { Skeleton } from "./Skeleton/Skeleton";
 export { InfoPopover } from "./InfoPopover/InfoPopover";
+export { LockedField } from "./LockedField/LockedField";
 
 export type { MalbecThemeProviderProps } from "./theme";
 export type {
@@ -372,3 +373,4 @@ export type { PageHeaderProps } from "./PageHeader/PageHeader";
 export type { SectionHeadingProps } from "./SectionHeading/SectionHeading";
 export type { SkeletonProps } from "./Skeleton/Skeleton";
 export type { InfoPopoverProps } from "./InfoPopover/InfoPopover";
+export type { LockedFieldProps } from "./LockedField/LockedField";
