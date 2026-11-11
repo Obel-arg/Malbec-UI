@@ -35,18 +35,17 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - Any `rounded-[8px]` you add to a `Badge`.
 
 ### Breaking: brand colour only on the primary CTA
-- **Button:** `tone` now defaults to `"neutral"`.
-  - `outline`, `ghost` and `secondary` are grey: `text-default` text, a `background-300` border on outline, `background-200` hover and a `malbec-icon` focus ring.
-  - `tone="brand"` brings back the 1.x brand text and border.
+- **Button:** `outline`, `ghost` and `secondary` are always grey: `text-default` text, a `background-300` border on outline, `background-200` hover and a neutral focus ring.
+  - There is no brand tone: the 1.x brand text and border on these variants is gone. `tone="neutral"` still compiles but is deprecated and does nothing.
   - `primary` and `destructive` don't change.
   - The component now starts at `md`, the declared default, instead of `lg`. The height is the same.
 - **Checkbox, Switch, RadioGroup, Steps:** checked and active states are solid `malbec-icon` (#3f3f46) instead of brand colour (spec rule 2). Unchecked controls have a `background-300` border, and the focus ring is `malbec-icon`.
 - **What to delete:**
-  - `tone="neutral"` everywhere.
+  - `tone="neutral"` everywhere (Live 2 files, Publishing 7).
   - Artist and Publishing: `no-green-button-classes` and `NEUTRAL_CHECKBOX_CLASS`.
   - Publishing: `button-outline.css` and `button-ghost.css`.
   - Live: `malbecOutlineButtonClass`, `malbecGhostButtonClass` and the `ui:h-9 ui:px-4 ui:text-[12px]` repeated on buttons (that is the default `md`).
-- **Check:** any outline or ghost that should stay in brand colour now needs `tone="brand"`.
+- **Check:** an outline or ghost that really needs the brand colour should be the `primary` button instead.
 
 ### Breaking: no pure white, no card shadow
 - **Popover:** content sits on `background-100` instead of pure white (spec rule 5). Dark mode doesn't change.
