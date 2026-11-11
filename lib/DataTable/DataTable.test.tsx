@@ -19,6 +19,7 @@ function renderTable(onRowClick = vi.fn()) {
       columns={columns}
       data={[{ id: "1", venue: "Rosario · Metropolitano" }]}
       onRowClick={onRowClick}
+      emptyLabel="Sin resultados"
     />,
   );
   return onRowClick;
