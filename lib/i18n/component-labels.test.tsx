@@ -7,6 +7,7 @@ import { Combobox } from "../Combobox/Combobox";
 import { DatePicker } from "../DatePicker/DatePicker";
 import { Dialog } from "../Dialog/Dialog";
 import { FloatingBar } from "../FloatingBar/FloatingBar";
+import { Inbox } from "../Inbox/Inbox";
 import { Sheet } from "../Sheet/Sheet";
 import { Pagination } from "../Pagination/Pagination";
 import { Sidebar } from "../Sidebar/Sidebar";
@@ -130,5 +131,24 @@ describe("pickers read their labels from MalbecLabelsProvider", () => {
     es(<CalendarWeek week={new Date(2026, 10, 9)} onWeekChange={() => {}} />);
     expect(screen.getByRole("button", { name: "Semana anterior" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Semana siguiente" })).toBeTruthy();
+  });
+});
+
+describe("Inbox reads its labels from MalbecLabelsProvider", () => {
+  it("title, more actions and unread dot", () => {
+    es(
+      <Inbox moreActions={[{ value: "read-all", label: "Marcar todo como leído" }]}>
+        <Inbox.List>
+          <Inbox.Item unread>
+            <Inbox.Item.Content>
+              <Inbox.Item.Title>Nuevo contrato</Inbox.Item.Title>
+            </Inbox.Item.Content>
+          </Inbox.Item>
+        </Inbox.List>
+      </Inbox>,
+    );
+    expect(screen.getByText("Notificaciones")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Más acciones" })).toBeTruthy();
+    expect(screen.getByLabelText("Sin leer")).toBeTruthy();
   });
 });
