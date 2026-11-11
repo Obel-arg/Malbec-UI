@@ -182,6 +182,16 @@ export const comboboxEmptyVariants = cva(
   { variants: {}, defaultVariants: {} },
 );
 
+/** Loading row at the end of the list. */
+export const comboboxStatusVariants = cva([
+  "malbec-font-sans",
+  "ui:px-2",
+  "ui:py-2",
+  "ui:text-center",
+  "ui:text-xs",
+  "ui:text-text-default-muted",
+]);
+
 export const comboboxSeparatorVariants = cva(
   ["ui:-mx-1", "ui:my-1", "ui:h-px", "ui:bg-background-200"],
   { variants: {}, defaultVariants: {} },

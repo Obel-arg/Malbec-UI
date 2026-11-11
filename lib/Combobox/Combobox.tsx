@@ -14,6 +14,7 @@ import {
   comboboxItemVariants,
   comboboxListVariants,
   comboboxSeparatorVariants,
+  comboboxStatusVariants,
   comboboxTriggerRowVariants,
 } from "./combobox-variants";
 import type { ComboboxTriggerRowVariant } from "./combobox-variants";
@@ -47,6 +48,7 @@ type ComboboxContextValue = {
   filteredItems: unknown[];
   preventContentAutofocus: boolean;
   comboboxRootRef: React.RefObject<HTMLDivElement | null>;
+  loading: boolean;
 };
 
 const ComboboxContext = React.createContext<ComboboxContextValue | null>(null);
@@ -134,6 +136,11 @@ export type ComboboxProps = {
   filter?: ComboboxFilter | null;
   /** Fires with the typed query; use it to fetch remote results (debounce on your side). */
   onInputValueChange?: (inputValue: string) => void;
+  /**
+   * Results are being fetched (first page or the next one): the list shows a loading row and
+   * `Combobox.Empty` stays hidden.
+   */
+  loading?: boolean;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -179,6 +186,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
       mode = "inline",
       filter: filterProp,
       onInputValueChange,
+      loading = false,
       className,
       style: rootStyle,
       children,
@@ -304,6 +312,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
         filteredItems,
         preventContentAutofocus,
         comboboxRootRef,
+        loading,
       }),
       [
         mode,
@@ -329,6 +338,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
         filteredItems,
         preventContentAutofocus,
         comboboxRootRef,
+        loading,
       ],
     );
 
@@ -818,6 +828,7 @@ export type ComboboxListProps = Omit<
 const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
   function ComboboxList({ className, children, ...rest }, ref) {
     const ctx = useComboboxContext("Combobox.List");
+    const labels = useMalbecLabels();
 
     /**
      * The list is portaled to <body>. Inside a modal Dialog/Sheet, the modal's scroll lock
@@ -860,6 +871,15 @@ const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
             {children(item)}
           </React.Fragment>
         ))}
+        {ctx.loading ? (
+          <li
+            role="status"
+            data-slot="combobox-loading"
+            className={cn(comboboxStatusVariants())}
+          >
+            {labels.loading}
+          </li>
+        ) : null}
       </ul>
     );
   },
@@ -947,7 +967,7 @@ export type ComboboxEmptyProps = React.ComponentPropsWithoutRef<"div">;
 const ComboboxEmpty = React.forwardRef<HTMLDivElement, ComboboxEmptyProps>(
   function ComboboxEmpty({ className, ...rest }, ref) {
     const ctx = useComboboxContext("Combobox.Empty");
-    if (ctx.filteredItems.length > 0) return null;
+    if (ctx.filteredItems.length > 0 || ctx.loading) return null;
     return (
       <div
         ref={ref}

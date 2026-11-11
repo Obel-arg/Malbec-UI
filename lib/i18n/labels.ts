@@ -12,6 +12,8 @@ export interface MalbecLabels {
   close: string;
   /** Combobox toggle while the list is closed. */
   open: string;
+  /** Combobox list while results are being fetched. */
+  loading: string;
   /** Pagination `<nav>` label. */
   pagination: string;
   previous: string;
@@ -58,6 +60,7 @@ export const labelsEn: MalbecLabels = {
   closeSheet: "Close sheet",
   close: "Close",
   open: "Open",
+  loading: "Loading…",
   pagination: "Pagination",
   previous: "Previous",
   next: "Next",
@@ -96,6 +99,7 @@ export const labelsEs: MalbecLabels = {
   closeSheet: "Cerrar panel",
   close: "Cerrar",
   open: "Abrir",
+  loading: "Cargando…",
   pagination: "Paginación",
   previous: "Anterior",
   next: "Siguiente",

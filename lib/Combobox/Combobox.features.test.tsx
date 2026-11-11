@@ -52,4 +52,9 @@ describe("Combobox search", () => {
     expect(screen.getAllByRole("option")).toHaveLength(2);
   });
 
+  it("shows a loading row instead of the empty state while loading", () => {
+    render(<Venues items={[]} loading defaultOpen />);
+    expect(screen.getByRole("status").textContent).toBe("Cargando…");
+    expect(screen.queryByText("Sin resultados")).toBeNull();
+  });
 });
