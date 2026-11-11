@@ -35,7 +35,9 @@ function GhostRows({ columns, rows }: { columns: number; rows: number }) {
     <div
       aria-hidden
       data-slot="empty-state-ghost"
-      className="ui:[mask-image:linear-gradient(rgb(0_0_0/0.9),transparent)]"
+      // Fades out downwards and clears an ellipse in the middle, so the text sits on the plain
+      // surface without a box of its own behind it.
+      className="ui:[mask-composite:intersect] ui:[mask-image:radial-gradient(ellipse_42%_60%_at_50%_50%,transparent_55%,black_100%),linear-gradient(rgb(0_0_0/0.9),transparent)]"
     >
       {Array.from({ length: rows }, (_, r) => (
         <div
@@ -113,7 +115,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(func
       >
         <GhostRows columns={Math.max(1, columns)} rows={Math.max(1, rows)} />
         <div className="ui:absolute ui:inset-0 ui:flex ui:flex-col ui:items-center ui:justify-center ui:gap-2.5 ui:text-center">
-          <div className="ui:rounded-[10px] ui:bg-background-100 ui:px-3.5 ui:py-1.5">{text}</div>
+          {text}
           {action ? <div data-slot="empty-state-actions">{action}</div> : null}
         </div>
       </div>

@@ -63,3 +63,13 @@ describe("DataTable empty row", () => {
     expect(classesOf(cell)).not.toContain("ui:text-center");
   });
 });
+
+describe('EmptyState variant="ghost" text', () => {
+  it("sits on the plain surface: no box of its own behind the text", () => {
+    const { container } = render(<EmptyState variant="ghost" title="Todavía no hay proveedores" />);
+    const title = screen.getByText("Todavía no hay proveedores");
+    const holder = title.closest('[data-slot="empty-state"] > div:last-child')!;
+    expect(holder.querySelector(".ui\\:bg-background-100")).toBeNull();
+    expect(container.querySelector('[data-slot="empty-state-ghost"]')!.className).toContain("mask-composite:intersect");
+  });
+});
