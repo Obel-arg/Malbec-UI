@@ -73,6 +73,30 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - `defaultMode="light"` on the provider.
   - Any override that sets `--color-foreground` to ink, and `text-malbec-ink` used only to avoid `text-foreground`.
 
+### Breaking: quieter tooltips, Inbox and charts
+- **Tooltip:** the light tooltip (the default, for explaining a value) goes from 16px to **13px / 18px** and wraps at **280px**. The dark tooltip doesn't change.
+- **Inbox:** brand colour is gone. Tab counts are a grey chip (`background-300` / `malbec-icon`) instead of solid primary. Unread rows lose their `color-mix(primary 5%)` tint; the dot alone marks them. The active tab underline is ink.
+- **Charts:** `--chart-1..5` no longer come from primary and accent. They are the warm SERIES_INK greys from the spec (`charts.md`), deepest first, as opaque hex, with a dark-mode equivalent. Charts look the same in every app.
+- `styles.css` no longer uses `color-mix()`. `--color-text-default-muted` is the equivalent `rgba`.
+- **What to delete:** Tooltip text-size and `max-w` overrides on the light tooltip (Live `text-[12px]` ×51); local chart palettes that only existed to replace the brand-coloured series.
+
+### Breaking: `size="sm"` is no longer a text size
+- **Button:** `size="sm"` (10px) now renders as `md` (36px, 12px) and is `@deprecated`. The spec never pairs `sm` with a label. It still type-checks, so nothing breaks at build time.
+- New **`size="icon-sm"`**: a 32px square for compact icon-only buttons. The calendar arrows use it.
+- **What to do:** replace `size="sm"` with `md` on text buttons (Artist 179, Live 72, Publishing 61) and with `icon-sm` on small icon-only buttons.
+
+### Breaking: no English text built in
+- New **`MalbecLabelsProvider`** (`locale="es" | "en"`, plus `labels` to override one at a time) and `useMalbecLabels()`. Every text a component renders on its own reads from it: close buttons, Pagination, Breadcrumb, Sidebar, DataTable selection, Combobox, DatePicker, the calendars and the Inbox. Without a provider, components stay in English. The catalogs are exported as `labelsEn` / `labelsEs`.
+- **DataTable `emptyLabel` is required.** The "No results." fallback is gone.
+- **What to do:** wrap the app in `<MalbecLabelsProvider locale={locale}>`, pass `emptyLabel` to every `DataTable`, and delete local wrappers that only translated these labels.
+
+### Breaking: the form API moves to `malbec-ui/form`
+- `Form`, `useForm`, `withForm`, `withFieldGroup` and their types are imported from **`malbec-ui/form`**. `@tanstack/react-form` is now an optional peer: apps without forms don't need it.
+- **What to do:** Artist changes `import { Form, useForm } from "malbec-ui"` to `"malbec-ui/form"` (22 files).
+
+### Breaking: the green preset is `artist`
+- The theme preset `management` is renamed **`artist`** (Malbec Artist's palette). The provider's default theme is still Records.
+
 ### Breaking: unused exports removed
 - `statusTone`, `statusVariant`, `priorityVariant`, `STATUS_TONES`, `TONE_VARIANT` and `formatGmtOffsetLabel` are no longer exported. None of the four apps imported them.
 - Use `<StatusBadge status="…" />` or `<StatusBadge tone={…} />` for status colours. `PRIORITY_TONE` stays: `<StatusBadge tone={PRIORITY_TONE.Alta} status="Alta" />`.
