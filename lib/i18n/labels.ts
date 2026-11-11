@@ -53,6 +53,12 @@ export interface MalbecLabels {
   unread: string;
   /** NotificationBell aria-label; the dot shows no number, so the count travels here. */
   notifications: (unreadCount: number) => string;
+  /** ConfirmDialog buttons and reason field. */
+  confirm: string;
+  cancel: string;
+  confirming: string;
+  reason: string;
+  reasonRequired: string;
 }
 
 const unreadSuffix = (count: number) => (count > 0 ? ` (${count > 99 ? "99+" : count})` : "");
@@ -97,6 +103,11 @@ export const labelsEn: MalbecLabels = {
   moreActions: "More actions",
   unread: "Unread",
   notifications: (count) => `Notifications${unreadSuffix(count)}`,
+  confirm: "Confirm",
+  cancel: "Cancel",
+  confirming: "Confirming…",
+  reason: "Reason",
+  reasonRequired: "Write the reason to continue.",
 };
 
 export const labelsEs: MalbecLabels = {
@@ -137,6 +148,11 @@ export const labelsEs: MalbecLabels = {
   moreActions: "Más acciones",
   unread: "Sin leer",
   notifications: (count) => `Notificaciones${unreadSuffix(count)}`,
+  confirm: "Confirmar",
+  cancel: "Cancelar",
+  confirming: "Confirmando…",
+  reason: "Motivo",
+  reasonRequired: "Escribí el motivo para continuar.",
 };
 
 export const LABELS_BY_LOCALE: Record<MalbecLocale, MalbecLabels> = {

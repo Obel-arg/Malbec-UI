@@ -67,6 +67,7 @@ export { Table } from "./Table/Table";
 
 // Round B: shell
 export { NotificationBell } from "./NotificationBell/NotificationBell";
+export { ConfirmDialog } from "./ConfirmDialog/ConfirmDialog";
 
 export type { MalbecThemeProviderProps } from "./theme";
 export type {
@@ -365,3 +366,4 @@ export type {
 // Round B: shell
 export type { SidebarCollapsible } from "./Sidebar/Sidebar";
 export type { NotificationBellProps } from "./NotificationBell/NotificationBell";
+export type { ConfirmDialogProps } from "./ConfirmDialog/ConfirmDialog";
