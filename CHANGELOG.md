@@ -2,7 +2,7 @@
 
 All notable changes to Malbec UI are documented here.
 
-## v2.0.0 — 2026-11-04
+## v2.0.0 — 2026-11-11
 
 The library's defaults now match the malbec-ux-ui spec approved by Isa. This release changes what you see without any code change on your side. Each section below says what changes on screen, and which overrides you can delete.
 
@@ -73,6 +73,10 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - `defaultMode="light"` on the provider.
   - Any override that sets `--color-foreground` to ink, and `text-malbec-ink` used only to avoid `text-foreground`.
 
+### Breaking: grey focus rings
+- Every focus ring (Dialog and Sheet close buttons, Pagination, Breadcrumb, Sidebar, Calendar, Combobox, Badge, Toggle, FloatingBar, sortable headers, Inbox…) is now **grey instead of the brand colour**, from a new token `--color-focus`: `#3f3f46` in light, `#a8a29e` in dark so it keeps 3:1 contrast on dark surfaces. Tabs keep their `background-300` ring.
+- **What to delete:** `focus-visible:ring-*` overrides that only existed to neutralise the brand ring.
+
 ### Breaking: quieter tooltips, Inbox and charts
 - **Tooltip:** the light tooltip (the default, for explaining a value) goes from 16px to **13px / 18px** and wraps at **280px**. The dark tooltip doesn't change.
 - **Inbox:** brand colour is gone. Tab counts are a grey chip (`background-300` / `malbec-icon`) instead of solid primary. Unread rows lose their `color-mix(primary 5%)` tint; the dot alone marks them. The active tab underline is ink.
@@ -105,7 +109,7 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 ### Added: components the apps already had
 All additive. Each one is the version already approved on screen in an app, adjusted to the spec; you can delete your local copy when you migrate.
 - **Charts:** chart primitives from `charts.md`: `CHART_INK` / `SERIES_INK`, the area and territory scales, the dotted `ChartCard`, the sheen (`ChartMarkDefs`, render it once per screen), `CrosshairCursor` and `TOOLTIP_CARD_CLASS`. Plus **`Donut`** (thin ring, total in the centre, long tail folded into "Other") and **`PctBlocks`**. Replaces the local `chart-style` modules (103 consumers).
-- **`Notice`** (`tone="info" | "pending"`, the suite's one yellow), **`EmptyState`** in three forms: `row` (one quiet line inside a table, the action as a link; a plain DataTable `emptyLabel` now renders like this), `ghost` (faded placeholder rows with the text and action on top) and `page` (a whole empty screen, left-aligned, actions on the right), **`Skeleton`** and **`InfoPopover`**.
+- **`Notice`** (`tone="info" | "pending"`, the suite's one yellow), **`EmptyState`** in three forms: `row` (one quiet line inside a table, the action as a link; a plain DataTable `emptyLabel` now renders like this), `ghost` (faded placeholder rows with the text and action on top) and `page` (a whole empty screen, left-aligned, actions on the right), **`Skeleton`**, and **`Field.Label info`** (an "i" next to the label that opens the explanation on click, tap or keyboard; Records' InfoPopover).
 - **Input `locked`** (+ `lockReason`): a value you can see but not edit, in the same box as the fields next to it, with a lock and the reason in its tooltip. Replaces Records' `LockedField`.
 - **`ConfirmDialog`**: async confirm with a pending state, an error message, destructive tone and `requireReason`. `confirmPhrase` (type-to-confirm) is not included: no app has it approved on screen.
 - **`NotificationBell`**: the suite's bell (two states, one arrival animation, the unread dot in `--color-malbec-unread`, reduced motion). The floating toast stays in the apps.
