@@ -21,3 +21,9 @@ describe("--chart-* tokens (malbec-ux-ui charts.md)", () => {
     expect(chartVars[0]).toBe("#56514c");
   });
 });
+
+describe("styles.css", () => {
+  it("does not use color-mix() anywhere (CLAUDE.md: it splits under @supports)", () => {
+    expect(css).not.toContain("color-mix(");
+  });
+});
