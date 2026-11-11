@@ -28,11 +28,11 @@ const EXPECTED = {
     "TOKEN_TO_CSS_VAR",
     "live",
     "malbecRecords",
-    "management",
+    "artist",
     "publishing",
     "booking",
   ],
-  "/theme/presets": ["live", "malbecRecords", "management", "publishing", "booking"],
+  "/theme/presets": ["live", "malbecRecords", "artist", "publishing", "booking"],
 };
 
 const failures = [];
