@@ -178,7 +178,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
               <div className="ui:flex ui:w-full ui:max-w-full ui:items-center ui:justify-center ui:gap-3">
                 <Button
                   variant="outline"
-                  size="sm"
+                  size="icon-sm"
                   aria-label="Previous day"
                   onClick={() => onDayChange(startOfDay(addDays(day, -1)))}
                 >
@@ -191,7 +191,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
                 </h2>
                 <Button
                   variant="outline"
-                  size="sm"
+                  size="icon-sm"
                   aria-label="Next day"
                   onClick={() => onDayChange(startOfDay(addDays(day, 1)))}
                 >

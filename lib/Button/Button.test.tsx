@@ -73,4 +73,22 @@ describe("Button", () => {
     expect(classes).toContain("ui:border-background-300");
     expect(classes).toContain("ui:h-9");
   });
+  it('size="sm" falls back to md geometry: malbec-ux-ui never pairs sm with text', () => {
+    render(<Button size="sm">Guardar</Button>);
+    const classes = classesOf(screen.getByRole("button"));
+    expect(classes).toEqual(expect.arrayContaining(["ui:h-9", "ui:px-4", "ui:text-[12px]"]));
+    expect(classes).not.toContain("ui:text-[10px]");
+  });
+
+  it('size="icon-sm" is a 32px square for compact icon buttons', () => {
+    render(
+      <Button size="icon-sm" variant="outline" aria-label="Mes anterior">
+        <Button.Icon>
+          <svg />
+        </Button.Icon>
+      </Button>,
+    );
+    const classes = classesOf(screen.getByRole("button", { name: "Mes anterior" }));
+    expect(classes).toEqual(expect.arrayContaining(["ui:h-8", "ui:w-8", "ui:p-0"]));
+  });
 });

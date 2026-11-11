@@ -1675,7 +1675,7 @@ function UsernameForm() {
         )}
       </form.AppField>
 
-      <Button htmlType="submit" size="sm">
+      <Button htmlType="submit" size="md">
         <Button.Text>Submit</Button.Text>
       </Button>
     </Form>
@@ -1724,7 +1724,7 @@ function UsernameForm() {
             </form.AppField>
 
             <div className="ui:mt-6 ui:flex ui:justify-end">
-              <Button htmlType="submit" size="sm">
+              <Button htmlType="submit" size="md">
                 <Button.Text>Submit</Button.Text>
               </Button>
             </div>

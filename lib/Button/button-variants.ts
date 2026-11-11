@@ -47,10 +47,16 @@ export const buttonVariants = cva(
         neutral: "ui:focus-visible:ring-malbec-icon",
       },
       size: {
-        sm: "ui:h-8 ui:px-2 ui:py-[6px] ui:text-[10px] ui:leading-4 ui:tracking-[-0.3px]",
+        /**
+         * @deprecated malbec-ux-ui never pairs `sm` with text, so it renders as `md`. For a compact
+         * icon-only button use `icon-sm`.
+         */
+        sm: "ui:h-9 ui:px-4 ui:py-[6px] ui:text-[12px] ui:leading-5",
         md: "ui:h-9 ui:px-4 ui:py-[6px] ui:text-[12px] ui:leading-5",
         lg: "ui:h-9 ui:px-4 ui:py-2 ui:text-[12px] ui:leading-5",
         icon: "ui:h-9 ui:w-9 ui:p-0 ui:text-[12px]",
+        /** 32px square for compact icon-only buttons (calendar arrows, toolbars). */
+        "icon-sm": "ui:h-8 ui:w-8 ui:p-0 ui:text-[12px]",
       },
     },
     compoundVariants: [
@@ -82,10 +88,11 @@ export const buttonIconVariants = cva(
   {
     variants: {
       size: {
-        sm: "ui:size-3",
+        sm: "ui:size-4",
         md: "ui:size-4",
         lg: "ui:size-4",
         icon: "ui:size-5",
+        "icon-sm": "ui:size-4",
       },
     },
     defaultVariants: {
@@ -101,10 +108,11 @@ export const buttonSpinnerWrapperVariants = cva(
   {
     variants: {
       size: {
-        sm: "ui:size-3",
+        sm: "ui:size-4",
         md: "ui:size-4",
         lg: "ui:size-4",
         icon: "ui:size-5",
+        "icon-sm": "ui:size-4",
       },
     },
     defaultVariants: {
