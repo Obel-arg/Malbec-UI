@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
 import { Button } from "../Button/Button";
+import { Field } from "../Field/Field";
 import { Label } from "../Label/Label";
 import { Input, type InputProps } from "./Input";
 
@@ -407,5 +408,47 @@ export const Bare: Story = {
         className="ui:w-24 ui:text-right ui:text-sm ui:font-semibold"
       />
     </p>
+  ),
+};
+
+export const Locked: Story = {
+  name: "Locked (see, don't edit)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Field, Input } from "@obel-arg/malbec-ui";
+
+<Field>
+  <Field.Label htmlFor="amount">Monto</Field.Label>
+  <Input id="amount" defaultValue="12.500" />
+</Field>
+<Field>
+  <Field.Label htmlFor="currency">Moneda</Field.Label>
+  <Input
+    id="currency"
+    value="USD"
+    locked
+    lockReason="La define el contrato y no se puede cambiar acá."
+  />
+</Field>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:grid ui:w-[480px] ui:grid-cols-2 ui:gap-4">
+      <Field>
+        <Field.Label htmlFor="amount">Monto</Field.Label>
+        <Input id="amount" defaultValue="12.500" />
+      </Field>
+      <Field>
+        <Field.Label htmlFor="currency">Moneda</Field.Label>
+        <Input
+          id="currency"
+          value="USD"
+          locked
+          lockReason="La define el contrato y no se puede cambiar acá."
+        />
+      </Field>
+    </div>
   ),
 };
