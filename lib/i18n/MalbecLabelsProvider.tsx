@@ -23,6 +23,7 @@ export function MalbecLabelsProvider({ locale = "en", labels, children }: Malbec
 }
 
 /** The labels of the nearest `MalbecLabelsProvider`, or English without one. */
+// eslint-disable-next-line react-refresh/only-export-components -- public hook paired with its provider
 export function useMalbecLabels(): MalbecLabels {
   return React.useContext(MalbecLabelsContext);
 }
