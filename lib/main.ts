@@ -64,6 +64,8 @@ export { DataTable } from "./DataTable/DataTable";
 export { SortableColumnHeader } from "./DataTable/sortable-column-header";
 export { Steps } from "./Steps/Steps";
 export { Table } from "./Table/Table";
+// Round B: surfaces
+export { Notice } from "./Notice/Notice";
 
 export type { MalbecThemeProviderProps } from "./theme";
 export type {
@@ -358,3 +360,5 @@ export type {
   InputOtpGroupProps,
   InputOtpSeparatorProps,
 } from "./InputOtp/InputOtp";
+// Round B: surfaces
+export type { NoticeProps, NoticeTone } from "./Notice/Notice";
