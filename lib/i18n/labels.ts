@@ -8,8 +8,10 @@ export interface MalbecLabels {
   closeDialog: string;
   /** Sheet close button. */
   closeSheet: string;
-  /** FloatingBar close button. */
+  /** FloatingBar close button; Combobox toggle while the list is open. */
   close: string;
+  /** Combobox toggle while the list is closed. */
+  open: string;
   /** Pagination `<nav>` label. */
   pagination: string;
   previous: string;
@@ -55,6 +57,7 @@ export const labelsEn: MalbecLabels = {
   closeDialog: "Close dialog",
   closeSheet: "Close sheet",
   close: "Close",
+  open: "Open",
   pagination: "Pagination",
   previous: "Previous",
   next: "Next",
@@ -92,6 +95,7 @@ export const labelsEs: MalbecLabels = {
   closeDialog: "Cerrar diálogo",
   closeSheet: "Cerrar panel",
   close: "Cerrar",
+  open: "Abrir",
   pagination: "Paginación",
   previous: "Anterior",
   next: "Siguiente",

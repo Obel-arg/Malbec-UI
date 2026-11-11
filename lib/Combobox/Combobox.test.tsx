@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it } from "vitest";
+import { MalbecLabelsProvider } from "../i18n/MalbecLabelsProvider";
 import { Combobox } from "./Combobox";
 
 beforeAll(() => {
@@ -81,5 +82,18 @@ describe("Combobox defects reported by Live", () => {
     fireEvent(list, wheel);
     expect(list.scrollTop).toBe(120);
     expect(wheel.defaultPrevented).toBe(true);
+  });
+});
+
+describe("Combobox labels", () => {
+  it("names the open/close toggle from MalbecLabelsProvider", () => {
+    render(
+      <MalbecLabelsProvider locale="es">
+        <Combobox items={fruits}>
+          <Combobox.Input aria-label="Fruta" />
+        </Combobox>
+      </MalbecLabelsProvider>,
+    );
+    expect(screen.getByRole("button", { name: "Abrir" })).toBeTruthy();
   });
 });
