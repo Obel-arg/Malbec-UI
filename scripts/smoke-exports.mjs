@@ -18,7 +18,7 @@ const require = createRequire(import.meta.url);
 const PKG = "@obel-arg/malbec-ui";
 
 const EXPECTED = {
-  "": ["Button", "DataTable", "MalbecThemeProvider", "useTheme", "themes"],
+  "": ["Button", "DataTable", "MalbecThemeProvider", "useTheme", "themes", "MalbecLabelsProvider", "useMalbecLabels"],
   "/icons": ["Settings2", "ChevronDown"],
   "/theme": [
     "MalbecThemeProvider",

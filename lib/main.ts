@@ -3,6 +3,10 @@ import "./styles.css";
 
 export { MalbecThemeProvider, useTheme } from "./theme";
 export * as themes from "./theme/presets";
+export { MalbecLabelsProvider, useMalbecLabels } from "./i18n/MalbecLabelsProvider";
+export type { MalbecLabelsProviderProps } from "./i18n/MalbecLabelsProvider";
+export { labelsEn, labelsEs } from "./i18n/labels";
+export type { MalbecLabels, MalbecLocale } from "./i18n/labels";
 
 export { Spinner } from "./Spinner/Spinner";
 export { Button } from "./Button/Button";
