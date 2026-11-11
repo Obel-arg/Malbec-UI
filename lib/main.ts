@@ -362,3 +362,4 @@ export type {
 // Round B: tables (types)
 export type { DataTablePaginationProps } from "./DataTable/DataTablePagination";
 export type { DataTableColumnsToggleProps } from "./DataTable/DataTableColumnsToggle";
+export type { SortableColumnHeaderProps } from "./DataTable/sortable-column-header";

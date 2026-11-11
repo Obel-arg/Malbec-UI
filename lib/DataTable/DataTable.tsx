@@ -77,6 +77,11 @@ interface DataTableBaseProps<TData, TValue> {
   getRowId?: (row: TData) => string;
   /** When false, sorting is disabled. Defaults to `true`. */
   enableSorting?: boolean;
+  /** Controlled sorting. Pair with `onSortingChange`. */
+  sorting?: SortingState;
+  onSortingChange?: (sorting: SortingState) => void;
+  /** Server-side sorting: `data` already comes sorted, the table doesn't reorder it. */
+  manualSorting?: boolean;
   /**
    * Rows per page. Turns on client-side pagination; render the page links with
    * `footer={({ table }) => <DataTable.Pagination table={table} />}`.
@@ -173,6 +178,9 @@ export function DataTable<TData, TValue>({
   rowSelection: rowSelectionEnabled = false,
   getRowId,
   enableSorting = true,
+  sorting: sortingProp,
+  onSortingChange,
+  manualSorting = false,
   pageSize,
   pagination: paginationProp,
   onPaginationChange,
@@ -180,7 +188,13 @@ export function DataTable<TData, TValue>({
   onRowSelectionChange,
   onRowClick,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [innerSorting, setInnerSorting] = useState<SortingState>([]);
+  const sorting = sortingProp ?? innerSorting;
+  const handleSortingChange: OnChangeFn<SortingState> = (updater) => {
+    const next = typeof updater === "function" ? updater(sorting) : updater;
+    if (!sortingProp) setInnerSorting(next);
+    onSortingChange?.(next);
+  };
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const paginated = paginationProp != null || pageSize != null || rowCount != null;
@@ -216,7 +230,8 @@ export function DataTable<TData, TValue>({
     manualPagination: rowCount != null,
     rowCount,
     getRowId,
-    onSortingChange: setSorting,
+    onSortingChange: handleSortingChange,
+    manualSorting,
     onRowSelectionChange: rowSelectionEnabled ? setRowSelection : undefined,
     onPaginationChange: paginated ? handlePaginationChange : undefined,
     state: {

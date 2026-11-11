@@ -49,6 +49,12 @@ export interface MalbecLabels {
   unread: string;
   /** DataTable.ColumnsToggle trigger. */
   columns: string;
+  /** SortableColumnHeader, column not sorted yet. */
+  sortAscending: string;
+  /** SortableColumnHeader, column sorted ascending. */
+  sortDescending: string;
+  /** SortableColumnHeader, column sorted descending. */
+  clearSort: string;
 }
 
 export type MalbecLocale = "en" | "es";
@@ -89,6 +95,9 @@ export const labelsEn: MalbecLabels = {
   moreActions: "More actions",
   unread: "Unread",
   columns: "Columns",
+  sortAscending: "Sort ascending",
+  sortDescending: "Sort descending",
+  clearSort: "Clear sort",
 };
 
 export const labelsEs: MalbecLabels = {
@@ -127,6 +136,9 @@ export const labelsEs: MalbecLabels = {
   moreActions: "Más acciones",
   unread: "Sin leer",
   columns: "Columnas",
+  sortAscending: "Ordenar ascendente",
+  sortDescending: "Ordenar descendente",
+  clearSort: "Quitar orden",
 };
 
 export const LABELS_BY_LOCALE: Record<MalbecLocale, MalbecLabels> = {

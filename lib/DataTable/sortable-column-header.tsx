@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import type { Column } from "@tanstack/react-table";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { cn } from "../utils/cn";
 
 const ChevronUp = () => (
@@ -44,30 +45,52 @@ const ChevronsUpDown = () => (
 
 type MetaWithClass = { thClassName?: string };
 
+const ALIGN = {
+  left: "ui:justify-start",
+  center: "ui:justify-center",
+  right: "ui:justify-end",
+} as const;
+
+export type SortableColumnHeaderProps<TData, TValue> = {
+  column: Column<TData, TValue>;
+  children: ReactNode;
+  /** Leading icon, before the label (e.g. a column glyph). */
+  icon?: ReactNode;
+  /** Number columns go `right`: the title sits over its values. @default "left" */
+  align?: keyof typeof ALIGN;
+  className?: string;
+};
+
 /**
  * Sortable table header cell for TanStack Table column defs (used with {@link DataTable}
  * or any `flexRender` header). Inherits header typography; reads optional
- * `column.columnDef.meta.thClassName` for header cell classes.
+ * `column.columnDef.meta.thClassName` for header cell classes. For server-side sorting,
+ * pass `sorting`, `onSortingChange` and `manualSorting` to `DataTable`.
  */
 export function SortableColumnHeader<TData, TValue>({
   column,
   children,
+  icon,
+  align = "left",
   className,
-}: {
-  column: Column<TData, TValue>;
-  children: ReactNode;
-  className?: string;
-}) {
+}: SortableColumnHeaderProps<TData, TValue>) {
+  const labels = useMalbecLabels();
   const meta = column.columnDef.meta as MetaWithClass | undefined;
+  const wrapper = cn(
+    "ui:flex ui:items-center ui:gap-[5px]",
+    ALIGN[align],
+    className,
+    meta?.thClassName,
+  );
+  const iconNode = icon ? (
+    <span className="ui:inline-flex ui:shrink-0 ui:items-center ui:[&>svg]:size-4">
+      {icon}
+    </span>
+  ) : null;
   if (!column.getCanSort()) {
     return (
-      <div
-        className={cn(
-          "ui:flex ui:items-center ui:gap-[5px]",
-          className,
-          meta?.thClassName,
-        )}
-      >
+      <div className={wrapper}>
+        {iconNode}
         {children}
       </div>
     );
@@ -75,13 +98,7 @@ export function SortableColumnHeader<TData, TValue>({
 
   const sort = column.getIsSorted();
   return (
-    <div
-      className={cn(
-        "ui:flex ui:items-center ui:gap-[5px]",
-        className,
-        meta?.thClassName,
-      )}
-    >
+    <div className={wrapper}>
       <button
         type="button"
         className={cn(
@@ -95,12 +112,13 @@ export function SortableColumnHeader<TData, TValue>({
         onClick={column.getToggleSortingHandler()}
         aria-label={
           sort === "asc"
-            ? "Sort descending"
+            ? labels.sortDescending
             : sort === "desc"
-              ? "Clear sort"
-              : "Sort ascending"
+              ? labels.clearSort
+              : labels.sortAscending
         }
       >
+        {iconNode}
         {children}
         {sort === "desc" ? (
           <ChevronDown />

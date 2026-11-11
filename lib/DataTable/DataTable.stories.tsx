@@ -75,11 +75,8 @@ function useEventColumns() {
         id: "artist",
         accessorKey: "artist",
         header: ({ column }) => (
-          <SortableColumnHeader column={column}>
-            <div className="ui:flex ui:items-center ui:gap-[5px]">
-              <TableStoryHeaderIconArtist />
-              <span>Artista</span>
-            </div>
+          <SortableColumnHeader column={column} icon={<TableStoryHeaderIconArtist />}>
+            Artista
           </SortableColumnHeader>
         ),
         cell: ({ row }) => (
@@ -92,11 +89,8 @@ function useEventColumns() {
       {
         accessorKey: "venue",
         header: ({ column }) => (
-          <SortableColumnHeader column={column}>
-            <div className="ui:flex ui:items-center ui:gap-[5px]">
-              <TableStoryHeaderIconVenue />
-              <span>Venue</span>
-            </div>
+          <SortableColumnHeader column={column} icon={<TableStoryHeaderIconVenue />}>
+            Venue
           </SortableColumnHeader>
         ),
         cell: (ctx) => (
@@ -109,11 +103,8 @@ function useEventColumns() {
         id: "fechas",
         accessorKey: "dateLabel",
         header: ({ column }) => (
-          <SortableColumnHeader column={column}>
-            <div className="ui:flex ui:items-center ui:gap-[5px]">
-              <TableStoryHeaderIconCalendar />
-              <span>Fechas</span>
-            </div>
+          <SortableColumnHeader column={column} icon={<TableStoryHeaderIconCalendar />}>
+            Fechas
           </SortableColumnHeader>
         ),
         cell: ({ row }) => (
@@ -128,11 +119,8 @@ function useEventColumns() {
         id: "status",
         accessorKey: "status",
         header: ({ column }) => (
-          <SortableColumnHeader column={column}>
-            <div className="ui:flex ui:items-center ui:gap-[5px]">
-              <TableStoryHeaderIconListStatus />
-              <span>Status</span>
-            </div>
+          <SortableColumnHeader column={column} icon={<TableStoryHeaderIconListStatus />}>
+            Status
           </SortableColumnHeader>
         ),
         cell: (ctx) => (
@@ -188,7 +176,9 @@ const DATA_TABLE_COLUMNS_SNIPPET = `import type { ColumnDef } from "@tanstack/re
 import { DataTable, SortableColumnHeader } from "@obel-arg/malbec-ui";
 
 // Build a TanStack ColumnDef[]. Wrap header content in SortableColumnHeader to
-// get click-to-sort; set \`enableSorting: false\` to opt a column out.
+// get click-to-sort (\`icon\` adds a leading glyph, \`align="right"\` for numbers);
+// set \`enableSorting: false\` to opt a column out. For server-side sorting pass
+// \`sorting\`, \`onSortingChange\` and \`manualSorting\` to DataTable.
 const columns: ColumnDef<EventRow>[] = [
   {
     id: "artist",
