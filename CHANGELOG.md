@@ -113,6 +113,11 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 - `Command.Empty` without children says what was searched. All texts come from `MalbecLabelsProvider`.
 - **What to do:** drop the `mr-2` wrappers around item icons (the row spaces them) and pass shortcut keys as `keys`.
 
+### Breaking: DataCard v1 is removed
+- `DataCard` (the brand-coloured band on one side, `accentSide`, title inside the panel) is no longer exported. A brand band as decoration of a figure contradicts spec rule 1: brand colour is for the CTA and for state.
+- Its replacement, DataCard v2 with the spec anatomy (`references/data-card.md`: embossed frame, block with a bevel, title outside), goes through the workshop with Isa first and is not in this release.
+- **What to do:** 18 files import it today (Records 10, Artist 6, Live 1, Publishing 1). Until v2 ships, build the card locally from `data-card.md`; Records' `data-card-style.ts` is the reference implementation. Don't copy v1.
+
 ### Breaking: unused exports removed
 - `statusTone`, `statusVariant`, `priorityVariant`, `STATUS_TONES`, `TONE_VARIANT` and `formatGmtOffsetLabel` are no longer exported. None of the four apps imported them.
 - Use `<StatusBadge status="…" />` or `<StatusBadge tone={…} />` for status colours. `PRIORITY_TONE` stays: `<StatusBadge tone={PRIORITY_TONE.Alta} status="Alta" />`.

@@ -12,4 +12,8 @@ describe("public API (2.0)", () => {
     expect(api).toHaveProperty("PRIORITY_TONE");
     expect(api).toHaveProperty("StatusBadge");
   });
+
+  it("drops DataCard v1 (brand band on top): it contradicts rule 1, v2 goes through the workshop", () => {
+    expect(api).not.toHaveProperty("DataCard");
+  });
 });

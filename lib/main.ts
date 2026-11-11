@@ -59,7 +59,6 @@ export { Textarea } from "./Textarea/Textarea";
 export { Tooltip } from "./Tooltip/Tooltip";
 export { Card } from "./Card/Card";
 export { Chart } from "./Chart/Chart";
-export { DataCard } from "./DataCard/DataCard";
 export { DataTable } from "./DataTable/DataTable";
 export { SortableColumnHeader } from "./DataTable/sortable-column-header";
 export { Steps } from "./Steps/Steps";
@@ -200,7 +199,6 @@ export type {
   CommandLoadingProps,
   CommandDialogProps,
 } from "./Command/Command";
-export type { DataCardProps } from "./DataCard/DataCard";
 export type {
   DataTableProps,
   DataTableRenderFooterContext,
