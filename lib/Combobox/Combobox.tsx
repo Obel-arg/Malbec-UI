@@ -1127,7 +1127,7 @@ const ComboboxChips = React.forwardRef<HTMLDivElement, ComboboxChipsProps>(
             data-disabled={ctx.disabled || undefined}
             className={cn(
               comboboxTriggerRowVariants({ variant: "default" }),
-              "ui:h-auto ui:min-h-10 ui:flex-wrap ui:items-center ui:justify-start ui:gap-1 ui:py-1.5",
+              "ui:h-auto ui:min-h-10 ui:flex-wrap ui:items-center ui:justify-start ui:gap-1 ui:px-1.5 ui:py-1.5",
               className,
             )}
             {...rest}
