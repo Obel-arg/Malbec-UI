@@ -400,7 +400,7 @@ function resolveYearSelectBounds(
   return { from, to };
 }
 
-/** Matches `CalendarWeek` toolbar: `Button variant="outline" size="sm"` (primary border, transparent fill). */
+/** Matches the `CalendarWeek` toolbar: `Button variant="outline" size="icon-sm"`. */
 const calendarMonthToolbarSelectTriggerClassName = [
   "ui:h-8 ui:min-h-8 ui:gap-2 ui:rounded-[8px] ui:border-[1.5px] ui:border-primary ui:bg-transparent",
   "ui:px-3 ui:py-[6px] ui:text-xs ui:font-medium ui:leading-4 ui:tracking-[-0.3px] ui:text-primary ui:shadow-none",
@@ -451,7 +451,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
     >
       <Button
         variant="outline"
-        size="sm"
+        size="icon-sm"
         aria-label={labels.previousMonth}
         className="ui:shrink-0 ui:justify-self-start"
         onClick={() => onMonthChange(startOfMonth(addMonths(monthAnchor, -1)))}
@@ -516,7 +516,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
       </div>
       <Button
         variant="outline"
-        size="sm"
+        size="icon-sm"
         aria-label={labels.nextMonth}
         className="ui:shrink-0 ui:justify-self-end"
         onClick={() => onMonthChange(startOfMonth(addMonths(monthAnchor, 1)))}
@@ -1062,7 +1062,7 @@ function CalendarMonthGroupBlock({ group }: { group: CalendarWeekTourGroup }) {
                   <Popover.Trigger asChild>
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="md"
                       className="ui:h-[22px] ui:w-full ui:justify-start ui:p-0 ui:px-1.5 ui:text-[10px]"
                       aria-label={labels.moreEvents(overflowList.length)}
                       onClick={(e) => e.stopPropagation()}
@@ -1321,7 +1321,7 @@ const CalendarMonthDay = React.forwardRef<
               <Popover.Trigger asChild>
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="md"
                   className="ui:w-full ui:p-0 ui:text-left ui:justify-start ui:h-5.5"
                   aria-label={labels.moreEvents(overflowDayEvents.length)}
                   onClick={(e) => e.stopPropagation()}

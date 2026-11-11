@@ -212,7 +212,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
           >
             <Button
               variant="outline"
-              size="sm"
+              size="icon-sm"
               aria-label={labels.previousWeek}
               disabled={!onWeekChange}
               onClick={() => onWeekChange?.(addWeeks(weekAnchor, -1))}
@@ -226,7 +226,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
             </h2>
             <Button
               variant="outline"
-              size="sm"
+              size="icon-sm"
               aria-label={labels.nextWeek}
               disabled={!onWeekChange}
               onClick={() => onWeekChange?.(addWeeks(weekAnchor, 1))}

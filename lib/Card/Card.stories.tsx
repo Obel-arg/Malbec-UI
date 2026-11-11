@@ -95,7 +95,7 @@ export const WithAction: Story = {
     <Card.Title>Configuration</Card.Title>
     <Card.Description>Adjust settings for this step.</Card.Description>
     <Card.Action>
-      <Button variant="ghost" size="sm">
+      <Button variant="ghost" size="md">
         <Button.Text>Help</Button.Text>
       </Button>
     </Card.Action>
@@ -105,14 +105,14 @@ export const WithAction: Story = {
   </Card.Content>
   <Card.Footer>
     <div className="flex gap-2">
-      <Button variant="outline" size="sm">
+      <Button variant="outline" size="md">
         <Button.Text>Cancel</Button.Text>
       </Button>
-      <Button variant="outline" size="sm">
+      <Button variant="outline" size="md">
         <Button.Text>Back</Button.Text>
       </Button>
     </div>
-    <Button variant="primary" size="sm">
+    <Button variant="primary" size="md">
       <Button.Text>Next</Button.Text>
     </Button>
   </Card.Footer>
@@ -127,7 +127,7 @@ export const WithAction: Story = {
         <Card.Title>Configuration</Card.Title>
         <Card.Description>Adjust settings for this step.</Card.Description>
         <Card.Action>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="md">
             <Button.Text>Help</Button.Text>
           </Button>
         </Card.Action>
@@ -139,14 +139,14 @@ export const WithAction: Story = {
       </Card.Content>
       <Card.Footer>
         <div className="ui:flex ui:gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="md">
             <Button.Text>Cancel</Button.Text>
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="md">
             <Button.Text>Back</Button.Text>
           </Button>
         </div>
-        <Button variant="primary" size="sm">
+        <Button variant="primary" size="md">
           <Button.Text>Next</Button.Text>
         </Button>
       </Card.Footer>

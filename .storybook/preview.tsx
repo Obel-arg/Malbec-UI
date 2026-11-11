@@ -8,7 +8,7 @@ import {
   booking,
   live,
   malbecRecords,
-  management,
+  artist,
   publishing,
 } from "../lib/theme/presets";
 import type { ThemeConfig, ThemeMode } from "../lib/theme/tokens";
@@ -17,7 +17,7 @@ import "../lib/styles.css";
 const presetMap: Record<string, ThemeConfig> = {
   malbecRecords,
   publishing,
-  management,
+  artist,
   booking,
   live,
 };
@@ -34,7 +34,7 @@ const preview: Preview = {
         items: [
           { value: "malbecRecords", title: "Records" },
           { value: "publishing", title: "Publishing" },
-          { value: "management", title: "Management" },
+          { value: "artist", title: "Artist" },
           { value: "booking", title: "Booking" },
           { value: "live", title: "Live" },
         ],
