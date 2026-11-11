@@ -60,7 +60,7 @@ export const inboxTabTriggerVariants = cva(
     // Underline sits exactly on the row's bottom border (row has `py-2` so the
     // trigger bottom edge is 12px above the row bottom; -bottom-[12px] places
     // the 2px stripe right on the border, replacing it in the active section).
-    "ui:after:content-[''] ui:after:absolute ui:after:left-0 ui:after:right-0 ui:after:-bottom-[12px] ui:after:h-[2px] ui:after:bg-primary ui:after:opacity-0",
+    "ui:after:content-[''] ui:after:absolute ui:after:left-0 ui:after:right-0 ui:after:-bottom-[12px] ui:after:h-[2px] ui:after:bg-malbec-ink ui:after:opacity-0",
     "ui:data-[state=active]:after:opacity-100",
   ],
   {
@@ -74,11 +74,11 @@ export const inboxTabTriggerVariants = cva(
   },
 );
 
-/** Count chip rendered next to each tab label. Mirrors Figma pill: bg-primary, white text. */
+/** Count chip rendered next to each tab label: a grey chip, never brand (malbec-ux-ui). */
 export const inboxTabCountVariants = cva([
   "ui:inline-flex ui:items-center ui:justify-center",
   "ui:h-4 ui:min-w-4 ui:px-[5px] ui:rounded-full",
-  "ui:bg-primary ui:text-primary-foreground",
+  "ui:bg-background-300 ui:text-malbec-icon",
   "ui:text-[11px] ui:font-medium ui:leading-3 ui:tracking-[0.22px] ui:uppercase",
   "ui:tabular-nums",
 ]);
@@ -90,8 +90,8 @@ export const inboxListVariants = cva([
 ]);
 
 /**
- * Notification row. Unread state paints a subtle tint of `primary` so the row
- * reads as "still open" even when the dot indicator scrolls out of view.
+ * Notification row. Unread rows are marked by the dot only: malbec-ux-ui keeps the brand
+ * colour off surfaces, even at low opacity.
  */
 export const inboxItemVariants = cva(
   [
@@ -102,7 +102,7 @@ export const inboxItemVariants = cva(
   {
     variants: {
       unread: {
-        true: "ui:bg-[color-mix(in_srgb,var(--color-primary)_5%,var(--color-background-100))]",
+        true: "",
         false: "",
       },
       interactive: {

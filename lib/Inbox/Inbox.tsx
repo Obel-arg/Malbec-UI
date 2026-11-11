@@ -368,7 +368,7 @@ InboxList.displayName = "Inbox.List";
 // ——— Item
 
 export type InboxItemProps = React.ComponentProps<"div"> & {
-  /** Renders the unread tint and the dot indicator in the title row. */
+  /** Renders the unread dot indicator in the title row. */
   unread?: boolean;
   /** When set, makes the row clickable / focusable and fires on activation. */
   onSelect?: () => void;
