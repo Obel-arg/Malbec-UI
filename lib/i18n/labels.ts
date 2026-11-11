@@ -14,6 +14,8 @@ export interface MalbecLabels {
   open: string;
   /** Combobox list while results are being fetched. */
   loading: string;
+  /** Combobox option that creates the typed text (`onCreate`). */
+  createOption: (inputValue: string) => string;
   /** Pagination `<nav>` label. */
   pagination: string;
   previous: string;
@@ -61,6 +63,7 @@ export const labelsEn: MalbecLabels = {
   close: "Close",
   open: "Open",
   loading: "Loading…",
+  createOption: (inputValue) => `Create “${inputValue}”`,
   pagination: "Pagination",
   previous: "Previous",
   next: "Next",
@@ -100,6 +103,7 @@ export const labelsEs: MalbecLabels = {
   close: "Cerrar",
   open: "Abrir",
   loading: "Cargando…",
+  createOption: (inputValue) => `Crear “${inputValue}”`,
   pagination: "Paginación",
   previous: "Anterior",
   next: "Siguiente",

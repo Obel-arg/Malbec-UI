@@ -58,3 +58,29 @@ describe("Combobox search", () => {
     expect(screen.queryByText("Sin resultados")).toBeNull();
   });
 });
+
+describe("Combobox onCreate", () => {
+  it("offers to create the query when nothing matches", () => {
+    const onCreate = vi.fn();
+    render(<Venues onCreate={onCreate} />);
+    type("Teatro Colón");
+    expect(screen.queryByText("Sin resultados")).toBeNull();
+    fireEvent.click(screen.getByRole("option", { name: "Crear “Teatro Colón”" }));
+    expect(onCreate).toHaveBeenCalledWith("Teatro Colón");
+  });
+
+  it("Enter creates when there is no match", () => {
+    const onCreate = vi.fn();
+    render(<Venues onCreate={onCreate} />);
+    type("Luna Park");
+    fireEvent.keyDown(screen.getByRole("combobox", { name: "Venue" }), { key: "Enter" });
+    expect(onCreate).toHaveBeenCalledWith("Luna Park");
+  });
+
+  it("does not offer to create without onCreate", () => {
+    render(<Venues />);
+    type("Luna Park");
+    expect(screen.queryByRole("option")).toBeNull();
+    expect(screen.getByText("Sin resultados")).toBeTruthy();
+  });
+});

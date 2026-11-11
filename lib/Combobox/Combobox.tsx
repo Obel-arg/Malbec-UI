@@ -49,6 +49,9 @@ type ComboboxContextValue = {
   preventContentAutofocus: boolean;
   comboboxRootRef: React.RefObject<HTMLDivElement | null>;
   loading: boolean;
+  /** The typed query, offered as a new option, when `onCreate` is set and nothing matches. */
+  createQuery: string | null;
+  create: () => void;
 };
 
 const ComboboxContext = React.createContext<ComboboxContextValue | null>(null);
@@ -141,6 +144,11 @@ export type ComboboxProps = {
    * `Combobox.Empty` stays hidden.
    */
   loading?: boolean;
+  /**
+   * When set and nothing matches the typed text, the list offers "Create “text”" (also on
+   * Enter). Called with the trimmed text; add the new item to `items` and select it yourself.
+   */
+  onCreate?: (inputValue: string) => void;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -187,6 +195,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
       filter: filterProp,
       onInputValueChange,
       loading = false,
+      onCreate,
       className,
       style: rootStyle,
       children,
@@ -285,6 +294,18 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
       [autoHighlight, inputValue, matches, items, setOpenState],
     );
 
+    const trimmedInput = inputValue.trim();
+    const createQuery =
+      onCreate && !loading && trimmedInput && filteredItems.length === 0
+        ? trimmedInput
+        : null;
+    const create = React.useCallback(() => {
+      if (!createQuery) return;
+      onCreate?.(createQuery);
+      setInputValue("");
+      if (!multiple) setOpen(false);
+    }, [createQuery, multiple, onCreate, setInputValue, setOpen]);
+
     const preventContentAutofocus = mode === "inline";
 
     const ctx = React.useMemo<ComboboxContextValue>(
@@ -313,6 +334,8 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
         preventContentAutofocus,
         comboboxRootRef,
         loading,
+        createQuery,
+        create,
       }),
       [
         mode,
@@ -339,6 +362,8 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
         preventContentAutofocus,
         comboboxRootRef,
         loading,
+        createQuery,
+        create,
       ],
     );
 
@@ -489,7 +514,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
           ctx.setHighlightedIndex((i) => {
             const next = Math.min(
               (i < 0 ? -1 : i) + 1,
-              ctx.filteredItems.length - 1,
+              ctx.filteredItems.length - (ctx.createQuery ? 0 : 1),
             );
             return next;
           });
@@ -503,7 +528,13 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
             ctx.highlightedIndex >= 0
               ? ctx.filteredItems[ctx.highlightedIndex]
               : ctx.filteredItems[0];
-          if (item === undefined) return;
+          if (item === undefined) {
+            if (ctx.createQuery) {
+              e.preventDefault();
+              ctx.create();
+            }
+            return;
+          }
           e.preventDefault();
           if (ctx.multiple) {
             const cur = Array.isArray(ctx.value) ? [...ctx.value] : [];
@@ -871,6 +902,23 @@ const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
             {children(item)}
           </React.Fragment>
         ))}
+        {ctx.createQuery ? (
+          <li
+            role="option"
+            aria-selected={false}
+            data-slot="combobox-create"
+            data-highlighted={
+              ctx.highlightedIndex === ctx.filteredItems.length || undefined
+            }
+            className={cn(comboboxItemVariants(), "ui:justify-start")}
+            onMouseEnter={() =>
+              ctx.setHighlightedIndex(ctx.filteredItems.length)
+            }
+            onClick={ctx.create}
+          >
+            {labels.createOption(ctx.createQuery)}
+          </li>
+        ) : null}
         {ctx.loading ? (
           <li
             role="status"
@@ -967,7 +1015,9 @@ export type ComboboxEmptyProps = React.ComponentPropsWithoutRef<"div">;
 const ComboboxEmpty = React.forwardRef<HTMLDivElement, ComboboxEmptyProps>(
   function ComboboxEmpty({ className, ...rest }, ref) {
     const ctx = useComboboxContext("Combobox.Empty");
-    if (ctx.filteredItems.length > 0 || ctx.loading) return null;
+    if (ctx.filteredItems.length > 0 || ctx.loading || ctx.createQuery) {
+      return null;
+    }
     return (
       <div
         ref={ref}
