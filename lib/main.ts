@@ -358,3 +358,6 @@ export type {
   InputOtpGroupProps,
   InputOtpSeparatorProps,
 } from "./InputOtp/InputOtp";
+
+// Round B: shell
+export type { SidebarCollapsible } from "./Sidebar/Sidebar";

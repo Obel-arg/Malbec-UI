@@ -23,6 +23,10 @@ export interface MalbecLabels {
   more: string;
   sidebarNavigation: string;
   toggleSidebar: string;
+  /** Sidebar trigger with `collapsible="dock"`, floating panel. */
+  pinSidebar: string;
+  /** Sidebar trigger with `collapsible="dock"`, pinned panel. */
+  unpinSidebar: string;
   selectAllRows: string;
   selectRow: string;
   /** Combobox trigger with nothing selected. */
@@ -65,6 +69,8 @@ export const labelsEn: MalbecLabels = {
   more: "More",
   sidebarNavigation: "Navigation menu",
   toggleSidebar: "Toggle sidebar",
+  pinSidebar: "Pin sidebar",
+  unpinSidebar: "Unpin sidebar",
   selectAllRows: "Select all",
   selectRow: "Select row",
   selectPlaceholder: "Select…",
@@ -102,6 +108,8 @@ export const labelsEs: MalbecLabels = {
   more: "Más",
   sidebarNavigation: "Menú de navegación",
   toggleSidebar: "Mostrar u ocultar la barra lateral",
+  pinSidebar: "Fijar el menú",
+  unpinSidebar: "Soltar el menú",
   selectAllRows: "Seleccionar todas",
   selectRow: "Seleccionar fila",
   selectPlaceholder: "Seleccionar…",

@@ -78,6 +78,105 @@
   stroke: none !important;
 }
 
+/**
+ * `Sidebar.Provider collapsible="dock"` (Malbec Artist / Live): the dock takes the layout slot and
+ * the panel floats over the content, so the usable width never changes by looking at the menu.
+ * Pinned, the dock measures the panel and the content starts to its right. Unlayered so it wins over
+ * the panel's own width transition utilities.
+ */
+[data-slot="sidebar-dock"] {
+  /* Unfolding is light and eager; folding was already asked for, so it is quicker. */
+  --sidebar-dock-duration-open: 260ms;
+  --sidebar-dock-duration-close: 200ms;
+  --sidebar-dock-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  /* Pinning pushes the whole page, so it is slower and eases in and out. */
+  --sidebar-dock-duration-pin: 320ms;
+  --sidebar-dock-ease-pin: cubic-bezier(0.4, 0, 0.2, 1);
+  display: contents;
+}
+
+@media (min-width: 48rem) {
+  [data-slot="sidebar-dock"] {
+    position: relative;
+    z-index: 10;
+    display: block;
+    flex: none;
+    align-self: stretch;
+    width: var(--sidebar-width);
+    transition: width var(--sidebar-dock-duration-pin) var(--sidebar-dock-ease-pin);
+  }
+
+  [data-slot="sidebar-dock"] > div {
+    height: 100%;
+  }
+
+  /* Without it the panel shrinks with the dock while pinning and bounces back open behind the content. */
+  [data-slot="sidebar-dock"] [data-slot="sidebar"] {
+    flex: none;
+  }
+
+  /* Floating: the gap is always the rail, unfolded or not. */
+  [data-slot="sidebar-dock"][data-overlay] {
+    width: var(--sidebar-width-collapsed);
+  }
+
+  [data-slot="sidebar-dock"][data-overlay] > div {
+    position: absolute;
+    inset-block: 0;
+  }
+
+  [data-slot="sidebar-dock"][data-overlay][data-side="left"] > div {
+    left: 0;
+  }
+
+  [data-slot="sidebar-dock"][data-overlay][data-side="right"] > div {
+    right: 0;
+  }
+
+  [data-slot="sidebar-dock"][data-overlay] [data-slot="sidebar"] {
+    transition:
+      width var(--sidebar-dock-duration-open) var(--sidebar-dock-ease),
+      box-shadow var(--sidebar-dock-duration-open) var(--sidebar-dock-ease);
+  }
+
+  [data-slot="sidebar-dock"][data-overlay]:not([data-open]) [data-slot="sidebar"] {
+    transition:
+      width var(--sidebar-dock-duration-close) var(--sidebar-dock-ease),
+      box-shadow var(--sidebar-dock-duration-close) var(--sidebar-dock-ease);
+  }
+
+  /* Wide and diffuse, in ink, only while the panel covers something: it reads as floating. */
+  [data-slot="sidebar-dock"][data-overlay][data-open][data-side="left"] [data-slot="sidebar"] {
+    box-shadow:
+      16px 0 40px -16px rgba(26, 26, 31, 0.16),
+      2px 0 8px -4px rgba(26, 26, 31, 0.07);
+  }
+
+  [data-slot="sidebar-dock"][data-overlay][data-open][data-side="right"] [data-slot="sidebar"] {
+    box-shadow:
+      -16px 0 40px -16px rgba(26, 26, 31, 0.16),
+      -2px 0 8px -4px rgba(26, 26, 31, 0.07);
+  }
+
+  /* While the panel slides, labels that don't fit yet are clipped, not wrapped onto two lines. */
+  [data-slot="sidebar-dock"] [data-slot="sidebar-content"] {
+    white-space: nowrap;
+  }
+
+  [data-slot="sidebar-dock"] [data-slot="sidebar-menu-button"] > span:not([data-slot]) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="sidebar-dock"],
+  [data-slot="sidebar-dock"] [data-slot="sidebar"] {
+    transition: none;
+  }
+}
+
 @layer base {
   @keyframes malbec-popover-in {
     from {
