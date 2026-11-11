@@ -11,6 +11,7 @@ import { Calendar, type CalendarProps } from "../Calendar/Calendar";
 import { Popover } from "../Popover/Popover";
 import { Select } from "../Select/Select";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import {
   datePickerLeadingIconVariants,
   datePickerTrailingIconVariants,
@@ -194,7 +195,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
       month: monthProp,
       defaultMonth,
       onMonthChange,
-      placeholder = "Pick a date",
+      placeholder: placeholderProp,
       disabled: disabledProp,
       presets = [],
       preset: presetProp,
@@ -208,6 +209,8 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
     ref,
   ) {
     const state = getEffectiveState(stateProp);
+    const labels = useMalbecLabels();
+    const placeholder = placeholderProp ?? labels.datePlaceholder;
 
     const [mode, setMode] = useControllableState<DatePickerMode>(
       modeProp,
@@ -443,9 +446,10 @@ const DatePickerPreset = React.forwardRef<
   DatePickerPresetProps
 >(function DatePickerPreset({ className, ...rest }, ref) {
   const ctx = useDatePickerContext("DatePicker.Preset");
+  const labels = useMalbecLabels();
 
   const selectedLabel =
-    ctx.presets.find((item) => item.value === ctx.preset)?.label ?? "Select";
+    ctx.presets.find((item) => item.value === ctx.preset)?.label ?? labels.selectPlaceholder;
 
   if (ctx.presets.length === 0) {
     return (
@@ -485,8 +489,8 @@ const DatePickerPreset = React.forwardRef<
       {...rest}
     >
       <Select value={ctx.preset} onValueChange={ctx.setPreset}>
-        <Select.Trigger aria-label="Date preset">
-          <Select.Value placeholder="Select" />
+        <Select.Trigger aria-label={labels.datePreset}>
+          <Select.Value placeholder={labels.selectPlaceholder} />
         </Select.Trigger>
         <Select.Content>
           {ctx.presets.map((item) => (

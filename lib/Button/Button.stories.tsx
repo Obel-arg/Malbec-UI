@@ -43,7 +43,7 @@ const meta = {
     },
     size: {
       control: "select",
-      options: ["sm", "md", "lg", "icon"] satisfies ButtonSize[],
+      options: ["md", "lg", "icon", "icon-sm"] satisfies ButtonSize[],
       description:
         "Small (10px text), Medium (default, 12px), Large (12px with roomier padding) or Icon-only square.",
     },
@@ -276,7 +276,7 @@ export const AllVariants: Story = {
   ),
 };
 
-const SIZES: ButtonSize[] = ["sm", "md", "lg"];
+const SIZES: ButtonSize[] = ["md", "lg"];
 
 export const AllSizes: Story = {
   name: "Matrix · Sizes",
@@ -285,10 +285,6 @@ export const AllSizes: Story = {
     docs: {
       source: {
         code: `import { Button } from "@obel-arg/malbec-ui";
-
-<Button size="sm">
-  <Button.Text>Size sm</Button.Text>
-</Button>
 
 <Button size="md">
   <Button.Text>Size md</Button.Text>
@@ -299,6 +295,20 @@ export const AllSizes: Story = {
 </Button>
 
 <Button size="icon" aria-label="Next">
+  <Button.Icon decorative={false}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden
+    >
+      <path d="m9 18 6-6-6-6" />
+    </svg>
+  </Button.Icon>
+</Button>
+
+<Button size="icon-sm" variant="outline" aria-label="Next">
   <Button.Icon decorative={false}>
     <svg
       viewBox="0 0 24 24"
@@ -323,6 +333,11 @@ export const AllSizes: Story = {
           </Button>
         ))}
         <Button size="icon" aria-label="Next">
+          <Button.Icon decorative={false}>
+            <ChevronRightIcon />
+          </Button.Icon>
+        </Button>
+        <Button size="icon-sm" variant="outline" aria-label="Next">
           <Button.Icon decorative={false}>
             <ChevronRightIcon />
           </Button.Icon>

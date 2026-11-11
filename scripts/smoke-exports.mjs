@@ -18,7 +18,7 @@ const require = createRequire(import.meta.url);
 const PKG = "@obel-arg/malbec-ui";
 
 const EXPECTED = {
-  "": ["Button", "DataTable", "MalbecThemeProvider", "useTheme", "themes"],
+  "": ["Button", "DataTable", "MalbecThemeProvider", "useTheme", "themes", "MalbecLabelsProvider", "useMalbecLabels"],
   "/icons": ["Settings2", "ChevronDown"],
   "/theme": [
     "MalbecThemeProvider",
@@ -28,12 +28,12 @@ const EXPECTED = {
     "TOKEN_TO_CSS_VAR",
     "live",
     "malbecRecords",
-    "management",
+    "artist",
     "publishing",
     "booking",
   ],
   "/form": ["Form", "useForm", "withForm", "withFieldGroup"],
-  "/theme/presets": ["live", "malbecRecords", "management", "publishing", "booking"],
+  "/theme/presets": ["live", "malbecRecords", "artist", "publishing", "booking"],
 };
 
 const failures = [];

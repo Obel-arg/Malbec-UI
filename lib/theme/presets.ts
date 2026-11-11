@@ -40,8 +40,8 @@ export const publishing: ThemeConfig = {
   },
 };
 
-export const management: ThemeConfig = {
-  name: "Management",
+export const artist: ThemeConfig = {
+  name: "Artist",
   light: {
     accent: "#8F9D98",
     primary: "#0A3D2F",

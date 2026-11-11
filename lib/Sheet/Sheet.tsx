@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import {
   sheetActionVariants,
   sheetBodyVariants,
@@ -107,6 +108,7 @@ const SheetContent = React.forwardRef<
   },
   ref,
 ) {
+  const labels = useMalbecLabels();
   return (
     <SheetPortal container={container}>
       <SheetOverlay
@@ -127,7 +129,7 @@ const SheetContent = React.forwardRef<
           <SheetPrimitive.Close
             data-slot="sheet-close"
             className={sheetCloseVariants()}
-            aria-label="Close sheet"
+            aria-label={labels.closeSheet}
           >
             <SheetCloseIcon />
           </SheetPrimitive.Close>

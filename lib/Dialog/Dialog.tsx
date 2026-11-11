@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import {
   dialogActionVariants,
   dialogBodyVariants,
@@ -107,6 +108,7 @@ const DialogContent = React.forwardRef<
   },
   ref,
 ) {
+  const labels = useMalbecLabels();
   return (
     <DialogPortal container={container}>
       <DialogOverlay
@@ -126,7 +128,7 @@ const DialogContent = React.forwardRef<
           <DialogPrimitive.Close
             data-slot="dialog-close"
             className={dialogCloseVariants()}
-            aria-label="Close dialog"
+            aria-label={labels.closeDialog}
           >
             <DialogCloseIcon />
           </DialogPrimitive.Close>
