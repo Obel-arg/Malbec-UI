@@ -69,6 +69,7 @@ export { Notice } from "./Notice/Notice";
 export { EmptyState } from "./EmptyState/EmptyState";
 export { PageHeader } from "./PageHeader/PageHeader";
 export { SectionHeading } from "./SectionHeading/SectionHeading";
+export { Skeleton } from "./Skeleton/Skeleton";
 
 export type { MalbecThemeProviderProps } from "./theme";
 export type {
@@ -368,3 +369,4 @@ export type { NoticeProps, NoticeTone } from "./Notice/Notice";
 export type { EmptyStateProps } from "./EmptyState/EmptyState";
 export type { PageHeaderProps } from "./PageHeader/PageHeader";
 export type { SectionHeadingProps } from "./SectionHeading/SectionHeading";
+export type { SkeletonProps } from "./Skeleton/Skeleton";
