@@ -47,8 +47,6 @@ type ComboboxContextValue = {
   filteredItems: unknown[];
   preventContentAutofocus: boolean;
   comboboxRootRef: React.RefObject<HTMLDivElement | null>;
-  /** Border-box width of the combobox root; drives popover/list width. */
-  anchorWidthPx: number | null;
 };
 
 const ComboboxContext = React.createContext<ComboboxContextValue | null>(null);
@@ -225,25 +223,6 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
     const [anchorMode, setAnchorMode] =
       React.useState<ComboboxAnchorMode>("none");
 
-    const [anchorWidthPx, setAnchorWidthPx] = React.useState<number | null>(
-      null,
-    );
-
-    React.useLayoutEffect(() => {
-      const el = comboboxRootRef.current;
-      if (!el) return;
-      const measure = () => {
-        const w = el.getBoundingClientRect().width;
-        setAnchorWidthPx(w > 0 ? Math.round(w) : null);
-      };
-      measure();
-      const ro = new ResizeObserver(() => {
-        measure();
-      });
-      ro.observe(el);
-      return () => ro.disconnect();
-    }, []);
-
     const filteredItems = React.useMemo(
       () => filterComboboxItems(items, inputValue, itemToStringValue),
       [items, inputValue, itemToStringValue],
@@ -295,7 +274,6 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
         filteredItems,
         preventContentAutofocus,
         comboboxRootRef,
-        anchorWidthPx,
       }),
       [
         mode,
@@ -321,7 +299,6 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
         filteredItems,
         preventContentAutofocus,
         comboboxRootRef,
-        anchorWidthPx,
       ],
     );
 
@@ -344,14 +321,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
               "ui:relative ui:box-border ui:block ui:w-full ui:min-w-[200px] ui:max-w-full",
               className,
             )}
-            style={{
-              ...rootStyle,
-              ...(anchorWidthPx != null
-                ? ({
-                    ["--combobox-anchor-width" as string]: `${anchorWidthPx}px`,
-                  } as React.CSSProperties)
-                : null),
-            }}
+            style={rootStyle}
           >
             {children}
           </div>
@@ -764,18 +734,16 @@ const ComboboxContent = React.forwardRef<
 ) {
   const ctx = useComboboxContext("Combobox.Content");
 
-  const measuredWidthStyle =
-    ctx.anchorWidthPx != null
-      ? { width: ctx.anchorWidthPx, minWidth: ctx.anchorWidthPx }
-      : undefined;
-
   return (
     <Popover.Content
       ref={ref}
       surface="plain"
       data-slot="combobox-content"
       style={{
-        ...measuredWidthStyle,
+        // The anchor's width (input row, chips box or trigger), which Radix measures. The
+        // combobox root can be wider than the field.
+        width: "var(--radix-popover-trigger-width)",
+        minWidth: "var(--radix-popover-trigger-width)",
         ...styleProp,
       }}
       side={side}
