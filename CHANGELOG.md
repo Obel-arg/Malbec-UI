@@ -123,6 +123,9 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 - v1's brand band, `accentSide` and the title inside the panel are gone (spec rule 1: brand colour is for the CTA and for state).
 - **What to do:** 18 files use v1 (Records 10, Artist 6, Live 1, Publishing 1). Move them to the new props: the old title becomes `label`, the figure becomes `value`. Delete local data-card modules (`data-card-style.ts`, `DATA_CARD_*`, `rail-data-card`). In a strip, use a grid with `items-stretch`: one card per figure, never N figures in one card.
 
+### Page header: a pattern, not a component
+- The header chosen in the workshop is documented as a composition of primitives in Storybook → **Patterns/Page header**: an 18px bold ink `h1` with its status `Badge` on the same line, the main `Button` on the right, a 13px muted subtitle, `Tabs.List` attached below, and 8px before the content. Copy that JSX; there is no `PageHeader` export.
+
 ### Breaking: unused exports removed
 - `statusTone`, `statusVariant`, `priorityVariant`, `STATUS_TONES`, `TONE_VARIANT` and `formatGmtOffsetLabel` are no longer exported. None of the four apps imported them.
 - Use `<StatusBadge status="…" />` or `<StatusBadge tone={…} />` for status colours. `PRIORITY_TONE` stays: `<StatusBadge tone={PRIORITY_TONE.Alta} status="Alta" />`.
@@ -131,7 +134,7 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 ### Added: components the apps already had
 All additive. Each one is the version already approved on screen in an app, adjusted to the spec; you can delete your local copy when you migrate.
 - **Charts:** chart primitives from `charts.md`: `CHART_INK` / `SERIES_INK`, the area and territory scales, the dotted `ChartCard`, the sheen (`ChartMarkDefs`, render it once per screen), `CrosshairCursor` and `TOOLTIP_CARD_CLASS`. Plus **`Donut`** (thin ring, total in the centre, long tail folded into "Other") and **`PctBlocks`**. Replaces the local `chart-style` modules (103 consumers).
-- **`Notice`** (`tone="info" | "pending"`, the suite's one yellow), **`EmptyState`** in three forms: `row` (one quiet line inside a table, the action as a link; a plain DataTable `emptyLabel` now renders like this), `ghost` (faded placeholder rows with the text and action on top) and `page` (a whole empty screen, left-aligned, actions on the right), **`PageHeader`** (18px bold title with its status, the main action on the right, a one-sentence subtitle and the section tabs attached below; chosen in the header workshop), **`Skeleton`**, and **`Field.Label info`** (an "i" next to the label that opens the explanation on click, tap or keyboard; Records' InfoPopover).
+- **`Notice`** (`tone="info" | "pending"`, the suite's one yellow), **`EmptyState`** in three forms: `row` (one quiet line inside a table, the action as a link; a plain DataTable `emptyLabel` now renders like this), `ghost` (faded placeholder rows with the text and action on top) and `page` (a whole empty screen, left-aligned, actions on the right), **`Skeleton`**, and **`Field.Label info`** (an "i" next to the label that opens the explanation on click, tap or keyboard; Records' InfoPopover).
 - **Input `locked`** (+ `lockReason`): a value you can see but not edit, in the same box as the fields next to it, with a lock and the reason in its tooltip. Replaces Records' `LockedField`.
 - **`ConfirmDialog`**: async confirm with a pending state, an error message, destructive tone and `requireReason`. `confirmPhrase` (type-to-confirm) is not included: no app has it approved on screen.
 - **`NotificationBell`**: the suite's bell (two states, one arrival animation, the unread dot in `--color-malbec-unread`, reduced motion). The floating toast stays in the apps.
