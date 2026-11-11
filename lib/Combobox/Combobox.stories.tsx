@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useEffect, useState } from "react";
 import { Combobox, type ComboboxProps } from "./Combobox";
 
 const frameworks = [
@@ -379,6 +380,168 @@ function Example() {
     </Combobox>
   );
 }`,
+      },
+    },
+  },
+};
+
+type Venue = { value: string; label: string; keywords?: string[] };
+
+const VENUES: Venue[] = [
+  { value: "movistar", label: "Movistar Arena", keywords: ["Buenos Aires", "Villa Crespo"] },
+  { value: "metropolitano", label: "Metropolitano", keywords: ["Rosario"] },
+  { value: "quality", label: "Quality Espacio", keywords: ["Córdoba"] },
+  { value: "arena-maipu", label: "Arena Maipú", keywords: ["Mendoza"] },
+];
+
+function VenuePicker() {
+  const [venues, setVenues] = useState<Venue[]>(VENUES);
+  const [value, setValue] = useState<Venue | null>(null);
+  return (
+    <Combobox
+      items={venues}
+      value={value}
+      onValueChange={(next) => setValue(next as Venue | null)}
+      isItemEqualToValue={(a, b) => (a as Venue).value === (b as Venue).value}
+      onCreate={(label) => {
+        const venue = { value: label.toLowerCase(), label };
+        setVenues((prev) => [...prev, venue]);
+        setValue(venue);
+      }}
+      className="ui:w-[280px]"
+    >
+      <Combobox.Input placeholder="Venue o ciudad" />
+      <Combobox.Content>
+        <Combobox.List>{(item) => <Combobox.Item value={item} />}</Combobox.List>
+      </Combobox.Content>
+    </Combobox>
+  );
+}
+
+/** Items match on their `keywords` too (type "rosario"), and `onCreate` offers the typed text when nothing matches. */
+export const KeywordsAndCreate: Story = {
+  args: { items: VENUES },
+  render: () => <VenuePicker />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Combobox } from "@obel-arg/malbec-ui";
+
+// Items match on their label and on \`keywords\`: "rosario" finds Metropolitano.
+const [venues, setVenues] = useState([
+  { value: "movistar", label: "Movistar Arena", keywords: ["Buenos Aires", "Villa Crespo"] },
+  { value: "metropolitano", label: "Metropolitano", keywords: ["Rosario"] },
+]);
+const [value, setValue] = useState(null);
+
+<Combobox
+  items={venues}
+  value={value}
+  onValueChange={setValue}
+  isItemEqualToValue={(a, b) => a.value === b.value}
+  onCreate={(label) => {
+    const venue = { value: label.toLowerCase(), label };
+    setVenues((prev) => [...prev, venue]);
+    setValue(venue);
+  }}
+>
+  <Combobox.Input placeholder="Venue o ciudad" />
+  <Combobox.Content>
+    <Combobox.List>{(item) => <Combobox.Item value={item} />}</Combobox.List>
+  </Combobox.Content>
+</Combobox>`,
+      },
+    },
+  },
+};
+
+const ARTISTS = Array.from({ length: 60 }, (_, i) => `Artista ${i + 1}`);
+const PAGE = 20;
+
+/** Stands in for an API: filters on the "server" and pages by 20. */
+function fakeSearch(query: string, page: number): Promise<string[]> {
+  const hits = ARTISTS.filter((a) => a.toLowerCase().includes(query.toLowerCase()));
+  return new Promise((resolve) =>
+    setTimeout(() => resolve(hits.slice(0, (page + 1) * PAGE)), 400),
+  );
+}
+
+function RemoteArtistPicker() {
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(0);
+  const [items, setItems] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fakeSearch(query, page).then((next) => {
+      if (cancelled) return;
+      setItems(next);
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [query, page]);
+
+  return (
+    <Combobox
+      items={items}
+      filter={null}
+      loading={loading}
+      onInputValueChange={(q) => {
+        setLoading(true);
+        setQuery(q);
+        setPage(0);
+      }}
+      className="ui:w-[280px]"
+    >
+      <Combobox.Input placeholder="Buscar artista" />
+      <Combobox.Content>
+        <Combobox.List
+          onLoadMore={() => {
+            setLoading(true);
+            setPage((p) => p + 1);
+          }}
+        >
+          {(item) => <Combobox.Item value={item} />}
+        </Combobox.List>
+        <Combobox.Empty>Sin resultados</Combobox.Empty>
+      </Combobox.Content>
+    </Combobox>
+  );
+}
+
+/** Remote search: `filter={null}` shows what the server returns, `loading` covers the request, and `onLoadMore` fetches the next page. */
+export const RemoteSearch: Story = {
+  args: { items: [] },
+  render: () => <RemoteArtistPicker />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Combobox } from "@obel-arg/malbec-ui";
+
+const [query, setQuery] = useState("");
+const [page, setPage] = useState(0);
+const { data = [], isFetching } = useArtistSearch(query, page); // your API, debounced
+
+<Combobox
+  items={data}
+  filter={null} // the server already filtered
+  loading={isFetching}
+  onInputValueChange={(q) => {
+    setQuery(q);
+    setPage(0);
+  }}
+>
+  <Combobox.Input placeholder="Buscar artista" />
+  <Combobox.Content>
+    <Combobox.List onLoadMore={() => setPage((p) => p + 1)}>
+      {(item) => <Combobox.Item value={item} />}
+    </Combobox.List>
+    <Combobox.Empty>Sin resultados</Combobox.Empty>
+  </Combobox.Content>
+</Combobox>`,
       },
     },
   },
