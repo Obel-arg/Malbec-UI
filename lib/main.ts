@@ -65,6 +65,14 @@ export { SortableColumnHeader } from "./DataTable/sortable-column-header";
 export { Steps } from "./Steps/Steps";
 export { Table } from "./Table/Table";
 
+// Round B: charts
+// Chart primitives of malbec-ux-ui (charts.md): inks, scales, dot-field card, sheen, grid, crosshair.
+export * from "./charts/chart-style";
+export { Donut, foldDonutData } from "./charts/Donut";
+export type { DonutDatum, DonutProps } from "./charts/Donut";
+export { PctBlocks, pctBlocksFilled } from "./charts/PctBlocks";
+export type { PctBlocksProps } from "./charts/PctBlocks";
+
 export type { MalbecThemeProviderProps } from "./theme";
 export type {
   AlertProps,
