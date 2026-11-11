@@ -106,3 +106,13 @@ describe("Combobox chips box padding", () => {
     expect(classes).not.toContain("ui:px-4");
   });
 });
+
+describe("Combobox chips input", () => {
+  it("has a real minimum width, so the chips box wraps it to a new line instead of overflowing", () => {
+    render(<Chips />);
+    const wrapper = screen.getByRole("combobox", { name: "Frutas" }).parentElement!;
+    const classes = wrapper.className.split(/\s+/);
+    expect(classes).toContain("ui:min-w-32");
+    expect(classes).not.toContain("ui:min-w-0");
+  });
+});
