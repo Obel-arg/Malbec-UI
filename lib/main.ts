@@ -384,7 +384,7 @@ export type { SortableColumnHeaderProps } from "./DataTable/sortable-column-head
 export type { ComboboxFilter } from "./Combobox/Combobox";
 // Round B: surfaces
 export type { NoticeProps, NoticeTone } from "./Notice/Notice";
-export type { EmptyStateProps } from "./EmptyState/EmptyState";
+export type { EmptyStateProps, EmptyStateVariant } from "./EmptyState/EmptyState";
 export type { SkeletonProps } from "./Skeleton/Skeleton";
 export type { InfoPopoverProps } from "./InfoPopover/InfoPopover";
 // Round B: shell

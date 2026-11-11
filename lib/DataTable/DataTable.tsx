@@ -364,11 +364,13 @@ export function DataTable<TData, TValue>({
               </Table.Row>
             ))
           ) : (
-            <Table.Row className="ui:h-24!">
+            <Table.Row className="ui:h-[52px]! ui:hover:bg-transparent">
               <Table.Cell
                 colSpan={Math.max(1, columnCount)}
                 className={cn(
-                  "ui:h-24 ui:text-center ui:font-medium ui:text-text-default-muted",
+                  // A plain label reads as EmptyState variant="row": one quiet, left-aligned line.
+                  // A ghost EmptyState fills the cell edge to edge.
+                  "ui:h-[52px] ui:text-left ui:font-normal ui:text-text-default-muted ui:has-[[data-variant=ghost]]:p-0",
                   tableAppearance === "dataGrid"
                     ? "ui:text-sm"
                     : "ui:text-[13px]",
