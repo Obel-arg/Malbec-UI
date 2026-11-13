@@ -2,8 +2,9 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 /**
  * [Malbec — Badge Figma](https://www.figma.com/design/xpeITaQp7zbkU4htYHvHXo/Malbec-OS-Design-System?node-id=58-191):
- * 4px corner radius, `text-xs` / medium, `tracking-[-0.36px]`, `px-2.5` / `py-0.5`.
- * `destructive` matches `Button` (`destructive` / `destructive-foreground` tokens).
+ * `text-xs` / medium, `tracking-[-0.36px]`, `px-2.5` / `py-0.5`.
+ * 8px corner radius (malbec-ux-ui rule 7: chips share the Button radius, never a capsule).
+ * `destructive` is the two-tone red pair, same as `red`.
  * Colour tones paint through `--malbec-badge-bg` / `--malbec-badge-fg`, so an app can retune a
  * pair from CSS without `!important`.
  */
@@ -14,7 +15,7 @@ export const badgeVariants = cva(
     "ui:items-center",
     "ui:justify-center",
     "ui:gap-1",
-    "ui:rounded-[4px]",
+    "ui:rounded-[8px]",
     "ui:border",
     "ui:font-medium",
     "ui:tracking-[-0.36px]",
@@ -24,7 +25,7 @@ export const badgeVariants = cva(
     "ui:transition-[color,background-color,border-color,opacity,box-shadow]",
     "ui:outline-none",
     "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
+    "ui:focus-visible:ring-focus",
     "ui:focus-visible:ring-offset-2",
     "ui:focus-visible:ring-offset-background-100",
   ],
@@ -36,7 +37,7 @@ export const badgeVariants = cva(
         outline:
           "ui:border-background-300 ui:border-solid ui:bg-transparent ui:text-text-default",
         destructive:
-          "ui:border-transparent ui:bg-destructive ui:text-destructive-foreground",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#dfd0d0] ui:[--malbec-badge-fg:#602a2a] ui:[--malbec-badge-accent:#602a2a]",
         ghost:
           "ui:border-transparent ui:bg-transparent ui:text-text-default ui:hover:bg-background-300/60",
         link:

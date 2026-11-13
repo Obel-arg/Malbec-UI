@@ -187,3 +187,39 @@ export const FieldsetWithLegend: Story = {
     },
   },
 };
+
+export const WithInfo: Story = {
+  name: "With info",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Field, Input } from "@obel-arg/malbec-ui";
+
+<Field>
+  <Field.Label
+    htmlFor="fee"
+    info="Se aplica sobre el neto de la liquidación, después de impuestos."
+    infoLabel="Cómo se calcula"
+  >
+    Comisión
+  </Field.Label>
+  <Input id="fee" defaultValue="12%" />
+</Field>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-[280px]">
+      <Field>
+        <Field.Label
+          htmlFor="fee"
+          info="Se aplica sobre el neto de la liquidación, después de impuestos."
+          infoLabel="Cómo se calcula"
+        >
+          Comisión
+        </Field.Label>
+        <Input id="fee" defaultValue="12%" />
+      </Field>
+    </div>
+  ),
+};

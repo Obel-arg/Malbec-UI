@@ -47,6 +47,7 @@ export default defineConfig({
         // imported by another entry keeps its side-effect imports but loses its re-exports.
         'theme/index': resolve(root, 'lib/theme/index.ts'),
         'theme/presets': resolve(root, 'lib/theme/presets.ts'),
+        form: resolve(root, 'lib/form.ts'),
       },
       name: 'malbec-ui',
       formats: ['es', 'cjs'],

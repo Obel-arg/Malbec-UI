@@ -1,6 +1,6 @@
 {
   "name": "@obel-arg/malbec-ui",
-  "version": "1.16.0",
+  "version": "2.0.0",
   "description": "Malbec UI component library",
   "type": "module",
   "packageManager": "pnpm@11.28.8",
@@ -26,6 +26,11 @@
       "import": "./dist/theme/index.js",
       "require": "./dist/theme/index.cjs"
     },
+    "./form": {
+      "types": "./dist/lib/form.d.ts",
+      "import": "./dist/form.js",
+      "require": "./dist/form.cjs"
+    },
     "./theme/presets": {
       "types": "./dist/lib/theme/presets.d.ts",
       "import": "./dist/theme/presets.js",
@@ -45,6 +50,11 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "public"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-form": {
+      "optional": true
+    }
   },
   "peerDependencies": {
     "@tanstack/react-form": "^1",

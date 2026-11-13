@@ -107,8 +107,8 @@ export const EditProfile: Story = {
   },
 };
 
-export const FloatingScrollBody: Story = {
-  name: "Size + no veil + scrolling body",
+export const SizeScrollBody: Story = {
+  name: "Size + scrolling body",
   parameters: {
     docs: {
       source: {
@@ -116,9 +116,9 @@ export const FloatingScrollBody: Story = {
 
 <Sheet>
   <Sheet.Trigger asChild>
-    <Button variant="outline" tone="neutral">Ver gasto</Button>
+    <Button variant="outline">Ver gasto</Button>
   </Sheet.Trigger>
-  <Sheet.Content size="md" overlay="none">
+  <Sheet.Content size="md">
     <Sheet.Header>
       <Sheet.Title>Gasto #1042</Sheet.Title>
     </Sheet.Header>
@@ -134,11 +134,11 @@ export const FloatingScrollBody: Story = {
   render: () => (
     <Sheet>
       <Sheet.Trigger asChild>
-        <Button variant="outline" tone="neutral">
+        <Button variant="outline">
           <Button.Text>Ver gasto</Button.Text>
         </Button>
       </Sheet.Trigger>
-      <Sheet.Content size="md" overlay="none">
+      <Sheet.Content size="md">
         <Sheet.Header>
           <Sheet.Title>Gasto #1042</Sheet.Title>
         </Sheet.Header>

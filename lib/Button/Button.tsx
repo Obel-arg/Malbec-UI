@@ -20,7 +20,7 @@ export interface ButtonProps extends Omit<
 > {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  /** `neutral` greys out `outline` / `ghost` instead of painting them in the brand colour. */
+  /** @deprecated No effect: `outline`, `ghost` and `secondary` are always grey since 2.0. */
   tone?: ButtonTone;
   /**
    * Render the single child (a `Link`, an `<a>`…) with the button styles instead of a `<button>`.
@@ -54,8 +54,9 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function ButtonRoot(
     {
       variant = "primary",
-      size = "lg",
-      tone = "brand",
+      size = "md",
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- deprecated, kept so 1.x call sites compile; must not reach the DOM
+      tone: _tone,
       asChild = false,
       loading = false,
       htmlType = "button",
@@ -66,7 +67,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) {
-    const classes = cn(buttonVariants({ variant, size, tone }), className);
+    const classes = cn(buttonVariants({ variant, size }), className);
 
     const ctx = React.useMemo<ButtonInternalContext>(
       () => ({ loading, variant, size }),
@@ -81,7 +82,6 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className={classes}
             data-variant={variant}
             data-size={size}
-            data-tone={tone}
             {...rest}
           >
             {children}
@@ -98,7 +98,6 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className={classes}
           data-variant={variant}
           data-size={size}
-          data-tone={tone}
           data-loading={loading || undefined}
           {...rest}
           disabled={disabled || loading}

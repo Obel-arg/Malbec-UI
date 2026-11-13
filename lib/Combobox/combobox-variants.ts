@@ -163,6 +163,9 @@ export const comboboxItemVariants = cva(
     "ui:data-disabled:pointer-events-none",
     "ui:data-disabled:opacity-50",
     "ui:data-highlighted:bg-background-200",
+    // Same as Select.Item: the chosen option keeps the neutral surface, not only on hover.
+    "ui:aria-selected:bg-background-200",
+    "ui:aria-selected:font-medium",
   ],
   { variants: {}, defaultVariants: {} },
 );
@@ -178,6 +181,16 @@ export const comboboxEmptyVariants = cva(
   ],
   { variants: {}, defaultVariants: {} },
 );
+
+/** Loading row at the end of the list. */
+export const comboboxStatusVariants = cva([
+  "malbec-font-sans",
+  "ui:px-2",
+  "ui:py-2",
+  "ui:text-center",
+  "ui:text-xs",
+  "ui:text-text-default-muted",
+]);
 
 export const comboboxSeparatorVariants = cva(
   ["ui:-mx-1", "ui:my-1", "ui:h-px", "ui:bg-background-200"],

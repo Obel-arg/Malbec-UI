@@ -6,6 +6,7 @@ import type { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Button } from "../Button/Button";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { isMultiDayOrAllDay } from "../CalendarMonth/calendar-span-layout";
 import { CalendarTimeGridAllDayStrip } from "./CalendarTimeGridAllDayStrip";
 import type { CalendarTimeGridEvent } from "./calendar-timegrid-types";
@@ -87,6 +88,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
     },
     ref,
   ) {
+    const labels = useMalbecLabels();
     const day = startOfDay(
       dayProp instanceof Date ? dayProp : new Date(dayProp as string | number),
     );
@@ -178,8 +180,8 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
               <div className="ui:flex ui:w-full ui:max-w-full ui:items-center ui:justify-center ui:gap-3">
                 <Button
                   variant="outline"
-                  size="sm"
-                  aria-label="Previous day"
+                  size="icon-sm"
+                  aria-label={labels.previousDay}
                   onClick={() => onDayChange(startOfDay(addDays(day, -1)))}
                 >
                   <Button.Icon>
@@ -191,8 +193,8 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
                 </h2>
                 <Button
                   variant="outline"
-                  size="sm"
-                  aria-label="Next day"
+                  size="icon-sm"
+                  aria-label={labels.nextDay}
                   onClick={() => onDayChange(startOfDay(addDays(day, 1)))}
                 >
                   <Button.Icon>
@@ -260,7 +262,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
             className={cn(
               calendarTimeGridColumnVariants({ isLast: true }),
               selectable &&
-                "ui:cursor-pointer ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-inset ui:focus-visible:ring-primary",
+                "ui:cursor-pointer ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-inset ui:focus-visible:ring-focus",
             )}
             style={{ minHeight: gridH }}
             tabIndex={selectable ? 0 : undefined}

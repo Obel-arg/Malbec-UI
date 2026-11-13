@@ -1,12 +1,14 @@
 import type { Preview } from "@storybook/react-vite";
 import { themes } from "storybook/theming";
 import "@fontsource-variable/inter";
+import { MalbecLabelsProvider } from "../lib/i18n/MalbecLabelsProvider";
+import type { MalbecLocale } from "../lib/i18n/labels";
 import { MalbecThemeProvider } from "../lib/theme/MalbecThemeProvider";
 import {
   booking,
   live,
   malbecRecords,
-  management,
+  artist,
   publishing,
 } from "../lib/theme/presets";
 import type { ThemeConfig, ThemeMode } from "../lib/theme/tokens";
@@ -15,7 +17,7 @@ import "../lib/styles.css";
 const presetMap: Record<string, ThemeConfig> = {
   malbecRecords,
   publishing,
-  management,
+  artist,
   booking,
   live,
 };
@@ -32,7 +34,7 @@ const preview: Preview = {
         items: [
           { value: "malbecRecords", title: "Records" },
           { value: "publishing", title: "Publishing" },
-          { value: "management", title: "Management" },
+          { value: "artist", title: "Artist" },
           { value: "booking", title: "Booking" },
           { value: "live", title: "Live" },
         ],
@@ -49,6 +51,19 @@ const preview: Preview = {
           { value: "light", title: "Light" },
           { value: "dark", title: "Dark" },
           { value: "system", title: "System" },
+        ],
+      },
+    },
+    malbecLocale: {
+      description: "Language of the texts components render on their own (MalbecLabelsProvider)",
+      defaultValue: "es",
+      toolbar: {
+        title: "Language",
+        icon: "globe",
+        dynamicTitle: true,
+        items: [
+          { value: "es", title: "Español" },
+          { value: "en", title: "English" },
         ],
       },
     },
@@ -83,7 +98,9 @@ const preview: Preview = {
         (context.globals.malbecMode as ThemeMode | undefined) ??
         (context.parameters.malbecMode as ThemeMode | undefined) ??
         "light";
+      const locale = (context.globals.malbecLocale as MalbecLocale | undefined) ?? "es";
       return (
+        <MalbecLabelsProvider locale={locale}>
         <MalbecThemeProvider
           key={`${themeKey}-${mode}`}
           theme={theme}
@@ -93,6 +110,7 @@ const preview: Preview = {
             <Story />
           </div>
         </MalbecThemeProvider>
+        </MalbecLabelsProvider>
       );
     },
   ],

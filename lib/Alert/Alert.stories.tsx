@@ -139,7 +139,7 @@ export const WithAction: Story = {
     Enable it under your profile settings to get started.
   </Alert.Description>
   <Alert.Action>
-    <Button size="sm" variant="primary">
+    <Button size="md" variant="primary">
       <Button.Text>Enable</Button.Text>
     </Button>
   </Alert.Action>
@@ -155,7 +155,7 @@ export const WithAction: Story = {
           Enable it under your profile settings to get started.
         </Alert.Description>
         <Alert.Action>
-          <Button size="sm" variant="primary">
+          <Button size="md" variant="primary">
             <Button.Text>Enable</Button.Text>
           </Button>
         </Alert.Action>

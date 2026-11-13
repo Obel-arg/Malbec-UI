@@ -2,6 +2,162 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v2.0.0 — 2026-11-11
+
+The library's defaults now match the malbec-ux-ui spec approved by Isa. This release changes what you see without any code change on your side. Each section below says what changes on screen, and which overrides you can delete.
+
+### Breaking: modals float without a veil
+- **Dialog, Sheet, AlertDialog and Command** render without a veil by default. The overlay element stays, so clicking outside still closes the modal; it is just transparent. The surface lifts off the page on the two-layer shadow `0 24px 70px rgba(0,0,0,.22), 0 8px 20px rgba(0,0,0,.1)`. Side sheets cast that shadow away from their edge.
+- `overlay="default"` is now `overlay="veil"`, the 1.x frosted veil (`background-200` at 60% + 3.5px blur, short shadow). Use it only where the design asks for it.
+- **What to delete:**
+  - `overlay="none"` everywhere. It is the default now.
+  - Artist: `floating-dialog-classes`.
+  - Publishing: `sheet-no-veil.css`.
+  - Live: `modal-classes`, and the ink-at-55% veil in `globals.css:312`, which Isa confirmed against the spec.
+- Command: to dim the page behind it, pass `overlayClassName`.
+- The overlay element of Dialog, Sheet and AlertDialog now carries `data-overlay="none|veil"`, the same as the content, so CSS can target a variant without `:has()`.
+
+### Breaking: segmented tabs are 40 / 14
+- The track is 40px with a 6px radius. The trigger is 14px medium, `px-3 py-1.5`, with a 4px radius; the active tab is `background-100` on a `0 1px 3px rgba(0,0,0,.05)` shadow. Isa confirmed the spec over the 36/13 the apps were using.
+- Every tab variant now has a neutral focus ring (`background-300`). The brand-colour ring no longer stays lit on the tab you just clicked.
+- **What to delete:**
+  - Artist: `segmented-tabs-classes.ts` (36px / 13px).
+  - Publishing: `segmented-tabs.ts`, including the `!`.
+  - Live: `SEGMENTED_TABS_TRIGGER_CLASS` (`ui:text-sm ui:font-medium`).
+  - Records: its `text-xs` trigger.
+  - Everywhere: `focus-visible:ring-background-300!` overrides.
+
+### Breaking: chips are 8px and destructive is two-tone
+- Every **Badge** goes from a 4px to an 8px radius, the same as `Button` (spec rule 7).
+- `variant="destructive"` drops solid red with white text for the spec pair `#dfd0d0` / `#602a2a`, the same as `red`.
+- **What to delete:**
+  - Publishing: `badge-destructive.css`.
+  - Any `rounded-[8px]` you add to a `Badge`.
+
+### Breaking: one destructive red in light and dark
+- `--color-destructive` is now `#ef4444` in the light theme too (it was `#dc2626`), the same red the dark theme already used. It shows up in the destructive Button, error text and any `text-destructive` / `bg-destructive` of your own. `--color-destructive-foreground` stays `#fafafa`.
+- **Contrast:** `#fafafa` on `#ef4444` is 3.6:1. It meets AA for large text and UI components (3:1) but not for small text (4.5:1); `#dc2626` gave 4.6:1. Keep destructive button labels at the default 14px medium or larger, and don't use `bg-destructive` behind body-size text.
+- **What to delete:** any override that set the light-theme destructive to `#ef4444` by hand.
+
+### Breaking: Dialog padding is 24px and the X sits on the title line
+- **Dialog** pads its panel 24px instead of 40px, so every dialog is 32px narrower inside and shorter.
+- With `showCloseButton`, the X (32px) is centred on the first line of the 28px title and its glyph ends at the content edge. Before, it sat 6px above the title.
+- `Dialog.Header` keeps 32px clear on the right when the X is present, so a long title wraps before it instead of running under it.
+- **What to check:** dialogs where you compensated the 40px with negative margins or your own padding, and any X you positioned by hand.
+
+### Breaking: brand colour only on the primary CTA
+- **Button:** `outline`, `ghost` and `secondary` are always grey: `text-default` text, a `background-300` border on outline, `background-200` hover and a neutral focus ring.
+  - There is no brand tone: the 1.x brand text and border on these variants is gone. `tone="neutral"` still compiles but is deprecated and does nothing.
+  - `primary` and `destructive` don't change.
+  - The component now starts at `md`, the declared default, instead of `lg`. The height is the same.
+- **Checkbox, Switch, RadioGroup, Steps:** checked and active states are solid `malbec-icon` (#3f3f46) instead of brand colour (spec rule 2). Unchecked controls have a `background-300` border, and the focus ring is `malbec-icon`.
+- **What to delete:**
+  - `tone="neutral"` everywhere (Live 2 files, Publishing 7).
+  - Artist and Publishing: `no-green-button-classes` and `NEUTRAL_CHECKBOX_CLASS`.
+  - Publishing: `button-outline.css` and `button-ghost.css`.
+  - Live: `malbecOutlineButtonClass`, `malbecGhostButtonClass` and the `ui:h-9 ui:px-4 ui:text-[12px]` repeated on buttons (that is the default `md`).
+- **Check:** an outline or ghost that really needs the brand colour should be the `primary` button instead.
+
+### Breaking: no pure white, no card shadow
+- **Popover:** content sits on `background-100` instead of pure white (spec rule 5). Dark mode doesn't change.
+- **Card:** no shadow by default; the `background-300` border draws the edge. To bring a shadow back on one card, pass it in `className`.
+- **What to delete:**
+  - Popover: `bg-background-100` (with or without `!`) on `Popover.Content`. Live has it ~41 times and Artist 9.
+  - Card: `shadow-none` (with or without `!`). Publishing has it 13 times and Artist 8.
+
+### Breaking: DataTable looks like Table
+- `tableAppearance` now defaults to `"default"`: 10px shell, `background-200` header and 58px rows, the same as `Table`. `tableAppearance="dataGrid"` brings back the dense 6px grid.
+- Rows stay on `background-100` instead of pure white. Hover is `background-200` at 50%.
+- `rowSelection` now defaults to `false`. Pass `rowSelection` to get the checkbox column; `onRowSelectionChange` only type-checks with it.
+- A column with id `artist` no longer gets its own padding.
+- **What to delete:**
+  - `tableAppearance="default"` and `rowSelection={false}` everywhere (Artist 63, Live 25, Publishing 27).
+  - Publishing: the `[&_thead_tr]:bg-background-200` patch (×26).
+  - Artist: `[&_tbody_tr]:bg-white` (×7).
+- **Check:** tables that use selection now need `rowSelection`. TypeScript flags every `onRowSelectionChange` without it, but a table that selects rows without that callback has to be found by hand.
+
+### Breaking: light first, no black
+- **MalbecThemeProvider:** `defaultMode` is now `"light"` instead of `"system"`. A dark OS no longer turns the app dark on first load. Pass `defaultMode="system"` to follow the OS. A mode the user already saved still wins.
+- **Foreground:** the light `--color-foreground` is ink `#1a1a1f` instead of `#09090b`, in `styles.css` and in the five presets (spec rule: no black). Dark mode doesn't change.
+- **What to delete:**
+  - `defaultMode="light"` on the provider.
+  - Any override that sets `--color-foreground` to ink, and `text-malbec-ink` used only to avoid `text-foreground`.
+
+### Breaking: grey focus rings
+- Every focus ring (Dialog and Sheet close buttons, Pagination, Breadcrumb, Sidebar, Calendar, Combobox, Badge, Toggle, FloatingBar, sortable headers, Inbox…) is now **grey instead of the brand colour**, from a new token `--color-focus`: `#3f3f46` in light, `#a8a29e` in dark so it keeps 3:1 contrast on dark surfaces. Tabs keep their `background-300` ring.
+- **What to delete:** `focus-visible:ring-*` overrides that only existed to neutralise the brand ring.
+
+### Breaking: quieter tooltips, Inbox and charts
+- **Tooltip:** the light tooltip (the default, for explaining a value) goes from 16px to **13px / 18px** and wraps at **280px**. The dark tooltip doesn't change.
+- **Inbox:** brand colour is gone. Tab counts are a grey chip (`background-300` / `malbec-icon`) instead of solid primary. Unread rows lose their `color-mix(primary 5%)` tint; the dot alone marks them. The active tab underline is ink.
+- **Charts:** `--chart-1..5` no longer come from primary and accent. They are the warm SERIES_INK greys from the spec (`charts.md`), deepest first, as opaque hex, with a dark-mode equivalent. Charts look the same in every app.
+- `styles.css` no longer uses `color-mix()`. `--color-text-default-muted` is the equivalent `rgba`.
+- **What to delete:** Tooltip text-size and `max-w` overrides on the light tooltip (Live `text-[12px]` ×51); local chart palettes that only existed to replace the brand-coloured series.
+
+### Breaking: `size="sm"` is no longer a text size
+- **Button:** `size="sm"` (10px) now renders as `md` (36px, 12px) and is `@deprecated`. The spec never pairs `sm` with a label. It still type-checks, so nothing breaks at build time.
+- New **`size="icon-sm"`**: a 32px square for compact icon-only buttons. The calendar arrows use it.
+- **What to do:** replace `size="sm"` with `md` on text buttons (Artist 179, Live 72, Publishing 61) and with `icon-sm` on small icon-only buttons.
+
+### Breaking: no English text built in
+- New **`MalbecLabelsProvider`** (`locale="es" | "en"`, plus `labels` to override one at a time) and `useMalbecLabels()`. Every text a component renders on its own reads from it: close buttons, Pagination, Breadcrumb, Sidebar, DataTable selection, Combobox, DatePicker, the calendars and the Inbox. Without a provider, components stay in English. The catalogs are exported as `labelsEn` / `labelsEs`.
+- **DataTable `emptyLabel` is required.** The "No results." fallback is gone.
+- **What to do:** wrap the app in `<MalbecLabelsProvider locale={locale}>`, pass `emptyLabel` to every `DataTable`, and delete local wrappers that only translated these labels.
+
+### Breaking: the form API moves to `malbec-ui/form`
+- `Form`, `useForm`, `withForm`, `withFieldGroup` and their types are imported from **`malbec-ui/form`**. `@tanstack/react-form` is now an optional peer: apps without forms don't need it.
+- **What to do:** Artist changes `import { Form, useForm } from "malbec-ui"` to `"malbec-ui/form"` (22 files).
+
+### Breaking: the green preset is `artist`
+- The theme preset `management` is renamed **`artist`** (Malbec Artist's palette). The provider's default theme is still Records.
+
+### Breaking: a new Command palette
+- **Command** follows version C of the Command workshop: Linear's structure with Resend's keys and footer.
+  - The surface is light (`background-100`), 600px wide with a 12px radius and a `background-300` edge. `Command.Dialog` adds the floating shadow.
+  - The input has no box and no search glyph: 16px ink text with a rule below.
+  - Group headings are 12px muted instead of bold.
+  - Rows are 36px with an 8px radius, a muted 16px icon, and the selected row on `background-200`.
+- New parts:
+  - `Command.Context`: a chip above the input with what the commands act on ("Show · Rosario").
+  - `Command.Shortcut keys={["G", "S"]} sequence`: boxed keys with "then" between them.
+  - `Command.Footer`: ↑↓ navigate, ↵ open, esc close.
+- `Command.Empty` without children says what was searched. All texts come from `MalbecLabelsProvider`.
+- **What to do:** drop the `mr-2` wrappers around item icons (the row spaces them) and pass shortcut keys as `keys`.
+
+### Breaking: DataCard is rebuilt to the spec
+- **`DataCard`** follows `references/data-card.md`, with three layers:
+  - an embossed `background-200` frame (radius 14, 4px band);
+  - a `background-100` block with a bevel and the figure (17px semibold, tabular), with an optional `sub` line;
+  - the `label` with its icon on the frame below.
+- New API: `<DataCard value="US$ 8.802" sub="6 costos" label="Gasto total" icon={<Wallet />} />`.
+- `variant="count"` is for short counts: a 28px icon and figure side by side, centred.
+- v1's brand band, `accentSide` and the title inside the panel are gone (spec rule 1: brand colour is for the CTA and for state).
+- **What to do:** 18 files use v1 (Records 10, Artist 6, Live 1, Publishing 1). Move them to the new props: the old title becomes `label`, the figure becomes `value`. Delete local data-card modules (`data-card-style.ts`, `DATA_CARD_*`, `rail-data-card`). In a strip, use a grid with `items-stretch`: one card per figure, never N figures in one card.
+
+### Breaking: unused exports removed
+- `statusTone`, `statusVariant`, `priorityVariant`, `STATUS_TONES`, `TONE_VARIANT` and `formatGmtOffsetLabel` are no longer exported. None of the four apps imported them.
+- Use `<StatusBadge status="…" />` or `<StatusBadge tone={…} />` for status colours. `PRIORITY_TONE` stays: `<StatusBadge tone={PRIORITY_TONE.Alta} status="Alta" />`.
+
+
+### Added: components the apps already had
+All additive. Each one is the version already approved on screen in an app, adjusted to the spec; you can delete your local copy when you migrate.
+- **Charts:** chart primitives from `charts.md`: `CHART_INK` / `SERIES_INK`, the area and territory scales, the dotted `ChartCard`, the sheen (`ChartMarkDefs`, render it once per screen), `CrosshairCursor` and `TOOLTIP_CARD_CLASS`. Plus **`Donut`** (thin ring, total in the centre, long tail folded into "Other") and **`PctBlocks`**. Replaces the local `chart-style` modules (103 consumers).
+- **`Notice`** (`tone="info" | "pending"`, the suite's one yellow), **`EmptyState`** in three forms: `row` (one quiet line inside a table, the action as a link; a plain DataTable `emptyLabel` now renders like this), `ghost` (faded placeholder rows with the text and action on top) and `page` (a whole empty screen, left-aligned, actions on the right), **`PageHeader`** (18px bold title with its status, the main action on the right, a one-sentence subtitle and the section tabs attached below; chosen in the header workshop), **`Skeleton`**, and **`Field.Label info`** (an "i" next to the label that opens the explanation on click, tap or keyboard; Records' InfoPopover).
+- **Input `locked`** (+ `lockReason`): a value you can see but not edit, in the same box as the fields next to it, with a lock and the reason in its tooltip. Replaces Records' `LockedField`.
+- **`ConfirmDialog`**: async confirm with a pending state, an error message, destructive tone and `requireReason`. `confirmPhrase` (type-to-confirm) is not included: no app has it approved on screen.
+- **`NotificationBell`**: the suite's bell (two states, one arrival animation, the unread dot in `--color-malbec-unread`, reduced motion). The floating toast stays in the apps.
+- **Sidebar `collapsible="dock"`** on `Sidebar.Provider`: a rail with a panel that floats on hover and pins.
+- **DataTable:** `DataTable.Pagination` (client `pageSize`, controlled `pagination`, server `rowCount`), `DataTable.ColumnsToggle`, controlled `sorting` + `manualSorting`, and `toolbar` as a function of the table. `SortableColumnHeader` takes `icon` and `align`.
+- **Table:** `stackOnMobile` (each row becomes a card under 640px; desktop unchanged) and `stickyHeader`.
+- **Combobox:** `keywords` per item, `filter={null}` + `onInputValueChange` for remote search, `loading`, `onCreate` ("Create “…”" when nothing matches) and `Combobox.List onLoadMore`.
+- **CSS (`tokens.css`):** `scroll-hidden` / `scroll-thin`, the suite easings and the `wizard-step` keyframes.
+
+### Fixes: Combobox
+- The list takes the width of its anchor, not of the root.
+- Chips look disabled with `disabled`, and sit at the start instead of `justify-between`.
+- The selected option is marked (`background-200`, medium weight), as in `Select`.
+- The wheel scrolls the list inside a modal Dialog or Sheet.
+- The open/close chevron reads its label from `MalbecLabelsProvider`.
 ## v1.16.0 — 2026-11-03
 
 ### Added

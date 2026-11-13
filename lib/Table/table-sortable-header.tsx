@@ -87,7 +87,7 @@ export function TableSortableHeader({
           "ui:border-0 ui:bg-transparent ui:p-0 ui:text-left ui:text-inherit",
           "ui:font-[inherit] ui:leading-[inherit] ui:tracking-[inherit]",
           "ui:text-current ui:outline-none ui:transition-colors",
-          "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2",
+          "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2",
           "ui:focus-visible:ring-offset-background-100",
         )}
         onClick={handle}

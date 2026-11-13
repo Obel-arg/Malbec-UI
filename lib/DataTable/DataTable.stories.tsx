@@ -29,10 +29,10 @@ import { SortableColumnHeader } from "./sortable-column-header";
  *
  * ```tsx
  * <DataTable
- *   tableAppearance="default"
  *   getRowId={(r) => r.id}
  *   columns={columns}
  *   data={rows}
+ *   emptyLabel="Sin eventos"
  *   tableChildrenStart={colgroup}
  * />
  * ```
@@ -75,11 +75,8 @@ function useEventColumns() {
         id: "artist",
         accessorKey: "artist",
         header: ({ column }) => (
-          <SortableColumnHeader column={column}>
-            <div className="ui:flex ui:items-center ui:gap-[5px]">
-              <TableStoryHeaderIconArtist />
-              <span>Artista</span>
-            </div>
+          <SortableColumnHeader column={column} icon={<TableStoryHeaderIconArtist />}>
+            Artista
           </SortableColumnHeader>
         ),
         cell: ({ row }) => (
@@ -92,11 +89,8 @@ function useEventColumns() {
       {
         accessorKey: "venue",
         header: ({ column }) => (
-          <SortableColumnHeader column={column}>
-            <div className="ui:flex ui:items-center ui:gap-[5px]">
-              <TableStoryHeaderIconVenue />
-              <span>Venue</span>
-            </div>
+          <SortableColumnHeader column={column} icon={<TableStoryHeaderIconVenue />}>
+            Venue
           </SortableColumnHeader>
         ),
         cell: (ctx) => (
@@ -109,11 +103,8 @@ function useEventColumns() {
         id: "fechas",
         accessorKey: "dateLabel",
         header: ({ column }) => (
-          <SortableColumnHeader column={column}>
-            <div className="ui:flex ui:items-center ui:gap-[5px]">
-              <TableStoryHeaderIconCalendar />
-              <span>Fechas</span>
-            </div>
+          <SortableColumnHeader column={column} icon={<TableStoryHeaderIconCalendar />}>
+            Fechas
           </SortableColumnHeader>
         ),
         cell: ({ row }) => (
@@ -128,11 +119,8 @@ function useEventColumns() {
         id: "status",
         accessorKey: "status",
         header: ({ column }) => (
-          <SortableColumnHeader column={column}>
-            <div className="ui:flex ui:items-center ui:gap-[5px]">
-              <TableStoryHeaderIconListStatus />
-              <span>Status</span>
-            </div>
+          <SortableColumnHeader column={column} icon={<TableStoryHeaderIconListStatus />}>
+            Status
           </SortableColumnHeader>
         ),
         cell: (ctx) => (
@@ -166,17 +154,16 @@ function useEventColumns() {
 function DataTableWithColumns(
   props: Pick<
     DataTableProps<EventRow, unknown>,
-    "data" | "emptyLabel" | "rowSelection" | "tableChildrenStart"
-  >,
+    "data" | "emptyLabel" | "tableChildrenStart"
+  > & { rowSelection?: boolean },
 ) {
   const columns = useEventColumns();
   return (
     <div className="ui:mx-auto ui:max-w-[1085px]">
       <DataTable
         tableChildrenStart={props.tableChildrenStart}
-        tableAppearance="default"
         getRowId={(r) => r.id}
-        rowSelection={props.rowSelection}
+        {...(props.rowSelection ? { rowSelection: true as const } : {})}
         columns={columns}
         data={props.data}
         emptyLabel={props.emptyLabel}
@@ -189,7 +176,9 @@ const DATA_TABLE_COLUMNS_SNIPPET = `import type { ColumnDef } from "@tanstack/re
 import { DataTable, SortableColumnHeader } from "@obel-arg/malbec-ui";
 
 // Build a TanStack ColumnDef[]. Wrap header content in SortableColumnHeader to
-// get click-to-sort; set \`enableSorting: false\` to opt a column out.
+// get click-to-sort (\`icon\` adds a leading glyph, \`align="right"\` for numbers);
+// set \`enableSorting: false\` to opt a column out. For server-side sorting pass
+// \`sorting\`, \`onSortingChange\` and \`manualSorting\` to DataTable.
 const columns: ColumnDef<EventRow>[] = [
   {
     id: "artist",
@@ -220,7 +209,8 @@ export const Events: Story = {
   render: () => (
     <DataTableWithColumns
       data={eventRowsSample}
-      tableChildrenStart={colgroup}
+      emptyLabel="Sin eventos"
+      tableChildrenStart={colgroupNoSelect}
     />
   ),
   parameters: {
@@ -231,10 +221,10 @@ export const Events: Story = {
 function EventsTable({ data }: { data: EventRow[] }) {
   return (
     <DataTable
-      tableAppearance="default"
       getRowId={(r) => r.id}
       columns={columns}
       data={data}
+      emptyLabel="Sin eventos"
       tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
     />
   );
@@ -321,10 +311,11 @@ function MultiSelectWithFloatingBar() {
       <DataTable
         key={resetKey}
         tableChildrenStart={colgroup}
-        tableAppearance="default"
         getRowId={(r) => r.id}
         columns={columns}
         data={eventRowsSample}
+        emptyLabel="Sin eventos"
+        rowSelection
         onRowSelectionChange={(rows) => setSelectedCount(rows.length)}
       />
       <div className="ui:fixed ui:left-1/2 ui:bottom-[48px] ui:-translate-x-1/2 ui:z-50">
@@ -417,10 +408,11 @@ function MultiSelectTable({
     <>
       <DataTable
         key={resetKey}
-        tableAppearance="default"
         getRowId={(r) => r.id}
         columns={columns}
         data={data}
+        emptyLabel="Sin eventos"
+        rowSelection
         onRowSelectionChange={(rows) => setSelectedCount(rows.length)}
       />
       <div className="fixed left-1/2 bottom-12 -translate-x-1/2 z-50">
@@ -469,13 +461,14 @@ function MultiSelectTable({
   render: () => <MultiSelectWithFloatingBar />,
 };
 
-export const NoRowSelection: Story = {
-  name: "Without row checkboxes",
+export const RowSelection: Story = {
+  name: "With row checkboxes",
   render: () => (
     <DataTableWithColumns
       data={eventRowsSample}
-      rowSelection={false}
-      tableChildrenStart={colgroupNoSelect}
+      emptyLabel="Sin eventos"
+      rowSelection
+      tableChildrenStart={colgroup}
     />
   ),
   parameters: {
@@ -483,15 +476,15 @@ export const NoRowSelection: Story = {
       source: {
         code: `${DATA_TABLE_COLUMNS_SNIPPET}
 
-// Pass \`rowSelection={false}\` to hide the checkbox column entirely.
+// Pass \`rowSelection\` to prepend the checkbox column (select all + per row).
 function EventsTable({ data }: { data: EventRow[] }) {
   return (
     <DataTable
-      tableAppearance="default"
       getRowId={(r) => r.id}
-      rowSelection={false}
+      rowSelection
       columns={columns}
       data={data}
+      emptyLabel="Sin eventos"
       tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
     />
   );
@@ -505,8 +498,8 @@ export const Empty: Story = {
   render: () => (
     <DataTableWithColumns
       data={[]}
-      emptyLabel="No rows."
-      tableChildrenStart={colgroup}
+      emptyLabel="Sin eventos"
+      tableChildrenStart={colgroupNoSelect}
     />
   ),
   parameters: {
@@ -518,15 +511,107 @@ export const Empty: Story = {
 function EventsTable() {
   return (
     <DataTable
-      tableAppearance="default"
       getRowId={(r) => r.id}
       columns={columns}
       data={[]}
-      emptyLabel="No rows."
+      emptyLabel="Sin eventos"
       tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
     />
   );
 }`,
+      },
+    },
+  },
+};
+
+const manyEventRows: EventRow[] = Array.from({ length: 8 }, (_, page) =>
+  eventRowsSample.map((row) => ({ ...row, id: `${row.id}-${page}` })),
+).flat();
+
+function PaginatedEventsTable() {
+  const columns = useEventColumns();
+  return (
+    <div className="ui:mx-auto ui:max-w-[1085px]">
+      <DataTable
+        getRowId={(r) => r.id}
+        columns={columns}
+        data={manyEventRows}
+        emptyLabel="Sin eventos"
+        tableChildrenStart={colgroupNoSelect}
+        pageSize={5}
+        footer={({ table }) => <DataTable.Pagination table={table} />}
+      />
+    </div>
+  );
+}
+
+export const Paginated: Story = {
+  name: "With pagination",
+  render: () => <PaginatedEventsTable />,
+  parameters: {
+    docs: {
+      source: {
+        code: `${DATA_TABLE_COLUMNS_SNIPPET}
+
+// Client-side: \`pageSize\` slices \`data\`. DataTable.Pagination hides itself when
+// everything fits in one page.
+<DataTable
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin eventos"
+  pageSize={5}
+  footer={({ table }) => <DataTable.Pagination table={table} />}
+/>
+
+// Server-side: \`data\` is the current page, \`rowCount\` the total on the server.
+const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 25 });
+const { rows, total } = useEvents(pagination);
+
+<DataTable
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin eventos"
+  rowCount={total}
+  pagination={pagination}
+  onPaginationChange={setPagination}
+  footer={({ table }) => <DataTable.Pagination table={table} />}
+/>`,
+      },
+    },
+  },
+};
+
+function EventsTableWithColumnsToggle() {
+  const columns = useEventColumns();
+  return (
+    <div className="ui:mx-auto ui:max-w-[1085px]">
+      <DataTable
+        getRowId={(r) => r.id}
+        columns={columns}
+        data={eventRowsSample}
+        emptyLabel="Sin eventos"
+        toolbar={({ table }) => <DataTable.ColumnsToggle table={table} />}
+      />
+    </div>
+  );
+}
+
+export const ColumnsToggle: Story = {
+  name: "With columns toggle",
+  render: () => <EventsTableWithColumnsToggle />,
+  parameters: {
+    docs: {
+      source: {
+        code: `${DATA_TABLE_COLUMNS_SNIPPET}
+
+// Lists every column that can hide (\`enableHiding: false\` opts one out). The menu
+// shows \`meta.label\`, else a string \`header\`, else the column id.
+<DataTable
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin eventos"
+  toolbar={({ table }) => <DataTable.ColumnsToggle table={table} />}
+/>`,
       },
     },
   },

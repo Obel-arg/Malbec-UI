@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 /**
- * 44×24px track, 20×20px thumb, primary fill, Off = bg-100, On = bg-200; both
+ * 44×24px track, 20×20px thumb in solid malbec-icon (malbec-ux-ui rule 2), Off = bg-100, On = bg-200; both
  * states use border-300 on the track so the pill is visible (off was borderless in
  * the raw frame and read as a floating dot only on light backgrounds).
  */
@@ -20,7 +20,7 @@ export const switchRootVariants = cva(
     "ui:outline-none",
     "ui:transition-[color,background-color,border-color,opacity,box-shadow]",
     "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
+    "ui:focus-visible:ring-focus",
     "ui:focus-visible:ring-offset-2",
     "ui:focus-visible:ring-offset-background-100",
     "ui:disabled:cursor-not-allowed",
@@ -43,7 +43,7 @@ export const switchThumbVariants = cva(
     "ui:block",
     "ui:size-5",
     "ui:rounded-full",
-    "ui:bg-primary",
+    "ui:bg-malbec-icon",
     "ui:shadow-none",
     "ui:transition-transform",
     "ui:duration-200",

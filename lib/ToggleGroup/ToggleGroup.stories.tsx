@@ -81,10 +81,13 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: { type: "single" as const },
-  render: () => (
-    <ToggleGroup type="single" aria-label="Text formatting" size="md" variant="default">
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_auto] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+function FormattingItems() {
+  return (
+    <>
       <ToggleGroup.Item value="bold" aria-label="Bold">
         <span className={iconBox}>
           <BoldIcon className="ui:size-full" />
@@ -100,14 +103,19 @@ export const Default: Story = {
           <UnderlineIcon className="ui:size-full" />
         </span>
       </ToggleGroup.Item>
-    </ToggleGroup>
-  ),
+    </>
+  );
+}
+
+export const States: Story = {
+  args: { type: "single" as const },
   parameters: {
+    controls: { hideNoControlsWarning: true },
     docs: {
       source: {
         code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
 
-<ToggleGroup type="single" aria-label="Text formatting" size="md" variant="default">
+<ToggleGroup type="single" aria-label="Text formatting">
   <ToggleGroup.Item value="bold" aria-label="Bold">
     <BoldIcon /> {/* your icon */}
   </ToggleGroup.Item>
@@ -117,44 +125,52 @@ export const Default: Story = {
   <ToggleGroup.Item value="underline" aria-label="Underline">
     <UnderlineIcon /> {/* your icon */}
   </ToggleGroup.Item>
+</ToggleGroup>
+
+// Same items, with a selected value:
+<ToggleGroup type="single" aria-label="Text formatting" defaultValue="bold">
+  …
+</ToggleGroup>
+
+// Same items, disabled:
+<ToggleGroup type="single" aria-label="Text formatting" disabled>
+  …
 </ToggleGroup>`,
       },
     },
   },
+  render: () => (
+    <div className={statesGrid}>
+      <span className={stateCaption}>Default</span>
+      <ToggleGroup type="single" aria-label="Text formatting">
+        <FormattingItems />
+      </ToggleGroup>
+      <span className={stateCaption}>Selected</span>
+      <ToggleGroup type="single" aria-label="Text formatting" defaultValue="bold">
+        <FormattingItems />
+      </ToggleGroup>
+      <span className={stateCaption}>Disabled</span>
+      <ToggleGroup type="single" aria-label="Text formatting" disabled>
+        <FormattingItems />
+      </ToggleGroup>
+    </div>
+  ),
 };
 
-export const Outline: Story = {
+const VARIANTS = ["default", "outline"] as const;
+const SIZES = ["sm", "md", "lg"] as const;
+
+export const AllVariants: Story = {
+  name: "Matrix · Variants × sizes",
   args: { type: "single" as const },
-  render: () => (
-    <ToggleGroup
-      type="single"
-      aria-label="Text formatting"
-      size="md"
-      variant="outline"
-    >
-      <ToggleGroup.Item value="bold" aria-label="Bold">
-        <span className={iconBox}>
-          <BoldIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-      <ToggleGroup.Item value="italic" aria-label="Italic">
-        <span className={iconBox}>
-          <ItalicIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-      <ToggleGroup.Item value="underline" aria-label="Underline">
-        <span className={iconBox}>
-          <UnderlineIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-    </ToggleGroup>
-  ),
   parameters: {
+    controls: { hideNoControlsWarning: true },
     docs: {
       source: {
         code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
 
-<ToggleGroup type="single" aria-label="Text formatting" size="md" variant="outline">
+// Same items, swap \`variant\` ("default" | "outline") and \`size\` ("sm" | "md" | "lg"):
+<ToggleGroup type="single" aria-label="Text formatting" variant="outline" size="sm">
   <ToggleGroup.Item value="bold" aria-label="Bold">
     <BoldIcon /> {/* your icon */}
   </ToggleGroup.Item>
@@ -168,148 +184,26 @@ export const Outline: Story = {
       },
     },
   },
-};
-
-export const Small: Story = {
-  name: "Size · Small",
-  args: { type: "single" as const },
   render: () => (
-    <ToggleGroup
-      type="single"
-      aria-label="Text formatting"
-      size="sm"
-      variant="default"
-    >
-      <ToggleGroup.Item value="bold" aria-label="Bold">
-        <span className={iconBox}>
-          <BoldIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-      <ToggleGroup.Item value="italic" aria-label="Italic">
-        <span className={iconBox}>
-          <ItalicIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-      <ToggleGroup.Item value="underline" aria-label="Underline">
-        <span className={iconBox}>
-          <UnderlineIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-    </ToggleGroup>
+    <div className={statesGrid}>
+      {VARIANTS.map((variant) => (
+        <React.Fragment key={variant}>
+          <span className={`${stateCaption} ui:capitalize`}>{variant}</span>
+          <div className="ui:flex ui:items-center ui:gap-4">
+            {SIZES.map((size) => (
+              <ToggleGroup
+                key={size}
+                type="single"
+                aria-label="Text formatting"
+                variant={variant}
+                size={size}
+              >
+                <FormattingItems />
+              </ToggleGroup>
+            ))}
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
   ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
-
-<ToggleGroup type="single" aria-label="Text formatting" size="sm" variant="default">
-  <ToggleGroup.Item value="bold" aria-label="Bold">
-    <BoldIcon /> {/* your icon */}
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="italic" aria-label="Italic">
-    <ItalicIcon /> {/* your icon */}
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="underline" aria-label="Underline">
-    <UnderlineIcon /> {/* your icon */}
-  </ToggleGroup.Item>
-</ToggleGroup>`,
-      },
-    },
-  },
-};
-
-export const Large: Story = {
-  name: "Size · Large",
-  args: { type: "single" as const },
-  render: () => (
-    <ToggleGroup
-      type="single"
-      aria-label="Text formatting"
-      size="lg"
-      variant="default"
-    >
-      <ToggleGroup.Item value="bold" aria-label="Bold">
-        <span className={iconBox}>
-          <BoldIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-      <ToggleGroup.Item value="italic" aria-label="Italic">
-        <span className={iconBox}>
-          <ItalicIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-      <ToggleGroup.Item value="underline" aria-label="Underline">
-        <span className={iconBox}>
-          <UnderlineIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-    </ToggleGroup>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
-
-<ToggleGroup type="single" aria-label="Text formatting" size="lg" variant="default">
-  <ToggleGroup.Item value="bold" aria-label="Bold">
-    <BoldIcon /> {/* your icon */}
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="italic" aria-label="Italic">
-    <ItalicIcon /> {/* your icon */}
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="underline" aria-label="Underline">
-    <UnderlineIcon /> {/* your icon */}
-  </ToggleGroup.Item>
-</ToggleGroup>`,
-      },
-    },
-  },
-};
-
-export const Disabled: Story = {
-  args: { type: "single" as const },
-  render: () => (
-    <ToggleGroup
-      type="single"
-      aria-label="Text formatting"
-      size="md"
-      variant="outline"
-      disabled
-    >
-      <ToggleGroup.Item value="bold" aria-label="Bold">
-        <span className={iconBox}>
-          <BoldIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-      <ToggleGroup.Item value="italic" aria-label="Italic">
-        <span className={iconBox}>
-          <ItalicIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-      <ToggleGroup.Item value="underline" aria-label="Underline">
-        <span className={iconBox}>
-          <UnderlineIcon className="ui:size-full" />
-        </span>
-      </ToggleGroup.Item>
-    </ToggleGroup>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { ToggleGroup } from "@obel-arg/malbec-ui";
-
-<ToggleGroup type="single" aria-label="Text formatting" size="md" variant="outline" disabled>
-  <ToggleGroup.Item value="bold" aria-label="Bold">
-    <BoldIcon /> {/* your icon */}
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="italic" aria-label="Italic">
-    <ItalicIcon /> {/* your icon */}
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="underline" aria-label="Underline">
-    <UnderlineIcon /> {/* your icon */}
-  </ToggleGroup.Item>
-</ToggleGroup>`,
-      },
-    },
-  },
 };

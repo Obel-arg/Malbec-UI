@@ -33,7 +33,12 @@ function fieldIsInvalid(meta: {
  * typed form, then `form.AppField` to bind controls — `name` is keyof-checked
  * against your `defaultValues`, and `field.state.value` is typed accordingly.
  *
+ * Import it from `@obel-arg/malbec-ui/form` and install `@tanstack/react-form` (an optional
+ * peer: apps without forms don't need it).
+ *
  * ```tsx
+ * import { Form, useForm } from "@obel-arg/malbec-ui/form";
+ *
  * const form = useForm({
  *   defaultValues: { email: "" },
  *   validators: { onSubmit: schema },
@@ -82,7 +87,8 @@ export const Default: Story = {
       source: {
         code: `import { useState } from "react";
 import { z } from "zod";
-import { Button, Field, Form, Input, useForm } from "@obel-arg/malbec-ui";
+import { Button, Field, Input } from "@obel-arg/malbec-ui";
+import { Form, useForm } from "@obel-arg/malbec-ui/form";
 
 const profileSchema = z.object({
   title: z
@@ -299,7 +305,6 @@ import {
   DatePicker,
   Field,
   FileDropzone,
-  Form,
   Input,
   InputOtp,
   Label,
@@ -307,8 +312,8 @@ import {
   Select,
   Textarea,
   ToggleGroup,
-  useForm,
 } from "@obel-arg/malbec-ui";
+import { Form, useForm } from "@obel-arg/malbec-ui/form";
 
 /** True once the field has been visited (touched/blurred) AND has errors. */
 function fieldIsInvalid(meta: {
@@ -986,7 +991,8 @@ export const InvalidByDefault: Story = {
       source: {
         code: `import { useEffect } from "react";
 import { z } from "zod";
-import { Button, Field, Form, Input, useForm } from "@obel-arg/malbec-ui";
+import { Button, Field, Input } from "@obel-arg/malbec-ui";
+import { Form, useForm } from "@obel-arg/malbec-ui/form";
 
 const fieldNames = ["title", "email" /* … */] as const;
 
@@ -1443,7 +1449,8 @@ export const ArrayField: Story = {
       source: {
         code: `import { useState } from "react";
 import { z } from "zod";
-import { Button, Form, Input, useForm } from "@obel-arg/malbec-ui";
+import { Button, Input } from "@obel-arg/malbec-ui";
+import { Form, useForm } from "@obel-arg/malbec-ui/form";
 
 type ContractRow = {
   rowKey: string;
@@ -1637,7 +1644,8 @@ export const PerFieldValidators: Story = {
   parameters: {
     docs: {
       source: {
-        code: `import { Button, Form, Input, useForm } from "@obel-arg/malbec-ui";
+        code: `import { Button, Input } from "@obel-arg/malbec-ui";
+import { Form, useForm } from "@obel-arg/malbec-ui/form";
 
 function UsernameForm() {
   const form = useForm({
@@ -1675,7 +1683,7 @@ function UsernameForm() {
         )}
       </form.AppField>
 
-      <Button htmlType="submit" size="sm">
+      <Button htmlType="submit" size="md">
         <Button.Text>Submit</Button.Text>
       </Button>
     </Form>
@@ -1724,7 +1732,7 @@ function UsernameForm() {
             </form.AppField>
 
             <div className="ui:mt-6 ui:flex ui:justify-end">
-              <Button htmlType="submit" size="sm">
+              <Button htmlType="submit" size="md">
                 <Button.Text>Submit</Button.Text>
               </Button>
             </div>
