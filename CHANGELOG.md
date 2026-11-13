@@ -34,6 +34,11 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
   - Publishing: `badge-destructive.css`.
   - Any `rounded-[8px]` you add to a `Badge`.
 
+### Breaking: one destructive red in light and dark
+- `--color-destructive` is now `#ef4444` in the light theme too (it was `#dc2626`), the same red the dark theme already used. It shows up in the destructive Button, error text and any `text-destructive` / `bg-destructive` of your own. `--color-destructive-foreground` stays `#fafafa`.
+- **Contrast:** `#fafafa` on `#ef4444` is 3.6:1. It meets AA for large text and UI components (3:1) but not for small text (4.5:1); `#dc2626` gave 4.6:1. Keep destructive button labels at the default 14px medium or larger, and don't use `bg-destructive` behind body-size text.
+- **What to delete:** any override that set the light-theme destructive to `#ef4444` by hand.
+
 ### Breaking: brand colour only on the primary CTA
 - **Button:** `outline`, `ghost` and `secondary` are always grey: `text-default` text, a `background-300` border on outline, `background-200` hover and a neutral focus ring.
   - There is no brand tone: the 1.x brand text and border on these variants is gone. `tone="neutral"` still compiles but is deprecated and does nothing.
