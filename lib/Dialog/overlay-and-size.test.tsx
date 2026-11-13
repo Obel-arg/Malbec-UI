@@ -191,3 +191,36 @@ describe("the overlay carries data-overlay", () => {
     expect(overlayOf("alert-dialog-overlay")).toBe("none");
   });
 });
+
+describe("Dialog spacing (2.0)", () => {
+  it("pads the panel 24px and centres the X on the 28px title line (24 + 14 - 16 = 22)", () => {
+    render(
+      <Dialog open>
+        <Dialog.Content showCloseButton aria-describedby={undefined}>
+          <Dialog.Header>
+            <Dialog.Title>Editar</Dialog.Title>
+          </Dialog.Header>
+        </Dialog.Content>
+      </Dialog>,
+    );
+    const content = slot("dialog-content");
+    expect(content).toContain("ui:p-6");
+    expect(content).not.toContain("ui:p-10");
+    const close = slot("dialog-close");
+    expect(close).toContain("ui:top-[22px]");
+    expect(close).toContain("ui:right-4");
+    expect(document.querySelector('[data-slot="dialog-content"]')?.hasAttribute("data-close-button")).toBe(true);
+    expect(slot("dialog-header")).toContain("ui:in-data-[close-button]:pr-8");
+  });
+
+  it("does not mark the content when there is no close button", () => {
+    render(
+      <Dialog open>
+        <Dialog.Content aria-describedby={undefined}>
+          <Dialog.Title>Editar</Dialog.Title>
+        </Dialog.Content>
+      </Dialog>,
+    );
+    expect(document.querySelector('[data-slot="dialog-content"]')?.hasAttribute("data-close-button")).toBe(false);
+  });
+});

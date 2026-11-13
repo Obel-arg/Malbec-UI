@@ -37,7 +37,7 @@ export const dialogContentVariants = cva([
   "ui:gap-4",
   "ui:rounded-[8px]",
   "ui:bg-background-100",
-  "ui:p-10",
+  "ui:p-6",
   "ui:outline-none",
   "ui:data-[state=open]:animate-malbec-dialog-in",
   "ui:data-[state=closed]:animate-malbec-dialog-out",
@@ -59,7 +59,7 @@ export const dialogContentVariants = cva([
 export type DialogSize = "sm" | "md" | "lg" | "xl";
 
 export const dialogCloseVariants = cva([
-  "ui:absolute ui:top-4 ui:right-4",
+  "ui:absolute ui:top-[22px] ui:right-4",
   "ui:inline-flex ui:size-8 ui:items-center ui:justify-center",
   "ui:cursor-pointer",
   "ui:rounded-[8px]",
@@ -71,7 +71,9 @@ export const dialogCloseVariants = cva([
 
 export const dialogCloseIconVariants = cva("ui:size-4");
 
-export const dialogHeaderVariants = cva("ui:flex ui:flex-col ui:text-left");
+export const dialogHeaderVariants = cva(
+  "ui:flex ui:flex-col ui:text-left ui:in-data-[close-button]:pr-8",
+);
 
 export const dialogTitleVariants = cva(
   "ui:text-[18px] ui:leading-7 ui:font-semibold ui:text-text-default",

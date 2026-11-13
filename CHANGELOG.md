@@ -39,6 +39,12 @@ The library's defaults now match the malbec-ux-ui spec approved by Isa. This rel
 - **Contrast:** `#fafafa` on `#ef4444` is 3.6:1. It meets AA for large text and UI components (3:1) but not for small text (4.5:1); `#dc2626` gave 4.6:1. Keep destructive button labels at the default 14px medium or larger, and don't use `bg-destructive` behind body-size text.
 - **What to delete:** any override that set the light-theme destructive to `#ef4444` by hand.
 
+### Breaking: Dialog padding is 24px and the X sits on the title line
+- **Dialog** pads its panel 24px instead of 40px, so every dialog is 32px narrower inside and shorter.
+- With `showCloseButton`, the X (32px) is centred on the first line of the 28px title and its glyph ends at the content edge. Before, it sat 6px above the title.
+- `Dialog.Header` keeps 32px clear on the right when the X is present, so a long title wraps before it instead of running under it.
+- **What to check:** dialogs where you compensated the 40px with negative margins or your own padding, and any X you positioned by hand.
+
 ### Breaking: brand colour only on the primary CTA
 - **Button:** `outline`, `ghost` and `secondary` are always grey: `text-default` text, a `background-300` border on outline, `background-200` hover and a neutral focus ring.
   - There is no brand tone: the 1.x brand text and border on these variants is gone. `tone="neutral"` still compiles but is deprecated and does nothing.
