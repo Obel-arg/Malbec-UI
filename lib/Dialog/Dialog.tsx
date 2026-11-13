@@ -120,6 +120,7 @@ const DialogContent = React.forwardRef<
         data-slot="dialog-content"
         data-size={size}
         data-overlay={overlay}
+        data-close-button={showCloseButton || undefined}
         className={cn(!unstyled && dialogContentVariants({ size, overlay }), className)}
         {...rest}
       >
