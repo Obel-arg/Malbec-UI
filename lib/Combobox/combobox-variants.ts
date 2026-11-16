@@ -155,6 +155,7 @@ export const comboboxItemVariants = cva(
     "ui:rounded-sm",
     "ui:px-2",
     "ui:py-1.5",
+    "ui:pointer-coarse:min-h-11",
     "ui:text-sm",
     "ui:font-normal",
     "ui:leading-tight",

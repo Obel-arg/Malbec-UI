@@ -45,7 +45,7 @@ export const commandGroupVariants = cva([
 
 /** 36px row: muted 16px icon, ink label, keys on the right; the selected one on background-200. */
 export const commandItemVariants = cva([
-  "ui:relative ui:flex ui:h-9 ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:justify-start ui:gap-3",
+  "ui:relative ui:flex ui:h-9 ui:pointer-coarse:min-h-11 ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:justify-start ui:gap-3",
   "ui:data-[disabled=true]:cursor-not-allowed",
   "ui:rounded-[8px] ui:px-3",
   "ui:text-sm ui:font-normal ui:text-malbec-ink",

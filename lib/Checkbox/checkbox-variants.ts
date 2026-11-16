@@ -9,6 +9,7 @@ export const checkboxRootVariants = cva(
   [
     "malbec-font-sans",
     "ui:group",
+    "ui:relative ui:hit-area",
     "ui:inline-flex",
     "ui:cursor-pointer",
     "ui:size-4",

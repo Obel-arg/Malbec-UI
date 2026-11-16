@@ -97,7 +97,7 @@ export const floatingBarTriggerTextVariants = cva([
 
 export const floatingBarCloseVariants = cva([
   "ui:inline-flex ui:items-center ui:justify-center ui:shrink-0",
-  "ui:size-[12px] ui:p-0",
+  "ui:relative ui:size-[12px] ui:p-0 ui:hit-area",
   "ui:bg-transparent ui:text-text-default ui:cursor-pointer",
   "ui:outline-none ui:rounded-[2px]",
   "ui:transition-opacity",

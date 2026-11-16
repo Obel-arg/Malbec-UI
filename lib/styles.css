@@ -767,3 +767,18 @@
     0 0 0 2px var(--color-background-100),
     0 0 0 4px var(--color-primary);
 }
+
+/*
+ * Touch screens: grows a small control's target to 44px with an invisible ::after, so nothing
+ * changes on screen. The control needs a positioned box (relative or absolute). Use it on
+ * controls with room around them; controls packed close together grow on coarse pointers instead.
+ */
+@utility hit-area {
+  @media (pointer: coarse) {
+    &::after {
+      content: "";
+      position: absolute;
+      inset: min(0px, calc((100% - 44px) / 2));
+    }
+  }
+}

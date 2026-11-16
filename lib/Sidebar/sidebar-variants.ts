@@ -167,7 +167,7 @@ const collapsedRowButton = [
 export const sidebarMenuButtonVariants = cva(
   [
     "ui:peer/menu-button",
-    "ui:flex ui:h-8 ui:w-full ui:items-center ui:gap-2 ui:rounded-md ui:p-2",
+    "ui:flex ui:h-8 ui:pointer-coarse:min-h-11 ui:w-full ui:items-center ui:gap-2 ui:rounded-md ui:p-2",
     "ui:text-left ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
     "ui:outline-none ui:transition-colors",
     "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
@@ -205,7 +205,7 @@ export const sidebarMenuSubItemVariants = cva("ui:relative ui:list-none ui:w-ful
 
 export const sidebarMenuSubButtonVariants = cva(
   [
-    "ui:flex ui:h-8 ui:w-full ui:items-center ui:gap-2 ui:rounded-md ui:p-2",
+    "ui:flex ui:h-8 ui:pointer-coarse:min-h-11 ui:w-full ui:items-center ui:gap-2 ui:rounded-md ui:p-2",
     "ui:text-left ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
     "ui:outline-none ui:transition-colors",
     "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",

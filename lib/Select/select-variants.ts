@@ -48,7 +48,7 @@ export const selectPopperWidthVariants = cva(
 export const selectViewportVariants = cva("ui:p-0");
 
 export const selectItemVariants = cva([
-  "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:rounded-sm ui:px-2 ui:py-1.5",
+  "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:rounded-sm ui:px-2 ui:py-1.5 ui:pointer-coarse:min-h-11",
   "ui:data-disabled:cursor-not-allowed",
   "ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default ui:outline-none",
   "ui:data-highlighted:bg-background-200",

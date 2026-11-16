@@ -16,7 +16,7 @@ export const radioGroupRootVariants = cva([
 export const radioGroupItemVariants = cva([
   "malbec-font-sans",
   "ui:box-border",
-  "ui:relative",
+  "ui:relative ui:hit-area",
   "ui:aspect-square",
   "ui:size-4",
   "ui:min-h-4",

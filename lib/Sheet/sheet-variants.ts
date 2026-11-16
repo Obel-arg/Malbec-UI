@@ -80,7 +80,7 @@ export const sheetContentVariants = cva(
 export type SheetSize = "sm" | "md" | "lg" | "xl";
 
 export const sheetCloseVariants = cva([
-  "ui:absolute ui:top-2 ui:right-2",
+  "ui:absolute ui:top-2 ui:right-2 ui:hit-area",
   "ui:inline-flex ui:size-8 ui:items-center ui:justify-center",
   "ui:cursor-pointer",
   "ui:rounded-[8px]",

@@ -60,7 +60,7 @@ export const dialogContentVariants = cva([
 export type DialogSize = "sm" | "md" | "lg" | "xl";
 
 export const dialogCloseVariants = cva([
-  "ui:absolute ui:top-[22px] ui:right-4",
+  "ui:absolute ui:top-[22px] ui:right-4 ui:hit-area",
   "ui:inline-flex ui:size-8 ui:items-center ui:justify-center",
   "ui:cursor-pointer",
   "ui:rounded-[8px]",

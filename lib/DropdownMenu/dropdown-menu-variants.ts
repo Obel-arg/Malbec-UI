@@ -32,7 +32,7 @@ export const dropdownMenuSubContentVariants = cva([
 export const dropdownMenuItemVariants = cva([
   "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
   "ui:data-disabled:cursor-not-allowed",
-  "ui:px-2 ui:py-1.5",
+  "ui:px-2 ui:py-1.5 ui:pointer-coarse:min-h-11",
   "ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default ui:outline-none",
   "ui:data-highlighted:bg-background-200",
   "ui:data-disabled:pointer-events-none ui:data-disabled:opacity-50",
@@ -42,7 +42,7 @@ export const dropdownMenuItemVariants = cva([
 export const dropdownMenuSubTriggerVariants = cva([
   "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
   "ui:data-disabled:cursor-not-allowed",
-  "ui:px-2 ui:py-1.5",
+  "ui:px-2 ui:py-1.5 ui:pointer-coarse:min-h-11",
   "ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default ui:outline-none",
   "ui:data-highlighted:bg-background-200",
   "ui:data-[state=open]:bg-background-200",

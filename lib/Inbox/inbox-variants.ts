@@ -35,7 +35,7 @@ export const inboxFilterTriggerVariants = cva([
 /** Icon button used for the top-right more-actions trigger. */
 export const inboxIconButtonVariants = cva([
   "ui:inline-flex ui:items-center ui:justify-center ui:cursor-pointer",
-  "ui:size-5 ui:p-[3px] ui:rounded-[4px] ui:bg-transparent ui:border-0",
+  "ui:size-5 ui:pointer-coarse:size-9 ui:p-[3px] ui:rounded-[4px] ui:bg-transparent ui:border-0",
   "ui:text-text-default-muted ui:hover:text-text-default ui:hover:bg-background-200",
   "ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   "ui:transition-colors",
@@ -182,7 +182,7 @@ export const inboxItemHoverBarVariants = cva([
 export const inboxItemHoverActionVariants = cva(
   [
     "ui:inline-flex ui:items-center ui:justify-center ui:cursor-pointer",
-    "ui:size-5 ui:p-[5px] ui:rounded-[4px] ui:border-0 ui:bg-transparent",
+    "ui:size-5 ui:pointer-coarse:size-9 ui:p-[5px] ui:rounded-[4px] ui:border-0 ui:bg-transparent",
     "ui:text-text-default-muted ui:hover:text-text-default ui:hover:bg-background-200",
     "ui:outline-none ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-inset",
     "ui:transition-colors",
