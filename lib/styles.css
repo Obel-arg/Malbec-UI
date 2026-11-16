@@ -113,8 +113,40 @@
     table-layout: auto !important;
   }
   /* A `table-fixed` colgroup would box the card into its first column's width. */
-  [data-stack-on-mobile] table > thead,
   [data-stack-on-mobile] table > colgroup {
+    display: none;
+  }
+  /*
+   * The header keeps only its controls (sort buttons, select all) as a row of chips above the
+   * cards; plain column names already show in each card.
+   */
+  [data-stack-on-mobile] table > thead {
+    display: block;
+  }
+  [data-stack-on-mobile] table > thead > tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    height: auto !important;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--color-background-300);
+  }
+  [data-stack-on-mobile] table > thead > tr > th {
+    position: static !important;
+    display: flex;
+    align-items: center;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+  [data-stack-on-mobile] table > thead > tr > th:not(:has(button, input)) {
+    display: none;
+  }
+  [data-stack-on-mobile] table > thead > tr:not(:has(button, input)) {
     display: none;
   }
   [data-stack-on-mobile] table > tbody,

@@ -59,4 +59,14 @@ describe("Table stickyHeader", () => {
     expect(shell.className).toContain("ui:max-h-[320px]");
     expect(container.querySelector("thead")!.className).toContain("ui:[&_th]:sticky");
   });
+
+  it("keeps the header's controls (sort, select all) as a row of chips on a phone", () => {
+    // Hiding the whole <thead> took sorting and "select all" away on a phone.
+    const css = readFileSync("lib/styles.css", "utf8");
+    const phone = css.slice(css.indexOf("@media (max-width: 639px) {\n  [data-stack-on-mobile]"));
+    expect(phone).not.toMatch(/\[data-stack-on-mobile\] table > thead,\s*\[data-stack-on-mobile\] table > colgroup \{\s*display: none;/);
+    expect(phone).toMatch(/\[data-stack-on-mobile\] table > thead > tr \{[^}]*display: flex;[^}]*flex-wrap: wrap;/);
+    // Header cells without a control (plain column names) stay hidden.
+    expect(phone).toMatch(/\[data-stack-on-mobile\] table > thead > tr > th:not\(:has\(button, input\)\) \{\s*display: none;/);
+  });
 });
