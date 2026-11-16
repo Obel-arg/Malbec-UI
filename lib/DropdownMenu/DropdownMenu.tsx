@@ -337,6 +337,8 @@ const DropdownMenuSubTrigger = React.forwardRef<
       onPointerEnter={(event) => {
         onPointerEnter?.(event);
         if (event.defaultPrevented) return;
+        // Only a mouse hovers: a touch opens the submenu on tap, without the hover timer.
+        if (event.pointerType !== "mouse") return;
         if (event.currentTarget instanceof HTMLElement) {
           relaySyntheticPointerMove(event.currentTarget, event);
         }

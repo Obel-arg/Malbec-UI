@@ -177,6 +177,9 @@ export const inboxItemHoverBarVariants = cva([
   "ui:opacity-0 ui:pointer-events-none ui:transition-opacity",
   "ui:group-hover/inbox-item:opacity-100 ui:group-hover/inbox-item:pointer-events-auto",
   "ui:group-focus-within/inbox-item:opacity-100 ui:group-focus-within/inbox-item:pointer-events-auto",
+  // Touch screens have no hover: the bar is always shown, in the row's flow so it covers nothing.
+  "ui:pointer-coarse:static ui:pointer-coarse:mt-2 ui:pointer-coarse:w-fit",
+  "ui:pointer-coarse:opacity-100 ui:pointer-coarse:pointer-events-auto",
 ]);
 
 export const inboxItemHoverActionVariants = cva(

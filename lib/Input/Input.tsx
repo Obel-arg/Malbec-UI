@@ -12,6 +12,40 @@ export type InputIconProps = React.ComponentPropsWithoutRef<"span"> & {
   side?: "start" | "end";
 };
 
+/**
+ * The lock of a `locked` input with its reason in a tooltip. A tooltip ignores taps, so on a
+ * touch screen a tap toggles it (a tap outside closes it); a mouse keeps the hover.
+ */
+function LockReason({ reason }: { reason: string }) {
+  const [open, setOpen] = React.useState(false);
+  const pointer = React.useRef("mouse");
+  return (
+    <Tooltip.Provider>
+      <Tooltip open={open} onOpenChange={setOpen}>
+        <Tooltip.Trigger asChild>
+          <span
+            data-lock-trigger=""
+            className="ui:relative ui:hit-area ui:flex ui:cursor-default"
+            onPointerDown={(e) => {
+              pointer.current = e.pointerType;
+              // Keep the tooltip from closing on pointerdown: the tap toggles it on click.
+              if (e.pointerType !== "mouse") e.preventDefault();
+            }}
+            onClick={(e) => {
+              if (pointer.current === "mouse") return;
+              e.preventDefault();
+              setOpen((o) => !o);
+            }}
+          >
+            <Lock className="ui:size-3.5" />
+          </span>
+        </Tooltip.Trigger>
+        <Tooltip.Content>{reason}</Tooltip.Content>
+      </Tooltip>
+    </Tooltip.Provider>
+  );
+}
+
 const InputIcon = React.forwardRef<HTMLSpanElement, InputIconProps>(
   function InputIcon({ side = "start", className, children, ...rest }, ref) {
     return (
@@ -79,16 +113,7 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   const lockIcon = locked ? (
     <InputIcon key="lock" side="end" data-slot="input-lock" className="ui:opacity-100 ui:text-text-default-muted">
       {lockReason ? (
-        <Tooltip.Provider>
-          <Tooltip>
-            <Tooltip.Trigger asChild>
-              <span className="ui:flex ui:cursor-default">
-                <Lock className="ui:size-3.5" />
-              </span>
-            </Tooltip.Trigger>
-            <Tooltip.Content>{lockReason}</Tooltip.Content>
-          </Tooltip>
-        </Tooltip.Provider>
+        <LockReason reason={lockReason} />
       ) : (
         <Lock className="ui:size-3.5" />
       )}
