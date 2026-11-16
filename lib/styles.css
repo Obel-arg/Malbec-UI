@@ -181,7 +181,7 @@
     text-align: left !important;
     white-space: normal !important;
     font-size: 13px;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
   [data-stack-on-mobile] table > tbody > tr > *:first-child,
   [data-stack-on-mobile] table > tbody > tr > [colspan],
@@ -200,6 +200,49 @@
   }
   [data-stack-on-mobile] table > tbody > tr > *:empty {
     display: none;
+  }
+  /* A value next to a chip ("13/02/2026" + "+2 fechas") wraps as a whole instead of splitting. */
+  [data-stack-on-mobile] table > tbody > tr > * > :where(div, span) {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+  /*
+   * The selection checkbox sits in the top-left corner, on the line of the first value, and the
+   * row's actions (the last cell, when it holds a button) in the top-right corner, unlabelled.
+   */
+  [data-stack-on-mobile] table > tbody > tr {
+    position: relative;
+  }
+  /* `:has()` can't nest, so these read the cell from the row with a descendant selector. */
+  [data-stack-on-mobile] table > tbody > tr:has(> * [role="checkbox"]) {
+    padding-left: 44px;
+  }
+  [data-stack-on-mobile] table > tbody > tr > :has([role="checkbox"]) {
+    position: absolute !important;
+    /* Out of the first-cell span: a grid area would become its containing block. */
+    grid-column: auto;
+    top: 10px;
+    left: 12px;
+    align-items: flex-start;
+  }
+  [data-stack-on-mobile] table > tbody > tr:has(> :last-child button):not(:has(> :last-child [role="checkbox"])) {
+    padding-right: 44px;
+  }
+  [data-stack-on-mobile] table > tbody > tr > :last-child:has(button):not(:has([role="checkbox"])) {
+    position: absolute !important;
+    top: 6px;
+    right: 8px;
+  }
+  [data-stack-on-mobile] table > tbody > tr > :last-child:has(button):not(:has([role="checkbox"]))::after {
+    content: none !important;
+  }
+  /* With the checkbox out of the grid, the cell after it is the card's title. */
+  [data-stack-on-mobile] table > tbody > tr > :has([role="checkbox"]):first-child + * {
+    grid-column: 1 / -1;
+    font-weight: 500;
+  }
+  [data-stack-on-mobile] table > tbody > tr > :has([role="checkbox"]):first-child + *::after {
+    content: none !important;
   }
 }
 
