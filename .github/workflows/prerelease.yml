@@ -1,0 +1,70 @@
+name: Prerelease to GitHub Packages
+
+# Publishes a release candidate from a release branch so apps can try a major
+# before it reaches main. Each push publishes <package.json version>-rc.<run
+# number> under the `next` dist-tag. The version is set on the runner only:
+# nothing is committed, tagged or released, and `latest` is untouched.
+# publish.yml still publishes the final version when the branch merges to main.
+
+on:
+  push:
+    branches:
+      - 'release/**'
+  workflow_dispatch:
+
+concurrency:
+  group: prerelease-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prerelease:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          registry-url: https://npm.pkg.github.com
+          scope: '@obel-arg'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # run_number only grows for this workflow, so a version is never reused
+      # (GitHub Packages refuses to republish one).
+      - name: Set the release-candidate version
+        id: version
+        run: |
+          BASE="$(node -p "require('./package.json').version")"
+          VERSION="${BASE}-rc.${{ github.run_number }}"
+          node -e '
+            const fs = require("fs");
+            const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+            pkg.version = process.argv[1];
+            fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
+          ' "$VERSION"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Will publish ${VERSION} under the 'next' dist-tag."
+
+      - name: Build
+        run: pnpm build
+
+      - name: Smoke-test the published entry points
+        run: node scripts/smoke-exports.mjs
+
+      - name: Publish to GitHub Packages
+        run: pnpm publish --no-git-checks --tag next
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: echo "Published \`@obel-arg/malbec-ui@${{ steps.version.outputs.version }}\` (dist-tag \`next\`)." >> "$GITHUB_STEP_SUMMARY"
