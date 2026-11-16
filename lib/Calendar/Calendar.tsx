@@ -135,8 +135,8 @@ export function CalendarDayButton({
 }
 
 const defaultClassNames: Record<string, string> = {
-  /** Always row: matches shadcn range calendar (two months side by side). */
-  months: "ui:relative ui:flex ui:w-full ui:flex-row ui:gap-4",
+  /** Two months side by side (shadcn range calendar) from sm; stacked on a phone, where they don't fit. */
+  months: "ui:relative ui:flex ui:w-full ui:flex-col ui:gap-4 ui:sm:flex-row",
   month: "ui:flex ui:min-w-0 ui:flex-1 ui:flex-col",
   /** Keep heading clear of the shared nav row. */
   month_caption:
@@ -190,7 +190,7 @@ const defaultComponents = {
         )}
       >
         <select
-          className="ui:absolute ui:inset-0 ui:h-full ui:w-full ui:cursor-pointer ui:appearance-none ui:bg-transparent ui:opacity-0 ui:outline-none"
+          className="ui:absolute ui:inset-0 ui:h-full ui:w-full ui:cursor-pointer ui:appearance-none ui:bg-transparent ui:text-[16px] ui:opacity-0 ui:outline-none"
           value={value}
           onChange={onChange}
           {...props}

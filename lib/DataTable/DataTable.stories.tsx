@@ -85,6 +85,7 @@ function useEventColumns() {
             imageUrl={row.original.imageUrl}
           />
         ),
+        meta: { label: "Artista", mobile: "title" },
       },
       {
         accessorKey: "venue",
@@ -98,6 +99,7 @@ function useEventColumns() {
             {String(ctx.getValue())}
           </span>
         ),
+        meta: { label: "Venue", mobile: "subtitle" },
       },
       {
         id: "fechas",
@@ -114,6 +116,7 @@ function useEventColumns() {
             chipShadow={row.original.dateChipShadow}
           />
         ),
+        meta: { label: "Fechas", mobile: "subtitle" },
       },
       {
         id: "status",
@@ -128,6 +131,7 @@ function useEventColumns() {
             <StatusLabel status={ctx.row.original.status} />
           </div>
         ),
+        meta: { label: "Status", mobile: "trailing" },
       },
       {
         id: "actions",
@@ -145,6 +149,7 @@ function useEventColumns() {
           </div>
         ),
         enableSorting: false,
+        meta: { mobile: "trailing" },
       },
     ],
     [],
@@ -154,12 +159,12 @@ function useEventColumns() {
 function DataTableWithColumns(
   props: Pick<
     DataTableProps<EventRow, unknown>,
-    "data" | "emptyLabel" | "tableChildrenStart"
+    "data" | "emptyLabel" | "tableChildrenStart" | "mobileLayout"
   > & { rowSelection?: boolean },
 ) {
   const columns = useEventColumns();
   return (
-    <div className="ui:mx-auto ui:max-w-[1085px]">
+    <div className="ui:mx-auto ui:w-full ui:max-w-[1085px]">
       <DataTable
         tableChildrenStart={props.tableChildrenStart}
         getRowId={(r) => r.id}
@@ -167,6 +172,7 @@ function DataTableWithColumns(
         columns={columns}
         data={props.data}
         emptyLabel={props.emptyLabel}
+        mobileLayout={props.mobileLayout}
       />
     </div>
   );
@@ -486,6 +492,51 @@ function EventsTable({ data }: { data: EventRow[] }) {
       data={data}
       emptyLabel="Sin eventos"
       tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
+    />
+  );
+}`,
+      },
+    },
+  },
+};
+
+export const ListOnMobile: Story = {
+  name: "List on a phone (mobileLayout)",
+  render: () => (
+    <DataTableWithColumns
+      data={eventRowsSample}
+      emptyLabel="Sin eventos"
+      rowSelection
+      mobileLayout="list"
+      tableChildrenStart={colgroup}
+    />
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `// Below 640px the table becomes a list: one line per row. Each column says where it goes
+// with meta.mobile; meta.label names it in the sort menu when the header isn't a string.
+const columns: ColumnDef<EventRow>[] = [
+  { id: "artist", accessorKey: "artist", header: /* … */, cell: /* … */,
+    meta: { label: "Artista", mobile: "title" } },
+  { accessorKey: "venue", header: /* … */, meta: { label: "Venue", mobile: "subtitle" } },
+  { id: "fechas", accessorKey: "dateLabel", header: /* … */, cell: /* … */,
+    meta: { label: "Fechas", mobile: "subtitle" } },
+  { id: "status", accessorKey: "status", header: /* … */, cell: /* … */,
+    meta: { label: "Status", mobile: "trailing" } },
+  { id: "actions", cell: () => <MoreActionButton />, enableSorting: false,
+    meta: { mobile: "trailing" } },
+];
+
+function EventsTable({ data }: { data: EventRow[] }) {
+  return (
+    <DataTable
+      getRowId={(r) => r.id}
+      rowSelection
+      mobileLayout="list"
+      columns={columns}
+      data={data}
+      emptyLabel="Sin eventos"
     />
   );
 }`,

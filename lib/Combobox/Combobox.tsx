@@ -383,7 +383,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
             data-mode={mode}
             data-disabled={disabled || undefined}
             className={cn(
-              "ui:relative ui:box-border ui:block ui:w-full ui:min-w-[200px] ui:max-w-full",
+              "ui:relative ui:box-border ui:block ui:w-full ui:min-w-[min(200px,100%)] ui:max-w-full",
               className,
             )}
             style={rootStyle}
@@ -638,7 +638,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
             <button
               type="button"
               data-slot="combobox-clear"
-              className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:focus-visible:ring-2 ui:focus-visible:ring-focus"
+              className="ui:inline-flex ui:size-7 ui:pointer-coarse:size-9 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:focus-visible:ring-2 ui:focus-visible:ring-focus"
               onMouseDown={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -667,7 +667,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
               aria-label={ctx.open ? labels.close : labels.open}
               aria-expanded={ctx.open}
               aria-controls={ctx.listId}
-              className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:opacity-50 ui:outline-none ui:transition-colors ui:hover:opacity-100 ui:focus-visible:ring-2 ui:focus-visible:ring-focus"
+              className="ui:inline-flex ui:size-7 ui:pointer-coarse:size-9 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:opacity-50 ui:outline-none ui:transition-colors ui:hover:opacity-100 ui:focus-visible:ring-2 ui:focus-visible:ring-focus"
               onMouseDown={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -698,7 +698,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
               <button
                 type="button"
                 data-slot="combobox-clear"
-                className="ui:inline-flex ui:size-7 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:focus-visible:ring-2 ui:focus-visible:ring-focus"
+                className="ui:inline-flex ui:size-7 ui:pointer-coarse:size-9 ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:transition-colors ui:hover:bg-background-200 ui:focus-visible:ring-2 ui:focus-visible:ring-focus"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={clear}
                 aria-label={labels.clearSelection}
@@ -1196,7 +1196,7 @@ const ComboboxChip = React.forwardRef<HTMLSpanElement, ComboboxChipProps>(
           <button
             type="button"
             data-slot="combobox-chip-remove"
-            className="ui:inline-flex ui:size-5 ui:cursor-pointer ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:hover:bg-background-100"
+            className="ui:relative ui:hit-area ui:inline-flex ui:size-5 ui:cursor-pointer ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:hover:bg-background-100"
             onMouseDown={(e) => e.preventDefault()}
             onClick={handleRemove}
             aria-label={labels.remove}

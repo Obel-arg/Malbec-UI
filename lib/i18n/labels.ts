@@ -77,6 +77,11 @@ export interface MalbecLabels {
   sortDescending: string;
   /** SortableColumnHeader, column sorted descending. */
   clearSort: string;
+  /** DataTable list layout (phone): the sort menu trigger, before the column name. */
+  sortBy: string;
+  /** DataTable list layout (phone): sort direction options. */
+  ascending: string;
+  descending: string;
   /** NotificationBell aria-label; the dot shows no number, so the count travels here. */
   notifications: (unreadCount: number) => string;
   /** ConfirmDialog buttons and reason field. */
@@ -142,6 +147,9 @@ export const labelsEn: MalbecLabels = {
   sortAscending: "Sort ascending",
   sortDescending: "Sort descending",
   clearSort: "Clear sort",
+  sortBy: "Sort by",
+  ascending: "Ascending",
+  descending: "Descending",
   notifications: (count) => `Notifications${unreadSuffix(count)}`,
   confirm: "Confirm",
   cancel: "Cancel",
@@ -201,6 +209,9 @@ export const labelsEs: MalbecLabels = {
   sortAscending: "Ordenar ascendente",
   sortDescending: "Ordenar descendente",
   clearSort: "Quitar orden",
+  sortBy: "Ordenar por",
+  ascending: "Ascendente",
+  descending: "Descendente",
   notifications: (count) => `Notificaciones${unreadSuffix(count)}`,
   confirm: "Confirmar",
   cancel: "Cancelar",

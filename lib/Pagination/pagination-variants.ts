@@ -9,6 +9,7 @@ export const paginationContentVariants = cva([
   "malbec-font-sans",
   "ui:flex",
   "ui:flex-row",
+  "ui:flex-wrap",
   "ui:items-center",
   "ui:gap-1",
   "ui:w-full",

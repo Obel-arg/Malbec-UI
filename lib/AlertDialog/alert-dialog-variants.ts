@@ -19,7 +19,8 @@ export const alertDialogContentVariants = cva(
   [
     "ui:malbec-font-sans",
     "ui:fixed ui:top-1/2 ui:left-1/2 ui:z-(--ui-z-overlay)",
-    "ui:grid ui:w-full ui:translate-x-[-50%] ui:translate-y-[-50%]",
+    "ui:grid ui:w-[calc(100vw-2rem)] ui:translate-x-[-50%] ui:translate-y-[-50%]",
+    "ui:max-h-[calc(100dvh-2rem)] ui:overflow-y-auto",
     "ui:gap-4",
     "ui:rounded-lg",
     "ui:border ui:border-background-300/30",
@@ -52,7 +53,7 @@ export const alertDialogFooterVariants = cva("ui:w-full", {
     size: {
       /** 56:608: cancel + action in a row, end-aligned */
       default:
-        "ui:flex ui:flex-row ui:items-center ui:justify-end ui:gap-2",
+        "ui:flex ui:flex-row ui:flex-wrap ui:items-center ui:justify-end ui:gap-2",
       /** Stacked full-width: put `<Action/>` first, then `<Cancel/>` in markup (primary on top) */
       sm: "ui:flex ui:w-full ui:flex-col ui:gap-2",
     },

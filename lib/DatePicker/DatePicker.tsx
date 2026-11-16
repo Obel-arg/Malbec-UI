@@ -328,7 +328,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
             ref={ref}
             data-slot="date-picker"
             data-state={state}
-            className={cn("malbec-font-sans ui:w-[280px]", className)}
+            className={cn("malbec-font-sans ui:w-[min(100%,280px)]", className)}
           >
             {children}
           </div>

@@ -5,7 +5,9 @@ import { popoverSurfaceMotionClasses } from "../Popover/popover-variants";
 export const dropdownMenuContentVariants = cva([
   "malbec-font-sans",
   /** Above modal overlays (`Dialog` / `Sheet` use `z-50`). */
-  "ui:z-(--ui-z-floating) ui:min-w-48 ui:overflow-hidden ui:rounded-md",
+  "ui:z-(--ui-z-floating) ui:min-w-48 ui:rounded-md",
+  /** A long menu scrolls inside the space Radix leaves instead of being clipped. */
+  "ui:max-h-(--radix-dropdown-menu-content-available-height) ui:overflow-y-auto",
   "ui:border ui:border-background-300 ui:bg-background-100 ui:p-1",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
   "ui:dark:bg-background-200",
@@ -17,7 +19,8 @@ export const dropdownMenuContentVariants = cva([
 export const dropdownMenuSubContentVariants = cva([
   "malbec-font-sans",
   /** Above root menu content (`z-100`) so the nested surface receives hover/focus. */
-  "ui:z-(--ui-z-floating-nested) ui:min-w-32 ui:overflow-hidden ui:rounded-md",
+  "ui:z-(--ui-z-floating-nested) ui:min-w-32 ui:rounded-md",
+  "ui:max-h-(--radix-dropdown-menu-content-available-height) ui:overflow-y-auto",
   "ui:border ui:border-background-300 ui:bg-background-100 ui:p-1",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
   "ui:dark:bg-background-200",
@@ -29,7 +32,7 @@ export const dropdownMenuSubContentVariants = cva([
 export const dropdownMenuItemVariants = cva([
   "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
   "ui:data-disabled:cursor-not-allowed",
-  "ui:px-2 ui:py-1.5",
+  "ui:px-2 ui:py-1.5 ui:pointer-coarse:min-h-11",
   "ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default ui:outline-none",
   "ui:data-highlighted:bg-background-200",
   "ui:data-disabled:pointer-events-none ui:data-disabled:opacity-50",
@@ -39,7 +42,7 @@ export const dropdownMenuItemVariants = cva([
 export const dropdownMenuSubTriggerVariants = cva([
   "ui:relative ui:flex ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:gap-2 ui:rounded-sm",
   "ui:data-disabled:cursor-not-allowed",
-  "ui:px-2 ui:py-1.5",
+  "ui:px-2 ui:py-1.5 ui:pointer-coarse:min-h-11",
   "ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default ui:outline-none",
   "ui:data-highlighted:bg-background-200",
   "ui:data-[state=open]:bg-background-200",

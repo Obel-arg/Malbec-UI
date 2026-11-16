@@ -6,6 +6,7 @@ import { Columns3 } from "lucide-react";
 import { Button } from "../Button/Button";
 import { DropdownMenu } from "../DropdownMenu/DropdownMenu";
 import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
+import { columnLabel } from "./column-label";
 
 export type DataTableColumnsToggleProps<TData> = {
   /** The TanStack table, from `DataTable`'s `toolbar={({ table }) => …}`. */
@@ -14,14 +15,6 @@ export type DataTableColumnsToggleProps<TData> = {
   label?: ReactNode;
   className?: string;
 };
-
-/** Name shown in the menu: `meta.label`, else a string `header`, else the column id. */
-function columnLabel<TData>(column: Column<TData, unknown>): ReactNode {
-  const meta = column.columnDef.meta as { label?: ReactNode } | undefined;
-  if (meta?.label != null) return meta.label;
-  const header = column.columnDef.header;
-  return typeof header === "string" ? header : column.id;
-}
 
 /**
  * Menu to show or hide columns of a `DataTable`. Lists every column that can hide

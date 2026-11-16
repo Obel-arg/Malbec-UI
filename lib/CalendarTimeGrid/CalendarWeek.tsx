@@ -203,6 +203,8 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
         role="region"
         aria-label={weekLabel}
         {...rest}
+        // Phone: the gutter plus seven 64px columns, scrolled sideways.
+        style={{ "--calendar-timegrid-min-width": "calc(3.5rem + 7 * 4rem)", ...rest.style } as React.CSSProperties}
       >
         {showWeekToolbar ? (
           <div

@@ -7,7 +7,7 @@ import { cva } from "class-variance-authority";
  */
 export const commandRootVariants = cva([
   "malbec-font-sans",
-  "ui:flex ui:h-full ui:w-full ui:max-w-[600px] ui:flex-col ui:items-stretch ui:overflow-hidden",
+  "ui:flex ui:h-full ui:min-h-0 ui:w-full ui:max-w-[600px] ui:flex-col ui:items-stretch ui:overflow-hidden",
   "ui:rounded-[12px] ui:border ui:border-solid ui:border-background-300",
   "ui:bg-background-100 ui:text-text-default",
 ]);
@@ -45,7 +45,7 @@ export const commandGroupVariants = cva([
 
 /** 36px row: muted 16px icon, ink label, keys on the right; the selected one on background-200. */
 export const commandItemVariants = cva([
-  "ui:relative ui:flex ui:h-9 ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:justify-start ui:gap-3",
+  "ui:relative ui:flex ui:h-9 ui:pointer-coarse:min-h-11 ui:w-full ui:cursor-pointer ui:select-none ui:items-center ui:justify-start ui:gap-3",
   "ui:data-[disabled=true]:cursor-not-allowed",
   "ui:rounded-[8px] ui:px-3",
   "ui:text-sm ui:font-normal ui:text-malbec-ink",
@@ -78,6 +78,8 @@ export const commandKbdVariants = cva([
 export const commandFooterVariants = cva([
   "ui:flex ui:w-full ui:items-center ui:gap-3.5 ui:border-t ui:border-background-300 ui:px-3.5 ui:py-2.5",
   "ui:text-xs ui:text-text-default-muted",
+  // Keyboard hints mean nothing on a touch screen.
+  "ui:pointer-coarse:hidden",
 ]);
 
 export const commandDialogOverlayVariants = cva([
@@ -89,7 +91,9 @@ export const commandDialogOverlayVariants = cva([
 ]);
 
 export const commandDialogContentVariants = cva([
-  "ui:fixed ui:top-[50%] ui:left-[50%] ui:z-(--ui-z-overlay) ui:w-full ui:max-w-[600px]",
+  "ui:fixed ui:top-[50%] ui:left-[50%] ui:z-(--ui-z-overlay) ui:w-[calc(100vw-2rem)] ui:max-w-[600px]",
+  // The list shrinks (and scrolls) so the input never leaves the screen.
+  "ui:flex ui:max-h-[calc(100dvh-2rem)] ui:flex-col",
   "ui:translate-x-[-50%] ui:translate-y-[-50%]",
   "ui:overflow-hidden ui:rounded-[12px] ui:border-0 ui:bg-transparent ui:p-0",
   FLOATING_SURFACE_SHADOW,

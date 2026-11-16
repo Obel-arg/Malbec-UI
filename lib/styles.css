@@ -113,8 +113,40 @@
     table-layout: auto !important;
   }
   /* A `table-fixed` colgroup would box the card into its first column's width. */
-  [data-stack-on-mobile] table > thead,
   [data-stack-on-mobile] table > colgroup {
+    display: none;
+  }
+  /*
+   * The header keeps only its controls (sort buttons, select all) as a row of chips above the
+   * cards; plain column names already show in each card.
+   */
+  [data-stack-on-mobile] table > thead {
+    display: block;
+  }
+  [data-stack-on-mobile] table > thead > tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    height: auto !important;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--color-background-300);
+  }
+  [data-stack-on-mobile] table > thead > tr > th {
+    position: static !important;
+    display: flex;
+    align-items: center;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+  [data-stack-on-mobile] table > thead > tr > th:not(:has(button, input)) {
+    display: none;
+  }
+  [data-stack-on-mobile] table > thead > tr:not(:has(button, input)) {
     display: none;
   }
   [data-stack-on-mobile] table > tbody,
@@ -149,7 +181,7 @@
     text-align: left !important;
     white-space: normal !important;
     font-size: 13px;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
   [data-stack-on-mobile] table > tbody > tr > *:first-child,
   [data-stack-on-mobile] table > tbody > tr > [colspan],
@@ -168,6 +200,49 @@
   }
   [data-stack-on-mobile] table > tbody > tr > *:empty {
     display: none;
+  }
+  /* A value next to a chip ("13/02/2026" + "+2 fechas") wraps as a whole instead of splitting. */
+  [data-stack-on-mobile] table > tbody > tr > * > :where(div, span) {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+  /*
+   * The selection checkbox sits in the top-left corner, on the line of the first value, and the
+   * row's actions (the last cell, when it holds a button) in the top-right corner, unlabelled.
+   */
+  [data-stack-on-mobile] table > tbody > tr {
+    position: relative;
+  }
+  /* `:has()` can't nest, so these read the cell from the row with a descendant selector. */
+  [data-stack-on-mobile] table > tbody > tr:has(> * [role="checkbox"]) {
+    padding-left: 44px;
+  }
+  [data-stack-on-mobile] table > tbody > tr > :has([role="checkbox"]) {
+    position: absolute !important;
+    /* Out of the first-cell span: a grid area would become its containing block. */
+    grid-column: auto;
+    top: 10px;
+    left: 12px;
+    align-items: flex-start;
+  }
+  [data-stack-on-mobile] table > tbody > tr:has(> :last-child button):not(:has(> :last-child [role="checkbox"])) {
+    padding-right: 44px;
+  }
+  [data-stack-on-mobile] table > tbody > tr > :last-child:has(button):not(:has([role="checkbox"])) {
+    position: absolute !important;
+    top: 6px;
+    right: 8px;
+  }
+  [data-stack-on-mobile] table > tbody > tr > :last-child:has(button):not(:has([role="checkbox"]))::after {
+    content: none !important;
+  }
+  /* With the checkbox out of the grid, the cell after it is the card's title. */
+  [data-stack-on-mobile] table > tbody > tr > :has([role="checkbox"]):first-child + * {
+    grid-column: 1 / -1;
+    font-weight: 500;
+  }
+  [data-stack-on-mobile] table > tbody > tr > :has([role="checkbox"]):first-child + *::after {
+    content: none !important;
   }
 }
 
@@ -670,7 +745,6 @@
   display: flex !important;
   align-items: center !important;
   gap: 1rem !important;
-  width: 384px !important;
   max-width: 100%;
   border-radius: 8px;
   box-sizing: border-box;
@@ -685,6 +759,13 @@
   border: 0 !important;
   border-left: 1px solid var(--color-background-300) !important;
   box-shadow: 0 0 2px 0 rgb(0 0 0 / 0.2) !important;
+}
+
+/* 384px from Sonner's mobile breakpoint up; below it Sonner fits the toast to the screen. */
+@media (min-width: 601px) {
+  [data-sonner-toast][data-styled]:not([data-type]) {
+    width: 384px !important;
+  }
 }
 
 [data-sonner-toast][data-styled]:not([data-type]) [data-content] {
@@ -766,4 +847,19 @@
   box-shadow:
     0 0 0 2px var(--color-background-100),
     0 0 0 4px var(--color-primary);
+}
+
+/*
+ * Touch screens: grows a small control's target to 44px with an invisible ::after, so nothing
+ * changes on screen. The control needs a positioned box (relative or absolute). Use it on
+ * controls with room around them; controls packed close together grow on coarse pointers instead.
+ */
+@utility hit-area {
+  @media (pointer: coarse) {
+    &::after {
+      content: "";
+      position: absolute;
+      inset: min(0px, calc((100% - 44px) / 2));
+    }
+  }
 }

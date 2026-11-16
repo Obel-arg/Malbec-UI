@@ -46,9 +46,9 @@ export const buttonVariants = cva(
         sm: "ui:h-9 ui:px-4 ui:py-[6px] ui:text-[12px] ui:leading-5",
         md: "ui:h-9 ui:px-4 ui:py-[6px] ui:text-[12px] ui:leading-5",
         lg: "ui:h-9 ui:px-4 ui:py-2 ui:text-[12px] ui:leading-5",
-        icon: "ui:h-9 ui:w-9 ui:p-0 ui:text-[12px]",
+        icon: "ui:relative ui:h-9 ui:w-9 ui:p-0 ui:text-[12px] ui:hit-area",
         /** 32px square for compact icon-only buttons (calendar arrows, toolbars). */
-        "icon-sm": "ui:h-8 ui:w-8 ui:p-0 ui:text-[12px]",
+        "icon-sm": "ui:relative ui:h-8 ui:w-8 ui:p-0 ui:text-[12px] ui:hit-area",
       },
     },
     compoundVariants: [

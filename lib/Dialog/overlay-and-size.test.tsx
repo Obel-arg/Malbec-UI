@@ -28,7 +28,7 @@ describe("Dialog", () => {
     const content = slot("dialog-content");
     expect(content).toContain(FLOATING_SHADOW);
     expect(content).not.toContain(VEILED_SHADOW);
-    expect(content).toContain("ui:max-w-[425px]");
+    expect(content).toContain("ui:w-[min(calc(100vw-2rem),425px)]");
   });
 
   it('overlay="veil" brings back the frosted veil and the short shadow', () => {
@@ -63,7 +63,7 @@ describe("Dialog", () => {
     const content = slot("dialog-content");
     expect(content).toContain(`ui:w-[min(calc(100vw-2rem),${px})]`);
     expect(content).toContain("ui:max-w-none");
-    expect(content).not.toContain("ui:max-w-[425px]");
+    expect(content).not.toContain("ui:w-[min(calc(100vw-2rem),425px)]");
   });
 });
 

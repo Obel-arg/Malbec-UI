@@ -103,7 +103,8 @@ export const comboboxFilterInputVariants = cva(
     "ui:border-0",
     "ui:bg-transparent",
     "ui:p-0",
-    "ui:text-sm",
+    // iOS zooms into a focused field under 16px: 16px on a phone, 14px from sm.
+    "ui:text-[16px] ui:sm:text-[14px]",
     "ui:font-normal",
     "ui:leading-tight",
     "ui:text-text-default",
@@ -154,6 +155,7 @@ export const comboboxItemVariants = cva(
     "ui:rounded-sm",
     "ui:px-2",
     "ui:py-1.5",
+    "ui:pointer-coarse:min-h-11",
     "ui:text-sm",
     "ui:font-normal",
     "ui:leading-tight",

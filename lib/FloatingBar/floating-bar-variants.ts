@@ -4,6 +4,8 @@ export const floatingBarVariants = cva(
   [
   "malbec-font-sans",
   "ui:inline-flex ui:items-center ui:gap-4",
+  // Never wider than the screen: the actions scroll sideways instead.
+  "ui:max-w-[calc(100vw-2rem)]",
   "ui:rounded-[10px] ui:border ui:border-background-300",
   "ui:bg-background-200 ui:text-text-default",
   "ui:px-5 ui:py-2",
@@ -22,7 +24,7 @@ export const floatingBarVariants = cva(
       placement: {
         inline: "",
         bottom:
-          "ui:fixed ui:bottom-10 ui:left-[calc(50%+var(--sidebar-offset,0px)/2)] ui:-translate-x-1/2 ui:z-[calc(var(--ui-z-overlay)-1)]",
+          "ui:fixed ui:bottom-[max(2.5rem,calc(env(safe-area-inset-bottom)+1rem))] ui:left-[calc(50%+var(--sidebar-offset,0px)/2)] ui:-translate-x-1/2 ui:z-[calc(var(--ui-z-overlay)-1)]",
       },
     },
     defaultVariants: { placement: "inline" },
@@ -39,7 +41,8 @@ export const floatingBarCountVariants = cva([
 ]);
 
 export const floatingBarActionsVariants = cva([
-  "ui:inline-flex ui:items-center ui:gap-2 ui:shrink-0",
+  "ui:inline-flex ui:min-w-0 ui:items-center ui:gap-2",
+  "ui:overflow-x-auto ui:[scrollbar-width:none] ui:[&::-webkit-scrollbar]:hidden",
 ]);
 
 export const floatingBarTriggerVariants = cva(
@@ -97,7 +100,7 @@ export const floatingBarTriggerTextVariants = cva([
 
 export const floatingBarCloseVariants = cva([
   "ui:inline-flex ui:items-center ui:justify-center ui:shrink-0",
-  "ui:size-[12px] ui:p-0",
+  "ui:relative ui:size-[12px] ui:p-0 ui:hit-area",
   "ui:bg-transparent ui:text-text-default ui:cursor-pointer",
   "ui:outline-none ui:rounded-[2px]",
   "ui:transition-opacity",

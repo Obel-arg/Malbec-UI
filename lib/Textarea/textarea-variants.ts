@@ -18,7 +18,8 @@ export const textareaVariants = cva([
   "ui:px-4",
   "ui:py-2",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
-  "ui:text-[14px]",
+  // iOS zooms into a focused field under 16px: 16px on a phone, 14px from sm.
+  "ui:text-[16px] ui:sm:text-[14px]",
   "ui:leading-5",
   "ui:tracking-[-0.42px]",
   "ui:text-text-default",

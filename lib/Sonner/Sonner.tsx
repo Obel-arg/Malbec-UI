@@ -7,6 +7,7 @@ import { cn } from "../utils/cn";
 import {
   mergeSonnerToastClassNames,
   sonnerDefaultToastClassNames,
+  sonnerMobileOffset,
   sonnerToasterStyle,
 } from "./sonner-variants";
 
@@ -23,6 +24,7 @@ const SonnerRoot = React.forwardRef<HTMLElement, SonnerProps>(function SonnerRoo
       theme={resolvedMode}
       className={cn("malbec-font-sans", className)}
       style={{ ...sonnerToasterStyle, ...style }}
+      mobileOffset={sonnerMobileOffset}
       toastOptions={{
         ...toastOptions,
         classNames: mergeSonnerToastClassNames(

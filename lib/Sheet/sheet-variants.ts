@@ -27,21 +27,29 @@ export const sheetContentVariants = cva(
       side: {
         top: [
           "ui:inset-x-0 ui:top-0 ui:border-b ui:border-background-300 ui:w-full",
+          "ui:max-h-[90dvh] ui:overflow-y-auto",
+          // Full-screen PWA: clear the notch (0 everywhere else).
+          "ui:pt-[max(1.5rem,env(safe-area-inset-top))]",
           "ui:data-[state=open]:animate-malbec-sheet-in-top",
           "ui:data-[state=closed]:animate-malbec-sheet-out-top",
         ],
         bottom: [
           "ui:inset-x-0 ui:bottom-0 ui:border-t ui:border-background-300 ui:w-full",
+          "ui:max-h-[90dvh] ui:overflow-y-auto",
+          // Full-screen PWA: clear the home indicator (0 everywhere else).
+          "ui:pb-[max(1.5rem,env(safe-area-inset-bottom))]",
           "ui:data-[state=open]:animate-malbec-sheet-in-bottom",
           "ui:data-[state=closed]:animate-malbec-sheet-out-bottom",
         ],
         left: [
-          "ui:top-0 ui:bottom-0 ui:left-0 ui:right-auto ui:h-full ui:w-[384px] ui:border-r ui:border-background-300",
+          "ui:top-0 ui:bottom-0 ui:left-0 ui:right-auto ui:h-full ui:w-[min(100vw,384px)] ui:border-r ui:border-background-300",
+          "ui:pt-[max(1.5rem,env(safe-area-inset-top))] ui:pb-[max(1.5rem,env(safe-area-inset-bottom))]",
           "ui:data-[state=open]:animate-malbec-sheet-in-left",
           "ui:data-[state=closed]:animate-malbec-sheet-out-left",
         ],
         right: [
-          "ui:top-0 ui:bottom-0 ui:right-0 ui:left-auto ui:h-full ui:w-[384px] ui:border-l ui:border-background-300",
+          "ui:top-0 ui:bottom-0 ui:right-0 ui:left-auto ui:h-full ui:w-[min(100vw,384px)] ui:border-l ui:border-background-300",
+          "ui:pt-[max(1.5rem,env(safe-area-inset-top))] ui:pb-[max(1.5rem,env(safe-area-inset-bottom))]",
           "ui:data-[state=open]:animate-malbec-sheet-in-right",
           "ui:data-[state=closed]:animate-malbec-sheet-out-right",
         ],
@@ -78,7 +86,7 @@ export const sheetContentVariants = cva(
 export type SheetSize = "sm" | "md" | "lg" | "xl";
 
 export const sheetCloseVariants = cva([
-  "ui:absolute ui:top-2 ui:right-2",
+  "ui:absolute ui:top-2 ui:right-2 ui:hit-area",
   "ui:inline-flex ui:size-8 ui:items-center ui:justify-center",
   "ui:cursor-pointer",
   "ui:rounded-[8px]",
@@ -133,7 +141,8 @@ export const sheetInlineInputVariants = cva([
   "ui:rounded-[6px]",
   "ui:bg-background-100",
   "ui:px-4 ui:py-2",
-  "ui:text-sm ui:leading-5 ui:font-normal ui:text-text-default",
+  // iOS zooms into a focused field under 16px: 16px on a phone, 14px from sm.
+  "ui:text-[16px] ui:sm:text-[14px] ui:leading-5 ui:font-normal ui:text-text-default",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
   "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",

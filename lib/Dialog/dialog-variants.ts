@@ -32,8 +32,9 @@ export const dialogContentVariants = cva([
   "ui:malbec-font-sans",
   "ui:fixed ui:top-1/2 ui:left-1/2 ui:right-auto ui:bottom-auto ui:z-(--ui-z-overlay)",
   "ui:-translate-x-1/2 ui:-translate-y-1/2",
-  "ui:flex ui:w-full ui:max-w-[425px] ui:flex-col",
-  "ui:h-auto",
+  "ui:flex ui:w-[min(calc(100vw-2rem),425px)] ui:flex-col",
+  // Taller than the screen (a long form, the phone keyboard open): scroll inside, keep the edges.
+  "ui:h-auto ui:max-h-[calc(100dvh-2rem)] ui:overflow-y-auto",
   "ui:gap-4",
   "ui:rounded-[8px]",
   "ui:bg-background-100",
@@ -59,7 +60,7 @@ export const dialogContentVariants = cva([
 export type DialogSize = "sm" | "md" | "lg" | "xl";
 
 export const dialogCloseVariants = cva([
-  "ui:absolute ui:top-[22px] ui:right-4",
+  "ui:absolute ui:top-[22px] ui:right-4 ui:hit-area",
   "ui:inline-flex ui:size-8 ui:items-center ui:justify-center",
   "ui:cursor-pointer",
   "ui:rounded-[8px]",
@@ -113,7 +114,8 @@ export const dialogInlineInputVariants = cva([
   "ui:rounded-[6px]",
   "ui:bg-background-100",
   "ui:px-4 ui:py-2",
-  "ui:text-sm ui:leading-5 ui:font-normal ui:text-text-default",
+  // iOS zooms into a focused field under 16px: 16px on a phone, 14px from sm.
+  "ui:text-[16px] ui:sm:text-[14px] ui:leading-5 ui:font-normal ui:text-text-default",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
   "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",

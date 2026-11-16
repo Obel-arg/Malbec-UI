@@ -8,6 +8,15 @@ import { cn } from "../utils/cn";
  * so default toasts can use Malbec surface tokens. Typed toasts (success, error, …) keep
  * sonner’s global theme rules; layout for untyped toasts is in `lib/styles.css`.
  */
+/**
+ * Phone offsets (Sonner's `mobileOffset`, below 600px): 16px like Sonner's default, more when
+ * the notch or the home indicator of a full-screen PWA needs it.
+ */
+export const sonnerMobileOffset = {
+  top: "max(16px, env(safe-area-inset-top))",
+  bottom: "max(16px, env(safe-area-inset-bottom))",
+};
+
 export const sonnerToasterStyle = {
   "--width": "384px",
   "--normal-bg": "var(--color-background-100)",
