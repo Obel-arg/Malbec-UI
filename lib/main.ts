@@ -203,7 +203,9 @@ export type {
   DataTableProps,
   DataTableRenderFooterContext,
   DataTableRowEvent,
+  DataTableColumnMeta,
 } from "./DataTable/DataTable";
+export type { DataTableMobileSlot } from "./DataTable/DataTableList";
 export type {
   DatePickerProps,
   DatePickerTriggerProps,

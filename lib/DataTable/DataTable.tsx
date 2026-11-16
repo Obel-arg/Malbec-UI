@@ -21,19 +21,31 @@ import type { MalbecLabels } from "../i18n/labels";
 import { Table, type TableAppearance } from "../Table/Table";
 import { cn } from "../utils/cn";
 import { DataTableColumnsToggle } from "./DataTableColumnsToggle";
+import { DataTableList, type DataTableMobileSlot } from "./DataTableList";
 import { DataTablePagination } from "./DataTablePagination";
 import {
   dataTableRootVariants,
   dataTableToolbarVariants,
 } from "./data-table-variants";
+import { shouldIgnoreRowInteraction } from "./row-interaction";
 
 export type DataTableRenderFooterContext<TData> = {
   table: TanStackTable<TData>;
 };
 
-export type DataTableRowEvent =
-  | MouseEvent<HTMLTableRowElement>
-  | KeyboardEvent<HTMLTableRowElement>;
+/** The row's event: a table row, or a list row in `mobileLayout="list"`. */
+export type DataTableRowEvent = MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>;
+
+/**
+ * Column `meta` that DataTable reads. `mobile` places the column in a phone list row
+ * (`mobileLayout="list"`); `label` names it in menus (sort, columns) when `header` isn't a string.
+ */
+export type DataTableColumnMeta = {
+  label?: ReactNode;
+  mobile?: DataTableMobileSlot;
+  thClassName?: string;
+  tdClassName?: string;
+};
 
 type DataTableOnRowSelectionChange<TData> = (selectedRows: TData[]) => void;
 
@@ -67,6 +79,13 @@ interface DataTableBaseProps<TData, TValue> {
   tableAppearance?: TableAppearance;
   /** Below 640px each row becomes a card (see `Table`'s `stackOnMobile`). */
   stackOnMobile?: boolean;
+  /**
+   * Phone layout below 640px. `"list"` shows one line per row instead of the table: the column
+   * with `meta.mobile: "title"` on top, the `"subtitle"` ones joined below, the `"trailing"` ones
+   * on the right (a status, a menu). Sorting and select-all move to a bar above. Without any
+   * `meta.mobile`, the first column is the title and the next two the subtitle. Default `"table"`.
+   */
+  mobileLayout?: "table" | "list";
   /**
    * Pins the header while the rows scroll inside the table shell; give the shell a height with
    * `tableContainerClassName` (e.g. `ui:max-h-[480px]`).
@@ -185,6 +204,7 @@ export function DataTable<TData, TValue>({
   footer,
   tableAppearance = "default",
   stackOnMobile,
+  mobileLayout = "table",
   stickyHeader,
   tableContainerClassName,
   rowSelection: rowSelectionEnabled = false,
@@ -296,7 +316,7 @@ export function DataTable<TData, TValue>({
         appearance={tableAppearance}
         stackOnMobile={stackOnMobile}
         stickyHeader={stickyHeader}
-        containerClassName={tableContainerClassName}
+        containerClassName={cn(tableContainerClassName, mobileLayout === "list" && "ui:max-sm:hidden")}
       >
         {tableChildrenStart}
         <Table.Header>
@@ -382,6 +402,14 @@ export function DataTable<TData, TValue>({
           )}
         </Table.Body>
       </Table>
+      {mobileLayout === "list" ? (
+        <DataTableList
+          table={table}
+          emptyLabel={emptyLabel}
+          rowSelection={rowSelectionEnabled}
+          onRowClick={onRowClick}
+        />
+      ) : null}
       {footerNode ? (
         <div className="ui:mt-2 ui:w-full" data-slot="data-table-footer">
           {footerNode}
@@ -393,15 +421,6 @@ export function DataTable<TData, TValue>({
 
 type ColMeta = { thClassName?: string; tdClassName?: string };
 
-// The row itself has role="button", so a match on the row doesn't count: only an
-// interactive element inside it does.
-function shouldIgnoreRowInteraction(target: EventTarget | null, row: HTMLElement): boolean {
-  if (!(target instanceof HTMLElement)) return false;
-  const interactive = target.closest(
-    'a, button, input, select, textarea, [role="button"], [data-row-click-ignore]',
-  );
-  return interactive !== null && interactive !== row;
-}
 
 function headerThClassName(
   header: {

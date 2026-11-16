@@ -70,6 +70,7 @@ const TableRoot = React.forwardRef<HTMLTableElement, TableRootProps>(function Ta
             stickyHeader && "ui:overflow-y-auto",
             containerClassName,
           )}
+          data-slot="table-container"
           data-appearance={appearance}
           data-stack-on-mobile={stackOnMobile ? "" : undefined}
         >
