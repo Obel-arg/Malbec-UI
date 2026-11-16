@@ -61,6 +61,8 @@ export const popoverContentVariants = cva([
   /** Above modal overlays (`Dialog` / `Sheet` use `z-50`) so popovers work inside them. */
   "ui:z-(--ui-z-floating) ui:w-auto ui:max-w-(--radix-popover-content-available-width) ui:rounded-md ui:border ui:border-background-300 ui:bg-background-100 ui:p-3",
   "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
+  /** Taller than the space left (a phone, the keyboard open): scroll inside. */
+  "ui:max-h-(--radix-popover-content-available-height) ui:overflow-y-auto",
   "ui:dark:bg-background-200",
   "ui:origin-(--radix-popover-content-transform-origin)",
   ...popoverSurfaceMotionClasses,

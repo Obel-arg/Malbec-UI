@@ -32,8 +32,9 @@ export const dialogContentVariants = cva([
   "ui:malbec-font-sans",
   "ui:fixed ui:top-1/2 ui:left-1/2 ui:right-auto ui:bottom-auto ui:z-(--ui-z-overlay)",
   "ui:-translate-x-1/2 ui:-translate-y-1/2",
-  "ui:flex ui:w-full ui:max-w-[425px] ui:flex-col",
-  "ui:h-auto",
+  "ui:flex ui:w-[min(calc(100vw-2rem),425px)] ui:flex-col",
+  // Taller than the screen (a long form, the phone keyboard open): scroll inside, keep the edges.
+  "ui:h-auto ui:max-h-[calc(100dvh-2rem)] ui:overflow-y-auto",
   "ui:gap-4",
   "ui:rounded-[8px]",
   "ui:bg-background-100",
