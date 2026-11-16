@@ -175,6 +175,7 @@ Records and Artist run as PWAs. These were checked on an iPhone (Safari) and in 
 - The selected option is marked (`background-200`, medium weight), as in `Select`.
 - The wheel scrolls the list inside a modal Dialog or Sheet.
 - The open/close chevron reads its label from `MalbecLabelsProvider`.
+- It no longer overflows a container narrower than 200px (a phone Dialog row next to a label).
 ## v1.16.0 — 2026-11-03
 
 ### Added
