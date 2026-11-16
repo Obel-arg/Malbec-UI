@@ -162,7 +162,7 @@ const PaginationPrevious = React.forwardRef<HTMLAnchorElement, PaginationPreviou
         ) : (
           <>
             <ChevronLeftIcon className="ui:size-3.5 ui:shrink-0 ui:text-text-default-muted" />
-            <span className="ui:whitespace-nowrap">{children ?? labels.previous}</span>
+            <span className="ui:whitespace-nowrap ui:max-sm:sr-only">{children ?? labels.previous}</span>
           </>
         )}
       </Comp>
@@ -196,7 +196,7 @@ const PaginationNext = React.forwardRef<HTMLAnchorElement, PaginationNextProps>(
           children
         ) : (
           <>
-            <span className="ui:whitespace-nowrap">{children ?? labels.next}</span>
+            <span className="ui:whitespace-nowrap ui:max-sm:sr-only">{children ?? labels.next}</span>
             <ChevronRightIcon className="ui:size-3.5 ui:shrink-0 ui:text-text-default-muted" />
           </>
         )}

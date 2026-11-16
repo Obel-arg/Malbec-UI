@@ -19,11 +19,12 @@ export const tabsListVariants = cva(
     variants: {
       variant: {
         /** malbec-ux-ui: 40px track, 6px radius. */
-        segmented: "ui:h-10 ui:rounded-[6px] ui:bg-background-200 ui:p-1",
+        segmented: "ui:h-10 ui:rounded-[6px] ui:bg-background-200 ui:p-1 ui:overflow-x-auto ui:[scrollbar-width:none] ui:[&::-webkit-scrollbar]:hidden",
         underline:
           "ui:h-11 ui:gap-4 ui:rounded-none ui:border-b ui:border-background-300 ui:bg-transparent ui:p-0",
         /** Screen-level tabs (malbec-ux-ui): no line, no track; the active one at 100%, the rest at 40%. */
-        opacity: "ui:h-auto ui:gap-6 ui:rounded-none ui:bg-transparent ui:p-0",
+        // Tabs that don't fit scroll sideways. Underline stays out: its indicator overlaps the border.
+        opacity: "ui:h-auto ui:gap-6 ui:rounded-none ui:bg-transparent ui:p-0 ui:overflow-x-auto ui:[scrollbar-width:none] ui:[&::-webkit-scrollbar]:hidden",
       },
     },
     defaultVariants: {
