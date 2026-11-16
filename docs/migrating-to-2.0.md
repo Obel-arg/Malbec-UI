@@ -101,6 +101,13 @@ Estos cambios se ven solos al actualizar. En cada uno, lo que queda por hacer es
 - [ ] `shadow-none` en Card (~13).
 - [ ] La DataCard v1 (1 archivo).
 
+**En las PWA (Records y Artist)**
+
+La librería ya resuelve el zoom de iOS, los márgenes del notch y las áreas de toque (ver el [CHANGELOG](../CHANGELOG.md#fixes-phones-and-pwas)). Lo que queda en la app:
+- [ ] Sacá `maximum-scale=1` o `user-scalable=no` del viewport si los agregaste para evitar el zoom al enfocar un campo: ya no hace falta y bloquean el zoom con dos dedos.
+- [ ] Borrá los overrides que ponían los inputs en 16px en mobile.
+- [ ] Si la app se dibuja debajo de la barra de estado (`viewport-fit=cover`), los Sheets, el Sidebar, la FloatingBar y los toasts ya respetan el notch y la barra de inicio. El resto de tu layout (headers fijos, barras inferiores propias) tenés que ajustarlo vos con `env(safe-area-inset-*)`.
+
 **Records**
 - [ ] El trigger de tabs con `text-xs`.
 - [ ] La DataCard v1 (10 archivos).
@@ -131,6 +138,7 @@ Estos componentes nacieron en alguna app y ya están aprobados en pantalla. Si t
 - [ ] `tsc`, `lint` y los tests de la app en verde.
 - [ ] Recorré cada pantalla en claro y en oscuro. Los diálogos, las tablas, las tabs y los botones son lo que más cambia.
 - [ ] Buscá los overrides que todavía quedan: `grep -rn 'overlay="none"\|tone="neutral"\|size="sm"\|tableAppearance="default"\|rowSelection={false}'`.
+- [ ] En Records y Artist, probá en un iPhone y en un Android: enfocar un campo (no tiene que hacer zoom), abrir un Dialog con el teclado abierto, un Select o un menú largo, y la PWA instalada a pantalla completa.
 - [ ] Para confirmar que una clase compiló, seguí `references/verificacion.md` de la skill `malbec-ux-ui`.
 
 ---
@@ -275,4 +283,5 @@ Resumen de la 2.0. El detalle de cada punto, con las medidas, está en la [entra
 - Utilidades en `tokens.css`.
 
 **Arreglos**
+- Teléfonos y PWA: sin zoom de iOS al enfocar un campo, overlays que entran en pantalla y scrollean, áreas de toque de 44 px, márgenes del notch y la barra de inicio, calendarios con scroll lateral, y las acciones de Inbox, el motivo de `Input locked` y el orden de la tabla apilada accesibles con el dedo.
 - Combobox: el ancho de la lista, los chips deshabilitados, la opción seleccionada marcada, el scroll dentro de un modal y la etiqueta del chevron.
