@@ -67,7 +67,6 @@ export { Table } from "./Table/Table";
 export { Notice } from "./Notice/Notice";
 export { DataCard } from "./DataCard/DataCard";
 export { EmptyState } from "./EmptyState/EmptyState";
-export { PageHeader } from "./PageHeader/PageHeader";
 export { Skeleton } from "./Skeleton/Skeleton";
 
 // Round B: charts
@@ -387,7 +386,6 @@ export type { ComboboxFilter } from "./Combobox/Combobox";
 export type { NoticeProps, NoticeTone } from "./Notice/Notice";
 export type { DataCardProps } from "./DataCard/DataCard";
 export type { EmptyStateProps, EmptyStateVariant } from "./EmptyState/EmptyState";
-export type { PageHeaderProps } from "./PageHeader/PageHeader";
 export type { SkeletonProps } from "./Skeleton/Skeleton";
 // Round B: shell
 export type { SidebarCollapsible } from "./Sidebar/Sidebar";

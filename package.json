@@ -5,7 +5,8 @@
   "type": "module",
   "packageManager": "pnpm@11.28.8",
   "files": [
-    "dist"
+    "dist",
+    "docs/migrating-to-2.0.md"
   ],
   "main": "dist/malbec-ui.cjs",
   "module": "dist/malbec-ui.js",
