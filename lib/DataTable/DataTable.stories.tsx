@@ -154,7 +154,7 @@ function useEventColumns() {
 function DataTableWithColumns(
   props: Pick<
     DataTableProps<EventRow, unknown>,
-    "data" | "emptyLabel" | "tableChildrenStart"
+    "data" | "emptyLabel" | "tableChildrenStart" | "stackOnMobile"
   > & { rowSelection?: boolean },
 ) {
   const columns = useEventColumns();
@@ -167,6 +167,7 @@ function DataTableWithColumns(
         columns={columns}
         data={props.data}
         emptyLabel={props.emptyLabel}
+        stackOnMobile={props.stackOnMobile}
       />
     </div>
   );
@@ -486,6 +487,41 @@ function EventsTable({ data }: { data: EventRow[] }) {
       data={data}
       emptyLabel="Sin eventos"
       tableChildrenStart={<colgroup>{/* column widths */}</colgroup>}
+    />
+  );
+}`,
+      },
+    },
+  },
+};
+
+export const StackOnMobile: Story = {
+  name: "Stacked on a phone (sort + select all)",
+  render: () => (
+    <DataTableWithColumns
+      data={eventRowsSample}
+      emptyLabel="Sin eventos"
+      rowSelection
+      stackOnMobile
+      tableChildrenStart={colgroup}
+    />
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `${DATA_TABLE_COLUMNS_SNIPPET}
+
+// Below 640px each row becomes a card; the header keeps its sort buttons and
+// the select-all checkbox as a row of chips above the cards.
+function EventsTable({ data }: { data: EventRow[] }) {
+  return (
+    <DataTable
+      getRowId={(r) => r.id}
+      rowSelection
+      stackOnMobile
+      columns={columns}
+      data={data}
+      emptyLabel="Sin eventos"
     />
   );
 }`,
