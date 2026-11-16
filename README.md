@@ -2,6 +2,8 @@
 
 Malbec UI — React component library, published to GitHub Packages.
 
+**Upgrading from 1.x?** Read [docs/migrating-to-2.0.md](docs/migrating-to-2.0.md) (in Spanish): step-by-step migration, which component to use in each case, and a summary of the changes. It also ships inside the package, at `node_modules/@obel-arg/malbec-ui/docs/migrating-to-2.0.md`.
+
 ## Install (consumers)
 
 The package lives in GitHub Packages, so installing it needs two things.
