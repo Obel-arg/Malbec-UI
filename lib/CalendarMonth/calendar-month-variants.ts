@@ -4,13 +4,15 @@ export const calendarMonthRootVariants = cva(
   [
     "malbec-font-sans",
     "ui:flex ui:w-full ui:flex-col ui:overflow-hidden",
+    // Phone: 80px columns that scroll sideways instead of ~53px cells with 10px text.
+    "ui:max-sm:overflow-x-auto",
     "ui:rounded-xl ui:border ui:border-sidebar-border ui:bg-background-100",
     "ui:shadow-[0_2px_12px_0_rgba(0,0,0,0.07)]",
   ],
 );
 
 export const calendarMonthHeaderRowVariants = cva(
-  "ui:flex ui:h-10 ui:shrink-0 ui:border-b ui:border-sidebar-border ui:bg-background-200",
+  "ui:flex ui:h-10 ui:shrink-0 ui:border-b ui:border-sidebar-border ui:bg-background-200 ui:max-sm:min-w-[560px]",
 );
 
 export const calendarMonthHeaderCellVariants = cva(
@@ -31,7 +33,7 @@ export const calendarMonthHeaderCellVariants = cva(
 );
 
 export const calendarMonthWeekRowVariants = cva(
-  "ui:relative ui:flex ui:min-h-[140px] ui:shrink-0",
+  "ui:relative ui:flex ui:min-h-[140px] ui:shrink-0 ui:max-sm:min-w-[560px]",
 );
 
 /** Pointer-event-transparent absolute layer used to draw span (multi-day) bars across day cells. */

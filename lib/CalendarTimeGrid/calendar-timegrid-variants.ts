@@ -3,12 +3,14 @@ import { cva } from "class-variance-authority";
 export const calendarTimeGridRootVariants = cva([
   "malbec-font-sans",
   "ui:flex ui:w-full ui:flex-col ui:overflow-hidden",
+  // Phone: the view keeps readable columns and scrolls sideways (rows take --calendar-timegrid-min-width).
+  "ui:max-sm:overflow-x-auto",
   "ui:rounded-xl ui:border ui:border-[#e0e0e0] ui:bg-[#f9f9f9]",
   "ui:shadow-[0_2px_12px_0_rgba(0,0,0,0.07)]",
 ]);
 
 export const calendarTimeGridHeaderRowVariants = cva(
-  "ui:flex ui:min-h-11 ui:shrink-0 ui:border-b ui:border-[#e0e0e0] ui:bg-[#f0f0f0]",
+  "ui:flex ui:min-h-11 ui:shrink-0 ui:border-b ui:border-[#e0e0e0] ui:bg-[#f0f0f0] ui:max-sm:min-w-(--calendar-timegrid-min-width)",
 );
 
 export const calendarTimeGridGutterHeaderVariants = cva(
@@ -36,7 +38,7 @@ export const calendarTimeGridDayHeaderVariants = cva(
 );
 
 export const calendarTimeGridBodyRowVariants = cva(
-  "ui:relative ui:flex ui:min-h-0 ui:flex-1 ui:overflow-hidden",
+  "ui:relative ui:flex ui:min-h-0 ui:flex-1 ui:overflow-hidden ui:max-sm:min-w-(--calendar-timegrid-min-width)",
 );
 
 export const calendarTimeGridTimeGutterVariants = cva(
@@ -69,7 +71,7 @@ export const calendarTimeGridTodayBadgeVariants = cva(
 
 /** Container row holding the gutter label + per-column track for span (all-day / multi-day) bars. */
 export const calendarTimeGridAllDayRowVariants = cva(
-  "ui:flex ui:shrink-0 ui:border-b ui:border-[#e0e0e0] ui:bg-[#f9f9f9]",
+  "ui:flex ui:shrink-0 ui:border-b ui:border-[#e0e0e0] ui:bg-[#f9f9f9] ui:max-sm:min-w-(--calendar-timegrid-min-width)",
 );
 
 export const calendarTimeGridAllDayGutterVariants = cva(
