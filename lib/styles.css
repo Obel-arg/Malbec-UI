@@ -670,7 +670,6 @@
   display: flex !important;
   align-items: center !important;
   gap: 1rem !important;
-  width: 384px !important;
   max-width: 100%;
   border-radius: 8px;
   box-sizing: border-box;
@@ -685,6 +684,13 @@
   border: 0 !important;
   border-left: 1px solid var(--color-background-300) !important;
   box-shadow: 0 0 2px 0 rgb(0 0 0 / 0.2) !important;
+}
+
+/* 384px from Sonner's mobile breakpoint up; below it Sonner fits the toast to the screen. */
+@media (min-width: 601px) {
+  [data-sonner-toast][data-styled]:not([data-type]) {
+    width: 384px !important;
+  }
 }
 
 [data-sonner-toast][data-styled]:not([data-type]) [data-content] {

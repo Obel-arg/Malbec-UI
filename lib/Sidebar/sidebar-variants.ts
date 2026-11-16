@@ -277,6 +277,8 @@ export const sidebarSheetContentVariants = cva(
   [
     "ui:fixed ui:inset-y-0 ui:z-(--ui-z-overlay)",
     "ui:flex ui:h-full ui:max-h-svh ui:w-(--sidebar-width-mobile) ui:max-w-(--sidebar-width-mobile) ui:flex-col ui:overflow-hidden ui:gap-0 ui:bg-background-200 ui:p-0 ui:outline-none",
+    // Full-screen PWA: keep the header and footer rows off the notch and the home indicator.
+    "ui:pt-[env(safe-area-inset-top)] ui:pb-[env(safe-area-inset-bottom)]",
     "ui:border-sidebar-border",
   ],
   {

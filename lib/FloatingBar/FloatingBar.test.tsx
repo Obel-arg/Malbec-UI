@@ -23,7 +23,7 @@ describe("FloatingBar placement", () => {
     expect(classes).toEqual(
       expect.arrayContaining([
         "ui:fixed",
-        "ui:bottom-10",
+        "ui:bottom-[max(2.5rem,calc(env(safe-area-inset-bottom)+1rem))]",
         "ui:left-[calc(50%+var(--sidebar-offset,0px)/2)]",
         "ui:-translate-x-1/2",
         "ui:z-[calc(var(--ui-z-overlay)-1)]",

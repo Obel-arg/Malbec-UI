@@ -22,7 +22,7 @@ export const floatingBarVariants = cva(
       placement: {
         inline: "",
         bottom:
-          "ui:fixed ui:bottom-10 ui:left-[calc(50%+var(--sidebar-offset,0px)/2)] ui:-translate-x-1/2 ui:z-[calc(var(--ui-z-overlay)-1)]",
+          "ui:fixed ui:bottom-[max(2.5rem,calc(env(safe-area-inset-bottom)+1rem))] ui:left-[calc(50%+var(--sidebar-offset,0px)/2)] ui:-translate-x-1/2 ui:z-[calc(var(--ui-z-overlay)-1)]",
       },
     },
     defaultVariants: { placement: "inline" },
