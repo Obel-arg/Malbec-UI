@@ -83,185 +83,6 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const rowClass = "ui:inline-flex ui:items-center ui:gap-1";
-
-export const Default: Story = {
-  render: () => (
-    <div className={rowClass}>
-      <Toggle aria-label="Bold" size="md" variant="default">
-        <Toggle.Icon>
-          <BoldIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Italic" size="md" variant="default">
-        <Toggle.Icon>
-          <ItalicIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Underline" size="md" variant="default">
-        <Toggle.Icon>
-          <UnderlineIcon />
-        </Toggle.Icon>
-      </Toggle>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Toggle } from "@obel-arg/malbec-ui";
-
-<Toggle aria-label="Bold" size="md" variant="default">
-  <Toggle.Icon>
-    <BoldIcon /> {/* your icon */}
-  </Toggle.Icon>
-</Toggle>`,
-      },
-    },
-  },
-};
-
-export const Outline: Story = {
-  render: () => (
-    <div className={rowClass}>
-      <Toggle aria-label="Bold" size="md" variant="outline">
-        <Toggle.Icon>
-          <BoldIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Italic" size="md" variant="outline">
-        <Toggle.Icon>
-          <ItalicIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Underline" size="md" variant="outline">
-        <Toggle.Icon>
-          <UnderlineIcon />
-        </Toggle.Icon>
-      </Toggle>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Toggle } from "@obel-arg/malbec-ui";
-
-<Toggle aria-label="Bold" size="md" variant="outline">
-  <Toggle.Icon>
-    <BoldIcon /> {/* your icon */}
-  </Toggle.Icon>
-</Toggle>`,
-      },
-    },
-  },
-};
-
-export const Small: Story = {
-  name: "Size · Small",
-  render: () => (
-    <div className={rowClass}>
-      <Toggle aria-label="Bold" size="sm" variant="default">
-        <Toggle.Icon>
-          <BoldIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Italic" size="sm" variant="default">
-        <Toggle.Icon>
-          <ItalicIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Underline" size="sm" variant="default">
-        <Toggle.Icon>
-          <UnderlineIcon />
-        </Toggle.Icon>
-      </Toggle>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Toggle } from "@obel-arg/malbec-ui";
-
-<Toggle aria-label="Bold" size="sm" variant="default">
-  <Toggle.Icon>
-    <BoldIcon /> {/* your icon */}
-  </Toggle.Icon>
-</Toggle>`,
-      },
-    },
-  },
-};
-
-export const Large: Story = {
-  name: "Size · Large",
-  render: () => (
-    <div className={rowClass}>
-      <Toggle aria-label="Bold" size="lg" variant="default">
-        <Toggle.Icon>
-          <BoldIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Italic" size="lg" variant="default">
-        <Toggle.Icon>
-          <ItalicIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Underline" size="lg" variant="default">
-        <Toggle.Icon>
-          <UnderlineIcon />
-        </Toggle.Icon>
-      </Toggle>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Toggle } from "@obel-arg/malbec-ui";
-
-<Toggle aria-label="Bold" size="lg" variant="default">
-  <Toggle.Icon>
-    <BoldIcon /> {/* your icon */}
-  </Toggle.Icon>
-</Toggle>`,
-      },
-    },
-  },
-};
-
-export const Disabled: Story = {
-  render: () => (
-    <div className={rowClass}>
-      <Toggle aria-label="Bold" size="md" variant="outline" disabled>
-        <Toggle.Icon>
-          <BoldIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Italic" size="md" variant="outline" disabled>
-        <Toggle.Icon>
-          <ItalicIcon />
-        </Toggle.Icon>
-      </Toggle>
-      <Toggle aria-label="Underline" size="md" variant="outline" disabled>
-        <Toggle.Icon>
-          <UnderlineIcon />
-        </Toggle.Icon>
-      </Toggle>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Toggle } from "@obel-arg/malbec-ui";
-
-<Toggle aria-label="Bold" size="md" variant="outline" disabled>
-  <Toggle.Icon>
-    <BoldIcon /> {/* your icon */}
-  </Toggle.Icon>
-</Toggle>`,
-      },
-    },
-  },
-};
-
 export const Playground: Story = {
   args: {
     "aria-label": "Bold",
@@ -275,5 +96,130 @@ export const Playground: Story = {
         <BoldIcon />
       </Toggle.Icon>
     </Toggle>
+  ),
+};
+
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_auto] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+export const States: Story = {
+  parameters: {
+    controls: { hideNoControlsWarning: true },
+    docs: {
+      source: {
+        code: `import { Toggle } from "@obel-arg/malbec-ui";
+
+<Toggle aria-label="Bold">
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>
+
+<Toggle aria-label="Bold" defaultPressed>
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>
+
+<Toggle aria-label="Bold" disabled>
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>
+
+<Toggle aria-label="Bold" disabled defaultPressed>
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>`,
+      },
+    },
+  },
+  render: () => (
+    <div className={statesGrid}>
+      <span className={stateCaption}>Off</span>
+      <Toggle aria-label="Bold">
+        <Toggle.Icon>
+          <BoldIcon />
+        </Toggle.Icon>
+      </Toggle>
+      <span className={stateCaption}>On</span>
+      <Toggle aria-label="Bold" defaultPressed>
+        <Toggle.Icon>
+          <BoldIcon />
+        </Toggle.Icon>
+      </Toggle>
+      <span className={stateCaption}>Disabled</span>
+      <Toggle aria-label="Bold" disabled>
+        <Toggle.Icon>
+          <BoldIcon />
+        </Toggle.Icon>
+      </Toggle>
+      <span className={stateCaption}>Disabled · on</span>
+      <Toggle aria-label="Bold" disabled defaultPressed>
+        <Toggle.Icon>
+          <BoldIcon />
+        </Toggle.Icon>
+      </Toggle>
+    </div>
+  ),
+};
+
+const VARIANTS = ["default", "outline"] as const;
+const SIZES = ["sm", "md", "lg"] as const;
+
+export const AllVariants: Story = {
+  name: "Matrix · Variants × sizes",
+  parameters: {
+    controls: { hideNoControlsWarning: true },
+    docs: {
+      source: {
+        code: `import { Toggle } from "@obel-arg/malbec-ui";
+
+// Same composition, swap \`variant\` ("default" | "outline") and \`size\` ("sm" | "md" | "lg"):
+<Toggle aria-label="Bold" variant="default" size="sm">
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>
+
+<Toggle aria-label="Bold" variant="outline" size="lg">
+  <Toggle.Icon>
+    <BoldIcon /> {/* your icon */}
+  </Toggle.Icon>
+</Toggle>`,
+      },
+    },
+  },
+  render: () => (
+    <div className={statesGrid}>
+      {VARIANTS.map((variant) => (
+        <React.Fragment key={variant}>
+          <span className={`${stateCaption} ui:capitalize`}>{variant}</span>
+          <div className="ui:flex ui:items-center ui:gap-4">
+            {SIZES.map((size) => (
+              <div key={size} className="ui:inline-flex ui:items-center ui:gap-1">
+                <Toggle aria-label="Bold" variant={variant} size={size}>
+                  <Toggle.Icon>
+                    <BoldIcon />
+                  </Toggle.Icon>
+                </Toggle>
+                <Toggle aria-label="Italic" variant={variant} size={size}>
+                  <Toggle.Icon>
+                    <ItalicIcon />
+                  </Toggle.Icon>
+                </Toggle>
+                <Toggle aria-label="Underline" variant={variant} size={size}>
+                  <Toggle.Icon>
+                    <UnderlineIcon />
+                  </Toggle.Icon>
+                </Toggle>
+              </div>
+            ))}
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
   ),
 };

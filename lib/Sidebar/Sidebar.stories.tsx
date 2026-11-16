@@ -216,11 +216,22 @@ function sidebarMenuFlipSide(side: "left" | "right"): "left" | "right" {
   return side === "left" ? "right" : "left";
 }
 
-function SidebarDemo({ side }: { side: "left" | "right" }) {
+function SidebarDemo({
+  side,
+  collapsible,
+}: {
+  side: "left" | "right";
+  collapsible?: "icon" | "dock";
+}) {
   const menuSide = sidebarMenuFlipSide(side);
 
   return (
-    <Sidebar.Provider defaultSide={side} className="ui:min-h-svh">
+    <Sidebar.Provider
+      defaultSide={side}
+      collapsible={collapsible}
+      defaultOpen={collapsible !== "dock"}
+      className="ui:min-h-svh"
+    >
       <Sidebar.Gap side={side}>
         <Sidebar side={side}>
           <Sidebar.Header>
@@ -580,4 +591,39 @@ export const Left: Story = {
 export const Right: Story = {
   render: () => <SidebarDemo side="right" />,
   parameters: { docs: { source: { code: sidebarSource("right") } } },
+};
+
+/**
+ * `collapsible="dock"`: the rail keeps its place and the panel unfolds OVER the content while the
+ * pointer (or keyboard focus) is on it, so the content never moves. The trigger pins it in place;
+ * `open` / `onOpenChange` are the pinned state, so persist those.
+ */
+export const Dock: Story = {
+  render: () => <SidebarDemo side="left" collapsible="dock" />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Sidebar } from "@obel-arg/malbec-ui";
+
+function AppShell({ children }: { children: React.ReactNode }) {
+  const [pinned, setPinned] = useStoredPreference("sidebar-pinned", false);
+
+  return (
+    <Sidebar.Provider collapsible="dock" open={pinned} onOpenChange={setPinned}>
+      <Sidebar.Gap>
+        <Sidebar>
+          <Sidebar.Content>{/* nav */}</Sidebar.Content>
+        </Sidebar>
+        <Sidebar.Inset>
+          {/* Pins or unpins the panel ("Fijar el menú" / "Soltar el menú"). */}
+          <Sidebar.Trigger />
+          {children}
+        </Sidebar.Inset>
+      </Sidebar.Gap>
+    </Sidebar.Provider>
+  );
+}`,
+      },
+    },
+  },
 };

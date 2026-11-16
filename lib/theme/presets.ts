@@ -5,7 +5,7 @@ export const malbecRecords: ThemeConfig = {
   light: {
     accent: "#CCB9C4",
     primary: "#621543",
-    foreground: "#09090B",
+    foreground: "#1A1A1F",
     "background-100": "#F8F8F8",
     "background-200": "#F1F0EE",
     "background-300": "#E4E2DF",
@@ -25,7 +25,7 @@ export const publishing: ThemeConfig = {
   light: {
     accent: "#D5A7A7",
     primary: "#891B1B",
-    foreground: "#09090B",
+    foreground: "#1A1A1F",
     "background-100": "#F8F8F8",
     "background-200": "#F1F0EE",
     "background-300": "#E4E2DF",
@@ -40,12 +40,12 @@ export const publishing: ThemeConfig = {
   },
 };
 
-export const management: ThemeConfig = {
-  name: "Management",
+export const artist: ThemeConfig = {
+  name: "Artist",
   light: {
     accent: "#8F9D98",
     primary: "#0A3D2F",
-    foreground: "#09090B",
+    foreground: "#1A1A1F",
     "background-100": "#F8F8F8",
     "background-200": "#F1F0EE",
     "background-300": "#E4E2DF",
@@ -65,7 +65,7 @@ export const booking: ThemeConfig = {
   light: {
     accent: "#8FA9AF",
     primary: "#246E80",
-    foreground: "#09090B",
+    foreground: "#1A1A1F",
     "background-100": "#F8F8F8",
     "background-200": "#F1F0EE",
     "background-300": "#E4E2DF",
@@ -85,7 +85,7 @@ export const live: ThemeConfig = {
   light: {
     accent: "#B2B7C7",
     primary: "#152362",
-    foreground: "#09090B",
+    foreground: "#1A1A1F",
     "background-100": "#F8F8F8",
     "background-200": "#F1F0EE",
     "background-300": "#E4E2DF",

@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import {
   dialogActionVariants,
   dialogBodyVariants,
@@ -80,7 +81,7 @@ export interface DialogContentProps extends React.ComponentProps<
   showCloseButton?: boolean;
   /** Width preset (`sm` 448 · `md` 560 · `lg` 640 · `xl` 880). Unset keeps the 425px default. */
   size?: DialogSize;
-  /** `none` drops the veil behind the dialog and floats it on a two-layer shadow. */
+  /** No veil by default (malbec-ux-ui rule 15); `veil` dims the page behind the dialog. */
   overlay?: OverlayVeil;
   /** Merged after default overlay styles. */
   overlayClassName?: string;
@@ -99,7 +100,7 @@ const DialogContent = React.forwardRef<
     children,
     showCloseButton = false,
     size,
-    overlay = "default",
+    overlay = "none",
     overlayClassName,
     unstyled,
     container,
@@ -107,14 +108,19 @@ const DialogContent = React.forwardRef<
   },
   ref,
 ) {
+  const labels = useMalbecLabels();
   return (
     <DialogPortal container={container}>
-      <DialogOverlay className={cn(dialogOverlayVariants({ overlay }), overlayClassName)} />
+      <DialogOverlay
+        data-overlay={overlay}
+        className={cn(dialogOverlayVariants({ overlay }), overlayClassName)}
+      />
       <DialogPrimitive.Content
         ref={ref}
         data-slot="dialog-content"
         data-size={size}
         data-overlay={overlay}
+        data-close-button={showCloseButton || undefined}
         className={cn(!unstyled && dialogContentVariants({ size, overlay }), className)}
         {...rest}
       >
@@ -123,7 +129,7 @@ const DialogContent = React.forwardRef<
           <DialogPrimitive.Close
             data-slot="dialog-close"
             className={dialogCloseVariants()}
-            aria-label="Close dialog"
+            aria-label={labels.closeDialog}
           >
             <DialogCloseIcon />
           </DialogPrimitive.Close>

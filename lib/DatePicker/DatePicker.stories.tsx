@@ -104,35 +104,51 @@ function Example() {
   },
 };
 
-export const Invalid: Story = {
-  name: "State · invalid",
-  render: () => (
-    <DatePicker locale={es} state="closed">
-      <DatePicker.Trigger aria-invalid />
-      <DatePicker.Content>
-        <DatePicker.Calendar />
-      </DatePicker.Content>
-    </DatePicker>
-  ),
+export const States: Story = {
   parameters: {
     docs: {
       source: {
         code: `import { DatePicker } from "@obel-arg/malbec-ui";
 import { es } from "date-fns/locale";
 
-function Example() {
-  return (
-    <DatePicker locale={es} state="closed">
-      <DatePicker.Trigger aria-invalid />
-      <DatePicker.Content>
-        <DatePicker.Calendar />
-      </DatePicker.Content>
-    </DatePicker>
-  );
-}`,
+<DatePicker locale={es} state="closed">
+  <DatePicker.Trigger />
+  <DatePicker.Content>
+    <DatePicker.Calendar />
+  </DatePicker.Content>
+</DatePicker>
+
+<DatePicker locale={es} state="closed">
+  <DatePicker.Trigger aria-invalid />
+  <DatePicker.Content>
+    <DatePicker.Calendar />
+  </DatePicker.Content>
+</DatePicker>`,
       },
     },
   },
+  render: () => (
+    <div className="malbec-font-sans ui:grid ui:grid-cols-[auto_auto] ui:items-center ui:gap-x-6 ui:gap-y-4">
+      <span className="ui:text-muted-medium ui:text-text-default-muted">
+        Default
+      </span>
+      <DatePicker locale={es} state="closed">
+        <DatePicker.Trigger />
+        <DatePicker.Content>
+          <DatePicker.Calendar />
+        </DatePicker.Content>
+      </DatePicker>
+      <span className="ui:text-muted-medium ui:text-text-default-muted">
+        Invalid
+      </span>
+      <DatePicker locale={es} state="closed">
+        <DatePicker.Trigger aria-invalid />
+        <DatePicker.Content>
+          <DatePicker.Calendar />
+        </DatePicker.Content>
+      </DatePicker>
+    </div>
+  ),
 };
 
 export const Open: Story = {

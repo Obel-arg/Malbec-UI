@@ -43,7 +43,7 @@ const meta = {
     },
     size: {
       control: "select",
-      options: ["sm", "md", "lg", "icon"] satisfies ButtonSize[],
+      options: ["md", "lg", "icon", "icon-sm"] satisfies ButtonSize[],
       description:
         "Small (10px text), Medium (default, 12px), Large (12px with roomier padding) or Icon-only square.",
     },
@@ -157,30 +157,62 @@ export const IconOnly: Story = {
   ),
 };
 
-export const Loading: Story = {
-  name: "State · Loading",
-  args: { loading: true },
-  render: (args) => (
-    <Button {...args}>
-      <Button.Spinner />
-      <Button.Icon>
-        <MailIcon />
-      </Button.Icon>
-      <Button.Text>Please wait</Button.Text>
-    </Button>
-  ),
-};
+export const States: Story = {
+  parameters: {
+    controls: { hideNoControlsWarning: true },
+    docs: {
+      source: {
+        code: `import { Button } from "@obel-arg/malbec-ui";
 
-export const Disabled: Story = {
-  name: "State · Disabled",
-  args: { disabled: true },
-  render: (args) => (
-    <Button {...args}>
-      <Button.Icon>
-        <MailIcon />
-      </Button.Icon>
-      <Button.Text>Disabled</Button.Text>
-    </Button>
+<Button>
+  <Button.Icon><MailIcon /></Button.Icon>
+  <Button.Text>Login with Email</Button.Text>
+</Button>
+
+<Button loading>
+  <Button.Spinner />
+  <Button.Icon><MailIcon /></Button.Icon>
+  <Button.Text>Please wait</Button.Text>
+</Button>
+
+<Button disabled>
+  <Button.Icon><MailIcon /></Button.Icon>
+  <Button.Text>Disabled</Button.Text>
+</Button>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="malbec-font-sans ui:grid ui:grid-cols-[auto_auto] ui:items-center ui:gap-x-6 ui:gap-y-4">
+      <span className="ui:text-muted-medium ui:text-text-default-muted">
+        Default
+      </span>
+      <Button>
+        <Button.Icon>
+          <MailIcon />
+        </Button.Icon>
+        <Button.Text>Login with Email</Button.Text>
+      </Button>
+      <span className="ui:text-muted-medium ui:text-text-default-muted">
+        Loading
+      </span>
+      <Button loading>
+        <Button.Spinner />
+        <Button.Icon>
+          <MailIcon />
+        </Button.Icon>
+        <Button.Text>Please wait</Button.Text>
+      </Button>
+      <span className="ui:text-muted-medium ui:text-text-default-muted">
+        Disabled
+      </span>
+      <Button disabled>
+        <Button.Icon>
+          <MailIcon />
+        </Button.Icon>
+        <Button.Text>Disabled</Button.Text>
+      </Button>
+    </div>
   ),
 };
 
@@ -244,7 +276,7 @@ export const AllVariants: Story = {
   ),
 };
 
-const SIZES: ButtonSize[] = ["sm", "md", "lg"];
+const SIZES: ButtonSize[] = ["md", "lg"];
 
 export const AllSizes: Story = {
   name: "Matrix · Sizes",
@@ -253,10 +285,6 @@ export const AllSizes: Story = {
     docs: {
       source: {
         code: `import { Button } from "@obel-arg/malbec-ui";
-
-<Button size="sm">
-  <Button.Text>Size sm</Button.Text>
-</Button>
 
 <Button size="md">
   <Button.Text>Size md</Button.Text>
@@ -267,6 +295,20 @@ export const AllSizes: Story = {
 </Button>
 
 <Button size="icon" aria-label="Next">
+  <Button.Icon decorative={false}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden
+    >
+      <path d="m9 18 6-6-6-6" />
+    </svg>
+  </Button.Icon>
+</Button>
+
+<Button size="icon-sm" variant="outline" aria-label="Next">
   <Button.Icon decorative={false}>
     <svg
       viewBox="0 0 24 24"
@@ -295,6 +337,11 @@ export const AllSizes: Story = {
             <ChevronRightIcon />
           </Button.Icon>
         </Button>
+        <Button size="icon-sm" variant="outline" aria-label="Next">
+          <Button.Icon decorative={false}>
+            <ChevronRightIcon />
+          </Button.Icon>
+        </Button>
       </div>
       <div className="ui:flex ui:items-end ui:gap-3">
         {SIZES.map((size) => (
@@ -315,37 +362,6 @@ export const AllSizes: Story = {
   ),
 };
 
-export const NeutralTone: Story = {
-  name: "Tone · Neutral (outline / ghost)",
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Button } from "@obel-arg/malbec-ui";
-
-<Button variant="outline" tone="neutral">
-  <Button.Text>Cancelar</Button.Text>
-</Button>
-<Button variant="ghost" tone="neutral">
-  <Button.Text>Ver detalle</Button.Text>
-</Button>`,
-      },
-    },
-  },
-  render: () => (
-    <div className="ui:flex ui:items-center ui:gap-3">
-      <Button variant="outline" tone="neutral">
-        <Button.Text>Cancelar</Button.Text>
-      </Button>
-      <Button variant="ghost" tone="neutral">
-        <Button.Text>Ver detalle</Button.Text>
-      </Button>
-      <Button variant="primary">
-        <Button.Text>Guardar</Button.Text>
-      </Button>
-    </div>
-  ),
-};
-
 export const AsChildLink: Story = {
   name: "Composition · Link (asChild)",
   parameters: {
@@ -354,14 +370,14 @@ export const AsChildLink: Story = {
         code: `import Link from "next/link";
 import { Button } from "@obel-arg/malbec-ui";
 
-<Button asChild variant="outline" tone="neutral" size="md">
+<Button asChild variant="outline" size="md">
   <Link href="/gastos">Ver gastos</Link>
 </Button>`,
       },
     },
   },
   render: () => (
-    <Button asChild variant="outline" tone="neutral" size="md">
+    <Button asChild variant="outline" size="md">
       <a href="#gastos">Ver gastos</a>
     </Button>
   ),

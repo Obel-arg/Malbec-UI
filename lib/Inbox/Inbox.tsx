@@ -4,6 +4,7 @@
 import * as React from "react";
 import { Bell, ChevronDown, MoreHorizontal } from "lucide-react";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import { DropdownMenu } from "../DropdownMenu/DropdownMenu";
 import { Tooltip } from "../Tooltip/Tooltip";
 import {
@@ -53,7 +54,7 @@ export type InboxMoreActionItem = {
 // ——— Root
 
 export type InboxProps = Omit<React.ComponentProps<"div">, "title"> & {
-  /** Header title; defaults to `"Inbox"`. Pass `null` to hide the header. */
+  /** Header title; defaults to the `inbox` label of `MalbecLabelsProvider`. Pass `null` to hide the header. */
   title?: React.ReactNode;
   /**
    * When set, the header title becomes a `<DropdownMenu>` trigger and renders
@@ -92,7 +93,7 @@ const InboxRoot = React.forwardRef<HTMLDivElement, InboxProps>(
   function InboxRoot(
     {
       className,
-      title = "Inbox",
+      title,
       filterItems,
       filterValue,
       onFilterChange,
@@ -173,12 +174,13 @@ function InboxHeader({
   onFilterChange,
   moreActions,
 }: InboxHeaderProps) {
+  const labels = useMalbecLabels();
   const hasFilter = (filterItems?.length ?? 0) > 0;
   const hasMore = (moreActions?.length ?? 0) > 0;
 
   const titleNode = (
     <span className={cn(inboxHeaderTitleVariants())} data-slot="inbox-title">
-      {title}
+      {title ?? labels.inbox}
       {hasFilter ? (
         <ChevronDown className="ui:size-5 ui:text-text-default" aria-hidden />
       ) : null}
@@ -193,7 +195,7 @@ function InboxHeader({
             <button
               type="button"
               className={cn(inboxFilterTriggerVariants())}
-              aria-label="Filter inbox"
+              aria-label={labels.filterInbox}
             >
               {titleNode}
             </button>
@@ -220,7 +222,7 @@ function InboxHeader({
             <button
               type="button"
               className={cn(inboxIconButtonVariants())}
-              aria-label="More actions"
+              aria-label={labels.moreActions}
             >
               <MoreHorizontal className="ui:size-3.5" aria-hidden />
             </button>
@@ -368,7 +370,7 @@ InboxList.displayName = "Inbox.List";
 // ——— Item
 
 export type InboxItemProps = React.ComponentProps<"div"> & {
-  /** Renders the unread tint and the dot indicator in the title row. */
+  /** Renders the unread dot indicator in the title row. */
   unread?: boolean;
   /** When set, makes the row clickable / focusable and fires on activation. */
   onSelect?: () => void;
@@ -635,11 +637,12 @@ const InboxItemUnreadDot = React.forwardRef<
   HTMLSpanElement,
   InboxItemUnreadDotProps
 >(function InboxItemUnreadDot({ className, ...rest }, ref) {
+  const labels = useMalbecLabels();
   return (
     <span
       ref={ref}
       data-slot="inbox-item-unread-dot"
-      aria-label="Unread"
+      aria-label={labels.unread}
       className={cn(inboxItemUnreadDotVariants(), className)}
       {...rest}
     />

@@ -50,6 +50,20 @@ export const tableHeaderGroupVariants = cva(
   },
 );
 
+/** `stickyHeader`: header cells stay on top of the scrolling rows, opaque like their row. */
+export const tableStickyHeaderVariants = cva(
+  "ui:[&_th]:sticky ui:[&_th]:top-0 ui:[&_th]:z-(--ui-z-sticky)",
+  {
+    variants: {
+      appearance: {
+        default: "ui:[&_th]:bg-background-200",
+        dataGrid: "ui:[&_th]:bg-background-100",
+      },
+    },
+    defaultVariants: { appearance: "default" },
+  },
+);
+
 export const tableBodyGroupVariants = cva(
   [
     "ui:[&>tr]:bg-background-100",

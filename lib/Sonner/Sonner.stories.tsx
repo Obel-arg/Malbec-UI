@@ -34,7 +34,7 @@ export const Default: Story = {
   <Sonner />
   <Button
     variant="outline"
-    size="sm"
+    size="md"
     onClick={() =>
       Sonner.toast("Event has been created", {
         description: "Sunday, December 03, 2023 at 9:00 AM",
@@ -56,7 +56,7 @@ export const Default: Story = {
       <Sonner />
       <Button
         variant="outline"
-        size="sm"
+        size="md"
         onClick={() =>
           Sonner.toast("Event has been created", {
             description: "Sunday, December 03, 2023 at 9:00 AM",

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import {
   paginationContentVariants,
   paginationEllipsisVariants,
@@ -59,12 +60,13 @@ export type PaginationProps = React.ComponentPropsWithoutRef<"nav">;
 
 const PaginationRoot = React.forwardRef<HTMLElement, PaginationProps>(
   function PaginationRoot({ className, ...props }, ref) {
+    const labels = useMalbecLabels();
     return (
       <nav
         ref={ref}
         data-slot="pagination"
         role="navigation"
-        aria-label="pagination"
+        aria-label={labels.pagination}
         className={cn(className)}
         {...props}
       />
@@ -145,12 +147,13 @@ export type PaginationPreviousProps = Omit<
 const PaginationPrevious = React.forwardRef<HTMLAnchorElement, PaginationPreviousProps>(
   function PaginationPrevious({ asChild, className, children, ...props }, ref) {
     const Comp = asChild ? Slot : "a";
+    const labels = useMalbecLabels();
 
     return (
       <Comp
         ref={ref}
         data-slot="pagination-previous"
-        aria-label="Go to previous page"
+        aria-label={labels.previousPage}
         className={cn(paginationPreviousNextVariants(), className)}
         {...props}
       >
@@ -159,7 +162,7 @@ const PaginationPrevious = React.forwardRef<HTMLAnchorElement, PaginationPreviou
         ) : (
           <>
             <ChevronLeftIcon className="ui:size-3.5 ui:shrink-0 ui:text-text-default-muted" />
-            <span className="ui:whitespace-nowrap">{children ?? "Previous"}</span>
+            <span className="ui:whitespace-nowrap">{children ?? labels.previous}</span>
           </>
         )}
       </Comp>
@@ -179,12 +182,13 @@ export type PaginationNextProps = Omit<
 const PaginationNext = React.forwardRef<HTMLAnchorElement, PaginationNextProps>(
   function PaginationNext({ asChild, className, children, ...props }, ref) {
     const Comp = asChild ? Slot : "a";
+    const labels = useMalbecLabels();
 
     return (
       <Comp
         ref={ref}
         data-slot="pagination-next"
-        aria-label="Go to next page"
+        aria-label={labels.nextPage}
         className={cn(paginationPreviousNextVariants(), className)}
         {...props}
       >
@@ -192,7 +196,7 @@ const PaginationNext = React.forwardRef<HTMLAnchorElement, PaginationNextProps>(
           children
         ) : (
           <>
-            <span className="ui:whitespace-nowrap">{children ?? "Next"}</span>
+            <span className="ui:whitespace-nowrap">{children ?? labels.next}</span>
             <ChevronRightIcon className="ui:size-3.5 ui:shrink-0 ui:text-text-default-muted" />
           </>
         )}
@@ -208,6 +212,7 @@ const PaginationEllipsis = React.forwardRef<
   HTMLSpanElement,
   PaginationEllipsisProps
 >(function PaginationEllipsis({ className, ...props }, ref) {
+  const labels = useMalbecLabels();
   return (
     <span
       ref={ref}
@@ -218,7 +223,7 @@ const PaginationEllipsis = React.forwardRef<
       {...props}
     >
       <MoreHorizontalIcon />
-      <span className="ui:sr-only">More pages</span>
+      <span className="ui:sr-only">{labels.morePages}</span>
     </span>
   );
 });

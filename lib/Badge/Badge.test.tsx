@@ -20,6 +20,21 @@ describe("Badge", () => {
     expect(classes).toContain("ui:[--malbec-badge-bg:#dfd0d0]");
   });
 
+  it("uses the 8px chip radius, never 4px or a capsule", () => {
+    render(<Badge>Activo</Badge>);
+    const classes = classesOf(screen.getByText("Activo"));
+    expect(classes).toContain("ui:rounded-[8px]");
+    expect(classes).not.toContain("ui:rounded-[4px]");
+  });
+
+  it("destructive is the two-tone red pair, not solid red with white text", () => {
+    render(<Badge variant="destructive">Vencido</Badge>);
+    const classes = classesOf(screen.getByText("Vencido"));
+    expect(classes).toContain("ui:[--malbec-badge-bg:#dfd0d0]");
+    expect(classes).toContain("ui:[--malbec-badge-fg:#602a2a]");
+    expect(classes).not.toContain("ui:bg-destructive");
+  });
+
   it("size=xs shrinks the chip and keeps md as the default", () => {
     render(
       <>

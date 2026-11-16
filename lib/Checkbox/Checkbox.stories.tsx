@@ -55,104 +55,71 @@ export const Playground: Story = {
   },
 };
 
-export const Unchecked: Story = {
-  render: () => (
-    <Checkbox defaultChecked={false}>
-      <Checkbox.Indicator />
-    </Checkbox>
-  ),
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_auto] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+export const States: Story = {
   parameters: {
+    controls: { hideNoControlsWarning: true },
     docs: {
       source: {
         code: `import { Checkbox } from "@obel-arg/malbec-ui";
 
 <Checkbox defaultChecked={false}>
   <Checkbox.Indicator />
-</Checkbox>`,
-      },
-    },
-  },
-};
-
-export const Checked: Story = {
-  render: () => (
-    <Checkbox defaultChecked>
-      <Checkbox.Indicator />
-    </Checkbox>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Checkbox } from "@obel-arg/malbec-ui";
+</Checkbox>
 
 <Checkbox defaultChecked>
   <Checkbox.Indicator />
-</Checkbox>`,
-      },
-    },
-  },
-};
+</Checkbox>
 
-export const Disabled: Story = {
-  render: () => (
-    <Checkbox disabled>
-      <Checkbox.Indicator />
-    </Checkbox>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Checkbox } from "@obel-arg/malbec-ui";
+<Checkbox defaultChecked="indeterminate">
+  <Checkbox.Indicator />
+</Checkbox>
 
 <Checkbox disabled>
+  <Checkbox.Indicator />
+</Checkbox>
+
+<Checkbox disabled defaultChecked>
+  <Checkbox.Indicator />
+</Checkbox>
+
+<Checkbox aria-invalid>
   <Checkbox.Indicator />
 </Checkbox>`,
       },
     },
   },
-};
-
-export const Indeterminate: Story = {
-  render: function IndeterminateRender() {
-    const [checked, setChecked] = React.useState<"indeterminate" | boolean>(
-      "indeterminate",
-    );
-    return (
-      <Checkbox
-        checked={checked}
-        onCheckedChange={(v) =>
-          setChecked(v === "indeterminate" ? "indeterminate" : v === true)
-        }
-      >
+  render: () => (
+    <div className={statesGrid}>
+      <span className={stateCaption}>Unchecked</span>
+      <Checkbox aria-label="Unchecked" defaultChecked={false}>
         <Checkbox.Indicator />
       </Checkbox>
-    );
-  },
-  parameters: {
-    docs: {
-      source: {
-        code: `import { useState } from "react";
-import { Checkbox } from "@obel-arg/malbec-ui";
-
-function IndeterminateExample() {
-  const [checked, setChecked] = useState<"indeterminate" | boolean>(
-    "indeterminate",
-  );
-
-  return (
-    <Checkbox
-      checked={checked}
-      onCheckedChange={(v) =>
-        setChecked(v === "indeterminate" ? "indeterminate" : v === true)
-      }
-    >
-      <Checkbox.Indicator />
-    </Checkbox>
-  );
-}`,
-      },
-    },
-  },
+      <span className={stateCaption}>Checked</span>
+      <Checkbox aria-label="Checked" defaultChecked>
+        <Checkbox.Indicator />
+      </Checkbox>
+      <span className={stateCaption}>Indeterminate</span>
+      <Checkbox aria-label="Indeterminate" defaultChecked="indeterminate">
+        <Checkbox.Indicator />
+      </Checkbox>
+      <span className={stateCaption}>Disabled</span>
+      <Checkbox aria-label="Disabled" disabled>
+        <Checkbox.Indicator />
+      </Checkbox>
+      <span className={stateCaption}>Disabled · checked</span>
+      <Checkbox aria-label="Disabled checked" disabled defaultChecked>
+        <Checkbox.Indicator />
+      </Checkbox>
+      <span className={stateCaption}>Invalid</span>
+      <Checkbox aria-label="Invalid" aria-invalid>
+        <Checkbox.Indicator />
+      </Checkbox>
+    </div>
+  ),
 };
 
 type TriState = false | true | "indeterminate";
@@ -273,41 +240,6 @@ export const WithLabel: Story = {
       You agree to our Terms of Service and Privacy Policy.
     </p>
   </div>
-</div>`,
-      },
-    },
-  },
-};
-
-export const Invalid: Story = {
-  render: () => (
-    <div className="ui:flex ui:items-start ui:gap-3">
-      <Checkbox id="invalid-story" aria-invalid>
-        <Checkbox.Indicator />
-      </Checkbox>
-      <label
-        htmlFor="invalid-story"
-        className="ui:cursor-pointer ui:text-label-semibold ui:text-text-default"
-      >
-        Required field
-      </label>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Checkbox } from "@obel-arg/malbec-ui";
-
-<div className="flex items-start gap-3">
-  <Checkbox id="required-field" aria-invalid>
-    <Checkbox.Indicator />
-  </Checkbox>
-  <label
-    htmlFor="required-field"
-    className="cursor-pointer text-label-semibold text-text-default"
-  >
-    Required field
-  </label>
 </div>`,
       },
     },

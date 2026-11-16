@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { CalendarTimeGridEventColor } from "./calendar-timegrid-types";
+import { withAlpha } from "../utils/with-alpha";
 
 /** Timed event block fill (`bg`) and accent (`text` / rail) per color. */
 export const CALENDAR_TIMEGRID_EVENT_COLORS: Record<
@@ -31,7 +32,7 @@ export function timeGridUnconfirmedStyle(
 ): CSSProperties {
   return {
     backgroundColor: "transparent",
-    borderColor: `color-mix(in srgb, ${CALENDAR_TIMEGRID_EVENT_COLORS[color].text} 60%, transparent)`,
+    borderColor: withAlpha(CALENDAR_TIMEGRID_EVENT_COLORS[color].text, 0.6),
     borderStyle: "dashed",
     borderWidth: 1.5,
   };

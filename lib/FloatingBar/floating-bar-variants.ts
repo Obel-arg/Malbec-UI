@@ -51,7 +51,7 @@ export const floatingBarTriggerVariants = cva(
     "ui:whitespace-nowrap ui:select-none ui:cursor-pointer",
     "ui:transition-[background-color,opacity,box-shadow]",
     "ui:outline-none",
-    "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-1 ui:focus-visible:ring-offset-background-200",
+    "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-1 ui:focus-visible:ring-offset-background-200",
     "ui:active:opacity-80",
     "ui:disabled:opacity-50 ui:disabled:pointer-events-none",
   ],
@@ -102,6 +102,6 @@ export const floatingBarCloseVariants = cva([
   "ui:outline-none ui:rounded-[2px]",
   "ui:transition-opacity",
   "ui:hover:opacity-70 ui:active:opacity-60",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-1 ui:focus-visible:ring-offset-background-200",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-1 ui:focus-visible:ring-offset-background-200",
   "ui:[&>svg]:size-full",
 ]);

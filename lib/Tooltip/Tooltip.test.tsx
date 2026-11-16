@@ -20,6 +20,15 @@ describe("Tooltip", () => {
     expect(content()).toContain("ui:bg-background-100");
   });
 
+  it("light explains a value at 13px, capped at 280px wide (malbec-ux-ui)", () => {
+    render(tooltip("light"));
+    const classes = content();
+    expect(classes).toEqual(
+      expect.arrayContaining(["ui:text-[13px]", "ui:leading-[18px]", "ui:max-w-[280px]"]),
+    );
+    expect(classes).not.toContain("ui:text-base");
+  });
+
   it('variant="dark" is la negra: ink surface, light 13px medium text, no border', () => {
     render(tooltip("dark"));
     const classes = content();

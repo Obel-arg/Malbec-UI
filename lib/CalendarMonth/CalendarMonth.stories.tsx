@@ -5,7 +5,7 @@ import { es } from "date-fns/locale";
 import { CalendarMonth, type CalendarMonthEvent } from "./CalendarMonth";
 
 const meta = {
-  title: "Custom/CalendarMonth",
+  title: "Components/CalendarMonth",
   parameters: { layout: "padded" },
   tags: ["autodocs"],
 } satisfies Meta;

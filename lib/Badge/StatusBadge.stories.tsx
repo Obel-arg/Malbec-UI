@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StatusBadge, type StatusBadgeProps } from "./StatusBadge";
-import { priorityVariant } from "./status-tone";
-import { Badge } from "./Badge";
+import { PRIORITY_TONE } from "./status-tone";
 
 /**
  * `Badge` whose colour comes from the canonical status map — the single source
@@ -122,20 +121,16 @@ export const Priority: Story = {
   render: () => (
     <div className="ui:flex ui:items-center ui:gap-3">
       {(["Alta", "Media", "Baja"] as const).map((p) => (
-        <Badge key={p} variant={priorityVariant(p)}>
-          <Badge.Text>{p}</Badge.Text>
-        </Badge>
+        <StatusBadge key={p} tone={PRIORITY_TONE[p]} status={p} />
       ))}
     </div>
   ),
   parameters: {
     docs: {
       source: {
-        code: `import { Badge, priorityVariant } from "@obel-arg/malbec-ui";
+        code: `import { PRIORITY_TONE, StatusBadge } from "@obel-arg/malbec-ui";
 
-<Badge variant={priorityVariant("Alta")}>
-  <Badge.Text>Alta</Badge.Text>
-</Badge>
+<StatusBadge tone={PRIORITY_TONE.Alta} status="Alta" />
 // Media → orange, Baja → yellow`,
       },
     },

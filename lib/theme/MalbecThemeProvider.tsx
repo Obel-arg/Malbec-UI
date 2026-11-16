@@ -44,7 +44,7 @@ export interface MalbecThemeProviderProps {
   theme?: ThemeConfig;
   /**
    * Initial color scheme. Use `setMode` from `useTheme()` to change at runtime.
-   * @default 'system'
+   * @default 'light'
    */
   defaultMode?: ThemeMode;
   /**
@@ -58,7 +58,7 @@ export interface MalbecThemeProviderProps {
 export function MalbecThemeProvider({
   children,
   theme: themeProp,
-  defaultMode = "system",
+  defaultMode = "light",
   storageKey = DEFAULT_STORAGE_KEY,
 }: MalbecThemeProviderProps) {
   const theme = themeProp ?? malbecRecords;

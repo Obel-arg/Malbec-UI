@@ -6,10 +6,10 @@ export type {
 } from "./tokens";
 export { TOKEN_NAMES, TOKEN_TO_CSS_VAR } from "./tokens";
 export {
+  artist,
   booking,
   live,
   malbecRecords,
-  management,
   publishing,
 } from "./presets";
 export { MalbecThemeContext } from "./MalbecThemeContext";

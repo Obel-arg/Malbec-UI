@@ -65,26 +65,14 @@ export const Playground: Story = {
   ),
 };
 
-export const Default: Story = {
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_320px] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+export const States: Story = {
   args: {},
-  render: () => (
-    <div className="ui:w-[320px]">
-      <InputOtp maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
-        <InputOtp.Group>
-          <InputOtp.Slot index={0} />
-          <InputOtp.Slot index={1} />
-          <InputOtp.Slot index={2} />
-        </InputOtp.Group>
-        <InputOtp.Separator />
-        <InputOtp.Group>
-          <InputOtp.Slot index={3} />
-          <InputOtp.Slot index={4} />
-          <InputOtp.Slot index={5} />
-        </InputOtp.Group>
-      </InputOtp>
-    </div>
-  ),
   parameters: {
+    controls: { hideNoControlsWarning: true },
     docs: {
       source: {
         code: `import { InputOtp } from "@obel-arg/malbec-ui";
@@ -102,54 +90,46 @@ import { REGEXP_ONLY_DIGITS } from "input-otp";
     <InputOtp.Slot index={4} />
     <InputOtp.Slot index={5} />
   </InputOtp.Group>
-</InputOtp>`,
-      },
-    },
-  },
-};
+</InputOtp>
 
-export const Invalid: Story = {
-  name: "State · invalid",
-  args: {},
-  render: () => (
-    <div className="ui:w-[320px]">
-      <InputOtp aria-invalid maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
-        <InputOtp.Group>
-          <InputOtp.Slot index={0} />
-          <InputOtp.Slot index={1} />
-          <InputOtp.Slot index={2} />
-        </InputOtp.Group>
-        <InputOtp.Separator />
-        <InputOtp.Group>
-          <InputOtp.Slot index={3} />
-          <InputOtp.Slot index={4} />
-          <InputOtp.Slot index={5} />
-        </InputOtp.Group>
-      </InputOtp>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { InputOtp } from "@obel-arg/malbec-ui";
-import { REGEXP_ONLY_DIGITS } from "input-otp";
+<InputOtp disabled maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
+  …
+</InputOtp>
 
 <InputOtp aria-invalid maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
-  <InputOtp.Group>
-    <InputOtp.Slot index={0} />
-    <InputOtp.Slot index={1} />
-    <InputOtp.Slot index={2} />
-  </InputOtp.Group>
-  <InputOtp.Separator />
-  <InputOtp.Group>
-    <InputOtp.Slot index={3} />
-    <InputOtp.Slot index={4} />
-    <InputOtp.Slot index={5} />
-  </InputOtp.Group>
+  …
 </InputOtp>`,
       },
     },
   },
+  render: () => (
+    <div className={statesGrid}>
+      {(
+        [
+          ["Default", {}],
+          ["Disabled", { disabled: true }],
+          ["Invalid", { "aria-invalid": true }],
+        ] as const
+      ).map(([label, stateProps]) => (
+        <React.Fragment key={label}>
+          <span className={stateCaption}>{label}</span>
+          <InputOtp {...stateProps} maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
+            <InputOtp.Group>
+              <InputOtp.Slot index={0} />
+              <InputOtp.Slot index={1} />
+              <InputOtp.Slot index={2} />
+            </InputOtp.Group>
+            <InputOtp.Separator />
+            <InputOtp.Group>
+              <InputOtp.Slot index={3} />
+              <InputOtp.Slot index={4} />
+              <InputOtp.Slot index={5} />
+            </InputOtp.Group>
+          </InputOtp>
+        </React.Fragment>
+      ))}
+    </div>
+  ),
 };
 
 export const WithSeparators: Story = {

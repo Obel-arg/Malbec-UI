@@ -14,7 +14,7 @@ export const buttonVariants = cva(
     "ui:transition-[opacity,background-color,border-color,color]",
     "ui:outline-none",
     "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
+    "ui:focus-visible:ring-focus",
     "ui:focus-visible:ring-offset-2",
     "ui:focus-visible:ring-offset-background-100",
     "ui:disabled:opacity-50",
@@ -25,52 +25,39 @@ export const buttonVariants = cva(
       variant: {
         primary:
           "ui:bg-primary ui:text-primary-foreground ui:font-semibold ui:hover:opacity-90 ui:active:opacity-80",
+        /** `secondary`, `ghost` and `outline` are grey: malbec-ux-ui keeps brand colour for the primary CTA. */
         secondary:
-          "ui:bg-background-300 ui:text-primary ui:hover:opacity-90 ui:active:opacity-80",
+          "ui:bg-background-300 ui:text-text-default ui:hover:opacity-90 ui:active:opacity-80",
         ghost:
-          "ui:bg-transparent ui:text-primary ui:hover:bg-background-300/60 ui:active:bg-background-300",
+          "ui:bg-transparent ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
         outline:
-          "ui:border-[1.5px] ui:border-primary ui:bg-transparent ui:text-primary ui:hover:bg-primary/10 ui:active:bg-primary/15",
+          "ui:border-[1.5px] ui:border-background-300 ui:bg-transparent ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
         destructive:
           "ui:bg-destructive ui:text-destructive-foreground ui:hover:opacity-90 ui:active:opacity-80",
         link: "ui:bg-transparent ui:text-primary ui:underline-offset-4 ui:hover:underline",
         /** A full-width, left-aligned row inside a list or popover (pick an item, add a credit…). */
         row: "ui:w-full ui:justify-start ui:bg-transparent ui:font-normal ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
       },
-      /**
-       * `neutral` greys out the chrome of `outline` / `ghost` (malbec-ux-ui: brand colour is only
-       * for CTAs and state). Same recipe the apps used to apply by hand (`no-green-button-classes`).
-       */
-      tone: {
-        brand: "",
-        neutral: "ui:focus-visible:ring-malbec-icon",
-      },
       size: {
-        sm: "ui:h-8 ui:px-2 ui:py-[6px] ui:text-[10px] ui:leading-4 ui:tracking-[-0.3px]",
+        /**
+         * @deprecated malbec-ux-ui never pairs `sm` with text, so it renders as `md`. For a compact
+         * icon-only button use `icon-sm`.
+         */
+        sm: "ui:h-9 ui:px-4 ui:py-[6px] ui:text-[12px] ui:leading-5",
         md: "ui:h-9 ui:px-4 ui:py-[6px] ui:text-[12px] ui:leading-5",
         lg: "ui:h-9 ui:px-4 ui:py-2 ui:text-[12px] ui:leading-5",
         icon: "ui:h-9 ui:w-9 ui:p-0 ui:text-[12px]",
+        /** 32px square for compact icon-only buttons (calendar arrows, toolbars). */
+        "icon-sm": "ui:h-8 ui:w-8 ui:p-0 ui:text-[12px]",
       },
     },
     compoundVariants: [
-      {
-        variant: "outline",
-        tone: "neutral",
-        class:
-          "ui:border-background-300 ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
-      },
-      {
-        variant: "ghost",
-        tone: "neutral",
-        class: "ui:text-text-default ui:hover:bg-background-200 ui:active:bg-background-300",
-      },
       // Rows size to their content; this goes last so it beats the size geometry.
       { variant: "row", class: "ui:h-auto ui:px-2 ui:py-1.5" },
     ],
     defaultVariants: {
       variant: "primary",
       size: "md",
-      tone: "brand",
     },
   },
 );
@@ -80,10 +67,11 @@ export const buttonIconVariants = cva(
   {
     variants: {
       size: {
-        sm: "ui:size-3",
+        sm: "ui:size-4",
         md: "ui:size-4",
         lg: "ui:size-4",
         icon: "ui:size-5",
+        "icon-sm": "ui:size-4",
       },
     },
     defaultVariants: {
@@ -99,10 +87,11 @@ export const buttonSpinnerWrapperVariants = cva(
   {
     variants: {
       size: {
-        sm: "ui:size-3",
+        sm: "ui:size-4",
         md: "ui:size-4",
         lg: "ui:size-4",
         icon: "ui:size-5",
+        "icon-sm": "ui:size-4",
       },
     },
     defaultVariants: {
@@ -115,4 +104,5 @@ export type ButtonVariant = NonNullable<
   VariantProps<typeof buttonVariants>["variant"]
 >;
 export type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
-export type ButtonTone = NonNullable<VariantProps<typeof buttonVariants>["tone"]>;
+/** @deprecated 2.0 removed the brand tone; `neutral` is the only look and has no effect. */
+export type ButtonTone = "neutral";

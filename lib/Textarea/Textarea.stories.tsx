@@ -42,57 +42,43 @@ export const Playground: Story = {
   ),
 };
 
-export const Default: Story = {
-  render: () => (
-    <div className="ui:w-[320px]">
-      <Textarea placeholder="Tell us a bit about you…" />
-    </div>
-  ),
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_320px] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+export const States: Story = {
   parameters: {
+    controls: { hideNoControlsWarning: true },
     docs: {
       source: {
         code: `import { Textarea } from "@obel-arg/malbec-ui";
 
-<Textarea placeholder="Tell us a bit about you…" />`,
-      },
-    },
-  },
-};
+<Textarea placeholder="Tell us a bit about you…" />
 
-export const Disabled: Story = {
-  name: "State · disabled",
-  render: () => (
-    <div className="ui:w-[320px]">
-      <Textarea disabled placeholder="Tell us a bit about you…" />
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Textarea } from "@obel-arg/malbec-ui";
-
-<Textarea disabled placeholder="Tell us a bit about you…" />`,
-      },
-    },
-  },
-};
-
-export const Invalid: Story = {
-  name: "State · invalid",
-  render: () => (
-    <div className="ui:w-[320px]">
-      <Textarea aria-invalid placeholder="Tell us a bit about you…" />
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Textarea } from "@obel-arg/malbec-ui";
+<Textarea disabled placeholder="Tell us a bit about you…" />
 
 <Textarea aria-invalid placeholder="Tell us a bit about you…" />`,
       },
     },
   },
+  render: () => (
+    <div className={statesGrid}>
+      <span className={stateCaption}>Default</span>
+      <Textarea aria-label="Default" placeholder="Tell us a bit about you…" />
+      <span className={stateCaption}>Disabled</span>
+      <Textarea
+        aria-label="Disabled"
+        disabled
+        placeholder="Tell us a bit about you…"
+      />
+      <span className={stateCaption}>Invalid</span>
+      <Textarea
+        aria-label="Invalid"
+        aria-invalid
+        placeholder="Tell us a bit about you…"
+      />
+    </div>
+  ),
 };
 
 export const WithLabel: Story = {

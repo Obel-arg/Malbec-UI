@@ -12,7 +12,7 @@ export const toggleVariants = cva(
     "ui:transition-[background-color,border-color,color,opacity]",
     "ui:outline-none",
     "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
+    "ui:focus-visible:ring-focus",
     "ui:focus-visible:ring-offset-2",
     "ui:focus-visible:ring-offset-background-100",
     "ui:disabled:opacity-50",

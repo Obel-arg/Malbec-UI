@@ -30,7 +30,7 @@ export const breadcrumbLinkVariants = cva(
     "ui:hover:text-foreground",
     "ui:focus-visible:outline-none",
     "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
+    "ui:focus-visible:ring-focus",
     "ui:focus-visible:ring-offset-2",
     "ui:focus-visible:ring-offset-background-100",
     "ui:rounded-sm",

@@ -175,8 +175,8 @@ const frameworks = ["Next.js", "Svelte.js", "Nuxt.js", "Remix", "Astro"];
   },
 };
 
-export const FloatingNoVeil: Story = {
-  name: "Size + no veil",
+export const SizeWithVeil: Story = {
+  name: "Size + veil (opt-in)",
   parameters: {
     docs: {
       source: {
@@ -184,16 +184,16 @@ export const FloatingNoVeil: Story = {
 
 <Dialog>
   <Dialog.Trigger asChild>
-    <Button variant="outline" tone="neutral">Editar show</Button>
+    <Button variant="outline">Editar show</Button>
   </Dialog.Trigger>
-  <Dialog.Content size="md" overlay="none">
+  <Dialog.Content size="md" overlay="veil">
     <Dialog.Header>
       <Dialog.Title>Editar show</Dialog.Title>
       <Dialog.Description>Los cambios se guardan al confirmar.</Dialog.Description>
     </Dialog.Header>
     <Dialog.Footer>
       <Dialog.Close asChild>
-        <Button variant="outline" tone="neutral">Cancelar</Button>
+        <Button variant="outline">Cancelar</Button>
       </Dialog.Close>
       <Button>Guardar</Button>
     </Dialog.Footer>
@@ -205,18 +205,18 @@ export const FloatingNoVeil: Story = {
   render: () => (
     <Dialog>
       <Dialog.Trigger asChild>
-        <Button variant="outline" tone="neutral">
+        <Button variant="outline">
           <Button.Text>Editar show</Button.Text>
         </Button>
       </Dialog.Trigger>
-      <Dialog.Content size="md" overlay="none">
+      <Dialog.Content size="md" overlay="veil">
         <Dialog.Header>
           <Dialog.Title>Editar show</Dialog.Title>
           <Dialog.Description>Los cambios se guardan al confirmar.</Dialog.Description>
         </Dialog.Header>
         <Dialog.Footer>
           <Dialog.Close asChild>
-            <Button variant="outline" tone="neutral">
+            <Button variant="outline">
               <Button.Text>Cancelar</Button.Text>
             </Button>
           </Dialog.Close>

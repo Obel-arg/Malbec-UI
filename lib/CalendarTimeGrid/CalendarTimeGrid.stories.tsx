@@ -457,7 +457,7 @@ function CalendarFormatsTabs() {
 }
 
 const meta = {
-  title: "Custom/CalendarTimeGrid",
+  title: "Components/CalendarTimeGrid",
   parameters: { layout: "padded" },
   tags: ["autodocs"],
 } satisfies Meta;

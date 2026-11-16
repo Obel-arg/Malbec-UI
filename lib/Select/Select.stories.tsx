@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Fragment } from "react";
 import { Select, type SelectProps } from "./Select";
 
 /**
@@ -61,15 +62,18 @@ export const Default: Story = {
   ),
 };
 
-export const Invalid: Story = {
-  name: "State · invalid",
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_18rem] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+export const States: Story = {
   parameters: {
     docs: {
       source: {
         code: `import { Select } from "@obel-arg/malbec-ui";
 
-<Select>
-  <Select.Trigger aria-invalid aria-label="Example select">
+<Select defaultValue="a">
+  <Select.Trigger aria-label="Example select">
     <Select.Value placeholder="Choose an option" />
   </Select.Trigger>
   <Select.Content>
@@ -77,22 +81,55 @@ export const Invalid: Story = {
     <Select.Item value="b">Option B</Select.Item>
     <Select.Item value="c">Option C</Select.Item>
   </Select.Content>
+</Select>
+
+<Select>
+  <Select.Trigger aria-label="Example select">
+    <Select.Value placeholder="Choose an option" />
+  </Select.Trigger>
+  …
+</Select>
+
+<Select disabled>
+  <Select.Trigger aria-label="Example select">
+    <Select.Value placeholder="Choose an option" />
+  </Select.Trigger>
+  …
+</Select>
+
+<Select>
+  <Select.Trigger aria-invalid aria-label="Example select">
+    <Select.Value placeholder="Choose an option" />
+  </Select.Trigger>
+  …
 </Select>`,
       },
     },
   },
   render: () => (
-    <div className="ui:w-72">
-      <Select>
-        <Select.Trigger aria-invalid aria-label="Example select">
-          <Select.Value placeholder="Choose an option" />
-        </Select.Trigger>
-        <Select.Content>
-          <Select.Item value="a">Option A</Select.Item>
-          <Select.Item value="b">Option B</Select.Item>
-          <Select.Item value="c">Option C</Select.Item>
-        </Select.Content>
-      </Select>
+    <div className={statesGrid}>
+      {(
+        [
+          ["Selected", { defaultValue: "a" }, false],
+          ["Placeholder", {}, false],
+          ["Disabled", { disabled: true }, false],
+          ["Invalid", {}, true],
+        ] as const
+      ).map(([label, rootProps, invalid]) => (
+        <Fragment key={label}>
+          <span className={stateCaption}>{label}</span>
+          <Select {...rootProps}>
+            <Select.Trigger aria-invalid={invalid || undefined} aria-label={label}>
+              <Select.Value placeholder="Choose an option" />
+            </Select.Trigger>
+            <Select.Content>
+              <Select.Item value="a">Option A</Select.Item>
+              <Select.Item value="b">Option B</Select.Item>
+              <Select.Item value="c">Option C</Select.Item>
+            </Select.Content>
+          </Select>
+        </Fragment>
+      ))}
     </div>
   ),
 };

@@ -18,7 +18,8 @@ export const tabsListVariants = cva(
   {
     variants: {
       variant: {
-        segmented: "ui:h-10 ui:rounded-[8px] ui:bg-background-200 ui:p-1",
+        /** malbec-ux-ui: 40px track, 6px radius. */
+        segmented: "ui:h-10 ui:rounded-[6px] ui:bg-background-200 ui:p-1",
         underline:
           "ui:h-11 ui:gap-4 ui:rounded-none ui:border-b ui:border-background-300 ui:bg-transparent ui:p-0",
         /** Screen-level tabs (malbec-ux-ui): no line, no track; the active one at 100%, the rest at 40%. */
@@ -44,10 +45,9 @@ export const tabsTriggerVariants = cva(
     "ui:tracking-[-0.42px]",
     "ui:transition-[color,background-color,box-shadow,border-color]",
     "ui:outline-none",
+    // Neutral focus ring: a brand ring stays lit on the tab you just clicked.
     "ui:focus-visible:ring-2",
-    "ui:focus-visible:ring-primary",
-    "ui:focus-visible:ring-offset-2",
-    "ui:focus-visible:ring-offset-background-100",
+    "ui:focus-visible:ring-background-300",
     "ui:cursor-pointer",
     "ui:disabled:cursor-not-allowed",
     "ui:disabled:pointer-events-none",
@@ -57,7 +57,7 @@ export const tabsTriggerVariants = cva(
     variants: {
       variant: {
         segmented:
-          "ui:h-full ui:rounded-[6px] ui:px-2.5 ui:py-0 ui:font-normal ui:text-text-default ui:data-[state=active]:bg-background-100 ui:data-[state=active]:shadow-[0_1px_2px_0_rgba(0,0,0,0.04)]",
+          "ui:h-full ui:rounded-[4px] ui:px-3 ui:py-1.5 ui:font-medium ui:text-text-default ui:data-[state=active]:bg-background-100 ui:data-[state=active]:shadow-[0_1px_3px_0_rgba(0,0,0,0.05)]",
         underline:
           "ui:relative ui:-mb-px ui:rounded-none ui:px-1 ui:py-3 ui:text-sm ui:font-medium ui:text-text-default-muted ui:hover:text-text-default ui:after:pointer-events-none ui:after:absolute ui:after:left-0 ui:after:right-0 ui:after:-bottom-px ui:after:h-[3px] ui:after:bg-background-300 ui:after:opacity-0 ui:after:content-[''] ui:data-[state=active]:text-text-default ui:data-[state=active]:after:opacity-100",
         opacity:
@@ -78,7 +78,7 @@ export const tabsContentVariants = cva([
   "ui:text-text-default",
   "ui:outline-none",
   "ui:focus-visible:ring-2",
-  "ui:focus-visible:ring-primary",
+  "ui:focus-visible:ring-focus",
   "ui:focus-visible:ring-offset-2",
   "ui:focus-visible:ring-offset-background-100",
 ]);

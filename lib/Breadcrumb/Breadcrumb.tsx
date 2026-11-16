@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "../utils/cn";
+import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import {
   breadcrumbEllipsisVariants,
   breadcrumbItemVariants,
@@ -45,11 +46,12 @@ const BreadcrumbRoot = React.forwardRef<
   React.ComponentRef<"nav">,
   BreadcrumbProps
 >(function BreadcrumbRoot({ className, ...props }, ref) {
+  const labels = useMalbecLabels();
   return (
     <nav
       ref={ref}
       data-slot="breadcrumb"
-      aria-label="breadcrumb"
+      aria-label={labels.breadcrumb}
       className={cn(className)}
       {...props}
     />
@@ -155,6 +157,7 @@ const BreadcrumbEllipsis = React.forwardRef<
   HTMLSpanElement,
   BreadcrumbEllipsisProps
 >(function BreadcrumbEllipsis({ className, ...props }, ref) {
+  const labels = useMalbecLabels();
   return (
     <span
       ref={ref}
@@ -165,7 +168,7 @@ const BreadcrumbEllipsis = React.forwardRef<
       {...props}
     >
       <EllipsisIcon />
-      <span className="ui:sr-only">More</span>
+      <span className="ui:sr-only">{labels.more}</span>
     </span>
   );
 });

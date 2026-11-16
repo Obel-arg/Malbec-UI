@@ -170,7 +170,7 @@ export const sidebarMenuButtonVariants = cva(
     "ui:flex ui:h-8 ui:w-full ui:items-center ui:gap-2 ui:rounded-md ui:p-2",
     "ui:text-left ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
     "ui:outline-none ui:transition-colors",
-    "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+    "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
     "ui:disabled:pointer-events-none ui:disabled:opacity-50",
     "ui:hover:bg-background-300/40",
     "ui:data-[active=true]:bg-background-300/60",
@@ -208,7 +208,7 @@ export const sidebarMenuSubButtonVariants = cva(
     "ui:flex ui:h-8 ui:w-full ui:items-center ui:gap-2 ui:rounded-md ui:p-2",
     "ui:text-left ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
     "ui:outline-none ui:transition-colors",
-    "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+    "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
     "ui:hover:bg-background-300/40",
     "ui:data-[active=true]:bg-background-300/60",
   ],
@@ -227,7 +227,7 @@ export const sidebarMenuSubButtonVariants = cva(
 
 /** Workspace / user row in header & footer (Figma: h-12, gap-2, p-2). */
 export const sidebarRowButtonVariants = cva([
-  "ui:flex ui:h-12 ui:w-full ui:min-w-0 ui:items-center ui:gap-2 ui:overflow-hidden ui:rounded-md ui:p-2 ui:bg-transparent ui:text-left ui:outline-none ui:transition-colors ui:hover:bg-background-300/40 ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:flex ui:h-12 ui:w-full ui:min-w-0 ui:items-center ui:gap-2 ui:overflow-hidden ui:rounded-md ui:p-2 ui:bg-transparent ui:text-left ui:outline-none ui:transition-colors ui:hover:bg-background-300/40 ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   ...collapsedRowButton,
 ]);
 

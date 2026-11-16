@@ -70,7 +70,7 @@ export const Dark: Story = {
 <Tooltip.Provider>
   <Tooltip>
     <Tooltip.Trigger asChild>
-      <Button variant="ghost" tone="neutral" size="icon" aria-label="Descargar PDF">
+      <Button variant="ghost" size="icon" aria-label="Descargar PDF">
         <Button.Icon><DownloadIcon /></Button.Icon>
       </Button>
     </Tooltip.Trigger>
@@ -84,7 +84,7 @@ export const Dark: Story = {
     <Tooltip.Provider>
       <Tooltip defaultOpen>
         <Tooltip.Trigger asChild>
-          <Button variant="ghost" tone="neutral" size="icon" aria-label="Descargar PDF">
+          <Button variant="ghost" size="icon" aria-label="Descargar PDF">
             <Button.Text>↓</Button.Text>
           </Button>
         </Tooltip.Trigger>

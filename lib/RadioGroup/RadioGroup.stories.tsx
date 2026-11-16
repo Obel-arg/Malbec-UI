@@ -58,85 +58,54 @@ export const Playground: Story = {
   },
 };
 
-/** Three stacked options with the middle value selected (design reference layout). */
-export const Default: Story = {
+const statesGrid =
+  "malbec-font-sans ui:grid ui:grid-cols-[auto_auto] ui:items-center ui:gap-x-6 ui:gap-y-4";
+const stateCaption = "ui:text-muted-medium ui:text-text-default-muted";
+
+export const States: Story = {
   parameters: {
+    controls: { hideNoControlsWarning: true },
     docs: {
       source: {
-        code: `import { Label, RadioGroup } from "@obel-arg/malbec-ui";
+        code: `import { RadioGroup } from "@obel-arg/malbec-ui";
 
-<RadioGroup defaultValue="comfortable">
-  <div className="flex items-center gap-2">
-    <RadioGroup.Item value="default" id="rg-default" />
-    <Label htmlFor="rg-default">Default</Label>
-  </div>
-  <div className="flex items-center gap-2">
-    <RadioGroup.Item value="comfortable" id="rg-comfortable" />
-    <Label htmlFor="rg-comfortable">Comfortable</Label>
-  </div>
-  <div className="flex items-center gap-2">
-    <RadioGroup.Item value="compact" id="rg-compact" />
-    <Label htmlFor="rg-compact">Compact</Label>
-  </div>
-</RadioGroup>`,
-      },
-    },
-  },
-  render: function DefaultRender() {
-    return (
-      <RadioGroup defaultValue="comfortable" className="ui:w-[108px]">
-        <div className="ui:flex ui:w-full ui:items-center ui:gap-2">
-          <RadioGroup.Item value="default" id="rg-default" />
-          <Label htmlFor="rg-default">Default</Label>
-        </div>
-        <div className="ui:flex ui:items-center ui:gap-2">
-          <RadioGroup.Item value="comfortable" id="rg-comfortable" />
-          <Label htmlFor="rg-comfortable">Comfortable</Label>
-        </div>
-        <div className="ui:flex ui:w-full ui:items-center ui:gap-2">
-          <RadioGroup.Item value="compact" id="rg-compact" />
-          <Label htmlFor="rg-compact">Compact</Label>
-        </div>
-      </RadioGroup>
-    );
-  },
-};
+<RadioGroup defaultValue="checked" className="flex-row">
+  <RadioGroup.Item value="unchecked" aria-label="Unchecked" />
+  <RadioGroup.Item value="checked" aria-label="Checked" />
+</RadioGroup>
 
-export const Invalid: Story = {
-  name: "State · invalid",
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Label, RadioGroup } from "@obel-arg/malbec-ui";
+<RadioGroup defaultValue="checked" disabled className="flex-row">
+  <RadioGroup.Item value="unchecked" aria-label="Unchecked" />
+  <RadioGroup.Item value="checked" aria-label="Checked" />
+</RadioGroup>
 
 // Mark items with aria-invalid to show the error state.
-<RadioGroup>
-  <div className="flex items-center gap-2">
-    <RadioGroup.Item aria-invalid value="one" id="rg-invalid-one" />
-    <Label htmlFor="rg-invalid-one">Option one</Label>
-  </div>
-  <div className="flex items-center gap-2">
-    <RadioGroup.Item aria-invalid value="two" id="rg-invalid-two" />
-    <Label htmlFor="rg-invalid-two">Option two</Label>
-  </div>
+<RadioGroup className="flex-row">
+  <RadioGroup.Item aria-invalid value="one" aria-label="Option one" />
+  <RadioGroup.Item aria-invalid value="two" aria-label="Option two" />
 </RadioGroup>`,
       },
     },
   },
-  render: function InvalidRender() {
-    return (
-      <RadioGroup className="ui:w-[140px]">
-        <div className="ui:flex ui:w-full ui:items-center ui:gap-2">
-          <RadioGroup.Item aria-invalid value="one" id="rg-invalid-one" />
-          <Label htmlFor="rg-invalid-one">Option one</Label>
-        </div>
-        <div className="ui:flex ui:w-full ui:items-center ui:gap-2">
-          <RadioGroup.Item aria-invalid value="two" id="rg-invalid-two" />
-          <Label htmlFor="rg-invalid-two">Option two</Label>
-        </div>
+  render: () => (
+    <div className={statesGrid}>
+      <span className={stateCaption}>Default</span>
+      <RadioGroup defaultValue="checked" className="ui:flex-row">
+        <RadioGroup.Item value="unchecked" aria-label="Unchecked" />
+        <RadioGroup.Item value="checked" aria-label="Checked" />
       </RadioGroup>
-    );
-  },
+      <span className={stateCaption}>Disabled</span>
+      <RadioGroup defaultValue="checked" disabled className="ui:flex-row">
+        <RadioGroup.Item value="unchecked" aria-label="Unchecked" />
+        <RadioGroup.Item value="checked" aria-label="Checked" />
+      </RadioGroup>
+      <span className={stateCaption}>Invalid</span>
+      <RadioGroup className="ui:flex-row">
+        <RadioGroup.Item aria-invalid value="one" aria-label="Option one" />
+        <RadioGroup.Item aria-invalid value="two" aria-label="Option two" />
+      </RadioGroup>
+    </div>
+  ),
 };
 
 export const WithLabels: Story = {
@@ -168,41 +137,6 @@ export const WithLabels: Story = {
         <div className="ui:flex ui:items-center ui:gap-2">
           <RadioGroup.Item value="two" id="wl-two" />
           <Label htmlFor="wl-two">Default</Label>
-        </div>
-      </RadioGroup>
-    );
-  },
-};
-
-export const Disabled: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `import { Label, RadioGroup } from "@obel-arg/malbec-ui";
-
-<RadioGroup defaultValue="a">
-  <div className="flex items-center gap-2">
-    <RadioGroup.Item value="a" id="dis-a" />
-    <Label htmlFor="dis-a">Available</Label>
-  </div>
-  <div className="flex items-center gap-2">
-    <RadioGroup.Item value="b" id="dis-b" disabled />
-    <Label htmlFor="dis-b">Disabled</Label>
-  </div>
-</RadioGroup>`,
-      },
-    },
-  },
-  render: function DisabledRender() {
-    return (
-      <RadioGroup defaultValue="a">
-        <div className="ui:flex ui:items-center ui:gap-2">
-          <RadioGroup.Item value="a" id="dis-a" />
-          <Label htmlFor="dis-a">Available</Label>
-        </div>
-        <div className="ui:flex ui:items-center ui:gap-2">
-          <RadioGroup.Item value="b" id="dis-b" disabled />
-          <Label htmlFor="dis-b">Disabled</Label>
         </div>
       </RadioGroup>
     );

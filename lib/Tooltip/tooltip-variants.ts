@@ -28,7 +28,7 @@ export const tooltipContentVariants = cva(
        */
       variant: {
         light:
-          "ui:border ui:border-background-300 ui:bg-background-100 ui:px-3 ui:py-1.5 ui:text-base ui:leading-6 ui:text-text-default ui:shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)]",
+          "ui:border ui:border-background-300 ui:bg-background-100 ui:max-w-[280px] ui:px-3 ui:py-1.5 ui:text-[13px] ui:leading-[18px] ui:text-text-default ui:shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)]",
         dark: "ui:border-0 ui:bg-malbec-ink ui:px-2.5 ui:py-1.5 ui:text-[13px] ui:font-medium ui:leading-4 ui:text-background-100 ui:shadow-[0_2px_8px_rgba(0,0,0,0.16)]",
       },
     },

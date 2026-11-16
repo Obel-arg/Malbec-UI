@@ -121,7 +121,7 @@ function DemoInbox() {
                 <Inbox.Item.Body>{SAMPLE_BODY}</Inbox.Item.Body>
               </div>
               <Inbox.Item.Actions>
-                <Button size="sm">Verify now</Button>
+                <Button size="md">Verify now</Button>
               </Inbox.Item.Actions>
               <Inbox.Item.Footer className="ui:opacity-50">
                 Today at 9:42 AM
@@ -141,8 +141,8 @@ function DemoInbox() {
                 <Inbox.Item.Body>{SAMPLE_BODY}</Inbox.Item.Body>
               </div>
               <Inbox.Item.Actions>
-                <Button size="sm">Primary action</Button>
-                <Button size="sm" variant="outline">
+                <Button size="md">Primary action</Button>
+                <Button size="md" variant="outline">
                   Secondary action
                 </Button>
               </Inbox.Item.Actions>
@@ -247,7 +247,7 @@ function InboxExample() {
                 </Inbox.Item.Body>
               </div>
               <Inbox.Item.Actions>
-                <Button size="sm">Verify now</Button>
+                <Button size="md">Verify now</Button>
               </Inbox.Item.Actions>
               <Inbox.Item.Footer className="opacity-50">
                 Today at 9:42 AM

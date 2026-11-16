@@ -1,5 +1,5 @@
 import { cva } from "class-variance-authority";
-import { overlayVeilVariants } from "../Dialog/dialog-variants";
+import { overlayVeilVariants, VEILED_SURFACE_SHADOW } from "../Dialog/dialog-variants";
 
 export const sheetOverlayVariants = cva(
   [
@@ -8,7 +8,7 @@ export const sheetOverlayVariants = cva(
     "ui:data-[state=closed]:animate-malbec-overlay-out",
     "ui:motion-reduce:animate-none",
   ],
-  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "default" } },
+  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "none" } },
 );
 
 export const sheetContentVariants = cva(
@@ -19,7 +19,6 @@ export const sheetContentVariants = cva(
     "ui:rounded-none",
     "ui:bg-background-100",
     "ui:p-6",
-    "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
     "ui:outline-none",
     "ui:motion-reduce:animate-none",
   ],
@@ -54,7 +53,7 @@ export const sheetContentVariants = cva(
         lg: "",
         xl: "",
       },
-      overlay: { default: "", none: "" },
+      overlay: { none: "", veil: VEILED_SURFACE_SHADOW },
     },
     compoundVariants: [
       ...(["left", "right"] as const).flatMap((side) => [
@@ -71,6 +70,7 @@ export const sheetContentVariants = cva(
     ],
     defaultVariants: {
       side: "right",
+      overlay: "none",
     },
   },
 );
@@ -85,7 +85,7 @@ export const sheetCloseVariants = cva([
   "ui:opacity-70",
   "ui:transition-opacity",
   "ui:outline-none",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);
 
 export const sheetCloseIconVariants = cva("ui:size-4");
@@ -119,7 +119,7 @@ export const sheetActionVariants = cva([
   "ui:whitespace-nowrap",
   "ui:outline-none ui:transition-[opacity,background-color]",
   "ui:hover:opacity-90 ui:active:opacity-80",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);
 
 export const sheetInlineFieldVariants = cva("ui:flex ui:w-full ui:items-center ui:gap-4");
@@ -136,5 +136,5 @@ export const sheetInlineInputVariants = cva([
   "ui:text-sm ui:leading-5 ui:font-normal ui:text-text-default",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
-  "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+  "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
 ]);

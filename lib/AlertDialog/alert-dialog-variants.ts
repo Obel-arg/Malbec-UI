@@ -1,10 +1,14 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { FLOATING_SURFACE_SHADOW, overlayVeilVariants } from "../Dialog/dialog-variants";
+import {
+  FLOATING_SURFACE_SHADOW,
+  overlayVeilVariants,
+  VEILED_SURFACE_SHADOW,
+} from "../Dialog/dialog-variants";
 
-/** Backdrop: dim + frosted glass over the page (not in the Figma card spec). */
+/** Transparent by default (malbec-ux-ui rule 15); `overlay="veil"` dims the page. */
 export const alertDialogOverlayVariants = cva(
   ["ui:fixed ui:inset-0 ui:z-(--ui-z-overlay)", "ui:transition-opacity"],
-  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "default" } },
+  { variants: { overlay: overlayVeilVariants }, defaultVariants: { overlay: "none" } },
 );
 
 /**
@@ -21,7 +25,6 @@ export const alertDialogContentVariants = cva(
     "ui:border ui:border-background-300/30",
     "ui:bg-background-100",
     "ui:p-6",
-    "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
     "ui:transition-[opacity,transform] ui:duration-200",
   ],
   {
@@ -31,10 +34,11 @@ export const alertDialogContentVariants = cva(
         // Compact dialog: Figma / mobile — more rounded panel, full-width footer stack, primary on top
         sm: "ui:max-w-sm ui:gap-4 ui:rounded-xl ui:p-6",
       },
-      overlay: { default: "", none: FLOATING_SURFACE_SHADOW },
+      overlay: { none: FLOATING_SURFACE_SHADOW, veil: VEILED_SURFACE_SHADOW },
     },
     defaultVariants: {
       size: "default",
+      overlay: "none",
     },
   },
 );
@@ -99,7 +103,7 @@ export const alertDialogCancelVariants = cva(
     "ui:text-sm ui:font-medium ui:leading-5 ui:tracking-[-0.3px] ui:text-text-default",
     "ui:whitespace-nowrap",
     "ui:outline-none ui:transition-[opacity,background-color,border-color]",
-    "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+    "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   ],
   {
     variants: {
@@ -125,7 +129,7 @@ export const alertDialogActionVariants = cva(
     "ui:whitespace-nowrap",
     "ui:outline-none ui:transition-[opacity,background-color]",
     "ui:hover:opacity-90 ui:active:opacity-80",
-    "ui:focus-visible:ring-2 ui:focus-visible:ring-primary ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
+    "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
   ],
   {
     variants: {
