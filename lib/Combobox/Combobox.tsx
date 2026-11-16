@@ -383,7 +383,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxProps>(
             data-mode={mode}
             data-disabled={disabled || undefined}
             className={cn(
-              "ui:relative ui:box-border ui:block ui:w-full ui:min-w-[200px] ui:max-w-full",
+              "ui:relative ui:box-border ui:block ui:w-full ui:min-w-[min(200px,100%)] ui:max-w-full",
               className,
             )}
             style={rootStyle}

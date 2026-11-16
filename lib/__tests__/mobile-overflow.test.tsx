@@ -65,3 +65,17 @@ describe("nothing runs off a 375px screen", () => {
     expect(classes(root.className)).toContain("ui:w-[min(100%,280px)]");
   });
 });
+
+describe("Combobox in a narrow container", () => {
+  it("never asks for more than its container (it had a fixed 200px minimum)", async () => {
+    const { Combobox } = await import("../Combobox/Combobox");
+    const { container } = render(
+      <Combobox items={["a", "b"]}>
+        <Combobox.Input placeholder="Pick" />
+      </Combobox>,
+    );
+    const root = container.querySelector('[data-slot="combobox"]')!;
+    expect(classes(root.className)).toContain("ui:min-w-[min(200px,100%)]");
+    expect(classes(root.className)).not.toContain("ui:min-w-[200px]");
+  });
+});
