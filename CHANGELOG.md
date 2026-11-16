@@ -153,6 +153,7 @@ All additive. Each one is the version already approved on screen in an app, adju
 - **`NotificationBell`**: the suite's bell (two states, one arrival animation, the unread dot in `--color-malbec-unread`, reduced motion). The floating toast stays in the apps.
 - **Sidebar `collapsible="dock"`** on `Sidebar.Provider`: a rail with a panel that floats on hover and pins.
 - **DataTable:** `DataTable.Pagination` (client `pageSize`, controlled `pagination`, server `rowCount`), `DataTable.ColumnsToggle`, controlled `sorting` + `manualSorting`, and `toolbar` as a function of the table. `SortableColumnHeader` takes `icon` and `align`.
+- **DataTable `mobileLayout="list"`:** below 640px, one line per row instead of the table. Each column says where it goes with `meta.mobile` (`"title"`, `"subtitle"`, `"trailing"`, `"hidden"`); `meta.label` names it in the sort menu. Sorting and select-all sit in a bar above the rows. Without `meta.mobile`, the first column is the title and the next two the subtitle. This is the phone layout to use for lists of shows, artists or contracts.
 - **Table:** `stackOnMobile` (each row becomes a card under 640px; desktop unchanged) and `stickyHeader`.
 - **Combobox:** `keywords` per item, `filter={null}` + `onInputValueChange` for remote search, `loading`, `onCreate` ("Create “…”" when nothing matches) and `Combobox.List onLoadMore`.
 - **CSS (`tokens.css`):** `scroll-hidden` / `scroll-thin`, the suite easings and the `wizard-step` keyframes.
@@ -166,7 +167,7 @@ Records and Artist run as PWAs. These were checked on an iPhone (Safari) and in 
 - **Nothing runs off a 375px screen:** toasts (the fixed 384px width now applies above 600px only), FloatingBar (its actions scroll sideways), segmented and opacity Tabs (scroll sideways), Pagination (wraps; Previous/Next keep only the arrow below 640px), the DatePicker range (months stack below 640px) and DatePicker itself.
 - **Calendars** keep readable columns below 640px and scroll sideways: 80px in the month view, 64px per day in the week view.
 - **Reachable with a finger:** Inbox row actions are always shown on touch screens, in the row's flow; the `Input locked` reason opens on tap; DropdownMenu submenus no longer start the hover timer on touch.
-- **Table `stackOnMobile`** keeps the header's controls (sort, select all) as a row of chips above the cards instead of hiding them.
+- **Table `stackOnMobile`** keeps the header's controls (sort, select all) as a row of chips above the cards instead of hiding them; the row checkbox and the last cell's menu sit in the card's top corners, and values no longer split mid-word. For a `DataTable`, prefer `mobileLayout="list"`.
 - Command hides its keyboard hints on touch screens.
 
 ### Fixes: Combobox
