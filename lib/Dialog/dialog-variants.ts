@@ -114,7 +114,8 @@ export const dialogInlineInputVariants = cva([
   "ui:rounded-[6px]",
   "ui:bg-background-100",
   "ui:px-4 ui:py-2",
-  "ui:text-sm ui:leading-5 ui:font-normal ui:text-text-default",
+  // iOS zooms into a focused field under 16px: 16px on a phone, 14px from sm.
+  "ui:text-[16px] ui:sm:text-[14px] ui:leading-5 ui:font-normal ui:text-text-default",
   "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
   "ui:outline-none",
   "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",

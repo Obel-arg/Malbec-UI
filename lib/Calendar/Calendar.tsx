@@ -190,7 +190,7 @@ const defaultComponents = {
         )}
       >
         <select
-          className="ui:absolute ui:inset-0 ui:h-full ui:w-full ui:cursor-pointer ui:appearance-none ui:bg-transparent ui:opacity-0 ui:outline-none"
+          className="ui:absolute ui:inset-0 ui:h-full ui:w-full ui:cursor-pointer ui:appearance-none ui:bg-transparent ui:text-[16px] ui:opacity-0 ui:outline-none"
           value={value}
           onChange={onChange}
           {...props}

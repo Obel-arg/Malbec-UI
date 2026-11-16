@@ -138,7 +138,7 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
         type={type}
         data-slot="input"
         className={cn(
-          "ui:flex-1 ui:min-w-0 ui:border-0 ui:bg-transparent ui:p-0 ui:text-[14px] ui:leading-5 ui:tracking-[-0.42px] ui:text-text-default ui:outline-none ui:placeholder:text-text-default-muted ui:disabled:cursor-not-allowed ui:disabled:opacity-50",
+          "ui:flex-1 ui:min-w-0 ui:border-0 ui:bg-transparent ui:p-0 ui:text-[16px] ui:sm:text-[14px] ui:leading-5 ui:tracking-[-0.42px] ui:text-text-default ui:outline-none ui:placeholder:text-text-default-muted ui:disabled:cursor-not-allowed ui:disabled:opacity-50",
           locked && "ui:truncate ui:text-text-default-muted ui:disabled:cursor-default ui:disabled:opacity-100",
         )}
         aria-describedby={describedBy}
