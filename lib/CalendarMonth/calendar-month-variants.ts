@@ -4,20 +4,19 @@ export const calendarMonthRootVariants = cva(
   [
     "malbec-font-sans",
     "ui:flex ui:w-full ui:flex-col ui:overflow-hidden",
-    "ui:rounded-xl ui:border ui:border-sidebar-border ui:bg-background-100",
-    "ui:shadow-[0_2px_12px_0_rgba(0,0,0,0.07)]",
+    "ui:rounded-xl ui:border ui:border-background-300 ui:bg-background-100",
   ],
 );
 
 export const calendarMonthHeaderRowVariants = cva(
-  "ui:flex ui:h-10 ui:shrink-0 ui:border-b ui:border-sidebar-border ui:bg-background-200",
+  "ui:flex ui:h-10 ui:shrink-0 ui:border-b ui:border-background-300 ui:bg-background-200",
 );
 
 export const calendarMonthHeaderCellVariants = cva(
   [
     "ui:flex ui:flex-1 ui:items-center ui:justify-center",
-    "ui:border-r ui:border-sidebar-border",
-    "ui:text-[11px] ui:font-medium ui:uppercase ui:leading-[normal] ui:text-[#a6a6ad]",
+    "ui:border-r ui:border-background-300",
+    "ui:text-[11px] ui:font-medium ui:uppercase ui:leading-[normal] ui:text-malbec-muted-text",
   ],
   {
     variants: {
@@ -103,7 +102,7 @@ export const calendarMonthGroupChildVariants = cva(
 export const calendarMonthDayCellVariants = cva(
   [
     "ui:relative ui:box-border ui:flex ui:min-w-0 ui:flex-1 ui:flex-col ui:items-stretch",
-    "ui:gap-1 ui:overflow-hidden ui:border-r ui:border-t ui:border-sidebar-border ui:p-2",
+    "ui:gap-1 ui:overflow-hidden ui:border-r ui:border-t ui:border-background-300 ui:p-2",
     "ui:bg-background-100",
   ],
   {
@@ -122,11 +121,11 @@ export const calendarMonthDayNumberRowVariants = cva(
 );
 
 export const calendarMonthDayNumberTextVariants = cva(
-  "ui:text-[12px] ui:font-medium ui:leading-[normal] ui:text-[#1a1a1f]",
+  "ui:text-[12px] ui:font-medium ui:leading-[normal] ui:text-malbec-ink",
   {
     variants: {
       isOutside: {
-        true: "ui:font-normal ui:text-[#a6a6ad]",
+        true: "ui:font-normal ui:text-malbec-muted-text",
         false: "",
       },
     },
@@ -135,7 +134,7 @@ export const calendarMonthDayNumberTextVariants = cva(
 );
 
 export const calendarMonthTodayIndicatorVariants = cva(
-  "ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:bg-primary ui:text-[12px] ui:font-semibold ui:leading-[normal] ui:text-primary-foreground",
+  "ui:inline-flex ui:size-6 ui:shrink-0 ui:items-center ui:justify-center ui:rounded-full ui:bg-malbec-icon ui:text-[12px] ui:font-semibold ui:leading-[normal] ui:text-background-100",
 );
 
 export const calendarMonthEventsStackVariants = cva(

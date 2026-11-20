@@ -32,6 +32,8 @@
   --color-malbec-icon: #3f3f46;
   /* Darkest neutral: titles and the dark tooltip. We never use black. */
   --color-malbec-ink: #1a1a1f;
+  /* Secondary text: hours, days outside the month, captions. */
+  --color-malbec-muted-text: #8c8c94;
   /* Table header labels (malbec-ux-ui tables.md). */
   --color-malbec-table-header: #6b6b7a;
   /*
@@ -601,6 +603,7 @@
   --color-malbec-icon: var(--color-malbec-icon);
   --color-malbec-ink: var(--color-malbec-ink);
   --color-malbec-table-header: var(--color-malbec-table-header);
+  --color-malbec-muted-text: var(--color-malbec-muted-text);
   --color-focus: var(--color-focus);
   --color-embossed-edge: var(--color-embossed-edge);
   --color-pending-surface: var(--color-pending-surface);
