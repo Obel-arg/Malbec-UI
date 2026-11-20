@@ -83,6 +83,28 @@ Chosen in the inputs workshop.
 - **New token:** `--color-malbec-over-budget` (`#dc2626`) in `style.css` and `tokens.css`, so app charts use the same red: `bg-malbec-over-budget` / `var(--color-malbec-over-budget)`.
 - **What to delete:** Live's override that painted the excess in the badge maroon (`malbec-badge-red-text`).
 
+### ConfirmDialog for every confirmation
+- **`size`** (`"sm"` for the compact dialog), passed to the `AlertDialog`.
+- **`trigger`**: the element that opens it (`AlertDialog.Trigger asChild`). With it, `open` / `onOpenChange` become optional.
+- **`confirmingLabel`**: the confirm text while `onConfirm` runs ("Eliminando…", "Moviendo…"). Defaults to the generic `confirming` label.
+- **`onConfirm` can return `false`** to stay open without throwing. Throwing (rejecting) still keeps it open too.
+- **`reasonHint`** (help under the reason, linked with `aria-describedby`) and **`reasonProps`** (`maxLength`, `rows`, `autoFocus`… for the reason `Textarea`).
+
+### Data card parts and a title aside
+- **`DataCard.Frame`, `DataCard.Block`, `DataCard.Title`**: the card's three layers, for panels with the same anatomy and free content (a list, three figures, a small chart). `DataCard` is built from them, so the classes can't drift. Replace any copy of the card's classes with them. The frame keeps the 1.5px ring of the data card (`border-embossed` and `ChartCard` are 1px on purpose).
+- **`titleAside`** on `DataCard` (`aside` on `DataCard.Title`): goes at the end of the title row and never truncates, for a variation chip.
+
+### Smaller additions
+- **`PctBlocks over="good"`**: past 100% of a minimum (ROAS ≥ 3x) is a goal beaten, so the blocks stay in the series tone. The default, `"bad"`, keeps the over-budget red. `data-over` still means the red state; `data-exceeded` (`"bad"` / `"good"`) marks past 100% either way.
+- **`EmptyState variant="page" divider={false}`**: drops the embossed divider, for an empty state inside a card.
+- **`cn`** is exported: it knows the `ui:` prefix, so `cn(TOOLTIP_CARD_CLASS, "min-w-[220px]")` replaces the kit's width without `!`.
+- **`BAR_CAP_RADIUS`** (5) is the default of `topCapPath`, and **`rightCapPath`** draws a horizontal bar with the rounded end on the right.
+- **Testing `Skeleton`**: find it by `[data-slot="skeleton"]`. Its classes carry the `ui:` prefix, so `.animate-pulse` matches nothing.
+
+### Fixes
+- **`NotificationBell` keeps `data-slot="notification-bell"` inside `Popover.Trigger asChild`.** The trigger's own `data-slot` replaced it, so the bell's styles stopped matching.
+- **`NotificationBell` doesn't shake when the page loads.** `unreadCount` accepts `undefined` while the count loads; the first number after it is the starting point, not an arrival. Pass `undefined` instead of `0` until the count arrives.
+
 ### Sidebar dock driven from code
 - **`openOverlay()` / `closeOverlay()` and `overlayOpen` in `useSidebar()`**, or controlled from the provider with `overlayOpen` + `onOverlayOpenChange`: unfolds the `collapsible="dock"` panel floating over the content from code (a walkthrough step). While held, hover, focus and Escape don't fold it. A pinned panel floats too while held and the content gets the rail's space back; `pinned` stays `true`, so it returns to its place on `closeOverlay()`.
 - **`offsetVariable`** on `Sidebar.Provider` (e.g. `"--app-sidebar-offset"`): also publishes the space the sidebar takes on `<html>`, for `fixed` elements outside the provider. Rail or panel width depending on pinning, 0 on mobile, negative on the right, removed on unmount. Inside the provider keep using `--sidebar-offset`.
