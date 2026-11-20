@@ -146,11 +146,21 @@ export function legendSwatchStyle(index: number): React.CSSProperties {
 /** CSS twin of `SINGLE_SERIES_PAINT`, for non-SVG marks (progress blocks, swatches). */
 export const SINGLE_MARK_STYLE: React.CSSProperties = { backgroundImage: sheenGradient(SINGLE_ALPHA) };
 
+/** Corner radius of a bar's cap (charts.md §4). */
+export const BAR_CAP_RADIUS = 5;
+
 /** Rectangle with rounded TOP corners (`r <= 0` gives a plain rectangle). */
-export function topCapPath(x: number, y: number, w: number, h: number, r: number): string {
+export function topCapPath(x: number, y: number, w: number, h: number, r: number = BAR_CAP_RADIUS): string {
   if (r <= 0) return `M${x} ${y} h${w} v${h} h${-w} Z`;
   const rr = Math.min(r, h, w / 2);
   return `M${x} ${y + h} V${y + rr} Q${x} ${y} ${x + rr} ${y} H${x + w - rr} Q${x + w} ${y} ${x + w} ${y + rr} V${y + h} Z`;
+}
+
+/** Horizontal bar with rounded RIGHT corners, the mirror of {@link topCapPath}. */
+export function rightCapPath(x: number, y: number, w: number, h: number, r: number = BAR_CAP_RADIUS): string {
+  if (r <= 0) return `M${x} ${y} h${w} v${h} h${-w} Z`;
+  const rr = Math.min(r, w, h / 2);
+  return `M${x} ${y} H${x + w - rr} Q${x + w} ${y} ${x + w} ${y + rr} V${y + h - rr} Q${x + w} ${y + h} ${x + w - rr} ${y + h} H${x} Z`;
 }
 
 /**
@@ -167,7 +177,7 @@ export function makeStackedBarShape(seriesKeys: readonly string[], seriesKey: st
     const topKey = topFirst.find((key) => Number(payload?.[key]) > 0);
     return (
       <path
-        d={topCapPath(x, y, w, h, topKey === seriesKey ? 5 : 0)}
+        d={topCapPath(x, y, w, h, topKey === seriesKey ? BAR_CAP_RADIUS : 0)}
         fill={String(props.fill)}
         stroke={CHART_SURFACE}
         strokeWidth={2}

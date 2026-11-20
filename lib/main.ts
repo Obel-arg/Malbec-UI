@@ -39,6 +39,8 @@ export { Select } from "./Select/Select";
 export { Dialog } from "./Dialog/Dialog";
 export { Sheet } from "./Sheet/Sheet";
 export { Sidebar, useSidebar } from "./Sidebar/Sidebar";
+/** Class merge that knows the `ui:` prefix: an app class wins over the kit's `ui:` class it overrides. */
+export { cn } from "./utils/cn";
 export { SIDEBAR_WIDTH, SIDEBAR_WIDTH_COLLAPSED } from "./Sidebar/sidebar-constants";
 export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Field } from "./Field/Field";
