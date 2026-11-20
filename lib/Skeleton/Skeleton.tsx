@@ -10,6 +10,9 @@ export interface SkeletonProps extends React.ComponentProps<"div"> {
  * Loading placeholder in neutral grey. Never the brand colour at low opacity: that tinted every
  * screen pink while it loaded (Records). 8px radius, the one of the controls. Size it with
  * `className` (`ui:h-4 ui:w-32`).
+ *
+ * In tests, find it by `[data-slot="skeleton"]`. Its classes carry the `ui:` prefix, so a selector
+ * like `.animate-pulse` matches nothing.
  */
 export const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(function Skeleton(
   { circle = false, className, ...rest },
