@@ -92,6 +92,12 @@ interface DataTableBaseProps<TData, TValue> {
   getRowId?: (row: TData) => string;
   /** When false, sorting is disabled. Defaults to `true`. */
   enableSorting?: boolean;
+  /**
+   * When false, clicking a sorted column flips between ascending and descending instead of
+   * clearing the sort on the third click. Use it when the data always has an order (e.g. by date).
+   * Defaults to `true`.
+   */
+  enableSortingRemoval?: boolean;
   /** Controlled sorting. Pair with `onSortingChange`. */
   sorting?: SortingState;
   onSortingChange?: (sorting: SortingState) => void;
@@ -204,6 +210,7 @@ export function DataTable<TData, TValue>({
   stickySelectionColumn = false,
   getRowId,
   enableSorting = true,
+  enableSortingRemoval = true,
   sorting: sortingProp,
   onSortingChange,
   manualSorting = false,
@@ -292,6 +299,7 @@ export function DataTable<TData, TValue>({
     },
     enableRowSelection: rowSelectionEnabled,
     enableSorting,
+    enableSortingRemoval,
   });
 
   const onRowSelectionChangeRef = useRef<

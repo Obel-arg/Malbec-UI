@@ -327,6 +327,7 @@ export type {
   TableFooterProps,
   TableRowProps,
   TableHeadProps,
+  TableSortableHeadProps,
   TableCellProps,
   TableCaptionProps,
 } from "./Table/Table";

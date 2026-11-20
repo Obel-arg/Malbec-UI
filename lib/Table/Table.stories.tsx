@@ -8,7 +8,6 @@ import {
   StatusLabel,
 } from "./events-sample";
 import { eventRowsSample, type EventRow } from "./table-events-sample-data";
-import { TableSortableHeader } from "./table-sortable-header";
 import { type TableSortState, toggleTableSort } from "./table-sort-utils";
 import {
   TableStoryHeaderIconArtist,
@@ -192,8 +191,7 @@ function EventsSortableTable() {
   }, [sort]);
 
   const bind = (columnId: string) => ({
-    columnId,
-    sort,
+    sort: sort?.key === columnId ? sort.direction : null,
     onSort: () => setSort((prev) => toggleTableSort(columnId, prev)),
   });
 
@@ -209,38 +207,30 @@ function EventsSortableTable() {
         </colgroup>
         <Table.Header>
           <Table.Row>
-            <Table.Head>
-              <TableSortableHeader {...bind("artist")}>
-                <div className="ui:flex ui:items-center ui:gap-[5px]">
-                  <TableStoryHeaderIconArtist />
-                  <span>Artista</span>
-                </div>
-              </TableSortableHeader>
-            </Table.Head>
-            <Table.Head>
-              <TableSortableHeader {...bind("venue")}>
-                <div className="ui:flex ui:items-center ui:gap-[5px]">
-                  <TableStoryHeaderIconVenue />
-                  <span>Venue</span>
-                </div>
-              </TableSortableHeader>
-            </Table.Head>
-            <Table.Head>
-              <TableSortableHeader {...bind("dateLabel")}>
-                <div className="ui:flex ui:items-center ui:gap-[5px]">
-                  <TableStoryHeaderIconCalendar />
-                  <span>Fechas</span>
-                </div>
-              </TableSortableHeader>
-            </Table.Head>
-            <Table.Head>
-              <TableSortableHeader {...bind("status")}>
-                <div className="ui:flex ui:items-center ui:gap-[5px]">
-                  <TableStoryHeaderIconListStatus />
-                  <span>Status</span>
-                </div>
-              </TableSortableHeader>
-            </Table.Head>
+            <Table.SortableHead {...bind("artist")}>
+              <div className="ui:flex ui:items-center ui:gap-[5px]">
+                <TableStoryHeaderIconArtist />
+                <span>Artista</span>
+              </div>
+            </Table.SortableHead>
+            <Table.SortableHead {...bind("venue")}>
+              <div className="ui:flex ui:items-center ui:gap-[5px]">
+                <TableStoryHeaderIconVenue />
+                <span>Venue</span>
+              </div>
+            </Table.SortableHead>
+            <Table.SortableHead {...bind("dateLabel")}>
+              <div className="ui:flex ui:items-center ui:gap-[5px]">
+                <TableStoryHeaderIconCalendar />
+                <span>Fechas</span>
+              </div>
+            </Table.SortableHead>
+            <Table.SortableHead {...bind("status")}>
+              <div className="ui:flex ui:items-center ui:gap-[5px]">
+                <TableStoryHeaderIconListStatus />
+                <span>Status</span>
+              </div>
+            </Table.SortableHead>
             <Table.Head className="ui:text-right">Acciones</Table.Head>
           </Table.Row>
         </Table.Header>
@@ -310,14 +300,19 @@ function SortableTable({ rows }: { rows: Row[] }) {
     <Table>
       <Table.Header>
         <Table.Row>
-          <Table.Head>
-            <button type="button" onClick={() => toggle("artist")}>
-              Artista {sort?.key === "artist" ? (sort.direction === "asc" ? "↑" : "↓") : ""}
-            </button>
-          </Table.Head>
-          <Table.Head>
-            <button type="button" onClick={() => toggle("venue")}>Venue</button>
-          </Table.Head>
+          {/* aria-sort goes on the <th>; the button's name says what the click does next. */}
+          <Table.SortableHead
+            sort={sort?.key === "artist" ? sort.direction : null}
+            onSort={() => toggle("artist")}
+          >
+            Artista
+          </Table.SortableHead>
+          <Table.SortableHead
+            sort={sort?.key === "venue" ? sort.direction : null}
+            onSort={() => toggle("venue")}
+          >
+            Venue
+          </Table.SortableHead>
         </Table.Row>
       </Table.Header>
       <Table.Body>

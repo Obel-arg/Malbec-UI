@@ -3,6 +3,8 @@
 import * as React from "react";
 import { cn } from "../utils/cn";
 import { useCellLabels } from "./use-cell-labels";
+import { SortButton } from "./sort-button";
+import { ariaSortFor, type SortDirection } from "./table-sort-utils";
 import {
   type TableAppearance,
   tableBodyGroupVariants,
@@ -171,6 +173,45 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(functio
   );
 });
 
+const SORTABLE_HEAD_ALIGN = {
+  left: "ui:justify-start",
+  center: "ui:justify-center",
+  right: "ui:justify-end",
+} as const;
+
+export type TableSortableHeadProps = Omit<TableHeadProps, "onClick"> & {
+  /** Current direction of this column, or `null` when the table is sorted by another one. */
+  sort: SortDirection | null;
+  /** Called on click; the table decides the next sort (URL, server, local state). */
+  onSort: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  /**
+   * What a click does, for the button's accessible name. Defaults to `asc` → `desc`, anything
+   * else → `asc`. Pass `null` when the click clears the sort.
+   */
+  nextSort?: SortDirection | null;
+  /** Number columns go `right`: the title sits over its values. @default "left" */
+  align?: keyof typeof SORTABLE_HEAD_ALIGN;
+};
+
+/**
+ * Header cell that sorts its column in a table built with `Table` (no TanStack). Puts `aria-sort`
+ * on the `<th>` and renders the same control as `SortableColumnHeader` in `DataTable`.
+ */
+const TableSortableHead = React.forwardRef<HTMLTableCellElement, TableSortableHeadProps>(
+  function TableSortableHead({ sort, onSort, nextSort, align = "left", children, ...rest }, ref) {
+    const next = nextSort === undefined ? (sort === "asc" ? "desc" : "asc") : nextSort;
+    return (
+      <TableHead ref={ref} aria-sort={ariaSortFor(sort)} {...rest}>
+        <div className={cn("ui:flex ui:items-center ui:gap-[5px]", SORTABLE_HEAD_ALIGN[align])}>
+          <SortButton direction={sort} next={next} onClick={onSort}>
+            {children}
+          </SortButton>
+        </div>
+      </TableHead>
+    );
+  },
+);
+
 export type TableCellProps = React.TdHTMLAttributes<HTMLTableCellElement>;
 
 const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(function TableCell(
@@ -209,6 +250,7 @@ TableBody.displayName = "Table.Body";
 TableFooter.displayName = "Table.Footer";
 TableRow.displayName = "Table.Row";
 TableHead.displayName = "Table.Head";
+TableSortableHead.displayName = "Table.SortableHead";
 TableCell.displayName = "Table.Cell";
 TableCaption.displayName = "Table.Caption";
 
@@ -218,6 +260,7 @@ type TableComponent = typeof TableRoot & {
   Footer: typeof TableFooter;
   Row: typeof TableRow;
   Head: typeof TableHead;
+  SortableHead: typeof TableSortableHead;
   Cell: typeof TableCell;
   Caption: typeof TableCaption;
 };
@@ -228,5 +271,6 @@ Table.Body = TableBody;
 Table.Footer = TableFooter;
 Table.Row = TableRow;
 Table.Head = TableHead;
+Table.SortableHead = TableSortableHead;
 Table.Cell = TableCell;
 Table.Caption = TableCaption;

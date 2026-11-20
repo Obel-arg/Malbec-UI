@@ -53,4 +53,24 @@ describe("SortableColumnHeader", () => {
     fireEvent.click(screen.getByRole("button", { name: "Clear sort" }));
     expect(onSortingChange).toHaveBeenCalledWith([]);
   });
+
+  it("enableSortingRemoval={false} flips between ascending and descending, never clearing", () => {
+    render(
+      <MalbecLabelsProvider locale="es">
+        <DataTable<Row, unknown>
+          columns={columns}
+          data={data}
+          emptyLabel="Sin venues"
+          enableSortingRemoval={false}
+        />
+      </MalbecLabelsProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Ordenar ascendente" }));
+    fireEvent.click(screen.getByRole("button", { name: "Ordenar descendente" }));
+    // The third click goes back to ascending instead of offering "Quitar orden".
+    expect(screen.queryByRole("button", { name: "Quitar orden" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Ordenar ascendente" }));
+    expect(names()).toEqual(["Córdoba", "Rosario"]);
+    expect(screen.getByRole("columnheader").getAttribute("aria-sort")).toBe("ascending");
+  });
 });
