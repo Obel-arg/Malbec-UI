@@ -391,7 +391,12 @@ export type { SortableColumnHeaderProps } from "./DataTable/sortable-column-head
 export type { ComboboxFilter } from "./Combobox/Combobox";
 // Round B: surfaces
 export type { NoticeProps, NoticeTone } from "./Notice/Notice";
-export type { DataCardProps } from "./DataCard/DataCard";
+export type {
+  DataCardProps,
+  DataCardFrameProps,
+  DataCardBlockProps,
+  DataCardTitleProps,
+} from "./DataCard/DataCard";
 export type { EmptyStateProps, EmptyStateVariant } from "./EmptyState/EmptyState";
 export type { SkeletonProps } from "./Skeleton/Skeleton";
 // Round B: shell

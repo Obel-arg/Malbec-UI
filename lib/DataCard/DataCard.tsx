@@ -16,6 +16,8 @@ export interface DataCardProps extends Omit<React.ComponentProps<"div">, "title"
    *   figure 28px side by side, block and label centred.
    */
   variant?: "amount" | "count";
+  /** Goes at the end of the title row, e.g. a variation chip ("-85 %"). */
+  titleAside?: React.ReactNode;
 }
 
 /** Frame: background-200 with the embossed edge (1px white light + a 1.5px warm ring outside). */
@@ -29,23 +31,67 @@ const titleClass =
 const figureClass =
   "ui:block ui:whitespace-nowrap ui:font-semibold ui:tabular-nums ui:text-malbec-ink";
 
+export type DataCardFrameProps = React.ComponentProps<"div">;
+export type DataCardBlockProps = React.ComponentProps<"div">;
+export interface DataCardTitleProps extends React.ComponentProps<"div"> {
+  /** Goes at the end of the row and never truncates, e.g. a variation chip. */
+  aside?: React.ReactNode;
+}
+
+/**
+ * The outer frame of the data card, for panels with the same anatomy but free content (a list,
+ * three figures, a small chart). Put a `DataCard.Title` and a `DataCard.Block` inside, in the
+ * order the panel needs.
+ */
+const DataCardFrame = React.forwardRef<HTMLDivElement, DataCardFrameProps>(function DataCardFrame(
+  { className, ...rest },
+  ref,
+) {
+  return <div ref={ref} data-slot="data-card-frame" className={cn(frameClass, className)} {...rest} />;
+});
+DataCardFrame.displayName = "DataCard.Frame";
+
+/** The bevelled inner block of the data card. */
+const DataCardBlock = React.forwardRef<HTMLDivElement, DataCardBlockProps>(function DataCardBlock(
+  { className, ...rest },
+  ref,
+) {
+  return <div ref={ref} data-slot="data-card-block" className={cn(blockClass, className)} {...rest} />;
+});
+DataCardBlock.displayName = "DataCard.Block";
+
+/** The title row on the frame, outside the block: 12px muted, with an optional `aside` at the end. */
+const DataCardTitle = React.forwardRef<HTMLDivElement, DataCardTitleProps>(function DataCardTitle(
+  { aside, className, children, ...rest },
+  ref,
+) {
+  return (
+    <div ref={ref} data-slot="data-card-title" className={cn(titleClass, className)} {...rest}>
+      {children}
+      {aside ? (
+        <span data-slot="data-card-title-aside" className="ui:ml-auto ui:flex ui:shrink-0 ui:items-center">
+          {aside}
+        </span>
+      ) : null}
+    </div>
+  );
+});
+DataCardTitle.displayName = "DataCard.Title";
+
 /**
  * The data card of the suite (malbec-ux-ui `data-card.md`): an embossed frame, a bevelled block
  * with the figure, and the label on the frame below. Concentric radii (14 outside, 10 inside).
  * No brand colour: the figure is the point. Put several in a grid with `items-stretch`; one card
  * per figure, never N figures in one card.
  */
-export const DataCard = React.forwardRef<HTMLDivElement, DataCardProps>(function DataCard(
-  { value, label, sub, icon, variant = "amount", className, ...rest },
+const DataCardRoot = React.forwardRef<HTMLDivElement, DataCardProps>(function DataCard(
+  { value, label, sub, icon, variant = "amount", titleAside, className, ...rest },
   ref,
 ) {
   const count = variant === "count";
   return (
-    <div ref={ref} data-slot="data-card" data-variant={variant} className={cn(frameClass, className)} {...rest}>
-      <div
-        data-slot="data-card-block"
-        className={cn(blockClass, count && "ui:flex-row ui:items-center ui:justify-center ui:gap-3.5")}
-      >
+    <DataCardFrame ref={ref} data-slot="data-card" data-variant={variant} className={className} {...rest}>
+      <DataCardBlock className={cn(count && "ui:flex-row ui:items-center ui:justify-center ui:gap-3.5")}>
         {count && icon ? (
           <span aria-hidden className="ui:flex ui:text-malbec-icon/75 ui:[&_svg]:size-7 ui:[&_svg]:shrink-0">
             {icon}
@@ -62,16 +108,27 @@ export const DataCard = React.forwardRef<HTMLDivElement, DataCardProps>(function
         {!count && sub ? (
           <span className="ui:block ui:truncate ui:text-[12px] ui:text-text-default-muted">{sub}</span>
         ) : null}
-      </div>
-      <div data-slot="data-card-title" className={cn(titleClass, count && "ui:justify-center")}>
+      </DataCardBlock>
+      <DataCardTitle aside={titleAside} className={cn(count && "ui:justify-center")}>
         {!count && icon ? (
           <span aria-hidden className="ui:flex ui:text-malbec-icon ui:[&_svg]:size-3.5 ui:[&_svg]:shrink-0">
             {icon}
           </span>
         ) : null}
         <span className="ui:truncate">{label}</span>
-      </div>
-    </div>
+      </DataCardTitle>
+    </DataCardFrame>
   );
 });
-DataCard.displayName = "DataCard";
+DataCardRoot.displayName = "DataCard";
+
+type DataCardComponent = typeof DataCardRoot & {
+  Frame: typeof DataCardFrame;
+  Block: typeof DataCardBlock;
+  Title: typeof DataCardTitle;
+};
+
+export const DataCard = DataCardRoot as DataCardComponent;
+DataCard.Frame = DataCardFrame;
+DataCard.Block = DataCardBlock;
+DataCard.Title = DataCardTitle;

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CalendarDays, Ticket, Wallet } from "lucide-react";
+import { Badge } from "../Badge/Badge";
 import { DataCard } from "./DataCard";
 
 /**
@@ -79,6 +80,58 @@ import { DataCard } from "@obel-arg/malbec-ui";
   render: () => (
     <div className="ui:w-[240px]">
       <DataCard variant="count" value="3" label="Shows esta semana" icon={<CalendarDays />} />
+    </div>
+  ),
+};
+
+export const TitleAside: Story = {
+  name: "Title aside (variation chip)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Badge, DataCard } from "@obel-arg/malbec-ui";
+
+<DataCard value="US$ 1,20" label="CPA" titleAside={<Badge variant="neutral">-85 %</Badge>} />`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-[240px]">
+      <DataCard value="US$ 1,20" label="CPA" titleAside={<Badge variant="neutral">-85 %</Badge>} />
+    </div>
+  ),
+};
+
+export const FreeContent: Story = {
+  name: "Parts (free content)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DataCard } from "@obel-arg/malbec-ui";
+
+<DataCard.Frame>
+  <DataCard.Title>Próximos shows</DataCard.Title>
+  <DataCard.Block>
+    <ul>
+      <li>Selena Quintanilla · Movistar Arena · 13/11</li>
+      <li>Edith Piaf · Teatro Colón · 06/11</li>
+    </ul>
+  </DataCard.Block>
+</DataCard.Frame>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-[360px]">
+      <DataCard.Frame>
+        <DataCard.Title>Próximos shows</DataCard.Title>
+        <DataCard.Block>
+          <ul className="ui:m-0 ui:flex ui:list-none ui:flex-col ui:gap-1.5 ui:p-0 ui:text-sm ui:text-text-default">
+            <li>Selena Quintanilla · Movistar Arena · 13/11</li>
+            <li>Edith Piaf · Teatro Colón · 06/11</li>
+          </ul>
+        </DataCard.Block>
+      </DataCard.Frame>
     </div>
   ),
 };
