@@ -67,3 +67,21 @@ describe("DataCard parts asChild", () => {
     expect(container.querySelector("div")).toBeNull();
   });
 });
+
+describe("DataCard parts asChild classes", () => {
+  it("the child's own classes override the part's, like a className on the part does", () => {
+    render(
+      <DataCard.Block asChild>
+        <a href="/resultados" className="p-0 flex-row">
+          Resultados
+        </a>
+      </DataCard.Block>,
+    );
+    const classes = classesOf(screen.getByRole("link", { name: "Resultados" }));
+    expect(classes).toEqual(expect.arrayContaining(["p-0", "flex-row"]));
+    expect(classes).not.toContain("ui:px-4");
+    expect(classes).not.toContain("ui:py-3");
+    expect(classes).not.toContain("ui:flex-col");
+    expect(classes).toContain("ui:rounded-[10px]");
+  });
+});

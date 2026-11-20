@@ -35,6 +35,25 @@ const titleClass =
 const figureClass =
   "ui:block ui:whitespace-nowrap ui:font-semibold ui:tabular-nums ui:text-malbec-ink";
 
+/**
+ * `asChild` without losing overrides: Radix `Slot` joins the child's className after ours without
+ * merging, so `ui:px-4` would beat a `p-0` on the child. Merge it with `cn` here instead.
+ */
+function partProps(
+  asChild: boolean,
+  base: string,
+  className: string | undefined,
+  children: React.ReactNode,
+): { className: string; children: React.ReactNode } {
+  if (asChild && React.isValidElement<{ className?: string }>(children)) {
+    return {
+      className: cn(base, className, children.props.className),
+      children: React.cloneElement(children, { className: undefined }),
+    };
+  }
+  return { className: cn(base, className), children };
+}
+
 export interface DataCardFrameProps extends React.ComponentProps<"div"> {
   /** Render as the child element (a link, `section`, `article`, `li`…), keeping the frame's classes. */
   asChild?: boolean;
@@ -54,21 +73,31 @@ export interface DataCardTitleProps extends React.ComponentProps<"div"> {
  * order the panel needs.
  */
 const DataCardFrame = React.forwardRef<HTMLDivElement, DataCardFrameProps>(function DataCardFrame(
-  { asChild = false, className, ...rest },
+  { asChild = false, className, children, ...rest },
   ref,
 ) {
   const Comp = asChild ? Slot : "div";
-  return <Comp ref={ref} data-slot="data-card-frame" className={cn(frameClass, className)} {...rest} />;
+  const part = partProps(asChild, frameClass, className, children);
+  return (
+    <Comp ref={ref} data-slot="data-card-frame" {...rest} className={part.className}>
+      {part.children}
+    </Comp>
+  );
 });
 DataCardFrame.displayName = "DataCard.Frame";
 
 /** The bevelled inner block of the data card. */
 const DataCardBlock = React.forwardRef<HTMLDivElement, DataCardBlockProps>(function DataCardBlock(
-  { asChild = false, className, ...rest },
+  { asChild = false, className, children, ...rest },
   ref,
 ) {
   const Comp = asChild ? Slot : "div";
-  return <Comp ref={ref} data-slot="data-card-block" className={cn(blockClass, className)} {...rest} />;
+  const part = partProps(asChild, blockClass, className, children);
+  return (
+    <Comp ref={ref} data-slot="data-card-block" {...rest} className={part.className}>
+      {part.children}
+    </Comp>
+  );
 });
 DataCardBlock.displayName = "DataCard.Block";
 
