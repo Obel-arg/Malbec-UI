@@ -1129,7 +1129,7 @@ const ComboboxChips = React.forwardRef<HTMLDivElement, ComboboxChipsProps>(
             data-disabled={ctx.disabled || undefined}
             className={cn(
               comboboxTriggerRowVariants({ variant: "default" }),
-              "ui:h-auto ui:min-h-8 ui:flex-wrap ui:items-center ui:justify-start ui:gap-1 ui:p-1",
+              "ui:h-auto ui:min-h-9 ui:flex-wrap ui:items-center ui:justify-start ui:gap-1 ui:p-1",
               className,
             )}
             {...rest}
@@ -1196,7 +1196,7 @@ const ComboboxChip = React.forwardRef<HTMLSpanElement, ComboboxChipProps>(
           <button
             type="button"
             data-slot="combobox-chip-remove"
-            className="ui:inline-flex ui:size-5 ui:cursor-pointer ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:hover:bg-background-100"
+            className="ui:inline-flex ui:size-4 ui:cursor-pointer ui:items-center ui:justify-center ui:rounded-sm ui:text-text-default ui:outline-none ui:hover:bg-background-100"
             onMouseDown={(e) => e.preventDefault()}
             onClick={handleRemove}
             aria-label={labels.remove}

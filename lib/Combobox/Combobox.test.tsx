@@ -99,11 +99,13 @@ describe("Combobox labels", () => {
 });
 
 describe("Combobox chips box padding", () => {
-  it("has the same padding on every side (4px), so a row of chips is as tall as a 32px field", () => {
+  it("has the same padding on every side (4px), so a row of chips is as tall as a 36px field", () => {
     render(<Chips />);
     const classes = chipsBox().className.split(/\s+/);
     expect(classes).toContain("ui:p-1");
-    expect(classes).toContain("ui:min-h-8");
+    expect(classes).toContain("ui:min-h-9");
+    // A chip is 26px (4px padding + a 16px remove button + its border): 4 + 26 + 4 + 2 = 36.
+    expect(document.querySelector('[data-slot="combobox-chip-remove"]')!.className).toContain("ui:size-4");
     expect(classes).not.toContain("ui:px-4");
   });
 });

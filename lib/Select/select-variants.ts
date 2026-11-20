@@ -3,14 +3,14 @@ import { popoverSurfaceTransitionMotionClasses } from "../Popover/popover-varian
 
 export const selectTriggerVariants = cva([
   "malbec-font-sans",
-  "ui:flex ui:h-8 ui:w-full ui:items-center ui:justify-between ui:rounded-md",
+  "ui:flex ui:h-9 ui:w-full ui:items-center ui:justify-between ui:rounded-md",
   // Radix drops className on Select.Value, so its layout is set from here. Plain text is
   // a block so the ellipsis renders (it can't on a flex container's anonymous text item);
   // :where() keeps it at (0,1,0) so apps override it with a plain class. A value with
   // element children (icon + text) keeps its flex row.
   "ui:[&>:where([data-slot=select-value])]:block ui:[&>:where([data-slot=select-value])]:min-w-0 ui:[&>:where([data-slot=select-value])]:truncate",
   "ui:[&>[data-slot=select-value]:has(>*)]:flex",
-  "ui:bg-background-100 ui:px-4 ui:py-1 ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
+  "ui:bg-background-100 ui:px-3 ui:py-1.5 ui:text-sm ui:font-normal ui:leading-tight ui:tracking-[-0.42px] ui:text-text-default",
   "ui:border ui:border-solid ui:border-background-300",
   "ui:outline-none ui:transition-[opacity,box-shadow]",
   "ui:focus-visible:ring-1 ui:focus-visible:ring-background-300",

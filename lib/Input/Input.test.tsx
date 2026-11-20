@@ -25,7 +25,7 @@ describe("Input variants", () => {
     expect(classes).toEqual(
       expect.arrayContaining(["ui:h-auto", "ui:p-0", "ui:bg-transparent", "ui:border-0", "ui:rounded-none"]),
     );
-    expect(classes).not.toContain("ui:h-8");
+    expect(classes).not.toContain("ui:h-9");
     expect(classes).not.toContain("ui:px-4");
     expect(classes).toContain("ui:focus-within:outline-background-300");
   });

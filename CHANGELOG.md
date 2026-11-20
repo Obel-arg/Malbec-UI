@@ -8,16 +8,18 @@ Table and DataTable additions that came out of the Live table audit, plus the de
 
 **This release changes what you see without a code change.** The fields, the calendar and underline tabs look different by default; the sections marked "Changes on screen" say what changes and which overrides each app can delete. Smaller visible changes: `meta.tdClassName` starts applying, plain popovers animate, and the Inbox tooltip darkens by one step. Everything else is opt-in and no API was removed. Each is described below.
 
-### Changes on screen: fields have a border and are 32px
+### Changes on screen: fields are drawn by a border
+Chosen in the inputs workshop.
 - **What changes:**
   - `Input`, `Select`, `Combobox`, `DatePicker` and `Textarea` lose the 2px halo and get a 1px `background-300` border.
-  - Single-line fields go from 36px to 32px.
-  - The Combobox chips box pads 4px on every side. A row of chips is still 40px tall: each chip's remove button is 20px. That is being decided in the inputs workshop.
-- **Watch out:** a default `Button` is still 36px, so in a row with a 32px field it sits 4px taller.
+  - They stay 36px tall, so they still line up with the default `Button`.
+  - The side padding goes from 16px to 12px.
+  - `Select` and `DatePicker` take the -0.42px tracking the other fields already had, so the same text reads the same in every field.
+  - The Combobox chips box pads 4px on every side, and each chip's remove button goes from 20px to 16px. A row of chips is now 36px like any other field; it used to be 42px.
 - **What to delete:**
   - Live: the 1px border on triggers in `layers.css` (`[data-slot="combobox-trigger"]`, `dropdown-menu-trigger`, the Combobox frame).
-  - Live: the `.show-form-fields` rules that add a border, turn the halo off and force 40px.
-  - Every app: any CSS that draws a border around these fields or changes their height.
+  - Live: the `.show-form-fields` rules that add a border and turn the halo off. Its 40px height is a Live choice: keep it or drop it to match the other apps.
+  - Every app: any CSS that draws a border around these fields.
 
 ### Changes on screen: calendar frame and greys from tokens
 - **What changes in `CalendarMonth`, `CalendarWeek` and `CalendarDay`:**
