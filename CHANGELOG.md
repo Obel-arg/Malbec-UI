@@ -2,6 +2,132 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v2.1.0 — 2026-11-20
+
+Table and DataTable additions that came out of the Live table audit, plus the defaults chosen in the design workshop for fields, the calendar and underline tabs.
+
+**This release changes what you see without a code change.** The fields, the calendar and underline tabs look different by default; the sections marked "Changes on screen" say what changes and which overrides each app can delete. Smaller visible changes: `meta.tdClassName` starts applying, plain popovers animate, and the Inbox tooltip darkens by one step. Everything else is opt-in and no API was removed. Each is described below.
+
+### Changes on screen: fields are drawn by a border
+Chosen with Isa in the 2.1 workshop (the look Live already used in its show form).
+- **What changes:**
+  - `Input`, `Select`, `Combobox`, `DatePicker` and `Textarea` lose the 2px halo and get a 1px border in the new `--color-malbec-field-border` token (`#ebeae8`; in dark mode it follows `background-300`).
+  - They grow from 36px to 40px. Buttons stay 36px (every size), so a field and a button side by side no longer share a height: align the row by its centre (`items-center`).
+  - The side padding goes from 16px to 12px.
+  - `Select` and `DatePicker` take the -0.42px tracking the other fields already had, so the same text reads the same in every field.
+  - The Combobox chips box pads 6px on every side, and each chip's remove button goes from 20px to 16px. A row of chips is now 40px like any other field; it used to be 42px.
+- **What to delete:**
+  - Live: the 1px border on triggers in `layers.css` (`[data-slot="combobox-trigger"]`, `dropdown-menu-trigger`, the Combobox frame).
+  - Live: the `.show-form-fields` rules that add a border, turn the halo off and set 40px: the library does all three now.
+  - Every app: any CSS that draws a border around these fields.
+- **What to check (migration):**
+  - **`shadow-none` no longer removes the box.** If a field turned off the halo to look boxless (a search in a side panel, an amount inside a sentence, a cell edited inline), it now shows a border. Use `variant="bare"` instead, or `border-0` when you need to keep the padding. In Live this hit about 10 fields.
+  - **Halo recreated by hand.** A field that redrew the old halo with `shadow-[0_0_2px…]` now shows the border and the shadow at once. Delete the shadow.
+- **New: `variant="bare"` on `Select.Trigger`, `Textarea` and `DatePicker.Trigger`.** Same as `Input variant="bare"`: no border, background or padding, and the focus ring stays. Use it for fields inside text or a table cell instead of loose `!border-0` overrides. New types: `SelectTriggerVariant`, `TextareaVariant`, `DatePickerTriggerVariant`.
+
+### Changes on screen: calendar frame and greys from tokens
+- **What changes in `CalendarMonth`, `CalendarWeek` and `CalendarDay`:**
+  - The frame is a `background-300` border with no shadow. It used to be `sidebar-border` plus a 12px shadow.
+  - The cold hard-coded greys become warm tokens: `background-100/200/300`, `text-default` and `malbec-ink`.
+  - The labels (day names, hours, days outside the month) use the new `malbec-subtle-text` (`#a6a6ad`), the same light grey Live's week view already used. They stay lighter than body muted text.
+  - The today circle is `malbec-icon` instead of the brand colour.
+  - The month and year selects follow the neutral outline: no brand border, no brand hover.
+  - The "now" line uses the `destructive` token, with the same red as before.
+  - Day names stay in uppercase.
+- **What to delete:** Live's calendar retints in `layers.css`:
+  - `.business-calendar-month`: the frame, `[class*=border-sidebar-border]` and the shadow.
+  - `.business-calendar-week`: the rules that target `#e0e0e0`, `#f0f0f0`, `#a6a6ad` and `bg-primary`.
+- **New tokens:** `--color-malbec-muted-text` (`#8c8c94`) in `style.css`, the same value `tokens.css` already shipped, and `--color-malbec-subtle-text` (`#a6a6ad`) in both `style.css` and `tokens.css`. If you overrode the calendar labels back to `#a6a6ad` after 2.1.0-rc.4, delete that override.
+
+### Changes on screen: underline tabs mark the active tab by opacity
+- **What changes:** `Tabs variant="underline"` now renders exactly like `variant="opacity"`: no rail and no indicator, the active tab at 100% and the rest at 40%. The old indicator used the same colour as its rail and barely showed. `underline` stays in `TabsVariant`, so nothing breaks at compile time.
+- **What to delete:** Live's `malbecUnderlineTabTriggerClass` and `malbecUnderlineTabsListClass` (`lib/malbec-tabs-classes.ts`). You can also switch to `variant="opacity"`.
+
+### DataTable applies `meta.tdClassName`
+- Column `meta.tdClassName` now styles every body cell of that column, the same way `meta.thClassName` styles its header. It was typed but ignored, so a column with `thClassName: "ui:text-right"` showed a right-aligned header over left-aligned values.
+- **Check:** if a column already passes `tdClassName`, those classes start applying with this version. Live's shows table passes `"!bg-transparent"` on the selection column; remove it together with `.shows-dashboard-selection-wrap`.
+
+### Sticky selection column (`stickySelectionColumn`)
+- With `rowSelection`, `stickySelectionColumn` pins the checkbox column to the left edge while a table wider than its shell scrolls sideways.
+- The pinned cell follows the row's hover and selected background with the row's own 150ms transition, so the checkbox cell no longer changes before the rest of the row.
+- **What to delete:** hand-made sticky checkbox columns, such as Live's `.shows-dashboard-selection-wrap` and `.venues-dashboard-selection-wrap` (once that table moves to `DataTable`).
+- New stacking variables:
+  - `--ui-z-sticky-column` (1): pinned body cells.
+  - `--ui-z-sticky-corner` (3): the header cell that is pinned both ways.
+  - `--ui-z-sticky` moves from 1 to 2, so sticky headers stay above pinned body cells. If your app overrides `--ui-z-sticky`, keep it above `--ui-z-sticky-column`.
+
+### Controlled selection (`selectedRowIds`)
+- `selectedRowIds` + `onSelectedRowIdsChange` make the selection controlled, by row id (pass `getRowId`).
+- Ids of rows that aren't in `data` stay selected, so a selection can span server-side pages. "Select all" only toggles the rows on screen.
+- To clear the selection after an action, pass `[]`.
+- **What to delete:** selection resetters, clear tokens and hand-made checkbox columns that keep a selection across pages, such as Live's approvals, accreditations and pending costs.
+
+### Sorting
+- New `Table.SortableHead` for tables built with `Table`. It puts `aria-sort` on the `<th>` and names its button after what the click does next, from `MalbecLabelsProvider`. It looks like `SortableColumnHeader` in `DataTable`. The table decides the next sort in `onSort`, so it works with URL or server sorting.
+- `SortableColumnHeader` now names its button after TanStack's next sorting order.
+- `DataTable` gets `enableSortingRemoval={false}`, for a column that flips between ascending and descending without a third "no sort" click (e.g. a date column).
+- **What to delete:** your own sortable headers that put `aria-sort` on an inner element or hard-code their text, such as Live's `SortableHeaderButton`.
+
+### Header pinned to the page scroll (`stickyHeader={{ scrollRoot }}`)
+- `Table` and `DataTable` take `stickyHeader={{ scrollRoot }}`. The header stays at the top of the page's scroll container until the table's last row goes by. This also works when the table scrolls sideways, which CSS `position: sticky` can't handle.
+- Omit `scrollRoot` to use the nearest ancestor that scrolls, or the window. Pass `null` while the container isn't mounted yet.
+- `stickyHeader={true}` is unchanged: the rows scroll inside the table's own shell.
+- **What to delete:** Live's `useStickyThead`.
+
+### Popover `surface="plain"` keeps its motion
+- **Changes on screen:** `surface="plain"` now keeps the open/close motion and the floating layer (`--ui-z-floating`). Before, it dropped them along with the frame, so plain popovers appeared without animation.
+- **What to delete:** CSS that re-adds the popover motion to a plain surface (`.inbox-popover` in Live, Artist and Publishing; the one in Records' `globals.css`) and the `ui:z-100` passed to plain popovers.
+
+### Changes on screen: the over-budget red in `PctBlocks`
+- **What changes:** above 100%, `PctBlocks` lights its blocks in the over-budget red approved in the charts spec, `#dc2626`, instead of `destructive` (`#ef4444`). It is a touch darker. `OVER_BUDGET` now points to the new token.
+- **New token:** `--color-malbec-over-budget` (`#dc2626`) in `style.css` and `tokens.css`, so app charts use the same red: `bg-malbec-over-budget` / `var(--color-malbec-over-budget)`.
+- **What to delete:** Live's override that painted the excess in the badge maroon (`malbec-badge-red-text`).
+
+### ConfirmDialog for every confirmation
+- **`size`** (`"sm"` for the compact dialog), passed to the `AlertDialog`.
+- **`trigger`**: the element that opens it (`AlertDialog.Trigger asChild`). With it, `open` / `onOpenChange` become optional.
+- **`confirmingLabel`**: the confirm text while `onConfirm` runs ("Eliminando…", "Moviendo…"). Defaults to the generic `confirming` label.
+- **`onConfirm` can return `false`** to stay open without throwing. Throwing (rejecting) still keeps it open too.
+- **`reasonHint`** (help under the reason, linked with `aria-describedby`) and **`reasonProps`** (`maxLength`, `rows`, `autoFocus`… for the reason `Textarea`).
+- **`reasonMinLength`**: the shortest reason that confirms. While shorter, a live line under the field says how many characters are missing ("Faltan 4 caracteres."); confirming marks the field invalid with the same text. New label `reasonTooShort(n)`, already translated (ES + EN).
+- **`children`**: content between the description and the reason (warnings, what's affected).
+
+### Data card parts and a title aside
+- **`DataCard.Frame`, `DataCard.Block`, `DataCard.Title`**: the card's three layers, for panels with the same anatomy and free content (a list, three figures, a small chart). `DataCard` is built from them, so the classes can't drift. Replace any copy of the card's classes with them. The frame keeps the 1.5px ring of the data card (`border-embossed` and `ChartCard` are 1px on purpose). **`asChild`** on `Frame` and `Block` renders them as your element (a link, `section`, `article`, `li`) with the same classes. The child's own `className` is merged like one on the part (`<DataCard.Block asChild><a className="p-0">` drops the padding). `Block` comes with `px-4 py-3`; pass `p-0` for a block with its own layout.
+- **`titleAside`** on `DataCard` (`aside` on `DataCard.Title`): goes at the end of the title row and never truncates. For a variation use `<Badge variant="neutral">` (chosen with Isa): a variation is data, not a verdict, so no green or red.
+
+### Smaller additions
+- **`PctBlocks over="good"`**: past 100% of a minimum (ROAS ≥ 3x) is a goal beaten, so the blocks stay in the series tone. The default, `"bad"`, keeps the over-budget red. `data-over` still means the red state; `data-exceeded` (`"bad"` / `"good"`) marks past 100% either way.
+- **`EmptyState variant="page" divider={false}`**: drops the embossed divider, for an empty state inside a card.
+- **`cn`** is exported: it knows the `ui:` prefix, so `cn(TOOLTIP_CARD_CLASS, "min-w-[220px]")` replaces the kit's width without `!`.
+- **`BAR_CAP_RADIUS`** (5) is the default of `topCapPath`, and **`rightCapPath`** draws a horizontal bar with the rounded end on the right.
+- **Testing `Skeleton`**: find it by `[data-slot="skeleton"]`. Its classes carry the `ui:` prefix, so `.animate-pulse` matches nothing.
+
+### Fixes
+- **`NotificationBell` keeps `data-slot="notification-bell"` inside `Popover.Trigger asChild`.** The trigger's own `data-slot` replaced it, so the bell's styles stopped matching.
+- **`NotificationBell` doesn't shake when the page loads.** `unreadCount` accepts `undefined` while the count loads; the first number after it is the starting point, not an arrival. Pass `undefined` instead of `0` until the count arrives.
+
+### Sidebar dock driven from code
+- **`openOverlay()` / `closeOverlay()` and `overlayOpen` in `useSidebar()`**, or controlled from the provider with `overlayOpen` + `onOverlayOpenChange`: unfolds the `collapsible="dock"` panel floating over the content from code (a walkthrough step). While held, hover, focus and Escape don't fold it. A pinned panel floats too while held and the content gets the rail's space back; `pinned` stays `true`, so it returns to its place on `closeOverlay()`.
+- **`offsetVariable`** on `Sidebar.Provider` (e.g. `"--app-sidebar-offset"`): also publishes the space the sidebar takes on `<html>`, for `fixed` elements outside the provider. Rail or panel width depending on pinning, 0 on mobile, negative on the right, removed on unmount. Inside the provider keep using `--sidebar-offset`.
+- **`SIDEBAR_WIDTH`** (`16rem`) and **`SIDEBAR_WIDTH_COLLAPSED`** (`4rem`) are exported, so apps don't duplicate them.
+
+### Changes on screen: EmptyState inside frames, dialogs and sheets
+- **`inset`** (`row`), **on by default** (chosen with Isa): pads the line to the height of a table row (46px, 16px sides), so a row empty state sitting straight inside a table frame or a tray no longer touches its edge. Inside a `DataTable` cell (`emptyLabel`) nothing changes: the cell keeps its padding and the row adds none. Pass `inset={false}` where something else already pads it, and delete any padding you added around it by hand.
+- **`framed`** (`ghost`): draws the Table frame (`background-300`, radius 10) around the placeholder, for when no table surrounds it.
+- **`size="sm"`** (`ghost`): 36px placeholder rows instead of 46px, for dialogs and sheets. Combine it with `rows` to make it shorter.
+- The `ghost` text now stacks on the rows instead of floating over them, so a short placeholder grows to fit the text and the action. With the defaults nothing changes (still 3 × 46px).
+
+### Embossed line at the head and foot of a block (`tokens.css`)
+- `divider-embossed-top`: the same line as `divider-embossed`, without the `:first-child` reset, for a block that opens with the line as its first child.
+- `divider-embossed-bottom`: the line that closes a block, drawn as a 2.5px band at its bottom.
+- **What to delete:** `.divider-embossed-top` and `.divider-embossed-bottom` in Live's `globals.css`. They are pixel-identical.
+
+### Colours from tokens
+- The table header label, every Badge tone and the Inbox hover-action tooltip now read tokens declared once in `styles.css`. They use the same values `tokens.css` ships to the apps.
+- The table and the badges are pixel-identical.
+- **Changes on screen:** the Inbox tooltip's background goes from `#1a1a1a` to the suite ink, `#1a1a1f`. In dark mode its text now stays light.
+
 ## v2.0.0 — 2026-11-11
 
 The library's defaults now match the malbec-ux-ui spec approved by Isa. This release changes what you see without any code change on your side. Each section below says what changes on screen, and which overrides you can delete.

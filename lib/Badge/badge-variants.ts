@@ -37,29 +37,29 @@ export const badgeVariants = cva(
         outline:
           "ui:border-background-300 ui:border-solid ui:bg-transparent ui:text-text-default",
         destructive:
-          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#dfd0d0] ui:[--malbec-badge-fg:#602a2a] ui:[--malbec-badge-accent:#602a2a]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:var(--color-malbec-badge-red-bg)] ui:[--malbec-badge-fg:var(--color-malbec-badge-red-text)] ui:[--malbec-badge-accent:var(--color-malbec-badge-red-text)]",
         ghost:
           "ui:border-transparent ui:bg-transparent ui:text-text-default ui:hover:bg-background-300/60",
         link:
           "ui:border-transparent ui:bg-transparent ui:text-primary ui:underline-offset-4 ui:hover:underline",
         /** Status chips (Product UI status popover, Figma 651:11230). */
         yellow:
-          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#efeed4] ui:[--malbec-badge-fg:#8a862f] ui:[--malbec-badge-accent:#8a862f]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:var(--color-malbec-badge-yellow-bg)] ui:[--malbec-badge-fg:var(--color-malbec-badge-yellow-text)] ui:[--malbec-badge-accent:var(--color-malbec-badge-yellow-text)]",
         orange:
-          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#efe3d4] ui:[--malbec-badge-fg:#8a642f] ui:[--malbec-badge-accent:#8a642f]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:var(--color-malbec-badge-orange-bg)] ui:[--malbec-badge-fg:var(--color-malbec-badge-orange-text)] ui:[--malbec-badge-accent:var(--color-malbec-badge-orange-text)]",
         blue:
-          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#dce6ec] ui:[--malbec-badge-fg:#2f628a] ui:[--malbec-badge-accent:#2f628a]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:var(--color-malbec-badge-blue-bg)] ui:[--malbec-badge-fg:var(--color-malbec-badge-blue-text)] ui:[--malbec-badge-accent:var(--color-malbec-badge-blue-text)]",
         violet:
-          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#e5dcec] ui:[--malbec-badge-fg:#352a60] ui:[--malbec-badge-accent:#352a60]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:var(--color-malbec-badge-violet-bg)] ui:[--malbec-badge-fg:var(--color-malbec-badge-violet-text)] ui:[--malbec-badge-accent:var(--color-malbec-badge-violet-text)]",
         emerald:
-          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#d0dfd0] ui:[--malbec-badge-fg:#2a602c] ui:[--malbec-badge-accent:#2a602c]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:var(--color-malbec-badge-green-bg)] ui:[--malbec-badge-fg:var(--color-malbec-badge-green-text)] ui:[--malbec-badge-accent:var(--color-malbec-badge-green-text)]",
         sage:
-          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#b4c5b5] ui:[--malbec-badge-fg:#025406] ui:[--malbec-badge-accent:#025406]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:var(--color-malbec-badge-sage-bg)] ui:[--malbec-badge-fg:var(--color-malbec-badge-sage-text)] ui:[--malbec-badge-accent:var(--color-malbec-badge-sage-text)]",
         /** System grey pair (draft, none, inactive). Same values as `malbec-badge-neutral-*`. */
         neutral:
-          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#e4e2df] ui:[--malbec-badge-fg:#6b6b7a] ui:[--malbec-badge-accent:#6b6b7a]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:var(--color-malbec-badge-neutral-bg)] ui:[--malbec-badge-fg:var(--color-malbec-badge-neutral-text)] ui:[--malbec-badge-accent:var(--color-malbec-badge-neutral-text)]",
         red:
-          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:#dfd0d0] ui:[--malbec-badge-fg:#602a2a] ui:[--malbec-badge-accent:#602a2a]",
+          "ui:border-transparent ui:bg-(--malbec-badge-bg) ui:text-(--malbec-badge-fg) ui:[--malbec-badge-bg:var(--color-malbec-badge-red-bg)] ui:[--malbec-badge-fg:var(--color-malbec-badge-red-text)] ui:[--malbec-badge-accent:var(--color-malbec-badge-red-text)]",
       },
       size: {
         md: "ui:px-2.5 ui:py-0.5 ui:text-xs ui:leading-5",

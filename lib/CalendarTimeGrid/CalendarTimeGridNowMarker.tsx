@@ -29,11 +29,11 @@ export function CalendarTimeGridNowMarker({
       <div className="ui:relative ui:flex ui:h-px ui:w-full ui:items-center">
         <span
           className={cn(
-            "ui:absolute ui:size-2 ui:shrink-0 ui:rounded-full ui:bg-[#ef4444]",
+            "ui:absolute ui:size-2 ui:shrink-0 ui:rounded-full ui:bg-destructive",
             dotOnSeparator ? "ui:left-0 ui:-translate-x-1/2" : "ui:left-1",
           )}
         />
-        <div className="ui:ml-3 ui:h-px ui:flex-1 ui:bg-[#ef4444]" />
+        <div className="ui:ml-3 ui:h-px ui:flex-1 ui:bg-destructive" />
       </div>
     </div>
   );

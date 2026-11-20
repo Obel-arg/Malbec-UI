@@ -16,12 +16,18 @@ describe("tokens.css", () => {
       "text-malbec-ink",
       "text-malbec-icon",
       "text-malbec-muted-text",
+      "text-malbec-subtle-text",
+      "bg-malbec-over-budget",
+      "border-malbec-field-border",
       "text-malbec-table-header",
       "bg-malbec-badge-red-bg",
     ]);
     expect(css).toMatch(/--color-malbec-ink:\s*#1a1a1f/);
     expect(css).toMatch(/--color-malbec-icon:\s*#3f3f46/);
     expect(css).toMatch(/--color-malbec-muted-text:\s*#8c8c94/);
+    expect(css).toMatch(/--color-malbec-subtle-text:\s*#a6a6ad/);
+    expect(css).toMatch(/--color-malbec-over-budget:\s*#dc2626/);
+    expect(css).toMatch(/--color-malbec-field-border:\s*#ebeae8/);
     expect(css).toMatch(/--color-malbec-table-header:\s*#6b6b7a/);
     expect(css).toMatch(/\.text-malbec-ink\s*{\s*color:\s*var\(--color-malbec-ink\)/);
     expect(css).toMatch(/\.bg-malbec-badge-red-bg\s*{/);
@@ -41,6 +47,17 @@ describe("tokens.css", () => {
     expect(css).toContain(".divider-embossed { border-top: 1px solid #eae7e3; box-shadow: inset 0 1.5px 0 #ffffff;");
     expect(css).toMatch(/\.divider-embossed\s*{[^}]*&:first-child|\.divider-embossed:first-child/);
     expect(css).toContain("hover\\:border-embossed");
+  });
+
+  it("ships the embossed line at the head and foot of a block", async () => {
+    const css = (await build(["divider-embossed-top", "divider-embossed-bottom"])).replace(/\s+/g, " ");
+    // Same line as divider-embossed, without the :first-child reset (a numbered section heading
+    // that opens its block is usually the first child).
+    expect(css).toContain(".divider-embossed-top { border-top: 1px solid #eae7e3; box-shadow: inset 0 1.5px 0 #ffffff; }");
+    // At the foot, edge then light like divider-embossed, drawn as a 2.5px band at the bottom.
+    expect(css).toContain("background-image: linear-gradient(to bottom, #eae7e3 0 1px, #ffffff 1px 2.5px)");
+    expect(css).toContain("background-position: bottom");
+    expect(css).toContain("background-size: 100% 2.5px");
   });
 
   it("defines a bg and a text color for every badge tone", async () => {

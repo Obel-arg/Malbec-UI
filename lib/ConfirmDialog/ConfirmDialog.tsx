@@ -1,22 +1,30 @@
 "use client";
 
 import * as React from "react";
-import { AlertDialog } from "../AlertDialog/AlertDialog";
+import { AlertDialog, type AlertDialogSize } from "../AlertDialog/AlertDialog";
 import { Field } from "../Field/Field";
 import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
-import { Textarea } from "../Textarea/Textarea";
+import { Textarea, type TextareaProps } from "../Textarea/Textarea";
 
 export interface ConfirmDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  /** Controlled open state. Leave it out with `trigger` and the dialog handles it. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /**
+   * Element that opens the dialog (rendered as `AlertDialog.Trigger asChild`), so the consumer
+   * doesn't keep `open` state just to show it.
+   */
+  trigger?: React.ReactElement;
+  /** `sm` for the compact dialog. @default "default" */
+  size?: AlertDialogSize;
   title: React.ReactNode;
   description?: React.ReactNode;
   /**
-   * Runs on confirm. Async work keeps the dialog open with both buttons disabled; it closes when
-   * the promise resolves and stays open if it rejects (show the failure with `error`).
-   * With `requireReason`, receives the trimmed reason.
+   * Runs on confirm. Async work keeps the dialog open with both buttons disabled. It closes when
+   * it settles, except when it returns (or resolves to) `false` or throws (rejects): then it stays
+   * open to retry, and you show why with `error`. With `requireReason`, receives the trimmed reason.
    */
-  onConfirm: (reason?: string) => void | Promise<void>;
+  onConfirm: (reason?: string) => void | boolean | Promise<void | boolean>;
   /** `destructive` paints the confirm button red (deleting, rejecting). @default "default" */
   tone?: "default" | "destructive";
   /**
@@ -27,9 +35,22 @@ export interface ConfirmDialogProps {
   /** Message under the description, e.g. why the last confirm failed. */
   error?: React.ReactNode;
   confirmLabel?: React.ReactNode;
+  /** Confirm button text while `onConfirm` runs ("Eliminando…"). Defaults to the `confirming` label. */
+  confirmingLabel?: React.ReactNode;
   cancelLabel?: React.ReactNode;
   reasonLabel?: React.ReactNode;
   reasonPlaceholder?: string;
+  /** Help under the reason field ("Lo ve el proveedor."). */
+  reasonHint?: React.ReactNode;
+  /**
+   * With `requireReason`: the shortest reason that confirms (trimmed). While it's shorter, a live
+   * line under the field says how many characters are missing.
+   */
+  reasonMinLength?: number;
+  /** Content between the description and the reason: warnings, what's affected. */
+  children?: React.ReactNode;
+  /** Extra props for the reason `Textarea` (`maxLength`, `rows`, `autoFocus`…). */
+  reasonProps?: Omit<TextareaProps, "id" | "value" | "defaultValue" | "onChange" | "disabled">;
 }
 
 /**
@@ -37,8 +58,10 @@ export interface ConfirmDialogProps {
  * pending state of an async confirm handled for you (from Records' `ConfirmDialog`).
  */
 export function ConfirmDialog({
-  open,
+  open: openProp,
   onOpenChange,
+  trigger,
+  size,
   title,
   description,
   onConfirm,
@@ -46,16 +69,26 @@ export function ConfirmDialog({
   requireReason = false,
   error,
   confirmLabel,
+  confirmingLabel,
   cancelLabel,
   reasonLabel,
   reasonPlaceholder,
+  reasonHint,
+  reasonProps,
+  reasonMinLength,
+  children,
 }: ConfirmDialogProps) {
   const labels = useMalbecLabels();
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
+  const open = openProp ?? uncontrolledOpen;
   const [pending, setPending] = React.useState(false);
   const [reason, setReason] = React.useState("");
   const [attempted, setAttempted] = React.useState(false);
-  const missingReason = requireReason && reason.trim() === "";
+  const trimmedLength = reason.trim().length;
+  const missingChars = requireReason ? Math.max(0, (reasonMinLength ?? 1) - trimmedLength) : 0;
+  const missingReason = missingChars > 0;
   const reasonId = React.useId();
+  const fieldId = React.useId();
 
   const setOpen = (next: boolean) => {
     if (pending) return;
@@ -63,7 +96,8 @@ export function ConfirmDialog({
       setReason("");
       setAttempted(false);
     }
-    onOpenChange(next);
+    if (openProp === undefined) setUncontrolledOpen(next);
+    onOpenChange?.(next);
   };
 
   const confirm = async (event: React.MouseEvent) => {
@@ -75,9 +109,10 @@ export function ConfirmDialog({
     }
     setPending(true);
     try {
-      await onConfirm(requireReason ? reason.trim() : undefined);
+      const result = await onConfirm(requireReason ? reason.trim() : undefined);
       setPending(false);
-      setOpen(false);
+      // `false` means "didn't go through": stay open, like a rejection.
+      if (result !== false) setOpen(false);
     } catch {
       // The consumer reports the failure through `error`; the dialog stays open to retry.
       setPending(false);
@@ -86,7 +121,8 @@ export function ConfirmDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialog.Content aria-busy={pending || undefined}>
+      {trigger ? <AlertDialog.Trigger asChild>{trigger}</AlertDialog.Trigger> : null}
+      <AlertDialog.Content size={size} aria-busy={pending || undefined}>
         <AlertDialog.Header>
           <AlertDialog.Title>{title}</AlertDialog.Title>
           {description ? <AlertDialog.Description>{description}</AlertDialog.Description> : null}
@@ -96,17 +132,36 @@ export function ConfirmDialog({
             </p>
           ) : null}
         </AlertDialog.Header>
+        {children}
         {requireReason ? (
-          <Field invalid={attempted && missingReason}>
+          <Field id={fieldId} invalid={attempted && missingReason}>
             <Field.Label htmlFor={reasonId}>{reasonLabel ?? labels.reason}</Field.Label>
             <Textarea
+              {...reasonProps}
+              aria-describedby={
+                [reasonProps?.["aria-describedby"], reasonHint ? `${fieldId}-description` : null, `${fieldId}-error`]
+                  .filter(Boolean)
+                  .join(" ") || undefined
+              }
               id={reasonId}
               value={reason}
               placeholder={reasonPlaceholder}
               disabled={pending}
               onChange={(e) => setReason(e.target.value)}
             />
-            <Field.Error>{attempted && missingReason ? labels.reasonRequired : null}</Field.Error>
+            {reasonHint ? <Field.Description>{reasonHint}</Field.Description> : null}
+            {reasonMinLength && trimmedLength > 0 && missingReason && !attempted ? (
+              <p aria-live="polite" data-slot="confirm-dialog-reason-count" className="ui:m-0 ui:text-xs ui:text-text-default-muted">
+                {labels.reasonTooShort(missingChars)}
+              </p>
+            ) : null}
+            <Field.Error>
+              {attempted && missingReason
+                ? trimmedLength === 0
+                  ? labels.reasonRequired
+                  : labels.reasonTooShort(missingChars)
+                : null}
+            </Field.Error>
           </Field>
         ) : null}
         <AlertDialog.Footer>
@@ -116,7 +171,7 @@ export function ConfirmDialog({
             disabled={pending}
             onClick={confirm}
           >
-            {pending ? labels.confirming : (confirmLabel ?? labels.confirm)}
+            {pending ? (confirmingLabel ?? labels.confirming) : (confirmLabel ?? labels.confirm)}
           </AlertDialog.Action>
         </AlertDialog.Footer>
       </AlertDialog.Content>

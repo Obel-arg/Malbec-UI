@@ -110,3 +110,26 @@ export const WithLabel: Story = {
     },
   },
 };
+
+export const Bare: Story = {
+  name: "Variant · Bare (inline editing)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Textarea } from "@obel-arg/malbec-ui";
+
+<Textarea variant="bare" rows={2} aria-label="Nota" defaultValue="Llegan a las 18 para la prueba de sonido." />`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-[320px]">
+      <Textarea
+        variant="bare"
+        rows={2}
+        aria-label="Nota"
+        defaultValue="Llegan a las 18 para la prueba de sonido."
+      />
+    </div>
+  ),
+};

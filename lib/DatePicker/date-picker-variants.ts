@@ -3,9 +3,9 @@ import { cva, type VariantProps } from "class-variance-authority";
 export const datePickerTriggerVariants = cva(
   [
     "malbec-font-sans",
-    "ui:flex ui:h-9 ui:w-full ui:items-center ui:rounded-md",
-    "ui:bg-background-100 ui:px-4 ui:py-2 ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
-    "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
+    "ui:flex ui:h-10 ui:w-full ui:items-center ui:rounded-md",
+    "ui:bg-background-100 ui:px-3 ui:py-1.5 ui:text-sm ui:font-normal ui:leading-tight ui:tracking-[-0.42px] ui:text-text-default",
+    "ui:border ui:border-solid ui:border-malbec-field-border",
     "ui:outline-none ui:transition-[opacity,box-shadow]",
     "ui:focus-visible:ring-1 ui:focus-visible:ring-background-300",
     // Keep the ring visible while the popover is open — Radix moves focus into
@@ -31,9 +31,15 @@ export const datePickerTriggerVariants = cva(
         preset: "",
         birth: "",
       },
+      variant: {
+        default: "",
+        /** Inline inside text or a table cell: no box. The focus ring stays. */
+        bare: "ui:h-auto ui:rounded-none ui:border-0 ui:bg-transparent ui:p-0",
+      },
     },
     defaultVariants: {
       state: "closed",
+      variant: "default",
     },
   },
 );
@@ -49,6 +55,8 @@ export const datePickerTrailingIconVariants = cva(
 export const datePickerTriggerTextVariants = cva(
   "ui:min-w-0 ui:flex-1 ui:truncate ui:text-left ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
 );
+
+export type DatePickerTriggerVariant = "default" | "bare";
 
 export type DatePickerState = NonNullable<
   VariantProps<typeof datePickerTriggerVariants>["state"]

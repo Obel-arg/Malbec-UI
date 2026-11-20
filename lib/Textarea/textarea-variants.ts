@@ -6,18 +6,18 @@ import { cva } from "class-variance-authority";
  * Textarea sits visually consistent with Input/Select/Combobox/DatePicker in
  * the same form.
  */
-export const textareaVariants = cva([
+export const textareaVariants = cva(
+  [
   "malbec-font-sans",
   "ui:block",
   "ui:w-full",
   "ui:min-w-0",
   "ui:min-h-20",
-  "ui:border-0",
   "ui:bg-background-100",
   "ui:rounded-[6px]",
-  "ui:px-4",
-  "ui:py-2",
-  "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
+  "ui:px-3",
+  "ui:py-1.5",
+  "ui:border ui:border-solid ui:border-malbec-field-border",
   "ui:text-[14px]",
   "ui:leading-5",
   "ui:tracking-[-0.42px]",
@@ -37,4 +37,17 @@ export const textareaVariants = cva([
   "ui:disabled:opacity-50",
   /** Invalid state set by callers via `aria-invalid` on the textarea itself. */
   "ui:aria-invalid:outline-destructive",
-]);
+  ],
+  {
+    variants: {
+      variant: {
+        default: "",
+        /** Inline editing without a box, like Input `bare`. The focus outline stays, pushed outside the text. */
+        bare: "ui:min-h-0 ui:rounded-none ui:border-0 ui:bg-transparent ui:p-0 ui:outline-offset-2",
+      },
+    },
+    defaultVariants: { variant: "default" },
+  },
+);
+
+export type TextareaVariant = "default" | "bare";

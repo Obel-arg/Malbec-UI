@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { cn } from "../utils/cn";
-import { popoverContentVariants } from "./popover-variants";
+import { popoverContentVariants, popoverLayerVariants } from "./popover-variants";
 
 const PopoverRoot = PopoverPrimitive.Root;
 
@@ -50,7 +50,8 @@ export type PopoverContentProps = React.ComponentPropsWithoutRef<
 > & {
   /**
    * `"popover"` — default surface (`popoverContentVariants`).
-   * `"plain"` — portal + positioning only; use `className` for chrome (e.g. Combobox).
+   * `"plain"` — no frame (border, fill, padding, radius): use `className` to draw your own (e.g.
+   *   Combobox). It keeps the open/close motion and the floating layer.
    */
   surface?: "popover" | "plain";
 };
@@ -80,7 +81,7 @@ const PopoverContent = React.forwardRef<
         sideOffset={sideOffset}
         collisionPadding={collisionPadding}
         className={cn(
-          surface === "popover" ? popoverContentVariants() : undefined,
+          surface === "popover" ? popoverContentVariants() : popoverLayerVariants(),
           className,
         )}
         {...rest}

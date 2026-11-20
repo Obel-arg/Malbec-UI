@@ -170,7 +170,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
         <div className={cn(calendarTimeGridHeaderRowVariants())}>
           <div className={cn(calendarTimeGridGutterHeaderVariants())}>
             {resolvedTimeZoneLabel ? (
-              <span className="ui:text-[10px] ui:font-medium ui:uppercase ui:leading-none ui:text-[#a0a0a0]">
+              <span className="ui:text-[10px] ui:font-medium ui:uppercase ui:leading-none ui:text-malbec-subtle-text">
                 {resolvedTimeZoneLabel}
               </span>
             ) : null}
@@ -207,8 +207,8 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
                 <span
                   className={
                     isTodayCol
-                      ? "ui:font-semibold ui:text-[#333333]"
-                      : "ui:text-[#a0a0a0]"
+                      ? "ui:font-semibold ui:text-text-default"
+                      : "ui:text-malbec-subtle-text"
                   }
                 >
                   {format(day, "EEE", { locale })
@@ -220,7 +220,7 @@ const CalendarDayRoot = React.forwardRef<HTMLDivElement, CalendarDayProps>(
                     {format(day, "d")}
                   </span>
                 ) : (
-                  <span className="ui:normal-case ui:tabular-nums ui:text-[#a0a0a0]">
+                  <span className="ui:normal-case ui:tabular-nums ui:text-malbec-subtle-text">
                     {format(day, "d")}
                   </span>
                 )}

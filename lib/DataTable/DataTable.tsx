@@ -18,7 +18,7 @@ import {
 import { Checkbox } from "../Checkbox/Checkbox";
 import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import type { MalbecLabels } from "../i18n/labels";
-import { Table, type TableAppearance } from "../Table/Table";
+import { Table, type TableAppearance, type TableRootProps } from "../Table/Table";
 import { cn } from "../utils/cn";
 import { DataTableColumnsToggle } from "./DataTableColumnsToggle";
 import { DataTablePagination } from "./DataTablePagination";
@@ -68,10 +68,11 @@ interface DataTableBaseProps<TData, TValue> {
   /** Below 640px each row becomes a card (see `Table`'s `stackOnMobile`). */
   stackOnMobile?: boolean;
   /**
-   * Pins the header while the rows scroll inside the table shell; give the shell a height with
-   * `tableContainerClassName` (e.g. `ui:max-h-[480px]`).
+   * Pins the header while the rows scroll. `true`: inside the table shell; give it a height with
+   * `tableContainerClassName` (e.g. `ui:max-h-[480px]`). `{ scrollRoot }`: at the top of the page's
+   * scroll root (see `Table`'s `stickyHeader`).
    */
-  stickyHeader?: boolean;
+  stickyHeader?: TableRootProps["stickyHeader"];
   /** Classes for the bordered, scrolling table shell. */
   tableContainerClassName?: string;
   /**
@@ -80,12 +81,24 @@ interface DataTableBaseProps<TData, TValue> {
    */
   rowSelection?: boolean;
   /**
+   * With `rowSelection`, pins the checkbox column to the left edge while a table wider than its
+   * shell scrolls sideways. The pinned cell follows the row's hover and selected background with
+   * the row's own transition.
+   */
+  stickySelectionColumn?: boolean;
+  /**
    * Stable id for each row, required for reliable selection. Should match a unique
    * field on `TData` (e.g. `row.id` or `row.uuid`).
    */
   getRowId?: (row: TData) => string;
   /** When false, sorting is disabled. Defaults to `true`. */
   enableSorting?: boolean;
+  /**
+   * When false, clicking a sorted column flips between ascending and descending instead of
+   * clearing the sort on the third click. Use it when the data always has an order (e.g. by date).
+   * Defaults to `true`.
+   */
+  enableSortingRemoval?: boolean;
   /** Controlled sorting. Pair with `onSortingChange`. */
   sorting?: SortingState;
   onSortingChange?: (sorting: SortingState) => void;
@@ -105,10 +118,6 @@ interface DataTableBaseProps<TData, TValue> {
    */
   rowCount?: number;
   /**
-   * Called whenever the row selection changes.
-   * Receives the array of currently selected rows.
-   */
-  /**
    * Called when a row is clicked, middle-clicked, or activated with Enter/Space.
    * Receives the resolved row id, the original row data, and the event, so the
    * consumer can check modifiers (`metaKey`/`ctrlKey`) or `button === 1` to open
@@ -122,7 +131,16 @@ type DataTableWithRowSelectionProps<TData, TValue> = DataTableBaseProps<
   TValue
 > & {
   rowSelection: true;
+  /** Called whenever the selection changes, with the selected rows that are in `data`. */
   onRowSelectionChange?: DataTableOnRowSelectionChange<TData>;
+  /**
+   * Controlled selection, by row id (pass `getRowId`). Ids of rows that aren't in `data` stay
+   * selected, so a selection can span server-side pages; "select all" only toggles the rows on
+   * screen. Pair with `onSelectedRowIdsChange`; clear it by passing `[]`.
+   */
+  selectedRowIds?: string[];
+  /** Called with every selected id, including those on other pages. */
+  onSelectedRowIdsChange?: (ids: string[]) => void;
 };
 
 type DataTableWithoutRowSelectionProps<TData, TValue> = DataTableBaseProps<
@@ -131,6 +149,8 @@ type DataTableWithoutRowSelectionProps<TData, TValue> = DataTableBaseProps<
 > & {
   rowSelection?: false;
   onRowSelectionChange?: () => void;
+  selectedRowIds?: undefined;
+  onSelectedRowIdsChange?: undefined;
 };
 
 export type DataTableProps<TData, TValue> =
@@ -143,7 +163,7 @@ function selectColumnDef<TData>(
   return {
     id: "select",
     header: ({ table }) => (
-      <div className="ui:flex ui:h-full ui:items-center ui:justify-center">
+      <div className="ui:relative ui:flex ui:h-full ui:items-center ui:justify-center">
         <Checkbox
           checked={
             table.getIsAllPageRowsSelected()
@@ -158,7 +178,7 @@ function selectColumnDef<TData>(
       </div>
     ),
     cell: ({ row }) => (
-      <div className="ui:flex ui:h-full ui:items-center ui:justify-center">
+      <div className="ui:relative ui:flex ui:h-full ui:items-center ui:justify-center">
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(v) => row.toggleSelected(!!v)}
@@ -188,8 +208,10 @@ export function DataTable<TData, TValue>({
   stickyHeader,
   tableContainerClassName,
   rowSelection: rowSelectionEnabled = false,
+  stickySelectionColumn = false,
   getRowId,
   enableSorting = true,
+  enableSortingRemoval = true,
   sorting: sortingProp,
   onSortingChange,
   manualSorting = false,
@@ -198,6 +220,8 @@ export function DataTable<TData, TValue>({
   onPaginationChange,
   rowCount,
   onRowSelectionChange,
+  selectedRowIds,
+  onSelectedRowIdsChange,
   onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [innerSorting, setInnerSorting] = useState<SortingState>([]);
@@ -207,7 +231,30 @@ export function DataTable<TData, TValue>({
     if (!sortingProp) setInnerSorting(next);
     onSortingChange?.(next);
   };
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [innerRowSelection, setInnerRowSelection] = useState<RowSelectionState>({});
+  const selectedIdsKey = selectedRowIds?.join("\u0000");
+  const controlledRowSelection = useMemo<RowSelectionState | undefined>(
+    () =>
+      selectedRowIds ? Object.fromEntries(selectedRowIds.map((id) => [id, true])) : undefined,
+    // Keyed on the ids, not the array, so a new array with the same ids doesn't re-render rows.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedIdsKey],
+  );
+  const rowSelection = controlledRowSelection ?? innerRowSelection;
+  // Two toggles in the same tick (before the parent passes new ids) must build on each other, so
+  // each change starts from the last selection we emitted. After every render it resyncs with
+  // what's on screen, so a change the parent rejected doesn't linger.
+  const latestSelectionRef = useRef(rowSelection);
+  useEffect(() => {
+    latestSelectionRef.current = rowSelection;
+  });
+  const handleRowSelectionChange: OnChangeFn<RowSelectionState> = (updater) => {
+    const prev = latestSelectionRef.current;
+    const next = typeof updater === "function" ? updater(prev) : updater;
+    latestSelectionRef.current = next;
+    if (!controlledRowSelection) setInnerRowSelection(next);
+    onSelectedRowIdsChange?.(Object.keys(next).filter((id) => next[id]));
+  };
 
   const paginated = paginationProp != null || pageSize != null || rowCount != null;
   const [innerPagination, setInnerPagination] = useState<PaginationState>({
@@ -244,7 +291,7 @@ export function DataTable<TData, TValue>({
     getRowId,
     onSortingChange: handleSortingChange,
     manualSorting,
-    onRowSelectionChange: rowSelectionEnabled ? setRowSelection : undefined,
+    onRowSelectionChange: rowSelectionEnabled ? handleRowSelectionChange : undefined,
     onPaginationChange: paginated ? handlePaginationChange : undefined,
     state: {
       sorting,
@@ -253,6 +300,7 @@ export function DataTable<TData, TValue>({
     },
     enableRowSelection: rowSelectionEnabled,
     enableSorting,
+    enableSortingRemoval,
   });
 
   const onRowSelectionChangeRef = useRef<
@@ -307,7 +355,7 @@ export function DataTable<TData, TValue>({
                   <Table.Head
                     key={header.id}
                     colSpan={header.colSpan}
-                    className={headerThClassName(header, tableAppearance)}
+                    className={headerThClassName(header, tableAppearance, stickySelectionColumn)}
                     aria-sort={(() => {
                       if (!header.column.getCanSort()) return undefined;
                       const s = header.column.getIsSorted();
@@ -356,7 +404,7 @@ export function DataTable<TData, TValue>({
                 {row.getVisibleCells().map((cell) => (
                   <Table.Cell
                     key={cell.id}
-                    className={dataCellClassName(cell.column.id, tableAppearance)}
+                    className={dataCellClassName(cell.column, tableAppearance, stickySelectionColumn)}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Table.Cell>
@@ -371,6 +419,8 @@ export function DataTable<TData, TValue>({
                   // A plain label reads as EmptyState variant="row": one quiet, left-aligned line.
                   // A ghost EmptyState fills the cell edge to edge.
                   "ui:h-[52px] ui:text-left ui:font-normal ui:text-text-default-muted ui:has-[[data-variant=ghost]]:p-0",
+                  // The cell already pads the line: an EmptyState row inside adds no padding of its own.
+                  "ui:[&_[data-slot=empty-state][data-inset]]:p-0",
                   tableAppearance === "dataGrid"
                     ? "ui:text-sm"
                     : "ui:text-[13px]",
@@ -391,6 +441,7 @@ export function DataTable<TData, TValue>({
   );
 }
 
+/** Column `meta` the table reads: `thClassName` styles the header cell, `tdClassName` every body cell. */
 type ColMeta = { thClassName?: string; tdClassName?: string };
 
 // The row itself has role="button", so a match on the row doesn't count: only an
@@ -408,26 +459,52 @@ function headerThClassName(
     column: { id: string; columnDef: { meta?: unknown } };
   },
   appearance: TableAppearance,
+  stickySelection: boolean,
 ): string | undefined {
+  const isSelect = header.column.id === "select";
   return cn(
-    header.column.id === "select" &&
+    isSelect &&
       (appearance === "dataGrid"
         ? "ui:w-8 ui:min-w-8 ui:px-2 ui:py-0 ui:text-center"
         : "ui:w-11 ui:min-w-[44px] ui:px-2 ui:text-center"),
+    isSelect &&
+      stickySelection && [
+        // `!` beats the thead's `[&_th]:*` rules from `stickyHeader`, which are more specific.
+        "ui:sticky! ui:left-0 ui:z-(--ui-z-sticky-corner)!",
+        // Opaque copy of the header row fill, so scrolled cells don't show through.
+        appearance === "dataGrid" ? "ui:bg-background-100" : "ui:bg-background-200",
+      ],
     (header.column.columnDef.meta as ColMeta | undefined)?.thClassName,
   );
 }
 
+/**
+ * The pinned selection cell has to be opaque, so it can't let the row's translucent hover and
+ * selected fills show through like the other cells. It paints the row base and lays the same tint
+ * on a ::before with the row's transition, so both change in step. Hover wins over selected, as on
+ * the row.
+ */
+const stickySelectionCellClass = [
+  "ui:sticky ui:left-0 ui:z-(--ui-z-sticky-column) ui:bg-background-100",
+  "ui:before:pointer-events-none ui:before:absolute ui:before:inset-0 ui:before:transition-colors",
+  "ui:[tr:hover>&]:before:bg-background-200/50",
+  "ui:[tr[data-state=selected]:not(:hover)>&]:before:bg-background-200/80",
+];
+
 function dataCellClassName(
-  columnId: string,
+  column: { id: string; columnDef: { meta?: unknown } },
   appearance: TableAppearance,
+  stickySelection: boolean,
 ): string | undefined {
-  if (columnId === "select") {
-    return appearance === "dataGrid"
-      ? "ui:w-8 ui:min-w-8 ui:px-2 ui:py-0 ui:text-center"
-      : "ui:w-11 ui:min-w-[44px] ui:px-2 ui:text-center";
-  }
-  return undefined;
+  const isSelect = column.id === "select";
+  return cn(
+    isSelect &&
+      (appearance === "dataGrid"
+        ? "ui:w-8 ui:min-w-8 ui:px-2 ui:py-0 ui:text-center"
+        : "ui:w-11 ui:min-w-[44px] ui:px-2 ui:text-center"),
+    isSelect && stickySelection && stickySelectionCellClass,
+    (column.columnDef.meta as ColMeta | undefined)?.tdClassName,
+  );
 }
 
 /** Page links for a paginated table: `footer={({ table }) => <DataTable.Pagination table={table} />}`. */

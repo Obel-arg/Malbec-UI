@@ -17,6 +17,7 @@ import {
   datePickerTrailingIconVariants,
   datePickerTriggerTextVariants,
   datePickerTriggerVariants,
+  type DatePickerTriggerVariant,
   type DatePickerState,
 } from "./date-picker-variants";
 
@@ -339,18 +340,22 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
 );
 DatePickerRoot.displayName = "DatePicker";
 
+export type { DatePickerTriggerVariant };
+
 export type DatePickerTriggerProps = Omit<
   React.ComponentPropsWithoutRef<"button">,
   "type"
 > & {
   placeholder?: string;
+  /** `bare` renders the trigger inline, without border, background or padding. */
+  variant?: DatePickerTriggerVariant;
 };
 
 const DatePickerTrigger = React.forwardRef<
   HTMLButtonElement,
   DatePickerTriggerProps
 >(function DatePickerTrigger(
-  { className, placeholder, children, ...rest },
+  { className, placeholder, children, variant = "default", ...rest },
   ref,
 ) {
   const ctx = useDatePickerContext("DatePicker.Trigger");
@@ -387,8 +392,9 @@ const DatePickerTrigger = React.forwardRef<
         type="button"
         data-slot="date-picker-trigger"
         data-state={ctx.state}
+        data-variant={variant}
         className={cn(
-          datePickerTriggerVariants({ state: ctx.state }),
+          datePickerTriggerVariants({ state: ctx.state, variant }),
           className,
         )}
         {...rest}
@@ -457,7 +463,7 @@ const DatePickerPreset = React.forwardRef<
         ref={ref}
         data-slot="date-picker-preset"
         className={cn(
-          "malbec-font-sans ui:flex ui:h-9 ui:w-full ui:items-center ui:justify-between ui:rounded-md ui:border ui:border-background-300 ui:bg-background-100 ui:px-4 ui:py-2 ui:text-sm ui:font-normal ui:text-text-default",
+          "malbec-font-sans ui:flex ui:h-10 ui:w-full ui:items-center ui:justify-between ui:rounded-md ui:border ui:border-malbec-field-border ui:bg-background-100 ui:px-3 ui:py-1.5 ui:text-sm ui:font-normal ui:tracking-[-0.42px] ui:text-text-default",
           className,
         )}
         {...rest}

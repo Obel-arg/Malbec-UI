@@ -207,7 +207,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
         {showWeekToolbar ? (
           <div
             className={cn(
-              "ui:flex ui:shrink-0 ui:items-center ui:justify-center ui:gap-3 ui:border-b ui:border-[#e0e0e0] ui:bg-[#f0f0f0] ui:px-3 ui:py-2",
+              "ui:flex ui:shrink-0 ui:items-center ui:justify-center ui:gap-3 ui:border-b ui:border-background-300 ui:bg-background-200 ui:px-3 ui:py-2",
             )}
           >
             <Button
@@ -240,7 +240,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
         <div className={cn(calendarTimeGridHeaderRowVariants())}>
           <div className={cn(calendarTimeGridGutterHeaderVariants())}>
             {resolvedTimeZoneLabel ? (
-              <span className="ui:text-[10px] ui:font-medium ui:uppercase ui:leading-none ui:text-[#a0a0a0]">
+              <span className="ui:text-[10px] ui:font-medium ui:uppercase ui:leading-none ui:text-malbec-subtle-text">
                 {resolvedTimeZoneLabel}
               </span>
             ) : null}
@@ -259,7 +259,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
               >
                 <span
                   className={cn(
-                    isTodayCol && "ui:font-semibold ui:text-[#333333]",
+                    isTodayCol && "ui:font-semibold ui:text-text-default",
                   )}
                 >
                   {format(day, "EEE", { locale })

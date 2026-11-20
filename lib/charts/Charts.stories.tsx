@@ -195,7 +195,8 @@ export const PercentBlocks: Story = {
 
 <PctBlocks value={44} />
 <PctBlocks value={100} />
-<PctBlocks value={130} /> // over budget: all 10 blocks in red (state)`,
+<PctBlocks value={130} /> // over a cap (budget, CPA): all 10 blocks in red (state)
+<PctBlocks value={350} over="good" /> // over a minimum (ROAS ≥ 3x): a goal beaten, no red`,
       },
     },
   },
@@ -207,6 +208,10 @@ export const PercentBlocks: Story = {
           <span className="ui:tabular-nums">{value}%</span>
         </div>
       ))}
+      <div className="ui:flex ui:items-center ui:gap-3">
+        <PctBlocks value={350} over="good" />
+        <span className="ui:tabular-nums">350% (over="good")</span>
+      </div>
     </div>
   ),
 };

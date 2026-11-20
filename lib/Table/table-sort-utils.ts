@@ -1,5 +1,13 @@
 "use client";
 
+export type SortDirection = "asc" | "desc";
+
+export function ariaSortFor(direction: SortDirection | null): "ascending" | "descending" | undefined {
+  if (direction === "asc") return "ascending";
+  if (direction === "desc") return "descending";
+  return undefined;
+}
+
 export type TableSortState =
   | { key: string; direction: "asc" | "desc" }
   | null;

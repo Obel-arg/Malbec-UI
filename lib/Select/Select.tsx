@@ -10,6 +10,7 @@ import {
   selectPopperWidthVariants,
   selectTriggerVariants,
   selectViewportVariants,
+  type SelectTriggerVariant,
 } from "./select-variants";
 
 type SelectMotionContextValue = {
@@ -137,19 +138,28 @@ const SelectValue = React.forwardRef<
 });
 SelectValue.displayName = "Select.Value";
 
+export type { SelectTriggerVariant };
+
 export type SelectTriggerProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Trigger
->;
+> & {
+  /** `bare` renders the trigger inline, without border, background or padding. */
+  variant?: SelectTriggerVariant;
+};
 
 const SelectTrigger = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
->(function SelectTrigger({ className, children, ...rest }, ref) {
+>(function SelectTrigger(
+  { className, children, variant = "default", ...rest },
+  ref,
+) {
   return (
     <SelectPrimitive.Trigger
       ref={ref}
       data-slot="select-trigger"
-      className={cn(selectTriggerVariants(), className)}
+      data-variant={variant}
+      className={cn(selectTriggerVariants({ variant }), className)}
       {...rest}
     >
       {children}

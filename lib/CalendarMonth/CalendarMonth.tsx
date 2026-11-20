@@ -85,7 +85,10 @@ function unconfirmedChipStyle(
   };
 }
 
-/** Header/pill fill per color (matches `Badge` variant backgrounds). */
+/**
+ * Header/pill fill per color (same values as the `malbec-badge-*` tokens). Hex on purpose:
+ * `withAlpha` derives the translucent fills from them (CSS colour mixing is off limits, see CLAUDE.md).
+ */
 const EVENT_CHIP_BG_COLOR: Record<CalendarMonthEventColor, string> = {
   yellow: "#efeed4",
   orange: "#efe3d4",
@@ -403,11 +406,10 @@ function resolveYearSelectBounds(
 
 /** Matches the `CalendarWeek` toolbar: `Button variant="outline" size="icon-sm"`. */
 const calendarMonthToolbarSelectTriggerClassName = [
-  "ui:h-8 ui:min-h-8 ui:gap-2 ui:rounded-[8px] ui:border-[1.5px] ui:border-primary ui:bg-transparent",
-  "ui:px-3 ui:py-[6px] ui:text-xs ui:font-medium ui:leading-4 ui:tracking-[-0.3px] ui:text-primary ui:shadow-none",
-  "ui:hover:bg-primary/10 ui:active:bg-primary/15",
+  "ui:h-8 ui:min-h-8 ui:gap-2 ui:rounded-[8px] ui:border ui:border-background-300 ui:bg-transparent",
+  "ui:px-3 ui:py-[6px] ui:text-xs ui:font-medium ui:leading-4 ui:tracking-[-0.3px] ui:text-text-default ui:shadow-none",
+  "ui:hover:bg-background-200 ui:active:bg-background-300",
   "ui:focus-visible:ring-2 ui:focus-visible:ring-focus ui:focus-visible:ring-offset-2 ui:focus-visible:ring-offset-background-100",
-  "[&>span:last-child]:text-primary [&>span:last-child]:opacity-100",
 ].join(" ");
 
 const CalendarMonthToolbarImpl = React.forwardRef<
@@ -445,7 +447,7 @@ const CalendarMonthToolbarImpl = React.forwardRef<
       ref={ref}
       data-slot="calendar-month-toolbar"
       className={cn(
-        "ui:grid ui:w-full ui:grid-cols-[auto_1fr_auto] ui:items-center ui:gap-3 ui:border-b ui:border-[#e0e0e0] ui:bg-[#f0f0f0] ui:px-3 ui:py-2",
+        "ui:grid ui:w-full ui:grid-cols-[auto_1fr_auto] ui:items-center ui:gap-3 ui:border-b ui:border-background-300 ui:bg-background-200 ui:px-3 ui:py-2",
         className,
       )}
       {...rest}

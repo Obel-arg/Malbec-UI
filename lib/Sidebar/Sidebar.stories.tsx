@@ -3,7 +3,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar } from "../Avatar/Avatar";
 import { DropdownMenu } from "../DropdownMenu/DropdownMenu";
 import { cn } from "../utils/cn";
-import { Sidebar, type SidebarProps } from "./Sidebar";
+import { Button } from "../Button/Button";
+import { Sidebar, useSidebar, type SidebarProps } from "./Sidebar";
 
 /**
  * Compound layout: `Sidebar.Provider` → `Sidebar.Gap` → `Sidebar` + `Sidebar.Inset`.
@@ -623,6 +624,93 @@ function AppShell({ children }: { children: React.ReactNode }) {
     </Sidebar.Provider>
   );
 }`,
+      },
+    },
+  },
+};
+
+function WalkthroughControls() {
+  const { openOverlay, closeOverlay, overlayOpen } = useSidebar();
+  return (
+    <Button variant="outline" onClick={overlayOpen ? closeOverlay : openOverlay}>
+      {overlayOpen ? "Ocultar el menú" : "Mostrar el menú"}
+    </Button>
+  );
+}
+
+/**
+ * `collapsible="dock"` driven from code: `openOverlay()` unfolds the panel floating over the
+ * content (a walkthrough step), and hover, focus or Escape don't fold it until `closeOverlay()`.
+ * A pinned panel floats too while held, giving the content the rail's space back.
+ * `overlayOpen` / `onOverlayOpenChange` control the same state from the provider.
+ * `offsetVariable` publishes the space the sidebar takes on `<html>` for `fixed` elements outside
+ * the provider.
+ */
+export const DockOverlayFromCode: Story = {
+  name: "Dock · overlay from code",
+  render: () => (
+    <Sidebar.Provider collapsible="dock" defaultOpen={false} offsetVariable="--app-sidebar-offset" className="ui:min-h-svh">
+      <Sidebar.Gap>
+        <Sidebar>
+          <Sidebar.Content>
+            <Sidebar.Group>
+              <Sidebar.GroupContent>
+                <Sidebar.Menu>
+                  <Sidebar.MenuItem>
+                    <Sidebar.MenuButton type="button" tooltip="Shows">
+                      <Sidebar.Icon>
+                        <IconTicket />
+                      </Sidebar.Icon>
+                      <span>Shows</span>
+                    </Sidebar.MenuButton>
+                  </Sidebar.MenuItem>
+                  <Sidebar.MenuItem>
+                    <Sidebar.MenuButton type="button" tooltip="Costos">
+                      <Sidebar.Icon>
+                        <IconSettings2 />
+                      </Sidebar.Icon>
+                      <span>Costos</span>
+                    </Sidebar.MenuButton>
+                  </Sidebar.MenuItem>
+                </Sidebar.Menu>
+              </Sidebar.GroupContent>
+            </Sidebar.Group>
+          </Sidebar.Content>
+        </Sidebar>
+        <Sidebar.Inset>
+          <header className="ui:flex ui:h-14 ui:items-center ui:gap-2 ui:border-b ui:border-background-300 ui:px-4">
+            <Sidebar.Trigger />
+            <WalkthroughControls />
+          </header>
+        </Sidebar.Inset>
+      </Sidebar.Gap>
+    </Sidebar.Provider>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, Sidebar, useSidebar } from "@obel-arg/malbec-ui";
+
+function WalkthroughStep() {
+  const { openOverlay, closeOverlay, overlayOpen } = useSidebar();
+  return (
+    <Button variant="outline" onClick={overlayOpen ? closeOverlay : openOverlay}>
+      {overlayOpen ? "Ocultar el menú" : "Mostrar el menú"}
+    </Button>
+  );
+}
+
+<Sidebar.Provider collapsible="dock" open={pinned} onOpenChange={setPinned} offsetVariable="--app-sidebar-offset">
+  <Sidebar.Gap>
+    <Sidebar>
+      <Sidebar.Content>{/* nav */}</Sidebar.Content>
+    </Sidebar>
+    <Sidebar.Inset>
+      <Sidebar.Trigger />
+      <WalkthroughStep />
+    </Sidebar.Inset>
+  </Sidebar.Gap>
+</Sidebar.Provider>`,
       },
     },
   },

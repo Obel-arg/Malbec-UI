@@ -366,3 +366,36 @@ function Example() {
     },
   },
 };
+
+export const Bare: Story = {
+  name: "Variant · Bare (inline)",
+  render: () => (
+    <p className="malbec-font-sans ui:flex ui:items-center ui:gap-2 ui:text-sm ui:text-text-default">
+      Fecha del show
+      <DatePicker locale={es} state="closed">
+        <DatePicker.Trigger variant="bare" className="ui:w-auto" />
+        <DatePicker.Content>
+          <DatePicker.Calendar />
+        </DatePicker.Content>
+      </DatePicker>
+    </p>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DatePicker } from "@obel-arg/malbec-ui";
+import { es } from "date-fns/locale";
+
+<p className="flex items-center gap-2 text-sm">
+  Fecha del show
+  <DatePicker locale={es} state="closed">
+    <DatePicker.Trigger variant="bare" className="w-auto" />
+    <DatePicker.Content>
+      <DatePicker.Calendar />
+    </DatePicker.Content>
+  </DatePicker>
+</p>`,
+      },
+    },
+  },
+};

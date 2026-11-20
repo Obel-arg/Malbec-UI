@@ -616,3 +616,229 @@ export const ColumnsToggle: Story = {
     },
   },
 };
+
+type SettlementRow = {
+  id: string;
+  show: string;
+  venue: string;
+  city: string;
+  date: string;
+  tickets: number;
+  gross: number;
+};
+
+const settlementRows: SettlementRow[] = [
+  { id: "s1", show: "Rosario · Metropolitano", venue: "Metropolitano", city: "Rosario", date: "12/03/2027", tickets: 4180, gross: 125400000 },
+  { id: "s2", show: "Córdoba · Quality Espacio", venue: "Quality Espacio", city: "Córdoba", date: "19/03/2027", tickets: 3920, gross: 117600000 },
+  { id: "s3", show: "Mendoza · Arena Maipú", venue: "Arena Maipú", city: "Mendoza", date: "26/03/2027", tickets: 2870, gross: 86100000 },
+  { id: "s4", show: "La Plata · Estadio Único", venue: "Estadio Único", city: "La Plata", date: "02/04/2027", tickets: 21500, gross: 645000000 },
+];
+
+const amount = new Intl.NumberFormat("es-AR");
+
+const settlementColumns: ColumnDef<SettlementRow, unknown>[] = [
+  { accessorKey: "show", header: "Show" },
+  { accessorKey: "venue", header: "Venue" },
+  { accessorKey: "city", header: "Ciudad" },
+  { accessorKey: "date", header: "Fecha" },
+  {
+    accessorKey: "tickets",
+    header: "Tickets",
+    cell: ({ getValue }) => amount.format(getValue<number>()),
+    meta: { thClassName: "ui:text-right", tdClassName: "ui:text-right ui:tabular-nums" },
+  },
+  {
+    accessorKey: "gross",
+    header: "Bruto (ARS)",
+    cell: ({ getValue }) => amount.format(getValue<number>()),
+    meta: { thClassName: "ui:text-right", tdClassName: "ui:text-right ui:tabular-nums" },
+  },
+];
+
+export const ColumnCellClasses: Story = {
+  name: "With column cell classes",
+  render: () => (
+    <DataTable
+      getRowId={(r) => r.id}
+      columns={settlementColumns}
+      data={settlementRows}
+      emptyLabel="Sin shows"
+      enableSorting={false}
+    />
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `// \`meta.thClassName\` styles the header cell, \`meta.tdClassName\` every body cell of the column.
+const columns: ColumnDef<SettlementRow>[] = [
+  { accessorKey: "show", header: "Show" },
+  {
+    accessorKey: "gross",
+    header: "Bruto (ARS)",
+    cell: ({ getValue }) => amount.format(getValue<number>()),
+    meta: { thClassName: "ui:text-right", tdClassName: "ui:text-right ui:tabular-nums" },
+  },
+];
+
+<DataTable getRowId={(r) => r.id} columns={columns} data={rows} emptyLabel="Sin shows" />`,
+      },
+    },
+  },
+};
+
+// Wide enough to overflow a narrow shell, so the rows scroll sideways.
+const wideSettlementColumns: ColumnDef<SettlementRow, unknown>[] = settlementColumns.map((column) => {
+  const meta = column.meta as { thClassName?: string; tdClassName?: string } | undefined;
+  return { ...column, meta: { ...meta, thClassName: `${meta?.thClassName ?? ""} ui:min-w-[220px]`.trim() } };
+});
+
+export const StickySelectionColumn: Story = {
+  name: "With sticky selection column",
+  render: () => (
+    <div className="ui:max-w-[720px]">
+      <DataTable
+        getRowId={(r) => r.id}
+        columns={wideSettlementColumns}
+        data={settlementRows}
+        emptyLabel="Sin shows"
+        enableSorting={false}
+        rowSelection
+        stickySelectionColumn
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `// In a table wider than its container, \`stickySelectionColumn\` keeps the checkboxes
+// pinned while the rows scroll sideways. The cell follows the row's hover and selected
+// background with the same transition.
+<DataTable
+  getRowId={(r) => r.id}
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin shows"
+  rowSelection
+  stickySelectionColumn
+/>`,
+      },
+    },
+  },
+};
+
+const allSettlementRows: SettlementRow[] = [
+  ...settlementRows,
+  { id: "s5", show: "Tucumán · Hipódromo", venue: "Hipódromo", city: "Tucumán", date: "09/04/2027", tickets: 9800, gross: 294000000 },
+  { id: "s6", show: "Salta · Delmi", venue: "Delmi", city: "Salta", date: "16/04/2027", tickets: 4100, gross: 123000000 },
+  { id: "s7", show: "Neuquén · Ruca Che", venue: "Ruca Che", city: "Neuquén", date: "23/04/2027", tickets: 3600, gross: 108000000 },
+  { id: "s8", show: "Mar del Plata · Polideportivo", venue: "Polideportivo", city: "Mar del Plata", date: "30/04/2027", tickets: 6200, gross: 186000000 },
+];
+
+function SettlementsSelectionAcrossPages() {
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 4 });
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  // What the server would return for the current page.
+  const page = allSettlementRows.slice(
+    pagination.pageIndex * pagination.pageSize,
+    (pagination.pageIndex + 1) * pagination.pageSize,
+  );
+  return (
+    <div className="ui:flex ui:flex-col ui:gap-3">
+      <div className="ui:flex ui:items-center ui:gap-3 ui:text-sm ui:text-text-default">
+        <span data-testid="selected-count">{selectedIds.length} seleccionados</span>
+        <button type="button" className="ui:underline" onClick={() => setSelectedIds([])}>
+          Limpiar selección
+        </button>
+      </div>
+      <DataTable
+        getRowId={(r) => r.id}
+        columns={settlementColumns}
+        data={page}
+        emptyLabel="Sin shows"
+        enableSorting={false}
+        rowSelection
+        selectedRowIds={selectedIds}
+        onSelectedRowIdsChange={setSelectedIds}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        rowCount={allSettlementRows.length}
+        footer={({ table }) => <DataTable.Pagination table={table} />}
+      />
+    </div>
+  );
+}
+
+export const SelectionAcrossPages: Story = {
+  name: "With selection across server pages",
+  render: () => <SettlementsSelectionAcrossPages />,
+  parameters: {
+    docs: {
+      source: {
+        code: `// Controlled selection by row id. Ids from other pages stay selected; "select all" only
+// toggles the rows on screen. Clear it by setting [].
+const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+<DataTable
+  getRowId={(r) => r.id}
+  columns={columns}
+  data={page}
+  emptyLabel="Sin shows"
+  rowSelection
+  selectedRowIds={selectedIds}
+  onSelectedRowIdsChange={setSelectedIds}
+  pagination={pagination}
+  onPaginationChange={setPagination}
+  rowCount={total}
+  footer={({ table }) => <DataTable.Pagination table={table} />}
+/>`,
+      },
+    },
+  },
+};
+
+const manySettlementRows: SettlementRow[] = Array.from({ length: 3 }, (_, round) =>
+  allSettlementRows.map((row) => ({ ...row, id: `${row.id}-${round}` })),
+).flat();
+
+function SettlementsInScrollingPage() {
+  // The element that scrolls the page; in an app, the workspace's scroll container.
+  const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
+  return (
+    <div ref={setScrollRoot} className="ui:h-[480px] ui:overflow-y-auto ui:bg-background-200 ui:p-6">
+      <p className="ui:mb-4 ui:text-sm ui:text-text-default">Shows del trimestre</p>
+      <div className="ui:max-w-[720px]">
+        <DataTable
+          getRowId={(r) => r.id}
+          columns={wideSettlementColumns}
+          data={manySettlementRows}
+          emptyLabel="Sin shows"
+          enableSorting={false}
+          rowSelection
+          stickySelectionColumn
+          stickyHeader={{ scrollRoot }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export const StickyHeaderInScrollingPage: Story = {
+  name: "With header pinned to the page scroll",
+  render: () => <SettlementsInScrollingPage />,
+  parameters: {
+    docs: {
+      source: {
+        code: `// The page scrolls, not the table. The header stays at the top of \`scrollRoot\` until the
+// last row goes by, even though the table also scrolls sideways. Omit \`scrollRoot\` to use the
+// nearest ancestor that scrolls (or the window); pass \`null\` while it isn't mounted yet.
+<DataTable
+  getRowId={(r) => r.id}
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin shows"
+  stickyHeader={{ scrollRoot: workspaceScrollEl }}
+/>`,
+      },
+    },
+  },
+};

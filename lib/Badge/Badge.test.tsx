@@ -8,8 +8,8 @@ describe("Badge", () => {
   it("has a neutral variant with the system grey pair", () => {
     render(<Badge variant="neutral">Borrador</Badge>);
     const classes = classesOf(screen.getByText("Borrador"));
-    expect(classes).toContain("ui:[--malbec-badge-bg:#e4e2df]");
-    expect(classes).toContain("ui:[--malbec-badge-fg:#6b6b7a]");
+    expect(classes).toContain("ui:[--malbec-badge-bg:var(--color-malbec-badge-neutral-bg)]");
+    expect(classes).toContain("ui:[--malbec-badge-fg:var(--color-malbec-badge-neutral-text)]");
   });
 
   it("paints colour tones through CSS variables an app can override", () => {
@@ -17,7 +17,7 @@ describe("Badge", () => {
     const classes = classesOf(screen.getByText("Vencido"));
     expect(classes).toContain("ui:bg-(--malbec-badge-bg)");
     expect(classes).toContain("ui:text-(--malbec-badge-fg)");
-    expect(classes).toContain("ui:[--malbec-badge-bg:#dfd0d0]");
+    expect(classes).toContain("ui:[--malbec-badge-bg:var(--color-malbec-badge-red-bg)]");
   });
 
   it("uses the 8px chip radius, never 4px or a capsule", () => {
@@ -30,8 +30,8 @@ describe("Badge", () => {
   it("destructive is the two-tone red pair, not solid red with white text", () => {
     render(<Badge variant="destructive">Vencido</Badge>);
     const classes = classesOf(screen.getByText("Vencido"));
-    expect(classes).toContain("ui:[--malbec-badge-bg:#dfd0d0]");
-    expect(classes).toContain("ui:[--malbec-badge-fg:#602a2a]");
+    expect(classes).toContain("ui:[--malbec-badge-bg:var(--color-malbec-badge-red-bg)]");
+    expect(classes).toContain("ui:[--malbec-badge-fg:var(--color-malbec-badge-red-text)]");
     expect(classes).not.toContain("ui:bg-destructive");
   });
 

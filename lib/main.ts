@@ -39,6 +39,9 @@ export { Select } from "./Select/Select";
 export { Dialog } from "./Dialog/Dialog";
 export { Sheet } from "./Sheet/Sheet";
 export { Sidebar, useSidebar } from "./Sidebar/Sidebar";
+/** Class merge that knows the `ui:` prefix: an app class wins over the kit's `ui:` class it overrides. */
+export { cn } from "./utils/cn";
+export { SIDEBAR_WIDTH, SIDEBAR_WIDTH_COLLAPSED } from "./Sidebar/sidebar-constants";
 export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Field } from "./Field/Field";
 export { FileDropzone } from "./FileDropzone/FileDropzone";
@@ -207,6 +210,7 @@ export type {
 export type {
   DatePickerProps,
   DatePickerTriggerProps,
+  DatePickerTriggerVariant,
   DatePickerContentProps,
   DatePickerPresetProps,
   DatePickerCalendarProps,
@@ -287,6 +291,7 @@ export type {
   SelectGroupProps,
   SelectValueProps,
   SelectTriggerProps,
+  SelectTriggerVariant,
   SelectContentProps,
   SelectItemProps,
 } from "./Select/Select";
@@ -327,8 +332,10 @@ export type {
   TableFooterProps,
   TableRowProps,
   TableHeadProps,
+  TableSortableHeadProps,
   TableCellProps,
   TableCaptionProps,
+  TableStickyHeaderOptions,
 } from "./Table/Table";
 export type {
   TabsProps,
@@ -337,7 +344,7 @@ export type {
   TabsTriggerProps,
   TabsContentProps,
 } from "./Tabs/Tabs";
-export type { TextareaProps } from "./Textarea/Textarea";
+export type { TextareaProps, TextareaVariant } from "./Textarea/Textarea";
 export type {
   ToggleProps,
   ToggleIconProps,
@@ -384,7 +391,12 @@ export type { SortableColumnHeaderProps } from "./DataTable/sortable-column-head
 export type { ComboboxFilter } from "./Combobox/Combobox";
 // Round B: surfaces
 export type { NoticeProps, NoticeTone } from "./Notice/Notice";
-export type { DataCardProps } from "./DataCard/DataCard";
+export type {
+  DataCardProps,
+  DataCardFrameProps,
+  DataCardBlockProps,
+  DataCardTitleProps,
+} from "./DataCard/DataCard";
 export type { EmptyStateProps, EmptyStateVariant } from "./EmptyState/EmptyState";
 export type { SkeletonProps } from "./Skeleton/Skeleton";
 // Round B: shell

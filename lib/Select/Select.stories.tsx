@@ -169,3 +169,41 @@ export const LongLabel: Story = {
     </Select>
   ),
 };
+
+export const Bare: Story = {
+  name: "Variant · Bare (inline)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Select } from "@obel-arg/malbec-ui";
+
+<p className="flex items-center gap-2 text-sm">
+  Moneda
+  <Select defaultValue="ars">
+    <Select.Trigger variant="bare" aria-label="Moneda" className="w-auto">
+      <Select.Value />
+    </Select.Trigger>
+    <Select.Content>
+      <Select.Item value="ars">ARS</Select.Item>
+      <Select.Item value="usd">USD</Select.Item>
+    </Select.Content>
+  </Select>
+</p>`,
+      },
+    },
+  },
+  render: () => (
+    <p className="malbec-font-sans ui:flex ui:items-center ui:gap-2 ui:text-sm ui:text-text-default">
+      Moneda
+      <Select defaultValue="ars">
+        <Select.Trigger variant="bare" aria-label="Moneda" className="ui:w-auto">
+          <Select.Value />
+        </Select.Trigger>
+        <Select.Content>
+          <Select.Item value="ars">ARS</Select.Item>
+          <Select.Item value="usd">USD</Select.Item>
+        </Select.Content>
+      </Select>
+    </p>
+  ),
+};

@@ -12,7 +12,10 @@ import {
   snapDotRowStart,
   snapToDotGrid,
   topCapPath,
+  rightCapPath,
+  BAR_CAP_RADIUS,
 } from "./chart-style";
+import * as barrel from "../main";
 
 const svg = (el: React.ReactElement | null) =>
   render(<svg>{el}</svg>).container.querySelector("svg")!.firstElementChild;
@@ -58,6 +61,23 @@ describe("dot grid (charts.md §5)", () => {
 describe("marks (charts.md §4, §8)", () => {
   it("topCapPath is a plain rectangle without radius", () => {
     expect(topCapPath(0, 0, 10, 20, 0)).toBe("M0 0 h10 v20 h-10 Z");
+  });
+
+  it("topCapPath defaults to the 5px bar cap", () => {
+    expect(BAR_CAP_RADIUS).toBe(5);
+    expect(topCapPath(0, 0, 20, 40)).toBe(topCapPath(0, 0, 20, 40, BAR_CAP_RADIUS));
+  });
+
+  it("rightCapPath rounds only the RIGHT end of a horizontal bar", () => {
+    expect(rightCapPath(0, 0, 20, 10, 0)).toBe("M0 0 h20 v10 h-20 Z");
+    // Left edge stays square: it starts at the top-left corner with a straight run.
+    expect(rightCapPath(0, 0, 40, 10)).toBe("M0 0 H35 Q40 0 40 5 V5 Q40 10 35 10 H0 Z");
+  });
+
+  it("the barrel exports cn so apps merge over the kit's ui: classes", () => {
+    const merged = barrel.cn(barrel.TOOLTIP_CARD_CLASS, "min-w-[220px]");
+    expect(merged).toContain("min-w-[220px]");
+    expect(merged).not.toContain("ui:min-w-[168px]");
   });
 
   it("rounds only the top segment with a value, even when the last series is 0", () => {
