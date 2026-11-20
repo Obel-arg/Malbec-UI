@@ -5,8 +5,8 @@ import { inputVariants } from "../Input/input-variants";
 import { selectTriggerVariants } from "../Select/select-variants";
 import { textareaVariants } from "../Textarea/textarea-variants";
 
-// Inputs workshop (2.1): a background-300 border instead of the halo, 36px tall, 12px side
-// padding and the same -0.42px tracking in every field.
+// 2.1 closing workshop: a malbec-field-border (#ebeae8) border instead of the halo, 40px tall,
+// 12px side padding and the same -0.42px tracking in every field.
 const fields = {
   Input: inputVariants(),
   "Select.Trigger": selectTriggerVariants(),
@@ -15,10 +15,12 @@ const fields = {
 };
 
 describe("field defaults (2.1)", () => {
-  it.each(Object.entries(fields))("%s: background-300 edge, no halo, 36px, 12px sides", (_name, classes) => {
-    expect(classes).toContain("ui:border-background-300");
+  it.each(Object.entries(fields))("%s: field-border edge, no halo, 40px, 12px sides", (_name, classes) => {
+    expect(classes).toContain("ui:border-malbec-field-border");
+    expect(classes).not.toContain("ui:border-background-300");
     expect(classes).not.toContain("0_0_2px");
-    expect(classes).toContain("ui:h-9");
+    expect(classes).toContain("ui:h-10");
+    expect(classes).not.toContain("ui:h-9");
     expect(classes).toContain("ui:px-3");
     expect(classes).not.toContain("ui:px-4");
   });
@@ -28,7 +30,7 @@ describe("field defaults (2.1)", () => {
   });
 
   it("Textarea shares the edge and the side padding", () => {
-    expect(textareaVariants()).toContain("ui:border-background-300");
+    expect(textareaVariants()).toContain("ui:border-malbec-field-border");
     expect(textareaVariants()).not.toContain("0_0_2px");
     expect(textareaVariants()).toContain("ui:px-3");
   });

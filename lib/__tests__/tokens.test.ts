@@ -18,6 +18,7 @@ describe("tokens.css", () => {
       "text-malbec-muted-text",
       "text-malbec-subtle-text",
       "bg-malbec-over-budget",
+      "border-malbec-field-border",
       "text-malbec-table-header",
       "bg-malbec-badge-red-bg",
     ]);
@@ -26,6 +27,7 @@ describe("tokens.css", () => {
     expect(css).toMatch(/--color-malbec-muted-text:\s*#8c8c94/);
     expect(css).toMatch(/--color-malbec-subtle-text:\s*#a6a6ad/);
     expect(css).toMatch(/--color-malbec-over-budget:\s*#dc2626/);
+    expect(css).toMatch(/--color-malbec-field-border:\s*#ebeae8/);
     expect(css).toMatch(/--color-malbec-table-header:\s*#6b6b7a/);
     expect(css).toMatch(/\.text-malbec-ink\s*{\s*color:\s*var\(--color-malbec-ink\)/);
     expect(css).toMatch(/\.bg-malbec-badge-red-bg\s*{/);

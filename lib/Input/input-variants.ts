@@ -8,7 +8,7 @@ export const inputVariants = cva(
   [
     "malbec-font-sans",
     "ui:flex",
-    "ui:h-9",
+    "ui:h-10",
     "ui:w-full",
     "ui:min-w-0",
     "ui:items-center",
@@ -16,7 +16,7 @@ export const inputVariants = cva(
     "ui:rounded-[6px]",
     "ui:px-3",
     "ui:py-1.5",
-    "ui:border ui:border-solid ui:border-background-300",
+    "ui:border ui:border-solid ui:border-malbec-field-border",
     "ui:text-[14px]",
     "ui:leading-5",
     "ui:tracking-[-0.42px]",

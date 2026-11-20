@@ -463,7 +463,7 @@ const DatePickerPreset = React.forwardRef<
         ref={ref}
         data-slot="date-picker-preset"
         className={cn(
-          "malbec-font-sans ui:flex ui:h-9 ui:w-full ui:items-center ui:justify-between ui:rounded-md ui:border ui:border-background-300 ui:bg-background-100 ui:px-3 ui:py-1.5 ui:text-sm ui:font-normal ui:tracking-[-0.42px] ui:text-text-default",
+          "malbec-font-sans ui:flex ui:h-10 ui:w-full ui:items-center ui:justify-between ui:rounded-md ui:border ui:border-malbec-field-border ui:bg-background-100 ui:px-3 ui:py-1.5 ui:text-sm ui:font-normal ui:tracking-[-0.42px] ui:text-text-default",
           className,
         )}
         {...rest}

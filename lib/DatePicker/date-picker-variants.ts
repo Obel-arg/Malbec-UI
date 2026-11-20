@@ -3,9 +3,9 @@ import { cva, type VariantProps } from "class-variance-authority";
 export const datePickerTriggerVariants = cva(
   [
     "malbec-font-sans",
-    "ui:flex ui:h-9 ui:w-full ui:items-center ui:rounded-md",
+    "ui:flex ui:h-10 ui:w-full ui:items-center ui:rounded-md",
     "ui:bg-background-100 ui:px-3 ui:py-1.5 ui:text-sm ui:font-normal ui:leading-tight ui:tracking-[-0.42px] ui:text-text-default",
-    "ui:border ui:border-solid ui:border-background-300",
+    "ui:border ui:border-solid ui:border-malbec-field-border",
     "ui:outline-none ui:transition-[opacity,box-shadow]",
     "ui:focus-visible:ring-1 ui:focus-visible:ring-background-300",
     // Keep the ring visible while the popover is open — Radix moves focus into

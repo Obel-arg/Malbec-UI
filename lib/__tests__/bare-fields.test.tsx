@@ -42,7 +42,7 @@ describe('variant="bare"', () => {
 
   it.each(Object.entries(fields))("%s keeps the box by default", (_name, renderField) => {
     expect(classesOf(renderField("default"))).toEqual(
-      expect.arrayContaining(["ui:border", "ui:border-background-300", "ui:bg-background-100"]),
+      expect.arrayContaining(["ui:border", "ui:border-malbec-field-border", "ui:bg-background-100"]),
     );
   });
 });

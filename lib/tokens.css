@@ -16,6 +16,7 @@
   --color-malbec-muted-text: #8c8c94;
   --color-malbec-subtle-text: #a6a6ad;
   --color-malbec-over-budget: #dc2626;
+  --color-malbec-field-border: #ebeae8;
   --color-malbec-table-header: #6b6b7a;
 
   /* Badge tones: background + text pairs. blue and red match <Badge variant>. */

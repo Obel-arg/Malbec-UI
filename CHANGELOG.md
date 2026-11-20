@@ -9,16 +9,16 @@ Table and DataTable additions that came out of the Live table audit, plus the de
 **This release changes what you see without a code change.** The fields, the calendar and underline tabs look different by default; the sections marked "Changes on screen" say what changes and which overrides each app can delete. Smaller visible changes: `meta.tdClassName` starts applying, plain popovers animate, and the Inbox tooltip darkens by one step. Everything else is opt-in and no API was removed. Each is described below.
 
 ### Changes on screen: fields are drawn by a border
-Chosen in the inputs workshop.
+Chosen with Isa in the 2.1 workshop (the look Live already used in its show form).
 - **What changes:**
-  - `Input`, `Select`, `Combobox`, `DatePicker` and `Textarea` lose the 2px halo and get a 1px `background-300` border.
-  - They stay 36px tall, so they still line up with the default `Button`.
+  - `Input`, `Select`, `Combobox`, `DatePicker` and `Textarea` lose the 2px halo and get a 1px border in the new `--color-malbec-field-border` token (`#ebeae8`; in dark mode it follows `background-300`).
+  - They grow from 36px to 40px. Buttons stay 36px (every size), so a field and a button side by side no longer share a height: align the row by its centre (`items-center`).
   - The side padding goes from 16px to 12px.
   - `Select` and `DatePicker` take the -0.42px tracking the other fields already had, so the same text reads the same in every field.
-  - The Combobox chips box pads 4px on every side, and each chip's remove button goes from 20px to 16px. A row of chips is now 36px like any other field; it used to be 42px.
+  - The Combobox chips box pads 6px on every side, and each chip's remove button goes from 20px to 16px. A row of chips is now 40px like any other field; it used to be 42px.
 - **What to delete:**
   - Live: the 1px border on triggers in `layers.css` (`[data-slot="combobox-trigger"]`, `dropdown-menu-trigger`, the Combobox frame).
-  - Live: the `.show-form-fields` rules that add a border and turn the halo off. Its 40px height is a Live choice: keep it or drop it to match the other apps.
+  - Live: the `.show-form-fields` rules that add a border, turn the halo off and set 40px: the library does all three now.
   - Every app: any CSS that draws a border around these fields.
 - **What to check (migration):**
   - **`shadow-none` no longer removes the box.** If a field turned off the halo to look boxless (a search in a side panel, an amount inside a sentence, a cell edited inline), it now shows a border. Use `variant="bare"` instead, or `border-0` when you need to keep the padding. In Live this hit about 10 fields.

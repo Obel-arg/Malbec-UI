@@ -17,7 +17,7 @@ export const textareaVariants = cva(
   "ui:rounded-[6px]",
   "ui:px-3",
   "ui:py-1.5",
-  "ui:border ui:border-solid ui:border-background-300",
+  "ui:border ui:border-solid ui:border-malbec-field-border",
   "ui:text-[14px]",
   "ui:leading-5",
   "ui:tracking-[-0.42px]",
