@@ -12,8 +12,13 @@ export function pctBlocksFilled(percent: number): number {
 }
 
 export type PctBlocksProps = Omit<React.ComponentProps<"div">, "children"> & {
-  /** Percentage, 0–100. Above 100 all blocks turn into the over-budget state. */
+  /** Percentage, 0–100. Above 100 all blocks light up; `over` says what that means. */
   value: number;
+  /**
+   * What going past 100% means. `bad` (a cap: budget, CPA ≤ US$4) turns the blocks into the
+   * over-budget red. `good` (a minimum: ROAS ≥ 3x) keeps them in the series tone. @default "bad"
+   */
+  over?: "bad" | "good";
 };
 
 /**
@@ -21,18 +26,21 @@ export type PctBlocksProps = Omit<React.ComponentProps<"div">, "children"> & {
  * fill and countable at a glance. Pair it with the number; it does not replace it.
  */
 export const PctBlocks = React.forwardRef<HTMLDivElement, PctBlocksProps>(function PctBlocks(
-  { value, className, ...rest },
+  { value, over: overMeaning = "bad", className, ...rest },
   ref,
 ) {
   const filled = pctBlocksFilled(value);
-  const over = value > 100;
+  const exceeded = value > 100;
+  const over = exceeded && overMeaning === "bad";
   return (
     <div
       ref={ref}
       role="img"
       aria-label={`${Math.round(value)}%`}
       data-slot="pct-blocks"
+      // `data-over` keeps meaning "in the red state"; `data-exceeded` is past 100% either way.
       data-over={over || undefined}
+      data-exceeded={exceeded ? overMeaning : undefined}
       className={cn("ui:flex ui:w-20 ui:gap-[2px]", className)}
       {...rest}
     >

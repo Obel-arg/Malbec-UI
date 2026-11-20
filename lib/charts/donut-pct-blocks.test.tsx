@@ -45,6 +45,17 @@ describe("PctBlocks", () => {
     expect(screen.getByRole("img", { name: "130%" })).toBeTruthy();
   });
 
+  it('over="good": going past 100% reads as a goal beaten, not as a red state', () => {
+    const { container } = render(<PctBlocks value={350} over="good" />);
+    const root = container.querySelector<HTMLElement>("[data-slot=pct-blocks]")!;
+    expect(root.dataset.over).toBeUndefined();
+    expect(root.dataset.exceeded).toBe("good");
+    root.querySelectorAll<HTMLElement>(":scope > span").forEach((block) => {
+      expect(block.style.backgroundColor).not.toBe(OVER_BUDGET);
+      expect(block.dataset.filled).toBeDefined();
+    });
+  });
+
   it("uses the approved over-budget red (charts.md §4, #dc2626) from its own token, not destructive", () => {
     expect(OVER_BUDGET).toBe("var(--color-malbec-over-budget)");
   });
