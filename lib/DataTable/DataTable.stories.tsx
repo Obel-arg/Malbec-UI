@@ -616,3 +616,72 @@ export const ColumnsToggle: Story = {
     },
   },
 };
+
+type SettlementRow = {
+  id: string;
+  show: string;
+  venue: string;
+  city: string;
+  date: string;
+  tickets: number;
+  gross: number;
+};
+
+const settlementRows: SettlementRow[] = [
+  { id: "s1", show: "Rosario · Metropolitano", venue: "Metropolitano", city: "Rosario", date: "12/03/2027", tickets: 4180, gross: 125400000 },
+  { id: "s2", show: "Córdoba · Quality Espacio", venue: "Quality Espacio", city: "Córdoba", date: "19/03/2027", tickets: 3920, gross: 117600000 },
+  { id: "s3", show: "Mendoza · Arena Maipú", venue: "Arena Maipú", city: "Mendoza", date: "26/03/2027", tickets: 2870, gross: 86100000 },
+  { id: "s4", show: "La Plata · Estadio Único", venue: "Estadio Único", city: "La Plata", date: "02/04/2027", tickets: 21500, gross: 645000000 },
+];
+
+const amount = new Intl.NumberFormat("es-AR");
+
+const settlementColumns: ColumnDef<SettlementRow, unknown>[] = [
+  { accessorKey: "show", header: "Show" },
+  { accessorKey: "venue", header: "Venue" },
+  { accessorKey: "city", header: "Ciudad" },
+  { accessorKey: "date", header: "Fecha" },
+  {
+    accessorKey: "tickets",
+    header: "Tickets",
+    cell: ({ getValue }) => amount.format(getValue<number>()),
+    meta: { thClassName: "ui:text-right", tdClassName: "ui:text-right ui:tabular-nums" },
+  },
+  {
+    accessorKey: "gross",
+    header: "Bruto (ARS)",
+    cell: ({ getValue }) => amount.format(getValue<number>()),
+    meta: { thClassName: "ui:text-right", tdClassName: "ui:text-right ui:tabular-nums" },
+  },
+];
+
+export const ColumnCellClasses: Story = {
+  name: "With column cell classes",
+  render: () => (
+    <DataTable
+      getRowId={(r) => r.id}
+      columns={settlementColumns}
+      data={settlementRows}
+      emptyLabel="Sin shows"
+      enableSorting={false}
+    />
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `// \`meta.thClassName\` styles the header cell, \`meta.tdClassName\` every body cell of the column.
+const columns: ColumnDef<SettlementRow>[] = [
+  { accessorKey: "show", header: "Show" },
+  {
+    accessorKey: "gross",
+    header: "Bruto (ARS)",
+    cell: ({ getValue }) => amount.format(getValue<number>()),
+    meta: { thClassName: "ui:text-right", tdClassName: "ui:text-right ui:tabular-nums" },
+  },
+];
+
+<DataTable getRowId={(r) => r.id} columns={columns} data={rows} emptyLabel="Sin shows" />`,
+      },
+    },
+  },
+};

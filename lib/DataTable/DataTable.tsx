@@ -356,7 +356,7 @@ export function DataTable<TData, TValue>({
                 {row.getVisibleCells().map((cell) => (
                   <Table.Cell
                     key={cell.id}
-                    className={dataCellClassName(cell.column.id, tableAppearance)}
+                    className={dataCellClassName(cell.column, tableAppearance)}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Table.Cell>
@@ -391,6 +391,7 @@ export function DataTable<TData, TValue>({
   );
 }
 
+/** Column `meta` the table reads: `thClassName` styles the header cell, `tdClassName` every body cell. */
 type ColMeta = { thClassName?: string; tdClassName?: string };
 
 // The row itself has role="button", so a match on the row doesn't count: only an
@@ -419,15 +420,16 @@ function headerThClassName(
 }
 
 function dataCellClassName(
-  columnId: string,
+  column: { id: string; columnDef: { meta?: unknown } },
   appearance: TableAppearance,
 ): string | undefined {
-  if (columnId === "select") {
-    return appearance === "dataGrid"
-      ? "ui:w-8 ui:min-w-8 ui:px-2 ui:py-0 ui:text-center"
-      : "ui:w-11 ui:min-w-[44px] ui:px-2 ui:text-center";
-  }
-  return undefined;
+  return cn(
+    column.id === "select" &&
+      (appearance === "dataGrid"
+        ? "ui:w-8 ui:min-w-8 ui:px-2 ui:py-0 ui:text-center"
+        : "ui:w-11 ui:min-w-[44px] ui:px-2 ui:text-center"),
+    (column.columnDef.meta as ColMeta | undefined)?.tdClassName,
+  );
 }
 
 /** Page links for a paginated table: `footer={({ table }) => <DataTable.Pagination table={table} />}`. */
