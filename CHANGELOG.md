@@ -20,11 +20,16 @@ Chosen in the inputs workshop.
   - Live: the 1px border on triggers in `layers.css` (`[data-slot="combobox-trigger"]`, `dropdown-menu-trigger`, the Combobox frame).
   - Live: the `.show-form-fields` rules that add a border and turn the halo off. Its 40px height is a Live choice: keep it or drop it to match the other apps.
   - Every app: any CSS that draws a border around these fields.
+- **What to check (migration):**
+  - **`shadow-none` no longer removes the box.** If a field turned off the halo to look boxless (a search in a side panel, an amount inside a sentence, a cell edited inline), it now shows a border. Use `variant="bare"` instead, or `border-0` when you need to keep the padding. In Live this hit about 10 fields.
+  - **Halo recreated by hand.** A field that redrew the old halo with `shadow-[0_0_2px…]` now shows the border and the shadow at once. Delete the shadow.
+- **New: `variant="bare"` on `Select.Trigger`, `Textarea` and `DatePicker.Trigger`.** Same as `Input variant="bare"`: no border, background or padding, and the focus ring stays. Use it for fields inside text or a table cell instead of loose `!border-0` overrides. New types: `SelectTriggerVariant`, `TextareaVariant`, `DatePickerTriggerVariant`.
 
 ### Changes on screen: calendar frame and greys from tokens
 - **What changes in `CalendarMonth`, `CalendarWeek` and `CalendarDay`:**
   - The frame is a `background-300` border with no shadow. It used to be `sidebar-border` plus a 12px shadow.
-  - The cold hard-coded greys become warm tokens: `background-100/200/300`, `text-default`, `malbec-ink` and the new `malbec-muted-text`.
+  - The cold hard-coded greys become warm tokens: `background-100/200/300`, `text-default` and `malbec-ink`.
+  - The labels (day names, hours, days outside the month) use the new `malbec-subtle-text` (`#a6a6ad`), the same light grey Live's week view already used. They stay lighter than body muted text.
   - The today circle is `malbec-icon` instead of the brand colour.
   - The month and year selects follow the neutral outline: no brand border, no brand hover.
   - The "now" line uses the `destructive` token, with the same red as before.
@@ -32,7 +37,7 @@ Chosen in the inputs workshop.
 - **What to delete:** Live's calendar retints in `layers.css`:
   - `.business-calendar-month`: the frame, `[class*=border-sidebar-border]` and the shadow.
   - `.business-calendar-week`: the rules that target `#e0e0e0`, `#f0f0f0`, `#a6a6ad` and `bg-primary`.
-- **New token:** `--color-malbec-muted-text` (`#8c8c94`) in `style.css`. It is the same value `tokens.css` already shipped.
+- **New tokens:** `--color-malbec-muted-text` (`#8c8c94`) in `style.css`, the same value `tokens.css` already shipped, and `--color-malbec-subtle-text` (`#a6a6ad`) in both `style.css` and `tokens.css`. If you overrode the calendar labels back to `#a6a6ad` after 2.1.0-rc.4, delete that override.
 
 ### Changes on screen: underline tabs mark the active tab by opacity
 - **What changes:** `Tabs variant="underline"` now renders exactly like `variant="opacity"`: no rail and no indicator, the active tab at 100% and the rest at 40%. The old indicator used the same colour as its rail and barely showed. `underline` stays in `TabsVariant`, so nothing breaks at compile time.
