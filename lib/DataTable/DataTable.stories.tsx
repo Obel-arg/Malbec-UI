@@ -685,3 +685,43 @@ const columns: ColumnDef<SettlementRow>[] = [
     },
   },
 };
+
+// Wide enough to overflow a narrow shell, so the rows scroll sideways.
+const wideSettlementColumns: ColumnDef<SettlementRow, unknown>[] = settlementColumns.map((column) => {
+  const meta = column.meta as { thClassName?: string; tdClassName?: string } | undefined;
+  return { ...column, meta: { ...meta, thClassName: `${meta?.thClassName ?? ""} ui:min-w-[220px]`.trim() } };
+});
+
+export const StickySelectionColumn: Story = {
+  name: "With sticky selection column",
+  render: () => (
+    <div className="ui:max-w-[720px]">
+      <DataTable
+        getRowId={(r) => r.id}
+        columns={wideSettlementColumns}
+        data={settlementRows}
+        emptyLabel="Sin shows"
+        enableSorting={false}
+        rowSelection
+        stickySelectionColumn
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `// In a table wider than its container, \`stickySelectionColumn\` keeps the checkboxes
+// pinned while the rows scroll sideways. The cell follows the row's hover and selected
+// background with the same transition.
+<DataTable
+  getRowId={(r) => r.id}
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin shows"
+  rowSelection
+  stickySelectionColumn
+/>`,
+      },
+    },
+  },
+};
