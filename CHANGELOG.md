@@ -89,9 +89,11 @@ Chosen in the inputs workshop.
 - **`confirmingLabel`**: the confirm text while `onConfirm` runs ("Eliminando…", "Moviendo…"). Defaults to the generic `confirming` label.
 - **`onConfirm` can return `false`** to stay open without throwing. Throwing (rejecting) still keeps it open too.
 - **`reasonHint`** (help under the reason, linked with `aria-describedby`) and **`reasonProps`** (`maxLength`, `rows`, `autoFocus`… for the reason `Textarea`).
+- **`reasonMinLength`**: the shortest reason that confirms. While shorter, a live line under the field says how many characters are missing ("Faltan 4 caracteres."); confirming marks the field invalid with the same text. New label `reasonTooShort(n)`, already translated (ES + EN).
+- **`children`**: content between the description and the reason (warnings, what's affected).
 
 ### Data card parts and a title aside
-- **`DataCard.Frame`, `DataCard.Block`, `DataCard.Title`**: the card's three layers, for panels with the same anatomy and free content (a list, three figures, a small chart). `DataCard` is built from them, so the classes can't drift. Replace any copy of the card's classes with them. The frame keeps the 1.5px ring of the data card (`border-embossed` and `ChartCard` are 1px on purpose).
+- **`DataCard.Frame`, `DataCard.Block`, `DataCard.Title`**: the card's three layers, for panels with the same anatomy and free content (a list, three figures, a small chart). `DataCard` is built from them, so the classes can't drift. Replace any copy of the card's classes with them. The frame keeps the 1.5px ring of the data card (`border-embossed` and `ChartCard` are 1px on purpose). **`asChild`** on `Frame` and `Block` renders them as your element (a link, `section`, `article`, `li`) with the same classes. `Block` comes with `px-4 py-3`; pass `p-0` for a block with its own layout.
 - **`titleAside`** on `DataCard` (`aside` on `DataCard.Title`): goes at the end of the title row and never truncates. For a variation use `<Badge variant="neutral">` (chosen with Isa): a variation is data, not a verdict, so no green or red.
 
 ### Smaller additions

@@ -42,6 +42,13 @@ export interface ConfirmDialogProps {
   reasonPlaceholder?: string;
   /** Help under the reason field ("Lo ve el proveedor."). */
   reasonHint?: React.ReactNode;
+  /**
+   * With `requireReason`: the shortest reason that confirms (trimmed). While it's shorter, a live
+   * line under the field says how many characters are missing.
+   */
+  reasonMinLength?: number;
+  /** Content between the description and the reason: warnings, what's affected. */
+  children?: React.ReactNode;
   /** Extra props for the reason `Textarea` (`maxLength`, `rows`, `autoFocus`…). */
   reasonProps?: Omit<TextareaProps, "id" | "value" | "defaultValue" | "onChange" | "disabled">;
 }
@@ -68,6 +75,8 @@ export function ConfirmDialog({
   reasonPlaceholder,
   reasonHint,
   reasonProps,
+  reasonMinLength,
+  children,
 }: ConfirmDialogProps) {
   const labels = useMalbecLabels();
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
@@ -75,7 +84,9 @@ export function ConfirmDialog({
   const [pending, setPending] = React.useState(false);
   const [reason, setReason] = React.useState("");
   const [attempted, setAttempted] = React.useState(false);
-  const missingReason = requireReason && reason.trim() === "";
+  const trimmedLength = reason.trim().length;
+  const missingChars = requireReason ? Math.max(0, (reasonMinLength ?? 1) - trimmedLength) : 0;
+  const missingReason = missingChars > 0;
   const reasonId = React.useId();
   const fieldId = React.useId();
 
@@ -121,6 +132,7 @@ export function ConfirmDialog({
             </p>
           ) : null}
         </AlertDialog.Header>
+        {children}
         {requireReason ? (
           <Field id={fieldId} invalid={attempted && missingReason}>
             <Field.Label htmlFor={reasonId}>{reasonLabel ?? labels.reason}</Field.Label>
@@ -138,7 +150,18 @@ export function ConfirmDialog({
               onChange={(e) => setReason(e.target.value)}
             />
             {reasonHint ? <Field.Description>{reasonHint}</Field.Description> : null}
-            <Field.Error>{attempted && missingReason ? labels.reasonRequired : null}</Field.Error>
+            {reasonMinLength && trimmedLength > 0 && missingReason && !attempted ? (
+              <p aria-live="polite" data-slot="confirm-dialog-reason-count" className="ui:m-0 ui:text-xs ui:text-text-default-muted">
+                {labels.reasonTooShort(missingChars)}
+              </p>
+            ) : null}
+            <Field.Error>
+              {attempted && missingReason
+                ? trimmedLength === 0
+                  ? labels.reasonRequired
+                  : labels.reasonTooShort(missingChars)
+                : null}
+            </Field.Error>
           </Field>
         ) : null}
         <AlertDialog.Footer>

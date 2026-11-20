@@ -85,6 +85,8 @@ export interface MalbecLabels {
   confirming: string;
   reason: string;
   reasonRequired: string;
+  /** ConfirmDialog `reasonMinLength`: how many characters the reason still needs. */
+  reasonTooShort: (missing: number) => string;
 }
 
 const unreadSuffix = (count: number) => (count > 0 ? ` (${count > 99 ? "99+" : count})` : "");
@@ -148,6 +150,7 @@ export const labelsEn: MalbecLabels = {
   confirming: "Confirming…",
   reason: "Reason",
   reasonRequired: "Write the reason to continue.",
+  reasonTooShort: (n) => `${n} more ${n === 1 ? "character" : "characters"} needed.`,
 };
 
 export const labelsEs: MalbecLabels = {
@@ -207,6 +210,7 @@ export const labelsEs: MalbecLabels = {
   confirming: "Confirmando…",
   reason: "Motivo",
   reasonRequired: "Escribí el motivo para continuar.",
+  reasonTooShort: (n) => `${n === 1 ? "Falta 1 carácter" : `Faltan ${n} caracteres`}.`,
 };
 
 export const LABELS_BY_LOCALE: Record<MalbecLocale, MalbecLabels> = {

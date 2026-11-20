@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { MalbecLabelsProvider } from "../i18n/MalbecLabelsProvider";
 import { ConfirmDialog } from "./ConfirmDialog";
 
 // Live feedback (MLIVE-393): size, a pending label per action, a trigger slot, an explicit way to
@@ -76,5 +77,43 @@ describe("ConfirmDialog options", () => {
     expect(document.activeElement).toBe(field);
     const hint = screen.getByText("Lo ve el proveedor.");
     expect(field.getAttribute("aria-describedby")?.split(" ")).toContain(hint.id);
+  });
+});
+
+describe("ConfirmDialog content and minimum reason", () => {
+  it("children go between the description and the reason", () => {
+    render(
+      <ConfirmDialog open onOpenChange={() => {}} title="¿Eliminar el costo?" description="No se puede deshacer." requireReason reasonLabel="Motivo" onConfirm={() => {}}>
+        <p>Está vinculado a 2 tareas del Gantt.</p>
+      </ConfirmDialog>,
+    );
+    const warning = screen.getByText("Está vinculado a 2 tareas del Gantt.");
+    const description = screen.getByText("No se puede deshacer.");
+    const reason = screen.getByLabelText("Motivo");
+    expect(description.compareDocumentPosition(warning) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(warning.compareDocumentPosition(reason) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("reasonMinLength counts down live and doesn't confirm a short reason", async () => {
+    const onConfirm = vi.fn();
+    render(
+      <MalbecLabelsProvider locale="es">
+        <ConfirmDialog open onOpenChange={() => {}} title="Eliminar costo" requireReason reasonMinLength={10} reasonLabel="Motivo" confirmLabel="Eliminar" onConfirm={onConfirm} />
+      </MalbecLabelsProvider>,
+    );
+    const field = screen.getByLabelText("Motivo");
+    fireEvent.change(field, { target: { value: "Dupli" } });
+    expect(screen.getByText("Faltan 5 caracteres.")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: "Eliminar" }));
+    expect(onConfirm).not.toHaveBeenCalled();
+    await waitFor(() => expect(field.getAttribute("aria-invalid")).toBe("true"));
+
+    fireEvent.change(field, { target: { value: "  Costo duplicado " } });
+    expect(screen.queryByText(/Faltan/)).toBeNull();
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Eliminar" }));
+    });
+    expect(onConfirm).toHaveBeenCalledWith("Costo duplicado");
   });
 });
