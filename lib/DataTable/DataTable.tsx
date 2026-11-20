@@ -419,6 +419,8 @@ export function DataTable<TData, TValue>({
                   // A plain label reads as EmptyState variant="row": one quiet, left-aligned line.
                   // A ghost EmptyState fills the cell edge to edge.
                   "ui:h-[52px] ui:text-left ui:font-normal ui:text-text-default-muted ui:has-[[data-variant=ghost]]:p-0",
+                  // The cell already pads the line: an EmptyState row inside adds no padding of its own.
+                  "ui:[&_[data-slot=empty-state][data-inset]]:p-0",
                   tableAppearance === "dataGrid"
                     ? "ui:text-sm"
                     : "ui:text-[13px]",

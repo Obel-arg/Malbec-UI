@@ -26,8 +26,9 @@ export interface EmptyStateProps extends Omit<React.ComponentProps<"div">, "titl
   /** `ghost` only: placeholder rows. @default 3 */
   rows?: number;
   /**
-   * `row` only: pads the line to the height of a table row (46px), for when it sits straight
-   * inside a table frame or a tray instead of a cell that already pads it.
+   * `row` only: pads the line to the height of a table row (46px, 16px sides), so it sits
+   * straight inside a table frame or a tray. Inside a `DataTable` cell the cell's own padding is
+   * kept and this adds none. `false` drops it, for a place that already pads it. @default true
    */
   inset?: boolean;
   /** `ghost` only: draws the Table frame around the placeholder, for when no table surrounds it. */
@@ -88,7 +89,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(func
     action,
     columns = 4,
     rows = 3,
-    inset = false,
+    inset = true,
     framed = false,
     size = "md",
     divider = true,
@@ -105,7 +106,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(func
         data-variant="row"
         data-inset={inset || undefined}
         className={cn(
-          inset && "ui:px-3.5 ui:py-[13px]",
+          inset && "ui:px-4 ui:py-[13px]",
           "malbec-font-sans ui:text-left ui:text-[13px] ui:leading-5 ui:text-text-default-muted ui:[&_a]:font-medium ui:[&_a]:text-malbec-ink ui:[&_a]:underline ui:[&_a]:decoration-background-300 ui:[&_a]:underline-offset-[3px] ui:[&_button]:font-medium ui:[&_button]:text-malbec-ink",
           className,
         )}

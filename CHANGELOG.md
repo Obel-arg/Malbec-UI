@@ -92,7 +92,7 @@ Chosen in the inputs workshop.
 
 ### Data card parts and a title aside
 - **`DataCard.Frame`, `DataCard.Block`, `DataCard.Title`**: the card's three layers, for panels with the same anatomy and free content (a list, three figures, a small chart). `DataCard` is built from them, so the classes can't drift. Replace any copy of the card's classes with them. The frame keeps the 1.5px ring of the data card (`border-embossed` and `ChartCard` are 1px on purpose).
-- **`titleAside`** on `DataCard` (`aside` on `DataCard.Title`): goes at the end of the title row and never truncates, for a variation chip.
+- **`titleAside`** on `DataCard` (`aside` on `DataCard.Title`): goes at the end of the title row and never truncates. For a variation use `<Badge variant="neutral">` (chosen with Isa): a variation is data, not a verdict, so no green or red.
 
 ### Smaller additions
 - **`PctBlocks over="good"`**: past 100% of a minimum (ROAS ≥ 3x) is a goal beaten, so the blocks stay in the series tone. The default, `"bad"`, keeps the over-budget red. `data-over` still means the red state; `data-exceeded` (`"bad"` / `"good"`) marks past 100% either way.
@@ -110,8 +110,8 @@ Chosen in the inputs workshop.
 - **`offsetVariable`** on `Sidebar.Provider` (e.g. `"--app-sidebar-offset"`): also publishes the space the sidebar takes on `<html>`, for `fixed` elements outside the provider. Rail or panel width depending on pinning, 0 on mobile, negative on the right, removed on unmount. Inside the provider keep using `--sidebar-offset`.
 - **`SIDEBAR_WIDTH`** (`16rem`) and **`SIDEBAR_WIDTH_COLLAPSED`** (`4rem`) are exported, so apps don't duplicate them.
 
-### EmptyState inside frames, dialogs and sheets
-- **`inset`** (`row`): pads the line to the height of a table row (46px), for when it sits straight inside a table frame or a tray instead of a cell that already pads it.
+### Changes on screen: EmptyState inside frames, dialogs and sheets
+- **`inset`** (`row`), **on by default** (chosen with Isa): pads the line to the height of a table row (46px, 16px sides), so a row empty state sitting straight inside a table frame or a tray no longer touches its edge. Inside a `DataTable` cell (`emptyLabel`) nothing changes: the cell keeps its padding and the row adds none. Pass `inset={false}` where something else already pads it, and delete any padding you added around it by hand.
 - **`framed`** (`ghost`): draws the Table frame (`background-300`, radius 10) around the placeholder, for when no table surrounds it.
 - **`size="sm"`** (`ghost`): 36px placeholder rows instead of 46px, for dialogs and sheets. Combine it with `rows` to make it shorter.
 - The `ghost` text now stacks on the rows instead of floating over them, so a short placeholder grows to fit the text and the action. With the defaults nothing changes (still 3 × 46px).

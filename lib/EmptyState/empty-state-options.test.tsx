@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { DataTable } from "../DataTable/DataTable";
 import { EmptyState } from "./EmptyState";
 
 // Live feedback on 2.1.0-rc.5: `row` needs padding inside a table frame or a tray, and `ghost`
@@ -8,13 +9,21 @@ const classesOf = (el: Element | null) => el?.className.split(/\s+/) ?? [];
 const root = (c: HTMLElement) => c.querySelector('[data-slot="empty-state"]');
 
 describe("EmptyState options", () => {
-  it("row: inset pads it to the height of a table row; without it there is no padding", () => {
-    const plain = render(<EmptyState title="Todavía no hay costos." />).container;
+  it("row: inset by default pads it to the height of a table row; inset={false} drops it", () => {
+    const plain = render(<EmptyState inset={false} title="Todavía no hay costos." />).container;
     expect(classesOf(root(plain)).some((c) => /^ui:p[xy]?-/.test(c))).toBe(false);
 
-    const inset = render(<EmptyState inset title="Todavía no hay costos." />).container;
-    expect(root(inset)?.getAttribute("data-inset")).toBe("true");
-    expect(classesOf(root(inset))).toEqual(expect.arrayContaining(["ui:px-3.5", "ui:py-[13px]"]));
+    const byDefault = render(<EmptyState title="Todavía no hay costos." />).container;
+    expect(root(byDefault)?.getAttribute("data-inset")).toBe("true");
+    expect(classesOf(root(byDefault))).toEqual(expect.arrayContaining(["ui:px-4", "ui:py-[13px]"]));
+  });
+
+  it("row inside a DataTable cell: the cell keeps its padding and the row adds none", () => {
+    const { container } = render(
+      <DataTable columns={[{ accessorKey: "name", header: "Proveedor" }]} data={[]} emptyLabel={<EmptyState title="Todavía no hay proveedores." />} />,
+    );
+    const cell = container.querySelector("tbody td")!;
+    expect(classesOf(cell)).toContain("ui:[&_[data-slot=empty-state][data-inset]]:p-0");
   });
 
   it("ghost: framed draws the Table frame around the placeholder", () => {

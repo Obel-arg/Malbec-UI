@@ -183,21 +183,21 @@ export const Page: Story = {
 };
 
 export const RowInset: Story = {
-  name: "Row · inset (straight inside a frame)",
+  name: "Row · straight inside a frame",
   parameters: {
     docs: {
       source: {
         code: `import { EmptyState } from "@obel-arg/malbec-ui";
 
 <div className="rounded-[10px] border border-background-300">
-  <EmptyState inset title="Todavía no hay costos en esta bandeja." action={<a href="/costos/nuevo">Cargar uno</a>} />
+  <EmptyState title="Todavía no hay costos en esta bandeja." action={<a href="/costos/nuevo">Cargar uno</a>} />
 </div>`,
       },
     },
   },
   render: () => (
     <div className="ui:w-[480px] ui:rounded-[10px] ui:border ui:border-solid ui:border-background-300">
-      <EmptyState inset title="Todavía no hay costos en esta bandeja." action={<a href="#new">Cargar uno</a>} />
+      <EmptyState title="Todavía no hay costos en esta bandeja." action={<a href="#new">Cargar uno</a>} />
     </div>
   ),
 };

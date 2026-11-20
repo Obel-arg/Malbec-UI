@@ -16,7 +16,10 @@ export interface DataCardProps extends Omit<React.ComponentProps<"div">, "title"
    *   figure 28px side by side, block and label centred.
    */
   variant?: "amount" | "count";
-  /** Goes at the end of the title row, e.g. a variation chip ("-85 %"). */
+  /**
+   * Goes at the end of the title row. For a variation ("-85 %") use `<Badge variant="neutral">`:
+   * a variation is data, not a verdict, so it carries no green or red (chosen with Isa, 2.1).
+   */
   titleAside?: React.ReactNode;
 }
 
