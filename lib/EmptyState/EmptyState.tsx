@@ -25,24 +25,36 @@ export interface EmptyStateProps extends Omit<React.ComponentProps<"div">, "titl
   columns?: number;
   /** `ghost` only: placeholder rows. @default 3 */
   rows?: number;
+  /**
+   * `row` only: pads the line to the height of a table row (46px), for when it sits straight
+   * inside a table frame or a tray instead of a cell that already pads it.
+   */
+  inset?: boolean;
+  /** `ghost` only: draws the Table frame around the placeholder, for when no table surrounds it. */
+  framed?: boolean;
+  /** `ghost` only: `sm` makes the placeholder rows 36px, for dialogs and sheets. @default "md" */
+  size?: "md" | "sm";
 }
 
 /** Bar widths for the ghost rows: varied but deterministic, so SSR and client match. */
 const GHOST_WIDTHS = [60, 45, 55, 40, 70, 50, 65, 35];
 
-function GhostRows({ columns, rows }: { columns: number; rows: number }) {
+function GhostRows({ columns, rows, size }: { columns: number; rows: number; size: "md" | "sm" }) {
   return (
     <div
       aria-hidden
       data-slot="empty-state-ghost"
       // Fades out downwards and clears an ellipse in the middle, so the text sits on the plain
       // surface without a box of its own behind it.
-      className="ui:[mask-composite:intersect] ui:[mask-image:radial-gradient(ellipse_42%_60%_at_50%_50%,transparent_55%,black_100%),linear-gradient(rgb(0_0_0/0.9),transparent)]"
+      className="ui:[grid-area:1/1] ui:[mask-composite:intersect] ui:[mask-image:radial-gradient(ellipse_42%_60%_at_50%_50%,transparent_55%,black_100%),linear-gradient(rgb(0_0_0/0.9),transparent)]"
     >
       {Array.from({ length: rows }, (_, r) => (
         <div
           key={r}
-          className="ui:grid ui:h-[46px] ui:items-center ui:gap-4 ui:border-t ui:border-background-300 ui:px-3.5 ui:first:border-t-0"
+          className={cn(
+            "ui:grid ui:items-center ui:gap-4 ui:border-t ui:border-background-300 ui:px-3.5 ui:first:border-t-0",
+            size === "sm" ? "ui:h-9" : "ui:h-[46px]",
+          )}
           style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
         >
           {Array.from({ length: columns }, (_, c) => (
@@ -67,7 +79,19 @@ function GhostRows({ columns, rows }: { columns: number; rows: number }) {
  * (the action) is what matters.
  */
 export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(function EmptyState(
-  { variant = "row", title, description, action, columns = 4, rows = 3, className, ...rest },
+  {
+    variant = "row",
+    title,
+    description,
+    action,
+    columns = 4,
+    rows = 3,
+    inset = false,
+    framed = false,
+    size = "md",
+    className,
+    ...rest
+  },
   ref,
 ) {
   if (variant === "row") {
@@ -76,7 +100,9 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(func
         ref={ref}
         data-slot="empty-state"
         data-variant="row"
+        data-inset={inset || undefined}
         className={cn(
+          inset && "ui:px-3.5 ui:py-[13px]",
           "malbec-font-sans ui:text-left ui:text-[13px] ui:leading-5 ui:text-text-default-muted ui:[&_a]:font-medium ui:[&_a]:text-malbec-ink ui:[&_a]:underline ui:[&_a]:decoration-background-300 ui:[&_a]:underline-offset-[3px] ui:[&_button]:font-medium ui:[&_button]:text-malbec-ink",
           className,
         )}
@@ -110,11 +136,20 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(func
         ref={ref}
         data-slot="empty-state"
         data-variant="ghost"
-        className={cn("malbec-font-sans ui:relative", className)}
+        data-size={size}
+        className={cn(
+          // The rows and the text share one grid cell, so a short placeholder grows to fit the text.
+          "malbec-font-sans ui:grid",
+          framed && "ui:overflow-hidden ui:rounded-[10px] ui:border ui:border-solid ui:border-background-300",
+          className,
+        )}
         {...rest}
       >
-        <GhostRows columns={Math.max(1, columns)} rows={Math.max(1, rows)} />
-        <div className="ui:absolute ui:inset-0 ui:flex ui:flex-col ui:items-center ui:justify-center ui:gap-2.5 ui:text-center">
+        <GhostRows columns={Math.max(1, columns)} rows={Math.max(1, rows)} size={size} />
+        <div
+          data-slot="empty-state-content"
+          className="ui:[grid-area:1/1] ui:flex ui:flex-col ui:items-center ui:justify-center ui:gap-2.5 ui:px-4 ui:py-3 ui:text-center"
+        >
           {text}
           {action ? <div data-slot="empty-state-actions">{action}</div> : null}
         </div>

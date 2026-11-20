@@ -78,6 +78,12 @@ Chosen in the inputs workshop.
 - **Changes on screen:** `surface="plain"` now keeps the open/close motion and the floating layer (`--ui-z-floating`). Before, it dropped them along with the frame, so plain popovers appeared without animation.
 - **What to delete:** CSS that re-adds the popover motion to a plain surface (`.inbox-popover` in Live, Artist and Publishing; the one in Records' `globals.css`) and the `ui:z-100` passed to plain popovers.
 
+### EmptyState inside frames, dialogs and sheets
+- **`inset`** (`row`): pads the line to the height of a table row (46px), for when it sits straight inside a table frame or a tray instead of a cell that already pads it.
+- **`framed`** (`ghost`): draws the Table frame (`background-300`, radius 10) around the placeholder, for when no table surrounds it.
+- **`size="sm"`** (`ghost`): 36px placeholder rows instead of 46px, for dialogs and sheets. Combine it with `rows` to make it shorter.
+- The `ghost` text now stacks on the rows instead of floating over them, so a short placeholder grows to fit the text and the action. With the defaults nothing changes (still 3 × 46px).
+
 ### Embossed line at the head and foot of a block (`tokens.css`)
 - `divider-embossed-top`: the same line as `divider-embossed`, without the `:first-child` reset, for a block that opens with the line as its first child.
 - `divider-embossed-bottom`: the line that closes a block, drawn as a 2.5px band at its bottom.

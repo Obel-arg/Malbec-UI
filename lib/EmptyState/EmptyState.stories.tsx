@@ -181,3 +181,57 @@ export const Page: Story = {
     </div>
   ),
 };
+
+export const RowInset: Story = {
+  name: "Row · inset (straight inside a frame)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { EmptyState } from "@obel-arg/malbec-ui";
+
+<div className="rounded-[10px] border border-background-300">
+  <EmptyState inset title="Todavía no hay costos en esta bandeja." action={<a href="/costos/nuevo">Cargar uno</a>} />
+</div>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-[480px] ui:rounded-[10px] ui:border ui:border-solid ui:border-background-300">
+      <EmptyState inset title="Todavía no hay costos en esta bandeja." action={<a href="#new">Cargar uno</a>} />
+    </div>
+  ),
+};
+
+export const GhostFramedSmall: Story = {
+  name: "Ghost · framed, sm (dialogs and sheets)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, EmptyState } from "@obel-arg/malbec-ui";
+
+<EmptyState
+  variant="ghost"
+  framed
+  size="sm"
+  rows={2}
+  columns={3}
+  title="Todavía no hay facturas"
+  action={<Button variant="outline">Cargar factura</Button>}
+/>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-[420px]">
+      <EmptyState
+        variant="ghost"
+        framed
+        size="sm"
+        rows={2}
+        columns={3}
+        title="Todavía no hay facturas"
+        action={<Button variant="outline">Cargar factura</Button>}
+      />
+    </div>
+  ),
+};
