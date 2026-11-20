@@ -55,13 +55,21 @@ export const popoverSurfaceMotionClasses = [
   "ui:data-[state=closed]:animate-[malbec-popover-out_var(--malbec-popover-exit-duration,120ms)_ease-in]",
 ] as const;
 
+/**
+ * What every popover surface keeps, framed or not: the floating layer (above modal overlays, so
+ * popovers work inside Dialog/Sheet), the transform origin and the open/close motion.
+ */
+export const popoverLayerVariants = cva([
+  "ui:z-(--ui-z-floating) ui:outline-none",
+  "ui:origin-(--radix-popover-content-transform-origin)",
+  ...popoverSurfaceMotionClasses,
+]);
+
 export const popoverContentVariants = cva([
   "malbec-font-sans",
   /** Intrinsic width; match trigger via `ui:w-(--radix-popover-trigger-width)` when needed. */
-  /** Above modal overlays (`Dialog` / `Sheet` use `z-50`) so popovers work inside them. */
-  "ui:z-(--ui-z-floating) ui:w-auto ui:max-w-(--radix-popover-content-available-width) ui:rounded-md ui:border ui:border-background-300 ui:bg-background-100 ui:p-3",
-  "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)] ui:outline-none",
+  "ui:w-auto ui:max-w-(--radix-popover-content-available-width) ui:rounded-md ui:border ui:border-background-300 ui:bg-background-100 ui:p-3",
+  "ui:shadow-[0_0_2px_rgba(0,0,0,0.2)]",
   "ui:dark:bg-background-200",
-  "ui:origin-(--radix-popover-content-transform-origin)",
-  ...popoverSurfaceMotionClasses,
+  popoverLayerVariants(),
 ]);
