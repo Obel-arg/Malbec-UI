@@ -83,8 +83,19 @@ type SidebarContextValue = {
   collapsible: SidebarCollapsible;
   /** `collapsible="dock"`: the panel takes its place in the layout (same as `open`). */
   pinned: boolean;
-  /** `collapsible="dock"`: folds the floating panel at once (e.g. before opening a sheet over it). */
+  /**
+   * `collapsible="dock"`: folds the floating panel at once (e.g. before opening a sheet over it),
+   * and releases it if it was opened with `openOverlay()` / `overlayOpen`.
+   */
   closeOverlay: () => void;
+  /**
+   * `collapsible="dock"`: unfolds the panel floating over the content from code (a walkthrough, a
+   * tour). Hover, focus and Escape don't fold it until `closeOverlay()`. If the panel is pinned, it
+   * floats too while held, and the content gets the rail's space back.
+   */
+  openOverlay: () => void;
+  /** `collapsible="dock"`: the panel is held open from code (`openOverlay()` or `overlayOpen`). */
+  overlayOpen: boolean;
   /** @internal wiring between the provider and the dock wrapper `Sidebar` renders. */
   dock: SidebarDockWiring | null;
 };
@@ -251,6 +262,20 @@ export interface SidebarProviderProps extends React.ComponentProps<"div"> {
   onOpenChange?: (open: boolean) => void;
   /** How the desktop panel folds. With `dock`, `open` means pinned. @default "icon" */
   collapsible?: SidebarCollapsible;
+  /**
+   * `collapsible="dock"`: holds the panel open floating over the content, controlled. Hover, focus
+   * and Escape don't fold it. Same as `openOverlay()` / `closeOverlay()` from `useSidebar()`.
+   */
+  overlayOpen?: boolean;
+  /** Called when `openOverlay()` or `closeOverlay()` asks to change `overlayOpen`. */
+  onOverlayOpenChange?: (open: boolean) => void;
+  /**
+   * Also publishes the space the sidebar takes (`--sidebar-offset`) on `<html>` under this name,
+   * for `fixed` elements that live outside the provider (e.g. `"--app-sidebar-offset"`). It uses
+   * the library widths (`SIDEBAR_WIDTH` / `SIDEBAR_WIDTH_COLLAPSED`), 0 on mobile, and is removed
+   * on unmount.
+   */
+  offsetVariable?: `--${string}`;
 }
 
 const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
@@ -261,6 +286,9 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
       open: openProp,
       onOpenChange,
       collapsible = "icon",
+      overlayOpen: overlayOpenProp,
+      onOverlayOpenChange,
+      offsetVariable,
       className,
       style,
       children,
@@ -273,11 +301,30 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
     const [openMobile, setOpenMobile] = React.useState(false);
     const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
 
+    const [uncontrolledOverlay, setUncontrolledOverlay] = React.useState(false);
+
     const open = openProp ?? uncontrolledOpen;
     const isDock = collapsible === "dock" && !isMobile;
-    const dockHover = useSidebarDockHover(isDock && !open);
+    const overlayOpen = overlayOpenProp ?? uncontrolledOverlay;
+    // Held from code: floats even over a pinned panel, which gives its layout slot back meanwhile.
+    const held = isDock && overlayOpen;
+    const pinnedNow = open && !held;
+    const dockHover = useSidebarDockHover(isDock && !pinnedNow);
     const { closeNow } = dockHover;
-    const expanded = open || dockHover.open;
+    const expanded = pinnedNow || held || dockHover.open;
+
+    const setOverlayOpen = React.useCallback(
+      (next: boolean) => {
+        onOverlayOpenChange?.(next);
+        if (overlayOpenProp === undefined) setUncontrolledOverlay(next);
+      },
+      [onOverlayOpenChange, overlayOpenProp],
+    );
+    const openOverlay = React.useCallback(() => setOverlayOpen(true), [setOverlayOpen]);
+    const closeOverlay = React.useCallback(() => {
+      closeNow();
+      if (overlayOpen) setOverlayOpen(false);
+    }, [closeNow, overlayOpen, setOverlayOpen]);
 
     const setOpen = React.useCallback(
       (next: boolean) => {
@@ -323,9 +370,11 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
         state: expanded ? "expanded" : "collapsed",
         collapsible,
         pinned: open,
-        closeOverlay: closeNow,
+        closeOverlay,
+        openOverlay,
+        overlayOpen: held,
         dock: isDock
-          ? { attach: dockHover.attach, overlay: !open, open: expanded, handlers: dockHover.handlers }
+          ? { attach: dockHover.attach, overlay: !pinnedNow, open: expanded, handlers: dockHover.handlers }
           : null,
       }),
       [
@@ -338,19 +387,39 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
         toggleSidebar,
         expanded,
         collapsible,
-        closeNow,
+        closeOverlay,
+        openOverlay,
+        held,
+        pinnedNow,
         isDock,
         dockHover.attach,
         dockHover.handlers,
       ],
     );
 
-    const width = `var(${open ? "--sidebar-width" : "--sidebar-width-collapsed"})`;
+    const occupies = isDock ? pinnedNow : open;
+    const width = `var(${occupies ? "--sidebar-width" : "--sidebar-width-collapsed"})`;
     const sidebarOffset = isMobile
       ? "0px"
       : defaultSide === "right"
         ? `calc(-1 * ${width})`
         : width;
+
+    // Outside the provider `var(--sidebar-width)` doesn't resolve, so <html> gets the plain widths.
+    const publishedWidth = occupies ? SIDEBAR_WIDTH : SIDEBAR_WIDTH_COLLAPSED;
+    const publishedOffset = isMobile
+      ? "0px"
+      : defaultSide === "right"
+        ? `calc(-1 * ${publishedWidth})`
+        : publishedWidth;
+    React.useEffect(() => {
+      if (!offsetVariable) return;
+      const root = document.documentElement.style;
+      root.setProperty(offsetVariable, publishedOffset);
+      return () => {
+        root.removeProperty(offsetVariable);
+      };
+    }, [offsetVariable, publishedOffset]);
 
     return (
       <SidebarContext.Provider value={value}>

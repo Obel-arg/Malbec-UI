@@ -83,6 +83,11 @@ Chosen in the inputs workshop.
 - **New token:** `--color-malbec-over-budget` (`#dc2626`) in `style.css` and `tokens.css`, so app charts use the same red: `bg-malbec-over-budget` / `var(--color-malbec-over-budget)`.
 - **What to delete:** Live's override that painted the excess in the badge maroon (`malbec-badge-red-text`).
 
+### Sidebar dock driven from code
+- **`openOverlay()` / `closeOverlay()` and `overlayOpen` in `useSidebar()`**, or controlled from the provider with `overlayOpen` + `onOverlayOpenChange`: unfolds the `collapsible="dock"` panel floating over the content from code (a walkthrough step). While held, hover, focus and Escape don't fold it. A pinned panel floats too while held and the content gets the rail's space back; `pinned` stays `true`, so it returns to its place on `closeOverlay()`.
+- **`offsetVariable`** on `Sidebar.Provider` (e.g. `"--app-sidebar-offset"`): also publishes the space the sidebar takes on `<html>`, for `fixed` elements outside the provider. Rail or panel width depending on pinning, 0 on mobile, negative on the right, removed on unmount. Inside the provider keep using `--sidebar-offset`.
+- **`SIDEBAR_WIDTH`** (`16rem`) and **`SIDEBAR_WIDTH_COLLAPSED`** (`4rem`) are exported, so apps don't duplicate them.
+
 ### EmptyState inside frames, dialogs and sheets
 - **`inset`** (`row`): pads the line to the height of a table row (46px), for when it sits straight inside a table frame or a tray instead of a cell that already pads it.
 - **`framed`** (`ghost`): draws the Table frame (`background-300`, radius 10) around the placeholder, for when no table surrounds it.

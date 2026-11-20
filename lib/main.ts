@@ -39,6 +39,7 @@ export { Select } from "./Select/Select";
 export { Dialog } from "./Dialog/Dialog";
 export { Sheet } from "./Sheet/Sheet";
 export { Sidebar, useSidebar } from "./Sidebar/Sidebar";
+export { SIDEBAR_WIDTH, SIDEBAR_WIDTH_COLLAPSED } from "./Sidebar/sidebar-constants";
 export { DropdownMenu } from "./DropdownMenu/DropdownMenu";
 export { Field } from "./Field/Field";
 export { FileDropzone } from "./FileDropzone/FileDropzone";
