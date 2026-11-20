@@ -52,6 +52,28 @@
 }
 
 /*
+ * The same line without the `:first-child` reset, for a block that opens with the line even as the
+ * first child of its container (e.g. a numbered section heading).
+ */
+@utility divider-embossed-top {
+  border-top: 1px solid #eae7e3;
+  box-shadow: inset 0 1.5px 0 #ffffff;
+}
+
+/*
+ * The line that CLOSES a block (e.g. under the amount in an expense form). Between two sections the
+ * line still belongs to the block below, with `divider-embossed`. Not a `border-bottom` + shadow:
+ * on a transparent block the shadow shows white through the whole box. It is a 2.5px band at the
+ * bottom, edge then light, the same order as `divider-embossed`.
+ */
+@utility divider-embossed-bottom {
+  background-image: linear-gradient(to bottom, #eae7e3 0 1px, #ffffff 1px 2.5px);
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100% 2.5px;
+}
+
+/*
  * Suite easings (`ease-out-strong`, …). The built-in CSS ones are soft and don't give the start
  * that makes a transition read as intentional.
  * - out-strong: what answers a click.

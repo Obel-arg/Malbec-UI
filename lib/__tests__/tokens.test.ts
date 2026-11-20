@@ -43,6 +43,17 @@ describe("tokens.css", () => {
     expect(css).toContain("hover\\:border-embossed");
   });
 
+  it("ships the embossed line at the head and foot of a block", async () => {
+    const css = (await build(["divider-embossed-top", "divider-embossed-bottom"])).replace(/\s+/g, " ");
+    // Same line as divider-embossed, without the :first-child reset (a numbered section heading
+    // that opens its block is usually the first child).
+    expect(css).toContain(".divider-embossed-top { border-top: 1px solid #eae7e3; box-shadow: inset 0 1.5px 0 #ffffff; }");
+    // At the foot, edge then light like divider-embossed, drawn as a 2.5px band at the bottom.
+    expect(css).toContain("background-image: linear-gradient(to bottom, #eae7e3 0 1px, #ffffff 1px 2.5px)");
+    expect(css).toContain("background-position: bottom");
+    expect(css).toContain("background-size: 100% 2.5px");
+  });
+
   it("defines a bg and a text color for every badge tone", async () => {
     const tones = ["green", "yellow", "orange", "purple", "blue", "red", "neutral"];
     const css = await build(tones.flatMap((t) => [`bg-malbec-badge-${t}-bg`, `text-malbec-badge-${t}-text`]));
