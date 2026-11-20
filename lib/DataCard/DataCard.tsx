@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { cn } from "../utils/cn";
 
@@ -34,8 +35,14 @@ const titleClass =
 const figureClass =
   "ui:block ui:whitespace-nowrap ui:font-semibold ui:tabular-nums ui:text-malbec-ink";
 
-export type DataCardFrameProps = React.ComponentProps<"div">;
-export type DataCardBlockProps = React.ComponentProps<"div">;
+export interface DataCardFrameProps extends React.ComponentProps<"div"> {
+  /** Render as the child element (a link, `section`, `article`, `li`…), keeping the frame's classes. */
+  asChild?: boolean;
+}
+export interface DataCardBlockProps extends React.ComponentProps<"div"> {
+  /** Render as the child element (a link, `li`…), keeping the block's classes. */
+  asChild?: boolean;
+}
 export interface DataCardTitleProps extends React.ComponentProps<"div"> {
   /** Goes at the end of the row and never truncates, e.g. a variation chip. */
   aside?: React.ReactNode;
@@ -47,19 +54,21 @@ export interface DataCardTitleProps extends React.ComponentProps<"div"> {
  * order the panel needs.
  */
 const DataCardFrame = React.forwardRef<HTMLDivElement, DataCardFrameProps>(function DataCardFrame(
-  { className, ...rest },
+  { asChild = false, className, ...rest },
   ref,
 ) {
-  return <div ref={ref} data-slot="data-card-frame" className={cn(frameClass, className)} {...rest} />;
+  const Comp = asChild ? Slot : "div";
+  return <Comp ref={ref} data-slot="data-card-frame" className={cn(frameClass, className)} {...rest} />;
 });
 DataCardFrame.displayName = "DataCard.Frame";
 
 /** The bevelled inner block of the data card. */
 const DataCardBlock = React.forwardRef<HTMLDivElement, DataCardBlockProps>(function DataCardBlock(
-  { className, ...rest },
+  { asChild = false, className, ...rest },
   ref,
 ) {
-  return <div ref={ref} data-slot="data-card-block" className={cn(blockClass, className)} {...rest} />;
+  const Comp = asChild ? Slot : "div";
+  return <Comp ref={ref} data-slot="data-card-block" className={cn(blockClass, className)} {...rest} />;
 });
 DataCardBlock.displayName = "DataCard.Block";
 

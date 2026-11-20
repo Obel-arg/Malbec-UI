@@ -44,3 +44,26 @@ describe("DataCard parts", () => {
     expect(aside.parentElement!.getAttribute("data-slot")).toBe("data-card-title");
   });
 });
+
+describe("DataCard parts asChild", () => {
+  it("Frame and Block render as the child element, keeping the classes and the slot", () => {
+    const { container } = render(
+      <ul>
+        <DataCard.Frame asChild>
+          <li>
+            <DataCard.Block asChild>
+              <a href="/propuestas/1">Propuesta Movistar Arena</a>
+            </DataCard.Block>
+          </li>
+        </DataCard.Frame>
+      </ul>,
+    );
+    const frame = container.querySelector("li")!;
+    expect(frame.getAttribute("data-slot")).toBe("data-card-frame");
+    expect(classesOf(frame)).toContain("ui:rounded-[14px]");
+    const block = screen.getByRole("link", { name: "Propuesta Movistar Arena" });
+    expect(block.getAttribute("data-slot")).toBe("data-card-block");
+    expect(classesOf(block)).toContain("ui:rounded-[10px]");
+    expect(container.querySelector("div")).toBeNull();
+  });
+});

@@ -135,3 +135,33 @@ export const FreeContent: Story = {
     </div>
   ),
 };
+
+export const FrameAsLink: Story = {
+  name: "Parts · as a link (asChild)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { DataCard } from "@obel-arg/malbec-ui";
+
+<DataCard.Frame asChild>
+  <a href="/propuestas/42">
+    <DataCard.Title>Propuesta</DataCard.Title>
+    <DataCard.Block>Movistar Arena · 13/11</DataCard.Block>
+  </a>
+</DataCard.Frame>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-[300px]">
+      <DataCard.Frame asChild>
+        <a href="#propuesta" className="ui:no-underline">
+          <DataCard.Title>Propuesta</DataCard.Title>
+          <DataCard.Block>
+            <span className="ui:text-sm ui:text-text-default">Movistar Arena · 13/11</span>
+          </DataCard.Block>
+        </a>
+      </DataCard.Frame>
+    </div>
+  ),
+};
