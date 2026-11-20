@@ -34,7 +34,7 @@ const wait = () => new Promise<void>((r) => setTimeout(r, 1200));
 function Demo({
   trigger,
   ...props
-}: Omit<ConfirmDialogProps, "open" | "onOpenChange"> & { trigger: string }) {
+}: Omit<ConfirmDialogProps, "open" | "onOpenChange" | "trigger"> & { trigger: string }) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -110,6 +110,74 @@ export const RequireReason: Story = {
       requireReason
       reasonPlaceholder="Qué tiene que corregir"
       confirmLabel="Rechazar"
+      onConfirm={wait}
+    />
+  ),
+};
+
+export const WithTrigger: Story = {
+  name: "Trigger, compact size and its own pending text",
+  args: demoArgs,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, ConfirmDialog } from "@obel-arg/malbec-ui";
+
+<ConfirmDialog
+  trigger={<Button variant="outline">Mover show</Button>}
+  size="sm"
+  title="¿Mover el show al 14/11?"
+  confirmLabel="Mover"
+  confirmingLabel="Moviendo…"
+  onConfirm={() => moveShow(showId)}
+/>`,
+      },
+    },
+  },
+  render: () => (
+    <ConfirmDialog
+      trigger={<Button variant="outline">Mover show</Button>}
+      size="sm"
+      title="¿Mover el show al 14/11?"
+      confirmLabel="Mover"
+      confirmingLabel="Moviendo…"
+      onConfirm={wait}
+    />
+  ),
+};
+
+export const ReasonWithLimits: Story = {
+  name: "Reason with a hint and a length limit",
+  args: demoArgs,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { Button, ConfirmDialog } from "@obel-arg/malbec-ui";
+
+<ConfirmDialog
+  trigger={<Button variant="outline">Rechazar costo</Button>}
+  title="Rechazar el costo"
+  tone="destructive"
+  requireReason
+  reasonHint="Lo ve quien cargó el costo. Hasta 280 caracteres."
+  reasonProps={{ maxLength: 280, rows: 3, autoFocus: true }}
+  confirmLabel="Rechazar"
+  confirmingLabel="Rechazando…"
+  onConfirm={async (reason) => (await rejectCost(costId, reason)).ok}
+/>`,
+      },
+    },
+  },
+  render: () => (
+    <ConfirmDialog
+      trigger={<Button variant="outline">Rechazar costo</Button>}
+      title="Rechazar el costo"
+      tone="destructive"
+      requireReason
+      reasonHint="Lo ve quien cargó el costo. Hasta 280 caracteres."
+      reasonProps={{ maxLength: 280, rows: 3, autoFocus: true }}
+      confirmLabel="Rechazar"
+      confirmingLabel="Rechazando…"
       onConfirm={wait}
     />
   ),
