@@ -4,7 +4,7 @@ All notable changes to Malbec UI are documented here.
 
 ## v2.1.0 — 2026-11-20
 
-Two DataTable additions. Nothing changes on screen unless you opt in.
+Table and DataTable additions that came out of the Live table audit, plus two fixes. New behaviour is opt-in. Three things change on screen without a code change: `meta.tdClassName` starts applying, plain popovers animate, and the Inbox tooltip darkens by one step. Each is described below.
 
 ### DataTable applies `meta.tdClassName`
 - Column `meta.tdClassName` now styles every body cell of that column, the same way `meta.thClassName` styles its header. It was typed but ignored, so a column with `thClassName: "ui:text-right"` showed a right-aligned header over left-aligned values.
@@ -13,8 +13,43 @@ Two DataTable additions. Nothing changes on screen unless you opt in.
 ### Sticky selection column (`stickySelectionColumn`)
 - With `rowSelection`, `stickySelectionColumn` pins the checkbox column to the left edge while a table wider than its shell scrolls sideways.
 - The pinned cell follows the row's hover and selected background with the row's own 150ms transition, so the checkbox cell no longer changes before the rest of the row.
-- **What to delete:** hand-made sticky checkbox columns, such as Live's `.shows-dashboard-selection-wrap` and `.venues-dashboard-selection-wrap` (once that table moves to `DataTable`). Their copy of the hover colour has no transition, which made the checkbox cell jump on hover.
-- New stacking variables: `--ui-z-sticky-column` (1, pinned body cells) and `--ui-z-sticky-corner` (3, the header cell that is pinned both ways). `--ui-z-sticky` moves from 1 to 2 so sticky headers stay above pinned body cells. If your app overrides `--ui-z-sticky`, keep it above `--ui-z-sticky-column`.
+- **What to delete:** hand-made sticky checkbox columns, such as Live's `.shows-dashboard-selection-wrap` and `.venues-dashboard-selection-wrap` (once that table moves to `DataTable`).
+- New stacking variables:
+  - `--ui-z-sticky-column` (1): pinned body cells.
+  - `--ui-z-sticky-corner` (3): the header cell that is pinned both ways.
+  - `--ui-z-sticky` moves from 1 to 2, so sticky headers stay above pinned body cells. If your app overrides `--ui-z-sticky`, keep it above `--ui-z-sticky-column`.
+
+### Controlled selection (`selectedRowIds`)
+- `selectedRowIds` + `onSelectedRowIdsChange` make the selection controlled, by row id (pass `getRowId`).
+- Ids of rows that aren't in `data` stay selected, so a selection can span server-side pages. "Select all" only toggles the rows on screen.
+- To clear the selection after an action, pass `[]`.
+- **What to delete:** selection resetters, clear tokens and hand-made checkbox columns that keep a selection across pages, such as Live's approvals, accreditations and pending costs.
+
+### Sorting
+- New `Table.SortableHead` for tables built with `Table`. It puts `aria-sort` on the `<th>` and names its button after what the click does next, from `MalbecLabelsProvider`. It looks like `SortableColumnHeader` in `DataTable`. The table decides the next sort in `onSort`, so it works with URL or server sorting.
+- `SortableColumnHeader` now names its button after TanStack's next sorting order.
+- `DataTable` gets `enableSortingRemoval={false}`, for a column that flips between ascending and descending without a third "no sort" click (e.g. a date column).
+- **What to delete:** your own sortable headers that put `aria-sort` on an inner element or hard-code their text, such as Live's `SortableHeaderButton`.
+
+### Header pinned to the page scroll (`stickyHeader={{ scrollRoot }}`)
+- `Table` and `DataTable` take `stickyHeader={{ scrollRoot }}`. The header stays at the top of the page's scroll container until the table's last row goes by. This also works when the table scrolls sideways, which CSS `position: sticky` can't handle.
+- Omit `scrollRoot` to use the nearest ancestor that scrolls, or the window. Pass `null` while the container isn't mounted yet.
+- `stickyHeader={true}` is unchanged: the rows scroll inside the table's own shell.
+- **What to delete:** Live's `useStickyThead`.
+
+### Popover `surface="plain"` keeps its motion
+- **Changes on screen:** `surface="plain"` now keeps the open/close motion and the floating layer (`--ui-z-floating`). Before, it dropped them along with the frame, so plain popovers appeared without animation.
+- **What to delete:** CSS that re-adds the popover motion to a plain surface (`.inbox-popover` in Live, Artist and Publishing; the one in Records' `globals.css`) and the `ui:z-100` passed to plain popovers.
+
+### Embossed line at the head and foot of a block (`tokens.css`)
+- `divider-embossed-top`: the same line as `divider-embossed`, without the `:first-child` reset, for a block that opens with the line as its first child.
+- `divider-embossed-bottom`: the line that closes a block, drawn as a 2.5px band at its bottom.
+- **What to delete:** `.divider-embossed-top` and `.divider-embossed-bottom` in Live's `globals.css`. They are pixel-identical.
+
+### Colours from tokens
+- The table header label, every Badge tone and the Inbox hover-action tooltip now read tokens declared once in `styles.css`. They use the same values `tokens.css` ships to the apps.
+- The table and the badges are pixel-identical.
+- **Changes on screen:** the Inbox tooltip's background goes from `#1a1a1a` to the suite ink, `#1a1a1f`. In dark mode its text now stays light.
 
 ## v2.0.0 — 2026-11-11
 
