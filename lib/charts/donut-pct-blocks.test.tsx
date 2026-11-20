@@ -44,4 +44,8 @@ describe("PctBlocks", () => {
     blocks.forEach((block) => expect(block.style.backgroundColor).toBe(OVER_BUDGET));
     expect(screen.getByRole("img", { name: "130%" })).toBeTruthy();
   });
+
+  it("uses the approved over-budget red (charts.md §4, #dc2626) from its own token, not destructive", () => {
+    expect(OVER_BUDGET).toBe("var(--color-malbec-over-budget)");
+  });
 });

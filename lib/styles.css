@@ -36,6 +36,8 @@
   --color-malbec-muted-text: #8c8c94;
   /* Lighter secondary text: calendar chrome (day names, hours, days outside the month). */
   --color-malbec-subtle-text: #a6a6ad;
+  /* Over-budget state in charts (>100%, charts.md §4). State, never a series colour. */
+  --color-malbec-over-budget: #dc2626;
   /* Table header labels (malbec-ux-ui tables.md). */
   --color-malbec-table-header: #6b6b7a;
   /*
@@ -607,6 +609,7 @@
   --color-malbec-table-header: var(--color-malbec-table-header);
   --color-malbec-muted-text: var(--color-malbec-muted-text);
   --color-malbec-subtle-text: var(--color-malbec-subtle-text);
+  --color-malbec-over-budget: var(--color-malbec-over-budget);
   --color-focus: var(--color-focus);
   --color-embossed-edge: var(--color-embossed-edge);
   --color-pending-surface: var(--color-pending-surface);

@@ -78,6 +78,11 @@ Chosen in the inputs workshop.
 - **Changes on screen:** `surface="plain"` now keeps the open/close motion and the floating layer (`--ui-z-floating`). Before, it dropped them along with the frame, so plain popovers appeared without animation.
 - **What to delete:** CSS that re-adds the popover motion to a plain surface (`.inbox-popover` in Live, Artist and Publishing; the one in Records' `globals.css`) and the `ui:z-100` passed to plain popovers.
 
+### Changes on screen: the over-budget red in `PctBlocks`
+- **What changes:** above 100%, `PctBlocks` lights its blocks in the over-budget red approved in the charts spec, `#dc2626`, instead of `destructive` (`#ef4444`). It is a touch darker. `OVER_BUDGET` now points to the new token.
+- **New token:** `--color-malbec-over-budget` (`#dc2626`) in `style.css` and `tokens.css`, so app charts use the same red: `bg-malbec-over-budget` / `var(--color-malbec-over-budget)`.
+- **What to delete:** Live's override that painted the excess in the badge maroon (`malbec-badge-red-text`).
+
 ### EmptyState inside frames, dialogs and sheets
 - **`inset`** (`row`): pads the line to the height of a table row (46px), for when it sits straight inside a table frame or a tray instead of a cell that already pads it.
 - **`framed`** (`ghost`): draws the Table frame (`background-300`, radius 10) around the placeholder, for when no table surrounds it.

@@ -35,7 +35,7 @@ export const SERIES_SINGLE = `rgba(${SERIES_INK}, 0.55)`;
 /** Empty block of `PctBlocks`. */
 export const PCT_BLOCK_EMPTY = `rgba(${SERIES_INK}, 0.07)`;
 /** State (> 100% of budget), never a series identity. */
-export const OVER_BUDGET = "var(--color-destructive)";
+export const OVER_BUDGET = "var(--color-malbec-over-budget)";
 
 /** Flat colour of entity `index`: same entity, same tone in chart, legend and table. */
 export function areaColor(index: number): string {
