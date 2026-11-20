@@ -64,6 +64,27 @@ export const tableStickyHeaderVariants = cva(
   },
 );
 
+/**
+ * `stickyHeader={{ scrollRoot }}`: the cells move with `translateY` (see `usePinnedHeader`), so
+ * they need their own layer and fill; while pinned they draw the row's bottom line, which stays
+ * behind at the table's top.
+ */
+export const tablePinnedHeaderVariants = cva(
+  [
+    "ui:[&_th]:relative ui:[&_th]:z-(--ui-z-sticky)",
+    "ui:data-pinned:[&_th]:shadow-[inset_0_-1px_0_var(--color-background-300)]",
+  ],
+  {
+    variants: {
+      appearance: {
+        default: "ui:[&_th]:bg-background-200",
+        dataGrid: "ui:[&_th]:bg-background-100",
+      },
+    },
+    defaultVariants: { appearance: "default" },
+  },
+);
+
 export const tableBodyGroupVariants = cva(
   [
     "ui:[&>tr]:bg-background-100",

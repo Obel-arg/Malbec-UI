@@ -18,7 +18,7 @@ import {
 import { Checkbox } from "../Checkbox/Checkbox";
 import { useMalbecLabels } from "../i18n/MalbecLabelsProvider";
 import type { MalbecLabels } from "../i18n/labels";
-import { Table, type TableAppearance } from "../Table/Table";
+import { Table, type TableAppearance, type TableRootProps } from "../Table/Table";
 import { cn } from "../utils/cn";
 import { DataTableColumnsToggle } from "./DataTableColumnsToggle";
 import { DataTablePagination } from "./DataTablePagination";
@@ -68,10 +68,11 @@ interface DataTableBaseProps<TData, TValue> {
   /** Below 640px each row becomes a card (see `Table`'s `stackOnMobile`). */
   stackOnMobile?: boolean;
   /**
-   * Pins the header while the rows scroll inside the table shell; give the shell a height with
-   * `tableContainerClassName` (e.g. `ui:max-h-[480px]`).
+   * Pins the header while the rows scroll. `true`: inside the table shell; give it a height with
+   * `tableContainerClassName` (e.g. `ui:max-h-[480px]`). `{ scrollRoot }`: at the top of the page's
+   * scroll root (see `Table`'s `stickyHeader`).
    */
-  stickyHeader?: boolean;
+  stickyHeader?: TableRootProps["stickyHeader"];
   /** Classes for the bordered, scrolling table shell. */
   tableContainerClassName?: string;
   /**
@@ -466,8 +467,8 @@ function headerThClassName(
         : "ui:w-11 ui:min-w-[44px] ui:px-2 ui:text-center"),
     isSelect &&
       stickySelection && [
-        // `!` beats `stickyHeader`'s `[&_th]:z-*` on the thead, which is more specific.
-        "ui:sticky ui:left-0 ui:z-(--ui-z-sticky-corner)!",
+        // `!` beats the thead's `[&_th]:*` rules from `stickyHeader`, which are more specific.
+        "ui:sticky! ui:left-0 ui:z-(--ui-z-sticky-corner)!",
         // Opaque copy of the header row fill, so scrolled cells don't show through.
         appearance === "dataGrid" ? "ui:bg-background-100" : "ui:bg-background-200",
       ],

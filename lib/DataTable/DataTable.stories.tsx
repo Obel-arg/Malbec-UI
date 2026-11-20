@@ -795,3 +795,50 @@ const [selectedIds, setSelectedIds] = useState<string[]>([]);
     },
   },
 };
+
+const manySettlementRows: SettlementRow[] = Array.from({ length: 3 }, (_, round) =>
+  allSettlementRows.map((row) => ({ ...row, id: `${row.id}-${round}` })),
+).flat();
+
+function SettlementsInScrollingPage() {
+  // The element that scrolls the page; in an app, the workspace's scroll container.
+  const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
+  return (
+    <div ref={setScrollRoot} className="ui:h-[480px] ui:overflow-y-auto ui:bg-background-200 ui:p-6">
+      <p className="ui:mb-4 ui:text-sm ui:text-text-default">Shows del trimestre</p>
+      <div className="ui:max-w-[720px]">
+        <DataTable
+          getRowId={(r) => r.id}
+          columns={wideSettlementColumns}
+          data={manySettlementRows}
+          emptyLabel="Sin shows"
+          enableSorting={false}
+          rowSelection
+          stickySelectionColumn
+          stickyHeader={{ scrollRoot }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export const StickyHeaderInScrollingPage: Story = {
+  name: "With header pinned to the page scroll",
+  render: () => <SettlementsInScrollingPage />,
+  parameters: {
+    docs: {
+      source: {
+        code: `// The page scrolls, not the table. The header stays at the top of \`scrollRoot\` until the
+// last row goes by, even though the table also scrolls sideways. Omit \`scrollRoot\` to use the
+// nearest ancestor that scrolls (or the window); pass \`null\` while it isn't mounted yet.
+<DataTable
+  getRowId={(r) => r.id}
+  columns={columns}
+  data={rows}
+  emptyLabel="Sin shows"
+  stickyHeader={{ scrollRoot: workspaceScrollEl }}
+/>`,
+      },
+    },
+  },
+};

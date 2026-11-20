@@ -16,13 +16,17 @@ import {
   tableHeaderGroupVariants,
   tableHeadVariants,
   tableRowVariants,
+  tablePinnedHeaderVariants,
   tableStickyHeaderVariants,
 } from "./table-variants";
+import { usePinnedHeader, type TableStickyHeaderOptions } from "./use-pinned-header";
+
+export type { TableStickyHeaderOptions } from "./use-pinned-header";
 
 export type { TableAppearance } from "./table-variants";
 
 const TableAppearanceContext = React.createContext<TableAppearance>("default");
-const TableStickyHeaderContext = React.createContext(false);
+const TableStickyHeaderContext = React.createContext<boolean | TableStickyHeaderOptions>(false);
 
 function useTableAppearance(): TableAppearance {
   return React.useContext(TableAppearanceContext);
@@ -41,10 +45,14 @@ export type TableRootProps = React.ComponentProps<"table"> & {
    */
   stackOnMobile?: boolean;
   /**
-   * Pins the header while the rows scroll. The container becomes the scroller, so give it a
-   * height with `containerClassName` (e.g. `ui:max-h-[480px]`).
+   * Pins the header while the rows scroll.
+   * - `true`: the rows scroll inside the table's own shell; give it a height with
+   *   `containerClassName` (e.g. `ui:max-h-[480px]`).
+   * - `{ scrollRoot }`: the page scrolls and the header stays at the top of `scrollRoot` (omitted:
+   *   the nearest ancestor that scrolls, or the window) until the table's last row goes by. Works
+   *   with a table that also scrolls sideways.
    */
-  stickyHeader?: boolean;
+  stickyHeader?: boolean | TableStickyHeaderOptions;
   /** Classes for the bordered container that scrolls (not the `<table>`). */
   containerClassName?: string;
 };
@@ -69,7 +77,7 @@ const TableRoot = React.forwardRef<HTMLTableElement, TableRootProps>(function Ta
           ref={containerRef}
           className={cn(
             tableContainerVariants({ appearance }),
-            stickyHeader && "ui:overflow-y-auto",
+            stickyHeader === true && "ui:overflow-y-auto",
             containerClassName,
           )}
           data-appearance={appearance}
@@ -93,13 +101,22 @@ const TableHeader = React.forwardRef<HTMLTableSectionElement, TableHeaderProps>(
   function TableHeader({ className, ...rest }, ref) {
     const appearance = useTableAppearance();
     const sticky = React.useContext(TableStickyHeaderContext);
+    const pinned = typeof sticky === "object" ? sticky : null;
+    const innerRef = React.useRef<HTMLTableSectionElement | null>(null);
+    usePinnedHeader(innerRef, pinned);
+    const setRef = (node: HTMLTableSectionElement | null) => {
+      innerRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    };
     return (
       <thead
-        ref={ref}
+        ref={setRef}
         data-slot="table-header"
         className={cn(
           tableHeaderGroupVariants({ appearance }),
-          sticky && tableStickyHeaderVariants({ appearance }),
+          sticky === true && tableStickyHeaderVariants({ appearance }),
+          pinned && tablePinnedHeaderVariants({ appearance }),
           className,
         )}
         {...rest}

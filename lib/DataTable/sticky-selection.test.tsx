@@ -30,6 +30,7 @@ describe("DataTable stickySelectionColumn", () => {
       />,
     );
     const { th, td } = selectionCells();
+    expect(th.className).toContain("ui:sticky!");
     for (const cell of [th, td]) {
       expect(cell.className).toContain("ui:sticky");
       expect(cell.className).toContain("ui:left-0");

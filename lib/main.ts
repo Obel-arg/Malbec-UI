@@ -330,6 +330,7 @@ export type {
   TableSortableHeadProps,
   TableCellProps,
   TableCaptionProps,
+  TableStickyHeaderOptions,
 } from "./Table/Table";
 export type {
   TabsProps,
