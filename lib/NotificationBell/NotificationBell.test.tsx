@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { MalbecLabelsProvider } from "../i18n/MalbecLabelsProvider";
+import { Popover } from "../Popover/Popover";
 import { NotificationBell } from "./NotificationBell";
 
 const q = (slot: string) => document.querySelector<HTMLElement>(`[data-slot="${slot}"]`);
@@ -45,5 +46,29 @@ describe("NotificationBell", () => {
     rerender(<NotificationBell unreadCount={2} />);
     expect(q("notification-bell-ring")!.dataset.shaking).toBeUndefined();
     expect(q("notification-bell-dot")).toBe(dot);
+  });
+
+  it("keeps its data-slot inside Popover.Trigger asChild", () => {
+    render(
+      <Popover>
+        <Popover.Trigger asChild>
+          <NotificationBell unreadCount={2} />
+        </Popover.Trigger>
+      </Popover>,
+    );
+    const bell = screen.getByRole("button");
+    expect(bell.getAttribute("data-slot")).toBe("notification-bell");
+    expect(bell.getAttribute("data-state")).toBe("closed");
+  });
+
+  it("the first count after loading (undefined) is not an arrival", () => {
+    const { rerender } = render(<NotificationBell unreadCount={undefined} />);
+    expect(screen.getByRole("button", { name: "Notifications" })).toBeTruthy();
+    rerender(<NotificationBell unreadCount={4} />);
+    expect(q("notification-bell-ring")!.dataset.shaking).toBeUndefined();
+    expect(q("notification-bell-dot")).not.toBeNull();
+
+    rerender(<NotificationBell unreadCount={5} />);
+    expect(q("notification-bell-ring")!.dataset.shaking).toBeDefined();
   });
 });

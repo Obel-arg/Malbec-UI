@@ -17,8 +17,12 @@ const WAVE_LEFT = "M4 2C2.8 3.7 2 5.7 2 8";
 
 export interface NotificationBellProps
   extends Omit<ButtonProps, "variant" | "size" | "children"> {
-  /** Unread notifications. The bell fills while it is above 0; a rise is an arrival. */
-  unreadCount: number;
+  /**
+   * Unread notifications. The bell fills while it is above 0; a rise is an arrival. Pass
+   * `undefined` while the count is loading: the first number after it is the starting point, not
+   * an arrival, so the bell doesn't shake when the page loads.
+   */
+  unreadCount: number | undefined;
 }
 
 /**
@@ -30,18 +34,20 @@ export interface NotificationBellProps
  * Wrap it in `Popover.Trigger asChild`: the trigger's `data-state="open"` stops the halo.
  */
 export const NotificationBell = React.forwardRef<HTMLButtonElement, NotificationBellProps>(
-  function NotificationBell({ unreadCount, className, ...rest }, ref) {
+  function NotificationBell({ unreadCount: rawCount, className, ...rest }, ref) {
     const labels = useMalbecLabels();
+    const unreadCount = rawCount ?? 0;
     const unread = unreadCount > 0;
 
     // Previous count kept in state (not a ref) so an arrival is detected during render.
-    const [seen, setSeen] = React.useState(unreadCount);
+    const [seen, setSeen] = React.useState(rawCount);
     // Monotonic: the dot's key, so every arrival remounts it and its entrance runs again.
     const [arrivals, setArrivals] = React.useState(0);
     const [shaking, setShaking] = React.useState(false);
-    if (unreadCount !== seen) {
-      setSeen(unreadCount);
-      if (unreadCount > seen) {
+    if (rawCount !== seen) {
+      setSeen(rawCount);
+      // Loaded (undefined → n) is the starting point; only a rise from a known count arrives.
+      if (rawCount !== undefined && seen !== undefined && rawCount > seen) {
         setArrivals((n) => n + 1);
         setShaking(true);
       }
@@ -52,11 +58,12 @@ export const NotificationBell = React.forwardRef<HTMLButtonElement, Notification
         ref={ref}
         variant="ghost"
         size="icon"
-        data-slot="notification-bell"
-        data-unread={unread || undefined}
         aria-label={labels.notifications(unreadCount)}
         className={className}
         {...rest}
+        // After `rest`: `Popover.Trigger asChild` passes its own data-slot, which would replace it.
+        data-slot="notification-bell"
+        data-unread={unread || undefined}
       >
         <span
           data-slot="notification-bell-ring"
