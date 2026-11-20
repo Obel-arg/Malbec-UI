@@ -1,7 +1,8 @@
 import { cva } from "class-variance-authority";
 import { popoverSurfaceTransitionMotionClasses } from "../Popover/popover-variants";
 
-export const selectTriggerVariants = cva([
+export const selectTriggerVariants = cva(
+  [
   "malbec-font-sans",
   "ui:flex ui:h-9 ui:w-full ui:items-center ui:justify-between ui:rounded-md",
   // Radix drops className on Select.Value, so its layout is set from here. Plain text is
@@ -28,7 +29,20 @@ export const selectTriggerVariants = cva([
   "ui:aria-invalid:outline-solid",
   "ui:aria-invalid:outline-destructive",
   "ui:aria-invalid:outline-offset-0",
-]);
+  ],
+  {
+    variants: {
+      variant: {
+        default: "",
+        /** Inline inside text or a table cell: no box. The focus ring stays. */
+        bare: "ui:h-auto ui:rounded-none ui:border-0 ui:bg-transparent ui:p-0",
+      },
+    },
+    defaultVariants: { variant: "default" },
+  },
+);
+
+export type SelectTriggerVariant = "default" | "bare";
 
 export const selectContentVariants = cva([
   "malbec-font-sans",

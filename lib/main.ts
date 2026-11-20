@@ -207,6 +207,7 @@ export type {
 export type {
   DatePickerProps,
   DatePickerTriggerProps,
+  DatePickerTriggerVariant,
   DatePickerContentProps,
   DatePickerPresetProps,
   DatePickerCalendarProps,
@@ -287,6 +288,7 @@ export type {
   SelectGroupProps,
   SelectValueProps,
   SelectTriggerProps,
+  SelectTriggerVariant,
   SelectContentProps,
   SelectItemProps,
 } from "./Select/Select";
@@ -339,7 +341,7 @@ export type {
   TabsTriggerProps,
   TabsContentProps,
 } from "./Tabs/Tabs";
-export type { TextareaProps } from "./Textarea/Textarea";
+export type { TextareaProps, TextareaVariant } from "./Textarea/Textarea";
 export type {
   ToggleProps,
   ToggleIconProps,

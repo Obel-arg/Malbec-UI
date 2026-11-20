@@ -17,6 +17,7 @@ import {
   datePickerTrailingIconVariants,
   datePickerTriggerTextVariants,
   datePickerTriggerVariants,
+  type DatePickerTriggerVariant,
   type DatePickerState,
 } from "./date-picker-variants";
 
@@ -339,18 +340,22 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerProps>(
 );
 DatePickerRoot.displayName = "DatePicker";
 
+export type { DatePickerTriggerVariant };
+
 export type DatePickerTriggerProps = Omit<
   React.ComponentPropsWithoutRef<"button">,
   "type"
 > & {
   placeholder?: string;
+  /** `bare` renders the trigger inline, without border, background or padding. */
+  variant?: DatePickerTriggerVariant;
 };
 
 const DatePickerTrigger = React.forwardRef<
   HTMLButtonElement,
   DatePickerTriggerProps
 >(function DatePickerTrigger(
-  { className, placeholder, children, ...rest },
+  { className, placeholder, children, variant = "default", ...rest },
   ref,
 ) {
   const ctx = useDatePickerContext("DatePicker.Trigger");
@@ -387,8 +392,9 @@ const DatePickerTrigger = React.forwardRef<
         type="button"
         data-slot="date-picker-trigger"
         data-state={ctx.state}
+        data-variant={variant}
         className={cn(
-          datePickerTriggerVariants({ state: ctx.state }),
+          datePickerTriggerVariants({ state: ctx.state, variant }),
           className,
         )}
         {...rest}

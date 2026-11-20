@@ -31,9 +31,15 @@ export const datePickerTriggerVariants = cva(
         preset: "",
         birth: "",
       },
+      variant: {
+        default: "",
+        /** Inline inside text or a table cell: no box. The focus ring stays. */
+        bare: "ui:h-auto ui:rounded-none ui:border-0 ui:bg-transparent ui:p-0",
+      },
     },
     defaultVariants: {
       state: "closed",
+      variant: "default",
     },
   },
 );
@@ -49,6 +55,8 @@ export const datePickerTrailingIconVariants = cva(
 export const datePickerTriggerTextVariants = cva(
   "ui:min-w-0 ui:flex-1 ui:truncate ui:text-left ui:text-sm ui:font-normal ui:leading-tight ui:text-text-default",
 );
+
+export type DatePickerTriggerVariant = "default" | "bare";
 
 export type DatePickerState = NonNullable<
   VariantProps<typeof datePickerTriggerVariants>["state"]
