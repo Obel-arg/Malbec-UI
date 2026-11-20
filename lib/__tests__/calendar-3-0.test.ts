@@ -28,6 +28,15 @@ describe("calendar defaults (3.0)", () => {
     expect(classes).not.toContain("bg-primary");
   });
 
+  it("draws its labels (day names, hours, days outside the month) in subtle-text", () => {
+    // Live feedback on 2.1.0-rc.4: muted-text read too dark for the calendar chrome.
+    for (const [file, src] of sources) {
+      expect(src.includes("malbec-muted-text"), `${file} still uses muted-text`).toBe(false);
+    }
+    const labelled = sources.filter(([, src]) => src.includes("ui:text-malbec-subtle-text"));
+    expect(labelled.length).toBeGreaterThanOrEqual(4);
+  });
+
   it("uses no sidebar-border, no 12px shadow, no brand at low opacity and no cold greys", () => {
     for (const [file, src] of sources) {
       for (const banned of ["sidebar-border", "0_2px_12px", "bg-primary/", "#e0e0e0", "#a0a0a0", "#a6a6ad", "#f9f9f9", "#f0f0f0", "#333333", "#ef4444"]) {

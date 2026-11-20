@@ -240,7 +240,7 @@ const CalendarWeekRoot = React.forwardRef<HTMLDivElement, CalendarWeekProps>(
         <div className={cn(calendarTimeGridHeaderRowVariants())}>
           <div className={cn(calendarTimeGridGutterHeaderVariants())}>
             {resolvedTimeZoneLabel ? (
-              <span className="ui:text-[10px] ui:font-medium ui:uppercase ui:leading-none ui:text-malbec-muted-text">
+              <span className="ui:text-[10px] ui:font-medium ui:uppercase ui:leading-none ui:text-malbec-subtle-text">
                 {resolvedTimeZoneLabel}
               </span>
             ) : null}

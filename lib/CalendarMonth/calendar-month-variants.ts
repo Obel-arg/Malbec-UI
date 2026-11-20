@@ -16,7 +16,7 @@ export const calendarMonthHeaderCellVariants = cva(
   [
     "ui:flex ui:flex-1 ui:items-center ui:justify-center",
     "ui:border-r ui:border-background-300",
-    "ui:text-[11px] ui:font-medium ui:uppercase ui:leading-[normal] ui:text-malbec-muted-text",
+    "ui:text-[11px] ui:font-medium ui:uppercase ui:leading-[normal] ui:text-malbec-subtle-text",
   ],
   {
     variants: {
@@ -125,7 +125,7 @@ export const calendarMonthDayNumberTextVariants = cva(
   {
     variants: {
       isOutside: {
-        true: "ui:font-normal ui:text-malbec-muted-text",
+        true: "ui:font-normal ui:text-malbec-subtle-text",
         false: "",
       },
     },

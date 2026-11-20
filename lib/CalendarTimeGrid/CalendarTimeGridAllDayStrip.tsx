@@ -102,7 +102,7 @@ export function CalendarTimeGridAllDayStrip({
         style={{ minHeight: stripHeight }}
       >
         {label ? (
-          <span className="ui:text-[10px] ui:font-medium ui:uppercase ui:leading-none ui:text-malbec-muted-text">
+          <span className="ui:text-[10px] ui:font-medium ui:uppercase ui:leading-none ui:text-malbec-subtle-text">
             {label}
           </span>
         ) : null}

@@ -16,12 +16,14 @@ describe("tokens.css", () => {
       "text-malbec-ink",
       "text-malbec-icon",
       "text-malbec-muted-text",
+      "text-malbec-subtle-text",
       "text-malbec-table-header",
       "bg-malbec-badge-red-bg",
     ]);
     expect(css).toMatch(/--color-malbec-ink:\s*#1a1a1f/);
     expect(css).toMatch(/--color-malbec-icon:\s*#3f3f46/);
     expect(css).toMatch(/--color-malbec-muted-text:\s*#8c8c94/);
+    expect(css).toMatch(/--color-malbec-subtle-text:\s*#a6a6ad/);
     expect(css).toMatch(/--color-malbec-table-header:\s*#6b6b7a/);
     expect(css).toMatch(/\.text-malbec-ink\s*{\s*color:\s*var\(--color-malbec-ink\)/);
     expect(css).toMatch(/\.bg-malbec-badge-red-bg\s*{/);

@@ -23,7 +23,7 @@ export const calendarTimeGridDayHeaderVariants = cva(
     variants: {
       isToday: {
         true: "ui:text-text-default",
-        false: "ui:text-malbec-muted-text",
+        false: "ui:text-malbec-subtle-text",
       },
       isLast: {
         true: "ui:border-r-0",
@@ -43,7 +43,7 @@ export const calendarTimeGridTimeGutterVariants = cva(
 );
 
 export const calendarTimeGridTimeLabelVariants = cva(
-  "ui:absolute ui:right-2 ui:-translate-y-1/2 ui:text-right ui:text-[11px] ui:font-normal ui:uppercase ui:leading-none ui:text-malbec-muted-text",
+  "ui:absolute ui:right-2 ui:-translate-y-1/2 ui:text-right ui:text-[11px] ui:font-normal ui:uppercase ui:leading-none ui:text-malbec-subtle-text",
 );
 
 export const calendarTimeGridColumnVariants = cva(
