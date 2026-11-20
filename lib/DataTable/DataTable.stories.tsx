@@ -725,3 +725,73 @@ export const StickySelectionColumn: Story = {
     },
   },
 };
+
+const allSettlementRows: SettlementRow[] = [
+  ...settlementRows,
+  { id: "s5", show: "Tucumán · Hipódromo", venue: "Hipódromo", city: "Tucumán", date: "09/04/2027", tickets: 9800, gross: 294000000 },
+  { id: "s6", show: "Salta · Delmi", venue: "Delmi", city: "Salta", date: "16/04/2027", tickets: 4100, gross: 123000000 },
+  { id: "s7", show: "Neuquén · Ruca Che", venue: "Ruca Che", city: "Neuquén", date: "23/04/2027", tickets: 3600, gross: 108000000 },
+  { id: "s8", show: "Mar del Plata · Polideportivo", venue: "Polideportivo", city: "Mar del Plata", date: "30/04/2027", tickets: 6200, gross: 186000000 },
+];
+
+function SettlementsSelectionAcrossPages() {
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 4 });
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  // What the server would return for the current page.
+  const page = allSettlementRows.slice(
+    pagination.pageIndex * pagination.pageSize,
+    (pagination.pageIndex + 1) * pagination.pageSize,
+  );
+  return (
+    <div className="ui:flex ui:flex-col ui:gap-3">
+      <div className="ui:flex ui:items-center ui:gap-3 ui:text-sm ui:text-text-default">
+        <span data-testid="selected-count">{selectedIds.length} seleccionados</span>
+        <button type="button" className="ui:underline" onClick={() => setSelectedIds([])}>
+          Limpiar selección
+        </button>
+      </div>
+      <DataTable
+        getRowId={(r) => r.id}
+        columns={settlementColumns}
+        data={page}
+        emptyLabel="Sin shows"
+        enableSorting={false}
+        rowSelection
+        selectedRowIds={selectedIds}
+        onSelectedRowIdsChange={setSelectedIds}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        rowCount={allSettlementRows.length}
+        footer={({ table }) => <DataTable.Pagination table={table} />}
+      />
+    </div>
+  );
+}
+
+export const SelectionAcrossPages: Story = {
+  name: "With selection across server pages",
+  render: () => <SettlementsSelectionAcrossPages />,
+  parameters: {
+    docs: {
+      source: {
+        code: `// Controlled selection by row id. Ids from other pages stay selected; "select all" only
+// toggles the rows on screen. Clear it by setting [].
+const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+<DataTable
+  getRowId={(r) => r.id}
+  columns={columns}
+  data={page}
+  emptyLabel="Sin shows"
+  rowSelection
+  selectedRowIds={selectedIds}
+  onSelectedRowIdsChange={setSelectedIds}
+  pagination={pagination}
+  onPaginationChange={setPagination}
+  rowCount={total}
+  footer={({ table }) => <DataTable.Pagination table={table} />}
+/>`,
+      },
+    },
+  },
+};

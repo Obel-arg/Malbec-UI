@@ -111,10 +111,6 @@ interface DataTableBaseProps<TData, TValue> {
    */
   rowCount?: number;
   /**
-   * Called whenever the row selection changes.
-   * Receives the array of currently selected rows.
-   */
-  /**
    * Called when a row is clicked, middle-clicked, or activated with Enter/Space.
    * Receives the resolved row id, the original row data, and the event, so the
    * consumer can check modifiers (`metaKey`/`ctrlKey`) or `button === 1` to open
@@ -128,7 +124,16 @@ type DataTableWithRowSelectionProps<TData, TValue> = DataTableBaseProps<
   TValue
 > & {
   rowSelection: true;
+  /** Called whenever the selection changes, with the selected rows that are in `data`. */
   onRowSelectionChange?: DataTableOnRowSelectionChange<TData>;
+  /**
+   * Controlled selection, by row id (pass `getRowId`). Ids of rows that aren't in `data` stay
+   * selected, so a selection can span server-side pages; "select all" only toggles the rows on
+   * screen. Pair with `onSelectedRowIdsChange`; clear it by passing `[]`.
+   */
+  selectedRowIds?: string[];
+  /** Called with every selected id, including those on other pages. */
+  onSelectedRowIdsChange?: (ids: string[]) => void;
 };
 
 type DataTableWithoutRowSelectionProps<TData, TValue> = DataTableBaseProps<
@@ -137,6 +142,8 @@ type DataTableWithoutRowSelectionProps<TData, TValue> = DataTableBaseProps<
 > & {
   rowSelection?: false;
   onRowSelectionChange?: () => void;
+  selectedRowIds?: undefined;
+  onSelectedRowIdsChange?: undefined;
 };
 
 export type DataTableProps<TData, TValue> =
@@ -205,6 +212,8 @@ export function DataTable<TData, TValue>({
   onPaginationChange,
   rowCount,
   onRowSelectionChange,
+  selectedRowIds,
+  onSelectedRowIdsChange,
   onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [innerSorting, setInnerSorting] = useState<SortingState>([]);
@@ -214,7 +223,21 @@ export function DataTable<TData, TValue>({
     if (!sortingProp) setInnerSorting(next);
     onSortingChange?.(next);
   };
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [innerRowSelection, setInnerRowSelection] = useState<RowSelectionState>({});
+  const selectedIdsKey = selectedRowIds?.join("\u0000");
+  const controlledRowSelection = useMemo<RowSelectionState | undefined>(
+    () =>
+      selectedRowIds ? Object.fromEntries(selectedRowIds.map((id) => [id, true])) : undefined,
+    // Keyed on the ids, not the array, so a new array with the same ids doesn't re-render rows.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedIdsKey],
+  );
+  const rowSelection = controlledRowSelection ?? innerRowSelection;
+  const handleRowSelectionChange: OnChangeFn<RowSelectionState> = (updater) => {
+    const next = typeof updater === "function" ? updater(rowSelection) : updater;
+    if (!controlledRowSelection) setInnerRowSelection(next);
+    onSelectedRowIdsChange?.(Object.keys(next).filter((id) => next[id]));
+  };
 
   const paginated = paginationProp != null || pageSize != null || rowCount != null;
   const [innerPagination, setInnerPagination] = useState<PaginationState>({
@@ -251,7 +274,7 @@ export function DataTable<TData, TValue>({
     getRowId,
     onSortingChange: handleSortingChange,
     manualSorting,
-    onRowSelectionChange: rowSelectionEnabled ? setRowSelection : undefined,
+    onRowSelectionChange: rowSelectionEnabled ? handleRowSelectionChange : undefined,
     onPaginationChange: paginated ? handlePaginationChange : undefined,
     state: {
       sorting,
