@@ -4,7 +4,37 @@ All notable changes to Malbec UI are documented here.
 
 ## v2.1.0 — 2026-11-20
 
-Table and DataTable additions that came out of the Live table audit, plus two fixes. New behaviour is opt-in. Three things change on screen without a code change: `meta.tdClassName` starts applying, plain popovers animate, and the Inbox tooltip darkens by one step. Each is described below.
+Table and DataTable additions that came out of the Live table audit, plus the defaults chosen in the design workshop for fields, the calendar and underline tabs.
+
+**This release changes what you see without a code change.** The fields, the calendar and underline tabs look different by default; the sections marked "Changes on screen" say what changes and which overrides each app can delete. Smaller visible changes: `meta.tdClassName` starts applying, plain popovers animate, and the Inbox tooltip darkens by one step. Everything else is opt-in and no API was removed. Each is described below.
+
+### Changes on screen: fields have a border and are 32px
+- **What changes:**
+  - `Input`, `Select`, `Combobox`, `DatePicker` and `Textarea` lose the 2px halo and get a 1px `background-300` border.
+  - Single-line fields go from 36px to 32px.
+  - The Combobox chips box pads 4px on every side. A row of chips is still 40px tall: each chip's remove button is 20px. That is being decided in the inputs workshop.
+- **Watch out:** a default `Button` is still 36px, so in a row with a 32px field it sits 4px taller.
+- **What to delete:**
+  - Live: the 1px border on triggers in `layers.css` (`[data-slot="combobox-trigger"]`, `dropdown-menu-trigger`, the Combobox frame).
+  - Live: the `.show-form-fields` rules that add a border, turn the halo off and force 40px.
+  - Every app: any CSS that draws a border around these fields or changes their height.
+
+### Changes on screen: calendar frame and greys from tokens
+- **What changes in `CalendarMonth`, `CalendarWeek` and `CalendarDay`:**
+  - The frame is a `background-300` border with no shadow. It used to be `sidebar-border` plus a 12px shadow.
+  - The cold hard-coded greys become warm tokens: `background-100/200/300`, `text-default`, `malbec-ink` and the new `malbec-muted-text`.
+  - The today circle is `malbec-icon` instead of the brand colour.
+  - The month and year selects follow the neutral outline: no brand border, no brand hover.
+  - The "now" line uses the `destructive` token, with the same red as before.
+  - Day names stay in uppercase.
+- **What to delete:** Live's calendar retints in `layers.css`:
+  - `.business-calendar-month`: the frame, `[class*=border-sidebar-border]` and the shadow.
+  - `.business-calendar-week`: the rules that target `#e0e0e0`, `#f0f0f0`, `#a6a6ad` and `bg-primary`.
+- **New token:** `--color-malbec-muted-text` (`#8c8c94`) in `style.css`. It is the same value `tokens.css` already shipped.
+
+### Changes on screen: underline tabs mark the active tab by opacity
+- **What changes:** `Tabs variant="underline"` now renders exactly like `variant="opacity"`: no rail and no indicator, the active tab at 100% and the rest at 40%. The old indicator used the same colour as its rail and barely showed. `underline` stays in `TabsVariant`, so nothing breaks at compile time.
+- **What to delete:** Live's `malbecUnderlineTabTriggerClass` and `malbecUnderlineTabsListClass` (`lib/malbec-tabs-classes.ts`). You can also switch to `variant="opacity"`.
 
 ### DataTable applies `meta.tdClassName`
 - Column `meta.tdClassName` now styles every body cell of that column, the same way `meta.thClassName` styles its header. It was typed but ignored, so a column with `thClassName: "ui:text-right"` showed a right-aligned header over left-aligned values.
