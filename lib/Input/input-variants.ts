@@ -8,16 +8,15 @@ export const inputVariants = cva(
   [
     "malbec-font-sans",
     "ui:flex",
-    "ui:h-9",
+    "ui:h-8",
     "ui:w-full",
     "ui:min-w-0",
     "ui:items-center",
-    "ui:border-0",
     "ui:bg-background-100",
     "ui:rounded-[6px]",
     "ui:px-4",
-    "ui:py-2",
-    "ui:shadow-[0_0_2px_0_rgba(0,0,0,0.2)]",
+    "ui:py-1",
+    "ui:border ui:border-solid ui:border-background-300",
     "ui:text-[14px]",
     "ui:leading-5",
     "ui:tracking-[-0.42px]",
@@ -74,7 +73,7 @@ export const inputVariants = cva(
          * Inline editing inside text (amounts, names in a row): no box, the consumer sets the
          * type. The focus outline stays, pushed outside the text.
          */
-        bare: "ui:h-auto ui:rounded-none ui:bg-transparent ui:p-0 ui:shadow-none ui:outline-offset-2",
+        bare: "ui:h-auto ui:rounded-none ui:border-0 ui:bg-transparent ui:p-0 ui:outline-offset-2",
       },
     },
     defaultVariants: { variant: "default" },

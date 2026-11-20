@@ -99,10 +99,11 @@ describe("Combobox labels", () => {
 });
 
 describe("Combobox chips box padding", () => {
-  it("has the same padding on every side (6px), not the 16px of the trigger row", () => {
+  it("has the same padding on every side (4px), so a row of chips is as tall as a 32px field", () => {
     render(<Chips />);
     const classes = chipsBox().className.split(/\s+/);
-    expect(classes).toEqual(expect.arrayContaining(["ui:px-1.5", "ui:py-1.5"]));
+    expect(classes).toContain("ui:p-1");
+    expect(classes).toContain("ui:min-h-8");
     expect(classes).not.toContain("ui:px-4");
   });
 });
