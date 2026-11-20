@@ -2,6 +2,20 @@
 
 All notable changes to Malbec UI are documented here.
 
+## v2.1.0 — 2026-11-20
+
+Two DataTable additions. Nothing changes on screen unless you opt in.
+
+### DataTable applies `meta.tdClassName`
+- Column `meta.tdClassName` now styles every body cell of that column, the same way `meta.thClassName` styles its header. It was typed but ignored, so a column with `thClassName: "ui:text-right"` showed a right-aligned header over left-aligned values.
+- **Check:** if a column already passes `tdClassName`, those classes start applying with this version. Live's shows table passes `"!bg-transparent"` on the selection column; remove it together with `.shows-dashboard-selection-wrap`.
+
+### Sticky selection column (`stickySelectionColumn`)
+- With `rowSelection`, `stickySelectionColumn` pins the checkbox column to the left edge while a table wider than its shell scrolls sideways.
+- The pinned cell follows the row's hover and selected background with the row's own 150ms transition, so the checkbox cell no longer changes before the rest of the row.
+- **What to delete:** hand-made sticky checkbox columns, such as Live's `.shows-dashboard-selection-wrap` and `.venues-dashboard-selection-wrap` (once that table moves to `DataTable`). Their copy of the hover colour has no transition, which made the checkbox cell jump on hover.
+- New stacking variables: `--ui-z-sticky-column` (1, pinned body cells) and `--ui-z-sticky-corner` (3, the header cell that is pinned both ways). `--ui-z-sticky` moves from 1 to 2 so sticky headers stay above pinned body cells. If your app overrides `--ui-z-sticky`, keep it above `--ui-z-sticky-column`.
+
 ## v2.0.0 — 2026-11-11
 
 The library's defaults now match the malbec-ux-ui spec approved by Isa. This release changes what you see without any code change on your side. Each section below says what changes on screen, and which overrides you can delete.
