@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { DataTable } from "./DataTable";
@@ -88,5 +88,31 @@ describe("DataTable controlled selection", () => {
     expect(rowCheckbox("Mendoza · Arena Maipú").getAttribute("aria-checked")).toBe("true");
     fireEvent.click(screen.getByText("Clear"));
     expect(rowCheckbox("Mendoza · Arena Maipú").getAttribute("aria-checked")).toBe("false");
+  });
+
+  it("keeps both changes when two rows toggle before the parent re-renders", () => {
+    function Harness() {
+      const [ids, setIds] = useState<string[]>([]);
+      return (
+        <>
+          <span data-testid="count">{ids.length}</span>
+          <DataTable<Row, unknown>
+            columns={columns}
+            data={page2}
+            getRowId={(r) => r.id}
+            emptyLabel="Sin resultados"
+            rowSelection
+            selectedRowIds={ids}
+            onSelectedRowIdsChange={setIds}
+          />
+        </>
+      );
+    }
+    render(<Harness />);
+    act(() => {
+      rowCheckbox("Mendoza · Arena Maipú").click();
+      rowCheckbox("La Plata · Estadio Único").click();
+    });
+    expect(screen.getByTestId("count").textContent).toBe("2");
   });
 });

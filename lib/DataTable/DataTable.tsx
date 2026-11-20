@@ -233,8 +233,17 @@ export function DataTable<TData, TValue>({
     [selectedIdsKey],
   );
   const rowSelection = controlledRowSelection ?? innerRowSelection;
+  // Two toggles in the same tick (before the parent passes new ids) must build on each other, so
+  // each change starts from the last selection we emitted. After every render it resyncs with
+  // what's on screen, so a change the parent rejected doesn't linger.
+  const latestSelectionRef = useRef(rowSelection);
+  useEffect(() => {
+    latestSelectionRef.current = rowSelection;
+  });
   const handleRowSelectionChange: OnChangeFn<RowSelectionState> = (updater) => {
-    const next = typeof updater === "function" ? updater(rowSelection) : updater;
+    const prev = latestSelectionRef.current;
+    const next = typeof updater === "function" ? updater(prev) : updater;
+    latestSelectionRef.current = next;
     if (!controlledRowSelection) setInnerRowSelection(next);
     onSelectedRowIdsChange?.(Object.keys(next).filter((id) => next[id]));
   };
