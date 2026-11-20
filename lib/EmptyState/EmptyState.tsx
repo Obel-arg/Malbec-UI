@@ -32,6 +32,8 @@ export interface EmptyStateProps extends Omit<React.ComponentProps<"div">, "titl
   inset?: boolean;
   /** `ghost` only: draws the Table frame around the placeholder, for when no table surrounds it. */
   framed?: boolean;
+  /** `page` only: the embossed divider above it. Turn it off inside a card. @default true */
+  divider?: boolean;
   /** `ghost` only: `sm` makes the placeholder rows 36px, for dialogs and sheets. @default "md" */
   size?: "md" | "sm";
 }
@@ -89,6 +91,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(func
     inset = false,
     framed = false,
     size = "md",
+    divider = true,
     className,
     ...rest
   },
@@ -163,7 +166,8 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(func
       data-slot="empty-state"
       data-variant="page"
       className={cn(
-        "malbec-font-sans ui:flex ui:flex-wrap ui:items-center ui:justify-between ui:gap-4 ui:border-t ui:border-embossed-edge ui:py-5 ui:shadow-[inset_0_1.5px_0_white]",
+        "malbec-font-sans ui:flex ui:flex-wrap ui:items-center ui:justify-between ui:gap-4 ui:py-5",
+        divider && "ui:border-t ui:border-embossed-edge ui:shadow-[inset_0_1.5px_0_white]",
         className,
       )}
       {...rest}

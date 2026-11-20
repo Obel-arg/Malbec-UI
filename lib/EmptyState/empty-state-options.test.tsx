@@ -45,3 +45,13 @@ describe("EmptyState options", () => {
     expect(classesOf(overlay)).not.toContain("ui:absolute");
   });
 });
+
+describe("EmptyState page divider", () => {
+  it("draws the embossed divider by default and drops it with divider={false}", () => {
+    const withLine = render(<EmptyState variant="page" title="Sin shows" />).container;
+    expect(classesOf(root(withLine))).toContain("ui:border-t");
+    const plain = render(<EmptyState variant="page" divider={false} title="Sin shows" />).container;
+    expect(classesOf(root(plain))).not.toContain("ui:border-t");
+    expect(classesOf(root(plain)).some((c) => c.startsWith("ui:shadow-"))).toBe(false);
+  });
+});

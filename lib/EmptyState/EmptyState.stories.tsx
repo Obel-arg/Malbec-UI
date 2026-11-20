@@ -235,3 +235,26 @@ export const GhostFramedSmall: Story = {
     </div>
   ),
 };
+
+export const PageInsideCard: Story = {
+  name: "Page · no divider (inside a card)",
+  parameters: {
+    docs: {
+      source: {
+        code: `import { EmptyState } from "@obel-arg/malbec-ui";
+
+<EmptyState variant="page" divider={false} title="Todavía no hay campañas" description="Conectá Meta Ads para ver la inversión del show." />`,
+      },
+    },
+  },
+  render: () => (
+    <div className="ui:w-[560px] ui:rounded-xl ui:border ui:border-solid ui:border-background-300 ui:px-5">
+      <EmptyState
+        variant="page"
+        divider={false}
+        title="Todavía no hay campañas"
+        description="Conectá Meta Ads para ver la inversión del show."
+      />
+    </div>
+  ),
+};
