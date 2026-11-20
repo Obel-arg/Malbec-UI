@@ -730,8 +730,8 @@ const InboxItemHoverAction = React.forwardRef<
         side="top"
         sideOffset={6}
         className={cn(
-          "ui:rounded-md ui:border-0 ui:bg-[#1a1a1a] ui:px-2 ui:py-1.5",
-          "ui:text-[12px] ui:leading-none ui:text-[#f8f8f8]",
+          "ui:rounded-md ui:border-0 ui:bg-malbec-ink ui:px-2 ui:py-1.5",
+          "ui:text-[12px] ui:leading-none ui:text-background-100 ui:dark:text-foreground",
           "ui:shadow-[0_2px_2px_rgba(0,0,0,0.08),0_4px_6px_rgba(0,0,0,0.12)]",
         )}
       >

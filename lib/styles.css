@@ -32,6 +32,28 @@
   --color-malbec-icon: #3f3f46;
   /* Darkest neutral: titles and the dark tooltip. We never use black. */
   --color-malbec-ink: #1a1a1f;
+  /* Table header labels (malbec-ux-ui tables.md). */
+  --color-malbec-table-header: #6b6b7a;
+  /*
+   * Badge tones (malbec-ux-ui): background + text pairs, the same values `tokens.css` ships to the
+   * apps. violet and sage are Badge-only.
+   */
+  --color-malbec-badge-green-bg: #d0dfd0;
+  --color-malbec-badge-green-text: #2a602c;
+  --color-malbec-badge-yellow-bg: #efeed4;
+  --color-malbec-badge-yellow-text: #8a862f;
+  --color-malbec-badge-orange-bg: #efe3d4;
+  --color-malbec-badge-orange-text: #8a642f;
+  --color-malbec-badge-blue-bg: #dce6ec;
+  --color-malbec-badge-blue-text: #2f628a;
+  --color-malbec-badge-red-bg: #dfd0d0;
+  --color-malbec-badge-red-text: #602a2a;
+  --color-malbec-badge-neutral-bg: #e4e2df;
+  --color-malbec-badge-neutral-text: #6b6b7a;
+  --color-malbec-badge-violet-bg: #e5dcec;
+  --color-malbec-badge-violet-text: #352a60;
+  --color-malbec-badge-sage-bg: #b4c5b5;
+  --color-malbec-badge-sage-text: #025406;
   /* Focus ring of every control: neutral, never brand (malbec-ux-ui). */
   --color-focus: #3f3f46;
   /* Warm edge of the embossed divider (malbec-ux-ui embossed.md): edge on top, white light below. */
@@ -578,6 +600,7 @@
   --color-sidebar-border: var(--color-sidebar-border);
   --color-malbec-icon: var(--color-malbec-icon);
   --color-malbec-ink: var(--color-malbec-ink);
+  --color-malbec-table-header: var(--color-malbec-table-header);
   --color-focus: var(--color-focus);
   --color-embossed-edge: var(--color-embossed-edge);
   --color-pending-surface: var(--color-pending-surface);
